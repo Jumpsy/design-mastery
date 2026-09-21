@@ -8,6 +8,16 @@ teardowns, an AI-generated-imagery guide, and Remotion guidance for programmatic
 
 Install by dropping this repo's contents into `~/.claude/skills/design-mastery/`.
 
+**Getting the repo:** on GitHub, use the green **Code** button → **Download ZIP** (no git
+needed), or `git clone` the repo URL. Unzip/move it so its contents land directly inside
+`~/.claude/skills/design-mastery/` (i.e. `SKILL.md` and `companion-skills/` should be
+directly inside that folder, not nested one level deeper).
+
+This repo bundles 39 full companion skill packs in `companion-skills/` — taste-skill,
+image-to-code-skill, redesign-skill, frontend-design, canvas-design, theme-factory, and
+more — not just links to them. Once installed, Claude reads them the same way it reads
+`SKILL.md`; nothing else needs installing separately.
+
 ## What it's for
 
 Point Claude at a screenshot, a URL, or a blank page and ask for a landing page,

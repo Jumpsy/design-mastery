@@ -15,11 +15,15 @@ that pointer).
 For motion-design and presentation/deck-craft principles, also see
 `references/motion-and-presentation-notes.md`.
 
-## 0. Check for installed specialist skills first
+## 0. Companion specialist skills — bundled in this repo, use them for their specialty
 
-Before working from this file alone, check whether these companion skill packs are
-installed and prefer invoking them for their specialty (they contain far more depth than
-can live in one file):
+This repo ships `companion-skills/` alongside this file — 39 full skill packs, copied in
+directly, not just referenced. They are not optional extras to go hunting for: if this
+repo is installed at `~/.claude/skills/design-mastery/`, they're sitting right next to
+this file at `~/.claude/skills/design-mastery/companion-skills/<name>/SKILL.md` and
+readable the same way this file is. Prefer invoking the matching companion skill for its
+specialty over improvising from this file alone — they contain far more depth than can
+live in one file:
 
 - `taste-skill` — anti-slop judgment, aesthetic critique, style presets (minimalist,
   brutalist, soft, redesign).
@@ -29,31 +33,32 @@ can live in one file):
   `design-systems`, `ux-strategy`, `prototyping-testing`, `designer-toolkit`.
 - `frontend-design` (superpowers) — for actual implementation quality once direction is set.
 - `dataviz` — for any chart/graph/dashboard element inside the design.
-- `apple-hig` — official Apple Human Interface Guidelines, 156 distilled files, tiered
-  routing index. Use for ANY Apple-platform UI (iOS/iPadOS/macOS/tvOS/visionOS/watchOS)
-  and as a general source of rigorous platform-convention thinking even off-Apple.
 - Official `anthropics/skills` set: `canvas-design` (posters/static visual art),
   `brand-guidelines` (Anthropic brand application), `theme-factory` (light/dark token
   themes), `web-artifacts-builder` (multi-file HTML/JS artifact scaffolding),
   `webapp-testing` (browser-drive a built app to verify it actually works),
   `algorithmic-art` (generative/procedural visuals).
-- `plugin87-*` design-architect pack (19 skills, installed with that prefix): notably
-  `plugin87-apply-aesthetic` (resolves a named look into tokens across **138 real design
-  systems** — apple, linear-app, stripe, vercel, notion, material, shadcn, spotify, tesla,
-  etc.), `plugin87-design-tokens`/`plugin87-brandkit` (DTCG 3-tier token generation),
-  `plugin87-design-review` (6-dimension critique + Nielsen heuristics), `plugin87-design-qa`
-  (lint/contrast/visual-regression gates), `plugin87-image-to-code`, `plugin87-migrate-design-system`
-  (bridge to Material 3/Apple HIG/Fluent/Carbon/Ant/shadcn/Radix/Chakra/Mantine/Bootstrap),
-  `plugin87-data-dashboard` (dense data-viz screens). Reference data (138-system library,
-  token/framework adapters) copied to `references/plugin87-data/`.
 
-Local copies exist at (not yet installed as Claude Code skills — offer to install into
-`~/.claude/skills/` if the user wants them active by name):
-`~/Documents/Documents - Jacob's MacBook Air (7)/Codex/taste-skill/skills/*`
-`~/Documents/Documents - Jacob's MacBook Air (7)/Codex/designer-skills/*/skills/*`
+Note: `apple-hig` (official Apple HIG text) and the `plugin87-*` design-architect pack
+are NOT bundled in this repo's `companion-skills/` — they're third-party/licensed
+content, kept local-only rather than redistributed. If they happen to be installed
+separately under `~/.claude/skills/`, still prefer them for Apple-platform UI and
+token/aesthetic-matching work respectively; otherwise this file's own judgment covers it.
 
-If none are installed, this file is self-sufficient for judgment; use `frontend-design`
-for the actual build.
+All of the above, plus the full rest of the bundle (design-token/design-token-audit,
+design-critique, design-system-governance, onboarding-design, form-design,
+responsive-design, dark-mode-design, error-handling-ux, search-ux, survey-design,
+localization-design, business-design, a-b-test-design, design-brief, design-negotiation,
+design-principles, design-qa-checklist, design-rationale, design-review-process,
+design-sprint-plan, design-system-adoption, design-debt-audit, design-impact-reporting,
+critique-brand-consistency, ux-writing, gpt-tasteskill, higgsfield-brandkit,
+21st-design-sync), live in full under `companion-skills/`. Read a companion skill's
+`SKILL.md` the same way you'd read this one — do not treat "not installed under
+`~/.claude/skills/<name>/` by its own name" as "not available"; this repo's
+`companion-skills/` directory IS the install.
+
+If a companion skill isn't present for some reason, this file is self-sufficient for
+judgment; use `frontend-design` for the actual build.
 
 - `impeccable` — award-winning-design-director mode with a strict pre-edit setup script,
   DESIGN.md/PRODUCT.md context loading, refinement-vs-redesign discipline, and a bounded
