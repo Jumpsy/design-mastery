@@ -41,9 +41,9 @@ via Playwright — real HTML/CSS built by this skill, not mockups.
 
 <img src="showcase/mobile-onboarding.png" alt="Mobile onboarding" width="360">
 
-### Brand identity (coffee)
+### Brand identity (kids edtech)
 
-![Branding coffee](showcase/branding-coffee.png)
+![Branding kids edtech](showcase/branding-coffee.png)
 
 ### Poster (concert)
 
