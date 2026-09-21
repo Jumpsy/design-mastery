@@ -1,0 +1,1985 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>STRATA Coffee Roasters — Wordmark & Identity Specification</title>
+<style>
+  :root {
+    --color-basalt: #0F1416;
+    --color-obsidian: #151C1F;
+    --color-bedrock: #1E272B;
+    --color-border: #2A363C;
+    --color-border-subtle: #202A2F;
+    --color-chalk: #F7F8F6;
+    --color-silica: #E7EAE6;
+    --color-vermilion: #E25C2B;
+    --color-vermilion-deep: #C9491B;
+    --color-vermilion-tint: rgba(226, 92, 43, 0.12);
+    --color-slate: #7E8B85;
+    --color-slate-light: #A3AFA9;
+    --color-danger: #D94436;
+    --font-stack: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    --radius-sm: 4px;
+    --radius-md: 8px;
+    --radius-lg: 12px;
+  }
+
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  body {
+    background-color: var(--color-basalt);
+    color: var(--color-chalk);
+    font-family: var(--font-stack);
+    font-size: 15px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    padding: 0 0 96px 0;
+  }
+
+  /* Global Container & Layout */
+  .specimen-header {
+    border-bottom: 1px solid var(--color-border);
+    background: rgba(15, 20, 22, 0.95);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+  }
+
+  .header-inner {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 16px 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+  }
+
+  .header-brand {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .header-tag {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--color-vermilion);
+    background: var(--color-vermilion-tint);
+    padding: 4px 10px;
+    border-radius: var(--radius-sm);
+    border: 1px solid rgba(226, 92, 43, 0.25);
+  }
+
+  .header-meta {
+    font-size: 12px;
+    color: var(--color-slate);
+    letter-spacing: 0.04em;
+  }
+
+  .header-telemetry {
+    display: flex;
+    gap: 24px;
+    align-items: center;
+    font-size: 12px;
+    color: var(--color-slate-light);
+  }
+
+  .telemetry-item strong {
+    color: var(--color-chalk);
+    font-weight: 500;
+  }
+
+  .container {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 32px;
+  }
+
+  /* Section Structural Layouts */
+  .section {
+    margin-top: 64px;
+  }
+
+  .section-intro {
+    margin-bottom: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .section-eyebrow {
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    color: var(--color-vermilion);
+  }
+
+  .section-title {
+    font-size: 28px;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    color: var(--color-chalk);
+  }
+
+  .section-desc {
+    font-size: 15px;
+    color: var(--color-slate-light);
+    max-width: 760px;
+  }
+
+  /* Primary Interactive Hero Stage */
+  .hero-card {
+    background: var(--color-obsidian);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+  }
+
+  .hero-toolbar {
+    padding: 16px 24px;
+    background: var(--color-bedrock);
+    border-bottom: 1px solid var(--color-border);
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+  }
+
+  .toolbar-group {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .toolbar-label {
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--color-slate);
+  }
+
+  .segmented-control {
+    display: inline-flex;
+    background: var(--color-basalt);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    padding: 2px;
+    gap: 2px;
+  }
+
+  .segmented-btn {
+    background: transparent;
+    border: none;
+    color: var(--color-slate-light);
+    font-family: inherit;
+    font-size: 12px;
+    font-weight: 500;
+    padding: 6px 14px;
+    border-radius: 3px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+
+  .segmented-btn:hover {
+    color: var(--color-chalk);
+    background: rgba(255, 255, 255, 0.04);
+  }
+
+  .segmented-btn.active {
+    background: var(--color-bedrock);
+    color: var(--color-chalk);
+    font-weight: 600;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+  }
+
+  .toggle-switch-wrap {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    user-select: none;
+  }
+
+  .toggle-switch {
+    width: 40px;
+    height: 22px;
+    background: var(--color-basalt);
+    border: 1px solid var(--color-border);
+    border-radius: 11px;
+    position: relative;
+    cursor: pointer;
+    transition: background-color 0.2s;
+  }
+
+  .toggle-switch::after {
+    content: '';
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: 16px;
+    height: 16px;
+    background: var(--color-slate-light);
+    border-radius: 50%;
+    transition: transform 0.2s, background-color 0.2s;
+  }
+
+  .toggle-switch.active {
+    background: var(--color-vermilion);
+    border-color: var(--color-vermilion);
+  }
+
+  .toggle-switch.active::after {
+    transform: translateX(18px);
+    background: #fff;
+  }
+
+  .hero-stage {
+    padding: 80px 48px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 380px;
+    position: relative;
+    transition: background-color 0.25s, color 0.25s;
+  }
+
+  /* Color Theme States for Hero Stage */
+  .hero-stage.mode-obsidian {
+    background-color: #0F1416;
+    color: #F7F8F6;
+  }
+  .hero-stage.mode-obsidian .stage-mark-type { fill: #F7F8F6; }
+  .hero-stage.mode-obsidian .stage-descriptor { fill: #E25C2B; }
+  .hero-stage.mode-obsidian .stage-emblem-frame { stroke: #E25C2B; fill: #13191C; }
+  .hero-stage.mode-obsidian .stage-emblem-top { fill: #E25C2B; }
+  .hero-stage.mode-obsidian .stage-emblem-mid { fill: #F7F8F6; }
+  .hero-stage.mode-obsidian .stage-emblem-bot { fill: #7E8B85; }
+
+  .hero-stage.mode-chalk {
+    background-color: #F7F8F6;
+    color: #0F1416;
+  }
+  .hero-stage.mode-chalk .stage-mark-type { fill: #0F1416; }
+  .hero-stage.mode-chalk .stage-descriptor { fill: #C9491B; }
+  .hero-stage.mode-chalk .stage-emblem-frame { stroke: #C9491B; fill: #FFFFFF; }
+  .hero-stage.mode-chalk .stage-emblem-top { fill: #C9491B; }
+  .hero-stage.mode-chalk .stage-emblem-mid { fill: #0F1416; }
+  .hero-stage.mode-chalk .stage-emblem-bot { fill: #7E8B85; }
+
+  .hero-stage.mode-mono {
+    background-color: #FFFFFF;
+    color: #000000;
+  }
+  .hero-stage.mode-mono .stage-mark-type { fill: #000000; }
+  .hero-stage.mode-mono .stage-descriptor { fill: #000000; }
+  .hero-stage.mode-mono .stage-emblem-frame { stroke: #000000; fill: #FFFFFF; }
+  .hero-stage.mode-mono .stage-emblem-top { fill: #000000; }
+  .hero-stage.mode-mono .stage-emblem-mid { fill: #000000; }
+  .hero-stage.mode-mono .stage-emblem-bot { fill: #000000; }
+
+  .hero-stage.mode-vermilion {
+    background-color: #E25C2B;
+    color: #F7F8F6;
+  }
+  .hero-stage.mode-vermilion .stage-mark-type { fill: #FFFFFF; }
+  .hero-stage.mode-vermilion .stage-descriptor { fill: #0F1416; }
+  .hero-stage.mode-vermilion .stage-emblem-frame { stroke: #FFFFFF; fill: #C9491B; }
+  .hero-stage.mode-vermilion .stage-emblem-top { fill: #FFFFFF; }
+  .hero-stage.mode-vermilion .stage-emblem-mid { fill: #0F1416; }
+  .hero-stage.mode-vermilion .stage-emblem-bot { fill: #FFFFFF; }
+
+  .stage-svg-wrap {
+    width: 100%;
+    max-width: 640px;
+    position: relative;
+    display: flex;
+    justify-content: center;
+  }
+
+  .stage-svg {
+    width: 100%;
+    height: auto;
+    display: block;
+    overflow: visible;
+  }
+
+  /* Slider interactive footer */
+  .hero-footer {
+    padding: 16px 24px;
+    background: var(--color-bedrock);
+    border-top: 1px solid var(--color-border);
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+  }
+
+  .scale-slider-wrap {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex-grow: 1;
+    max-width: 520px;
+  }
+
+  .scale-slider {
+    flex-grow: 1;
+    -webkit-appearance: none;
+    appearance: none;
+    height: 6px;
+    border-radius: 3px;
+    background: var(--color-basalt);
+    outline: none;
+  }
+
+  .scale-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: var(--color-vermilion);
+    cursor: pointer;
+    box-shadow: 0 0 6px rgba(226, 92, 43, 0.5);
+    transition: transform 0.1s;
+  }
+
+  .scale-slider::-webkit-slider-thumb:hover {
+    transform: scale(1.15);
+  }
+
+  .scale-slider::-moz-range-thumb {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: var(--color-vermilion);
+    cursor: pointer;
+    border: none;
+  }
+
+  .scale-readout {
+    font-size: 13px;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    color: var(--color-chalk);
+    min-width: 80px;
+  }
+
+  .scale-badge {
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-slate-light);
+    background: var(--color-basalt);
+    padding: 3px 8px;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--color-border-subtle);
+  }
+
+  /* Plan-Gate & Differentiation Callout */
+  .gate-panel {
+    margin-top: 32px;
+    background: var(--color-obsidian);
+    border-left: 3px solid var(--color-vermilion);
+    border-radius: 0 var(--radius-md) var(--radius-md) 0;
+    padding: 24px 28px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 32px;
+    border-top: 1px solid var(--color-border);
+    border-right: 1px solid var(--color-border);
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .gate-col h3 {
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .gate-col.rejected h3 { color: var(--color-danger); }
+  .gate-col.approved h3 { color: var(--color-vermilion); }
+
+  .gate-col ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    font-size: 13px;
+    color: var(--color-slate-light);
+  }
+
+  .gate-col li {
+    position: relative;
+    padding-left: 18px;
+  }
+
+  .gate-col.rejected li::before {
+    content: "✕";
+    position: absolute;
+    left: 0;
+    color: var(--color-danger);
+    font-weight: bold;
+  }
+
+  .gate-col.approved li::before {
+    content: "✓";
+    position: absolute;
+    left: 0;
+    color: var(--color-vermilion);
+    font-weight: bold;
+  }
+
+  /* Typographic Construction Breakdown Grid */
+  .anatomy-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 24px;
+    margin-top: 24px;
+  }
+
+  .anatomy-card {
+    background: var(--color-obsidian);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .anatomy-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--color-border-subtle);
+    padding-bottom: 12px;
+  }
+
+  .anatomy-glyph-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--color-chalk);
+  }
+
+  .anatomy-metric {
+    font-size: 11px;
+    font-family: ui-monospace, monospace;
+    color: var(--color-vermilion);
+    background: var(--color-vermilion-tint);
+    padding: 2px 6px;
+    border-radius: 3px;
+  }
+
+  .anatomy-svg-box {
+    background: var(--color-basalt);
+    border: 1px solid var(--color-border-subtle);
+    border-radius: var(--radius-sm);
+    height: 140px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 12px;
+  }
+
+  .anatomy-desc {
+    font-size: 13px;
+    color: var(--color-slate);
+    line-height: 1.5;
+  }
+
+  /* Lockup Variants System */
+  .lockups-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    margin-top: 24px;
+  }
+
+  .lockup-card {
+    background: var(--color-obsidian);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .lockup-preview {
+    background: var(--color-basalt);
+    padding: 48px 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 240px;
+    position: relative;
+    border-bottom: 1px solid var(--color-border-subtle);
+  }
+
+  .lockup-info {
+    padding: 20px 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .lockup-name {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--color-chalk);
+  }
+
+  .lockup-use {
+    font-size: 13px;
+    color: var(--color-slate);
+  }
+
+  /* Clearspace & Dimension System */
+  .clearspace-layout {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr;
+    gap: 24px;
+    margin-top: 24px;
+  }
+
+  .clearspace-stage-card {
+    background: var(--color-obsidian);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+  }
+
+  .clearspace-rules-card {
+    background: var(--color-obsidian);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    padding: 32px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .rule-block {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .rule-title {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--color-vermilion);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+
+  .rule-text {
+    font-size: 13px;
+    color: var(--color-slate-light);
+    line-height: 1.6;
+  }
+
+  /* Minimum Size Rules */
+  .min-size-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 24px;
+    margin-top: 24px;
+  }
+
+  .min-size-card {
+    background: var(--color-obsidian);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .min-size-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--color-border-subtle);
+    padding-bottom: 12px;
+  }
+
+  .min-size-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--color-chalk);
+  }
+
+  .min-size-metric-badge {
+    font-size: 12px;
+    font-family: ui-monospace, monospace;
+    font-weight: 600;
+    color: var(--color-vermilion);
+  }
+
+  .min-size-render-box {
+    background: var(--color-basalt);
+    border: 1px solid var(--color-border-subtle);
+    border-radius: var(--radius-sm);
+    min-height: 110px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    padding: 16px;
+  }
+
+  .min-size-label {
+    font-size: 11px;
+    color: var(--color-slate);
+    letter-spacing: 0.04em;
+  }
+
+  /* Chromatic & Material Palette */
+  .palette-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+    margin-top: 24px;
+  }
+
+  .palette-card {
+    background: var(--color-obsidian);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+  }
+
+  .palette-swatch {
+    height: 110px;
+    position: relative;
+    border-bottom: 1px solid var(--color-border-subtle);
+  }
+
+  .palette-details {
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .swatch-name {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--color-chalk);
+  }
+
+  .swatch-role {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--color-vermilion);
+  }
+
+  .swatch-hex {
+    font-size: 12px;
+    font-family: ui-monospace, monospace;
+    color: var(--color-slate-light);
+    margin-top: 4px;
+  }
+
+  .swatch-usage {
+    font-size: 12px;
+    color: var(--color-slate);
+    line-height: 1.4;
+    margin-top: 4px;
+  }
+
+  /* Real-World Context Touchpoints */
+  .touchpoints-grid {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    gap: 24px;
+    margin-top: 24px;
+  }
+
+  .packaging-card {
+    background: var(--color-obsidian);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    padding: 32px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+  }
+
+  .coffee-bag-mockup {
+    width: 320px;
+    height: 480px;
+    background: #11171A;
+    border: 2px solid #232D32;
+    border-radius: 12px 12px 6px 6px;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
+    padding: 24px 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    position: relative;
+  }
+
+  .coffee-bag-valve {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    border: 1px solid #2A363C;
+    margin: 0 auto 12px;
+    position: relative;
+  }
+  .coffee-bag-valve::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: #2A363C;
+  }
+
+  .coffee-label {
+    background: #0A0D0E;
+    border: 1px solid #283439;
+    border-radius: 6px;
+    padding: 20px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .label-rule {
+    height: 1px;
+    background: var(--color-vermilion);
+    opacity: 0.6;
+    margin: 4px 0;
+  }
+
+  .label-spec-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px 12px;
+    font-size: 10px;
+  }
+
+  .label-spec-item {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .spec-kicker {
+    color: var(--color-slate);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-size: 9px;
+  }
+
+  .spec-val {
+    color: var(--color-chalk);
+    font-weight: 500;
+  }
+
+  .retail-card {
+    background: var(--color-obsidian);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    padding: 32px;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  .cup-mockup-box {
+    background: var(--color-basalt);
+    border: 1px solid var(--color-border-subtle);
+    border-radius: var(--radius-sm);
+    padding: 36px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* Misuse / Don't Grid */
+  .misuse-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 20px;
+    margin-top: 24px;
+  }
+
+  .misuse-card {
+    background: var(--color-obsidian);
+    border: 1px solid rgba(217, 68, 54, 0.25);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .misuse-preview {
+    background: #140E0E;
+    height: 140px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    border-bottom: 1px solid rgba(217, 68, 54, 0.15);
+  }
+
+  .misuse-cross {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 24px;
+    height: 24px;
+    background: var(--color-danger);
+    color: #fff;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    font-weight: bold;
+  }
+
+  .misuse-info {
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .misuse-title {
+    font-size: 13px;
+    font-weight: 600;
+    color: #FF8F82;
+  }
+
+  .misuse-desc {
+    font-size: 12px;
+    color: var(--color-slate-light);
+    line-height: 1.4;
+  }
+
+  /* Code Inspector Section */
+  .code-card {
+    background: var(--color-obsidian);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    margin-top: 24px;
+  }
+
+  .code-header {
+    background: var(--color-bedrock);
+    padding: 12px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .code-title {
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--color-slate-light);
+  }
+
+  .copy-btn {
+    background: var(--color-basalt);
+    border: 1px solid var(--color-border);
+    color: var(--color-chalk);
+    font-family: inherit;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 5px 12px;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+
+  .copy-btn:hover {
+    background: var(--color-vermilion);
+    border-color: var(--color-vermilion);
+  }
+
+  .code-box {
+    padding: 20px;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    font-size: 12px;
+    line-height: 1.5;
+    color: #9EC0B1;
+    overflow-x: auto;
+    max-height: 220px;
+  }
+
+  /* Footer */
+  .specimen-footer {
+    margin-top: 96px;
+    padding-top: 32px;
+    border-top: 1px solid var(--color-border-subtle);
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    font-size: 12px;
+    color: var(--color-slate);
+  }
+
+  /* Responsive Adjustments */
+  @media (max-width: 900px) {
+    .header-inner { flex-direction: column; align-items: flex-start; }
+    .gate-panel { grid-template-columns: 1fr; }
+    .lockups-grid { grid-template-columns: 1fr; }
+    .clearspace-layout { grid-template-columns: 1fr; }
+    .touchpoints-grid { grid-template-columns: 1fr; }
+  }
+
+  @media (max-width: 600px) {
+    .container { padding: 0 16px; }
+    .hero-stage { padding: 48px 16px; }
+    .hero-toolbar { flex-direction: column; align-items: flex-start; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Global Reusable SVG Vector Definitions -->
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <defs>
+    <!-- Glyph S (Lapidary Roman) -->
+    <path id="glyph-s" d="M 66 32 L 52 32 C 48 20, 41 16, 33 16 C 22 16, 15 23, 15 33 C 15 43, 25 49, 40 55 C 58 62, 70 71, 70 88 C 70 104, 56 112, 34 112 C 15 112, 5 101, 3 86 L 17 86 C 19 96, 26 103, 35 103 C 47 103, 55 97, 55 86 C 55 75, 45 69, 31 63 C 14 56, 4 47, 4 33 C 4 18, 17 8, 33 8 C 50 8, 62 18, 66 32 Z" />
+    
+    <!-- Glyph T (Chiseled Wedge Serifs) -->
+    <path id="glyph-t" d="M 0 24 L 8 10 L 64 10 L 72 24 L 63 24 L 59 18 L 45 18 L 45 102 L 53 107 L 53 110 L 19 110 L 19 107 L 27 102 L 27 18 L 13 18 L 9 24 Z" />
+    
+    <!-- Glyph R (High-waisted bowl, sculpted flare leg) -->
+    <path id="glyph-r" d="M 8 110 L 8 107 L 14 102 L 14 18 L 8 13 L 8 10 L 46 10 C 65 10, 75 21, 75 37 C 75 51, 66 60, 50 63 C 54 67, 58 74, 62 82 L 72 102 L 78 107 L 78 110 L 58 110 L 48 88 C 43 78, 38 72, 30 70 L 30 102 L 36 107 L 36 110 Z M 30 20 L 30 58 L 44 58 C 55 58, 60 52, 60 39 C 60 26, 55 20, 44 20 Z" />
+    
+    <!-- Glyph A (Triangular summit, low architectural crossbar) -->
+    <path id="glyph-a" d="M 34 10 L 46 10 L 78 102 L 85 107 L 85 110 L 60 110 L 60 107 L 66 102 L 59 80 L 21 80 L 14 102 L 20 107 L 20 110 L 0 110 L 0 107 L 7 102 Z M 40 26 L 25 70 L 55 70 Z" />
+    
+    <!-- Composite Full Wordmark "STRATA" (Width 486, Height 120, Cap 100) -->
+    <g id="strata-wordmark-raw" fill-rule="evenodd">
+      <use href="#glyph-s" x="0" y="0" />
+      <use href="#glyph-t" x="72" y="0" />
+      <use href="#glyph-r" x="150" y="0" />
+      <use href="#glyph-a" x="234" y="0" />
+      <use href="#glyph-t" x="323" y="0" />
+      <use href="#glyph-a" x="401" y="0" />
+    </g>
+
+    <!-- Elevation Cipher Emblem (Terraced Strata Diamond) -->
+    <g id="strata-emblem-raw">
+      <rect x="15" y="15" width="50" height="50" rx="6" transform="rotate(45 40 40)" class="stage-emblem-frame" stroke-width="2.5"/>
+      <path d="M 26 26 L 48 26 L 54 32 L 32 32 Z" class="stage-emblem-top" />
+      <path d="M 20 37 L 60 37 L 60 43 L 20 43 Z" class="stage-emblem-mid" />
+      <path d="M 26 48 L 48 48 L 54 54 L 32 54 Z" class="stage-emblem-bot" />
+    </g>
+  </defs>
+</svg>
+
+<!-- Header -->
+<header class="specimen-header">
+  <div class="header-inner">
+    <div class="header-brand">
+      <span class="header-tag">Brand Standard</span>
+      <h1 style="font-size: 16px; font-weight: 600; letter-spacing: -0.01em;">STRATA COFFEE ROASTERS</h1>
+      <span class="header-meta">Identity Specification Manual v1.0</span>
+    </div>
+    <div class="header-telemetry">
+      <div class="telemetry-item">Terroir: <strong>Volcanic Cordillera</strong></div>
+      <div class="telemetry-item">Elevation: <strong>1,850m–2,350m</strong></div>
+      <div class="telemetry-item">Roast Profiling: <strong>Thermodynamic Airflow</strong></div>
+    </div>
+  </div>
+</header>
+
+<main class="container">
+
+  <!-- Section 1: Hero Live Stage with Interactive Controls -->
+  <section class="section" aria-label="Primary Wordmark Display">
+    <div class="section-intro">
+      <span class="section-eyebrow">01 / Master Wordmark</span>
+      <h2 class="section-title">Primary Brand Wordmark</h2>
+      <p class="section-desc">
+        Engineered for high-altitude single-origin coffee roasters. A custom-drawn chiseled lapidary wordmark built with razor-sharp terminal cuts, balanced counter spaces, and an architectural horizontal datum line.
+      </p>
+    </div>
+
+    <div class="hero-card">
+      <!-- Toolbar Controls -->
+      <div class="hero-toolbar">
+        <div class="toolbar-group">
+          <span class="toolbar-label">Color Mode:</span>
+          <div class="segmented-control" role="tablist" aria-label="Colorway Selection">
+            <button class="segmented-btn active" role="tab" aria-selected="true" id="btn-mode-obsidian" onclick="setColorMode('obsidian')">Obsidian</button>
+            <button class="segmented-btn" role="tab" aria-selected="false" id="btn-mode-chalk" onclick="setColorMode('chalk')">Chalk Light</button>
+            <button class="segmented-btn" role="tab" aria-selected="false" id="btn-mode-mono" onclick="setColorMode('mono')">1-Bit Mono</button>
+            <button class="segmented-btn" role="tab" aria-selected="false" id="btn-mode-vermilion" onclick="setColorMode('vermilion')">Thermal Vermilion</button>
+          </div>
+        </div>
+
+        <div class="toolbar-group">
+          <label class="toggle-switch-wrap" for="clearspace-toggle">
+            <span class="toolbar-label">Clearspace Overlay</span>
+            <div class="toggle-switch" id="clearspace-toggle" role="switch" aria-checked="false" tabindex="0" onclick="toggleClearspace()"></div>
+          </label>
+        </div>
+      </div>
+
+      <!-- Live Interactive Stage -->
+      <div class="hero-stage mode-obsidian" id="hero-stage">
+        <div class="stage-svg-wrap" id="stage-svg-wrap">
+          <svg class="stage-svg" id="master-hero-svg" viewBox="0 0 640 220" width="640" height="220" xmlns="http://www.w3.org/2000/svg">
+            
+            <!-- Clearspace Overlay Guidelines (Toggled dynamically) -->
+            <g id="clearspace-overlay-group" opacity="0" style="transition: opacity 0.25s ease;">
+              <!-- Outer exclusion zone boundary (1X margin = 60 units around) -->
+              <rect x="30" y="10" width="580" height="200" fill="none" stroke="#E25C2B" stroke-width="1.5" stroke-dasharray="6 4" opacity="0.8"/>
+              <!-- Diagonal exclusion hatch lines -->
+              <line x1="30" y1="10" x2="60" y2="40" stroke="#E25C2B" stroke-width="0.75" opacity="0.3"/>
+              <line x1="580" y1="10" x2="610" y2="40" stroke="#E25C2B" stroke-width="0.75" opacity="0.3"/>
+              <line x1="30" y1="180" x2="60" y2="210" stroke="#E25C2B" stroke-width="0.75" opacity="0.3"/>
+              <line x1="580" y1="180" x2="610" y2="210" stroke="#E25C2B" stroke-width="0.75" opacity="0.3"/>
+              
+              <!-- 1X Measurement Bracket - Top -->
+              <line x1="320" y1="10" x2="320" y2="40" stroke="#E25C2B" stroke-width="1.2"/>
+              <path d="M 317 14 L 320 10 L 323 14 M 317 36 L 320 40 L 323 36" fill="none" stroke="#E25C2B" stroke-width="1.2"/>
+              <text x="330" y="28" fill="#E25C2B" font-family="ui-monospace, monospace" font-size="11" font-weight="600">1X (Cap-Height)</text>
+
+              <!-- 1X Measurement Bracket - Left -->
+              <line x1="30" y1="100" x2="77" y2="100" stroke="#E25C2B" stroke-width="1.2"/>
+              <path d="M 34 97 L 30 100 L 34 103 M 73 97 L 77 100 L 73 103" fill="none" stroke="#E25C2B" stroke-width="1.2"/>
+              <text x="53" y="92" fill="#E25C2B" font-family="ui-monospace, monospace" font-size="11" font-weight="600" text-anchor="middle">1X</text>
+
+              <!-- 1X Measurement Bracket - Right -->
+              <line x1="563" y1="100" x2="610" y2="100" stroke="#E25C2B" stroke-width="1.2"/>
+              <path d="M 567 97 L 563 100 L 567 103 M 606 97 L 610 100 L 606 103" fill="none" stroke="#E25C2B" stroke-width="1.2"/>
+              <text x="586" y="92" fill="#E25C2B" font-family="ui-monospace, monospace" font-size="11" font-weight="600" text-anchor="middle">1X</text>
+
+              <!-- 1X Measurement Bracket - Bottom -->
+              <line x1="320" y1="170" x2="320" y2="210" stroke="#E25C2B" stroke-width="1.2"/>
+              <path d="M 317 174 L 320 170 L 323 174 M 317 206 L 320 210 L 323 206" fill="none" stroke="#E25C2B" stroke-width="1.2"/>
+              <text x="330" y="194" fill="#E25C2B" font-family="ui-monospace, monospace" font-size="11" font-weight="600">1X</text>
+
+              <!-- Module 'X' Reference Square -->
+              <rect x="42" y="22" width="24" height="24" fill="rgba(226, 92, 43, 0.15)" stroke="#E25C2B" stroke-width="1"/>
+              <text x="54" y="38" fill="#E25C2B" font-family="ui-monospace, monospace" font-size="11" font-weight="bold" text-anchor="middle">X</text>
+            </g>
+
+            <!-- Horizontal Geological Datum Line -->
+            <line x1="60" y1="106" x2="580" y2="106" stroke="#E25C2B" stroke-width="0.75" stroke-dasharray="2 4" opacity="0.35"/>
+
+            <!-- Centered Master Wordmark (Width 486, centered at x=77) -->
+            <g transform="translate(77, 40)" class="stage-mark-type">
+              <use href="#strata-wordmark-raw" />
+            </g>
+
+            <!-- Subtitle Descriptor & Coordinates -->
+            <text x="320" y="172" class="stage-descriptor" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="600" letter-spacing="7" text-anchor="middle">COFFEE ROASTERS · HIGH ALTITUDE TERROIR</text>
+            <text x="320" y="190" fill="#7E8B85" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="8.5" font-weight="500" letter-spacing="3" text-anchor="middle">MEDELLÍN 04°35'N · PORTLAND 45°31'N</text>
+          </svg>
+        </div>
+      </div>
+
+      <!-- Dynamic Scale Inspection Slider -->
+      <div class="hero-footer">
+        <div class="scale-slider-wrap">
+          <span class="toolbar-label">Optical Scale:</span>
+          <input type="range" class="scale-slider" id="scale-slider" min="20" max="140" value="80" oninput="handleScaleSlider(this.value)" aria-label="Continuous Optical Scale Inspector">
+          <span class="scale-readout" id="scale-readout">80px height</span>
+        </div>
+        <div class="toolbar-group">
+          <span class="scale-badge" id="scale-category">Packaging &amp; Hero Display Scale</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Plan-Gate Review & Explicit Rejection Record -->
+    <div class="gate-panel">
+      <div class="gate-col rejected">
+        <h3>First-Instinct Tropes Rejected (Plan-Gate)</h3>
+        <ul>
+          <li><strong>The "Fieldnote" Heritage Serif:</strong> Warm brown/parchment palette (#1C1A16, #F4EDE1, #C9A24B), Georgia italic serif, and looping botanical naturalist monogram. Explicitly rejected to establish a distinct, modern identity.</li>
+          <li><strong>Third-Wave Coffee Clichés:</strong> Crossed spoons, steaming coffee mugs, generic bean silhouettes, and circular hipster stamps.</li>
+          <li><strong>Generic SaaS Minimalist Sans:</strong> All-lowercase geometric sans with wide tracking and no typographic point of view.</li>
+        </ul>
+      </div>
+      <div class="gate-col approved">
+        <h3>Approved Strategic Direction: Strata</h3>
+        <ul>
+          <li><strong>Concept:</strong> Geological volcanic terroir and aerodynamic fluid-bed convection roasting. Single-origin micro-lots from 1,800m+ elevation.</li>
+          <li><strong>Typographic Architecture:</strong> Custom chiseled lapidary letterforms with 45° facet cuts, unified datum alignment, and balanced triangular counters.</li>
+          <li><strong>Chromatic Contrast:</strong> Cold Basalt Obsidian (#0F1416), Chalk White (#F7F8F6), and high-temperature Thermal Vermilion (#E25C2B).</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 2: Typographic Anatomy & Construction Geometry -->
+  <section class="section" aria-label="Typographic Construction">
+    <div class="section-intro">
+      <span class="section-eyebrow">02 / Construction &amp; Geometry</span>
+      <h2 class="section-title">Typographic Anatomy &amp; Optical Balance</h2>
+      <p class="section-desc">
+        Every glyph is crafted with intentional stroke contrast (3.4:1 vertical-to-horizontal ratio), geometric terminal cuts, and optical counter compensation.
+      </p>
+    </div>
+
+    <div class="anatomy-grid">
+      <!-- Glyph S Card -->
+      <article class="anatomy-card">
+        <div class="anatomy-card-header">
+          <h3 class="anatomy-glyph-title">Glyph 'S' — Sculptural Spine</h3>
+          <span class="anatomy-metric">Width 66u · Cap 100u</span>
+        </div>
+        <div class="anatomy-svg-box">
+          <svg viewBox="0 0 100 125" width="80" height="100">
+            <line x1="0" y1="10" x2="100" y2="10" stroke="#2A363C" stroke-width="1" stroke-dasharray="2 2"/>
+            <line x1="0" y1="110" x2="100" y2="110" stroke="#2A363C" stroke-width="1" stroke-dasharray="2 2"/>
+            <line x1="0" y1="63" x2="100" y2="63" stroke="#E25C2B" stroke-width="1" opacity="0.6"/>
+            <use href="#glyph-s" x="16" y="0" fill="#F7F8F6"/>
+            <circle cx="82" cy="32" r="3" fill="#E25C2B"/>
+            <circle cx="19" cy="86" r="3" fill="#E25C2B"/>
+          </svg>
+        </div>
+        <p class="anatomy-desc">
+          Sharp horizontal terminal cuts with acute chisel endpoints. The diagonal spine has calibrated stroke tension, inflecting across the central geological datum line.
+        </p>
+      </article>
+
+      <!-- Glyph T Card -->
+      <article class="anatomy-card">
+        <div class="anatomy-card-header">
+          <h3 class="anatomy-glyph-title">Glyph 'T' — Cantilevered Roof</h3>
+          <span class="anatomy-metric">Width 72u · Cap 100u</span>
+        </div>
+        <div class="anatomy-svg-box">
+          <svg viewBox="0 0 100 125" width="80" height="100">
+            <line x1="0" y1="10" x2="100" y2="10" stroke="#2A363C" stroke-width="1" stroke-dasharray="2 2"/>
+            <line x1="0" y1="110" x2="100" y2="110" stroke="#2A363C" stroke-width="1" stroke-dasharray="2 2"/>
+            <use href="#glyph-t" x="14" y="0" fill="#F7F8F6"/>
+            <path d="M 14 24 L 22 10 M 78 10 L 86 24" stroke="#E25C2B" stroke-width="1.5"/>
+          </svg>
+        </div>
+        <p class="anatomy-desc">
+          Architectural crossbeam with 45° chiseled downward wedge facets. Grounded by bracketed Roman triangular foot serifs to establish vertical authority.
+        </p>
+      </article>
+
+      <!-- Glyph R Card -->
+      <article class="anatomy-card">
+        <div class="anatomy-card-header">
+          <h3 class="anatomy-glyph-title">Glyph 'R' — Dynamic Strut</h3>
+          <span class="anatomy-metric">Width 78u · Cap 100u</span>
+        </div>
+        <div class="anatomy-svg-box">
+          <svg viewBox="0 0 100 125" width="80" height="100">
+            <line x1="0" y1="10" x2="100" y2="10" stroke="#2A363C" stroke-width="1" stroke-dasharray="2 2"/>
+            <line x1="0" y1="110" x2="100" y2="110" stroke="#2A363C" stroke-width="1" stroke-dasharray="2 2"/>
+            <use href="#glyph-r" x="12" y="0" fill="#F7F8F6"/>
+            <circle cx="70" cy="107" r="3" fill="#E25C2B"/>
+          </svg>
+        </div>
+        <p class="anatomy-desc">
+          Elevated circular bowl joining the vertical stem at the 58u waist. The diagonal leg extends with an architectural flare, terminating with a chisel cut at the baseline.
+        </p>
+      </article>
+
+      <!-- Glyph A Card -->
+      <article class="anatomy-card">
+        <div class="anatomy-card-header">
+          <h3 class="anatomy-glyph-title">Glyph 'A' — Summit Apex</h3>
+          <span class="anatomy-metric">Width 85u · Cap 100u</span>
+        </div>
+        <div class="anatomy-svg-box">
+          <svg viewBox="0 0 100 125" width="80" height="100">
+            <line x1="0" y1="10" x2="100" y2="10" stroke="#2A363C" stroke-width="1" stroke-dasharray="2 2"/>
+            <line x1="0" y1="110" x2="100" y2="110" stroke="#2A363C" stroke-width="1" stroke-dasharray="2 2"/>
+            <use href="#glyph-a" x="8" y="0" fill="#F7F8F6"/>
+            <line x1="29" y1="80" x2="67" y2="80" stroke="#E25C2B" stroke-width="2"/>
+          </svg>
+        </div>
+        <p class="anatomy-desc">
+          Flat chiseled summit apex. Tapered hairline left diagonal contrasted against a muscular right diagonal pillar. The low crossbar locks into the brand's horizon line.
+        </p>
+      </article>
+    </div>
+  </section>
+
+  <!-- Section 3: Lockup Hierarchy & System Variants -->
+  <section class="section" aria-label="System Lockup Variants">
+    <div class="section-intro">
+      <span class="section-eyebrow">03 / Identity System</span>
+      <h2 class="section-title">Lockup Variants &amp; Configurations</h2>
+      <p class="section-desc">
+        Standardized lockup configurations ensuring brand recognition across digital headers, product labels, architectural signage, and merchandise.
+      </p>
+    </div>
+
+    <div class="lockups-grid">
+      <!-- Variant 1: Pure Horizontal Wordmark -->
+      <article class="lockup-card">
+        <div class="lockup-preview">
+          <svg viewBox="0 0 520 130" width="100%" height="80" xmlns="http://www.w3.org/2000/svg">
+            <g fill="#F7F8F6" transform="translate(17, 5)">
+              <use href="#strata-wordmark-raw" />
+            </g>
+          </svg>
+        </div>
+        <div class="lockup-info">
+          <h3 class="lockup-name">01. Primary Horizontal Wordmark (Isolated)</h3>
+          <p class="lockup-use">Use on clean minimalist touchpoints: website hero headers, roastery exterior signage, and embossed stationery where secondary text is redundant.</p>
+        </div>
+      </article>
+
+      <!-- Variant 2: Full Horizontal Lockup with Emblem & Tagline -->
+      <article class="lockup-card">
+        <div class="lockup-preview">
+          <svg viewBox="0 0 680 150" width="100%" height="90" xmlns="http://www.w3.org/2000/svg">
+            <!-- Emblem -->
+            <g transform="translate(15, 25)">
+              <rect x="15" y="15" width="50" height="50" rx="6" transform="rotate(45 40 40)" fill="#13191C" stroke="#E25C2B" stroke-width="2.5"/>
+              <path d="M 26 26 L 48 26 L 54 32 L 32 32 Z" fill="#E25C2B"/>
+              <path d="M 20 37 L 60 37 L 60 43 L 20 43 Z" fill="#F7F8F6"/>
+              <path d="M 26 48 L 48 48 L 54 54 L 32 54 Z" fill="#7E8B85"/>
+            </g>
+            <!-- Vertical Divider -->
+            <line x1="105" y1="35" x2="105" y2="115" stroke="#2A363C" stroke-width="1.5"/>
+            <!-- Wordmark + Tagline -->
+            <g transform="translate(125, 20) scale(0.85)">
+              <g fill="#F7F8F6">
+                <use href="#strata-wordmark-raw" />
+              </g>
+              <text x="243" y="142" fill="#E25C2B" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="600" letter-spacing="6" text-anchor="middle">COFFEE ROASTERS · SINGLE ORIGIN</text>
+            </g>
+          </svg>
+        </div>
+        <div class="lockup-info">
+          <h3 class="lockup-name">02. Horizontal Lockup with Elevation Cipher</h3>
+          <p class="lockup-use">Primary commercial lockup for digital storefront navigation, trade show banners, wholesale invoices, and wholesale roasted bean shipper cartons.</p>
+        </div>
+      </article>
+
+      <!-- Variant 3: Stacked Architectural Lockup -->
+      <article class="lockup-card">
+        <div class="lockup-preview">
+          <svg viewBox="0 0 360 260" width="100%" height="180" xmlns="http://www.w3.org/2000/svg">
+            <!-- Center Emblem -->
+            <g transform="translate(140, 15)">
+              <rect x="15" y="15" width="50" height="50" rx="6" transform="rotate(45 40 40)" fill="#13191C" stroke="#E25C2B" stroke-width="2.5"/>
+              <path d="M 26 26 L 48 26 L 54 32 L 32 32 Z" fill="#E25C2B"/>
+              <path d="M 20 37 L 60 37 L 60 43 L 20 43 Z" fill="#F7F8F6"/>
+              <path d="M 26 48 L 48 48 L 54 54 L 32 54 Z" fill="#7E8B85"/>
+            </g>
+            <!-- Wordmark Scaled & Centered -->
+            <g fill="#F7F8F6" transform="translate(47, 110) scale(0.55)">
+              <use href="#strata-wordmark-raw" />
+            </g>
+            <!-- Orange Horizon Rule -->
+            <line x1="120" y1="195" x2="240" y2="195" stroke="#E25C2B" stroke-width="1.5"/>
+            <!-- Descriptor -->
+            <text x="180" y="218" fill="#E25C2B" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="10" font-weight="600" letter-spacing="4" text-anchor="middle">COFFEE ROASTERS</text>
+            <text x="180" y="236" fill="#7E8B85" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="8" font-weight="500" letter-spacing="2" text-anchor="middle">HIGH ALTITUDE VOLCANIC MICROLOTS</text>
+          </svg>
+        </div>
+        <div class="lockup-info">
+          <h3 class="lockup-name">03. Stacked / Vertical Architectural Lockup</h3>
+          <p class="lockup-use">Ideal for narrow, vertical display applications: specialty coffee retail pouch fronts, ceramic takeaway cups, barista aprons, and mobile app splash screens.</p>
+        </div>
+      </article>
+
+      <!-- Variant 4: Standalone Elevation Cipher Emblem -->
+      <article class="lockup-card">
+        <div class="lockup-preview" style="gap: 48px;">
+          <!-- Dark background emblem -->
+          <div style="text-align: center;">
+            <svg viewBox="0 0 100 100" width="80" height="80" xmlns="http://www.w3.org/2000/svg">
+              <rect x="20" y="20" width="60" height="60" rx="8" transform="rotate(45 50 50)" fill="#13191C" stroke="#E25C2B" stroke-width="2.5"/>
+              <path d="M 32 32 L 60 32 L 68 40 L 40 40 Z" fill="#E25C2B"/>
+              <path d="M 25 46 L 75 46 L 75 54 L 25 54 Z" fill="#F7F8F6"/>
+              <path d="M 32 60 L 60 60 L 68 68 L 40 68 Z" fill="#7E8B85"/>
+            </svg>
+            <div style="font-size: 11px; color: var(--color-slate); margin-top: 8px;">Obsidian Base</div>
+          </div>
+          <!-- Light background emblem -->
+          <div style="text-align: center; background: #F7F8F6; padding: 12px 18px; border-radius: 8px;">
+            <svg viewBox="0 0 100 100" width="80" height="80" xmlns="http://www.w3.org/2000/svg">
+              <rect x="20" y="20" width="60" height="60" rx="8" transform="rotate(45 50 50)" fill="#FFFFFF" stroke="#C9491B" stroke-width="2.5"/>
+              <path d="M 32 32 L 60 32 L 68 40 L 40 40 Z" fill="#C9491B"/>
+              <path d="M 25 46 L 75 46 L 75 54 L 25 54 Z" fill="#0F1416"/>
+              <path d="M 32 60 L 60 60 L 68 68 L 40 68 Z" fill="#7E8B85"/>
+            </svg>
+            <div style="font-size: 11px; color: #7E8B85; margin-top: 8px;">Chalk Base</div>
+          </div>
+        </div>
+        <div class="lockup-info">
+          <h3 class="lockup-name">04. Standalone Elevation Cipher (Mark-Only)</h3>
+          <p class="lockup-use">Used where space is constrained below the minimum legible wordmark threshold: browser favicons (16px/32px), tamper-evident bag seal labels, espresso portafilter handle coins, and social media avatars.</p>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <!-- Section 4: Clearspace Diagram & Exclusion Perimeter -->
+  <section class="section" aria-label="Clearspace Specification">
+    <div class="section-intro">
+      <span class="section-eyebrow">04 / Clearspace Specification</span>
+      <h2 class="section-title">Clearspace &amp; Protected Exclusion Zone</h2>
+      <p class="section-desc">
+        To preserve visual authority and optical impact, the mark must be surrounded by an inviolable clear space. No other typographic, photographic, or graphic element may encroach within this boundary.
+      </p>
+    </div>
+
+    <div class="clearspace-layout">
+      <!-- Clearspace Stage -->
+      <div class="clearspace-stage-card">
+        <svg viewBox="0 0 620 250" width="100%" height="auto" xmlns="http://www.w3.org/2000/svg">
+          <!-- Background Stage Container -->
+          <rect x="0" y="0" width="620" height="250" fill="#0A0E10" rx="8" />
+          
+          <!-- Outer Clearspace Boundary (Dashed) -->
+          <rect x="40" y="30" width="540" height="190" fill="none" stroke="#E25C2B" stroke-width="1.5" stroke-dasharray="6 4"/>
+          
+          <!-- Shaded Exclusion Perimeter Padding -->
+          <path d="M 40 30 L 580 30 L 580 220 L 40 220 Z M 95 65 L 95 185 L 525 185 L 525 65 Z" fill="rgba(226, 92, 43, 0.05)" fill-rule="evenodd"/>
+
+          <!-- Wordmark Inner Bounding Box -->
+          <rect x="95" y="65" width="430" height="120" fill="none" stroke="#2A363C" stroke-width="1"/>
+
+          <!-- Centered Wordmark -->
+          <g fill="#F7F8F6" transform="translate(102, 65) scale(0.85)">
+            <use href="#strata-wordmark-raw" />
+          </g>
+
+          <!-- Top Dimension Indicator -->
+          <line x1="310" y1="30" x2="310" y2="65" stroke="#E25C2B" stroke-width="1.5"/>
+          <path d="M 307 35 L 310 30 L 313 35 M 307 60 L 310 65 L 313 60" fill="none" stroke="#E25C2B" stroke-width="1.5"/>
+          <text x="322" y="52" fill="#E25C2B" font-family="ui-monospace, monospace" font-size="12" font-weight="bold">1X</text>
+
+          <!-- Left Dimension Indicator -->
+          <line x1="40" y1="125" x2="95" y2="125" stroke="#E25C2B" stroke-width="1.5"/>
+          <path d="M 45 122 L 40 125 L 45 128 M 90 122 L 95 125 L 90 128" fill="none" stroke="#E25C2B" stroke-width="1.5"/>
+          <text x="67" y="118" fill="#E25C2B" font-family="ui-monospace, monospace" font-size="12" font-weight="bold" text-anchor="middle">1X</text>
+
+          <!-- Right Dimension Indicator -->
+          <line x1="525" y1="125" x2="580" y2="125" stroke="#E25C2B" stroke-width="1.5"/>
+          <path d="M 530 122 L 525 125 L 530 128 M 575 122 L 580 125 L 575 128" fill="none" stroke="#E25C2B" stroke-width="1.5"/>
+          <text x="552" y="118" fill="#E25C2B" font-family="ui-monospace, monospace" font-size="12" font-weight="bold" text-anchor="middle">1X</text>
+
+          <!-- Bottom Dimension Indicator -->
+          <line x1="310" y1="185" x2="310" y2="220" stroke="#E25C2B" stroke-width="1.5"/>
+          <path d="M 307 190 L 310 185 L 313 190 M 307 215 L 310 220 L 313 215" fill="none" stroke="#E25C2B" stroke-width="1.5"/>
+          <text x="322" y="207" fill="#E25C2B" font-family="ui-monospace, monospace" font-size="12" font-weight="bold">1X</text>
+
+          <!-- Module Unit X Key -->
+          <g transform="translate(50, 40)">
+            <rect x="0" y="0" width="28" height="28" fill="var(--color-vermilion-tint)" stroke="#E25C2B" stroke-width="1"/>
+            <text x="14" y="19" fill="#E25C2B" font-family="ui-monospace, monospace" font-size="13" font-weight="bold" text-anchor="middle">X</text>
+          </g>
+        </svg>
+      </div>
+
+      <!-- Rules Explanation -->
+      <div class="clearspace-rules-card">
+        <div class="rule-block">
+          <h3 class="rule-title">The "1X" Clearspace Metric</h3>
+          <p class="rule-text">
+            The fundamental clearspace unit <strong>X</strong> is defined as 100% of the Cap-Height of the STRATA wordmark (equivalent to the full vertical height of the initial 'S').
+          </p>
+        </div>
+
+        <div class="rule-block">
+          <h3 class="rule-title">Perimeter Protection Rules</h3>
+          <p class="rule-text">
+            A minimum of <strong>1X</strong> clear space must be maintained on all four sides (top, bottom, left, and right). For large-format display billboards, exterior architectural signs, and trade-fair booths, clearspace should be expanded to <strong>1.5X</strong>.
+          </p>
+        </div>
+
+        <div class="rule-block">
+          <h3 class="rule-title">Trim &amp; Die-Cut Margins</h3>
+          <p class="rule-text">
+            When placing the mark on retail packaging, pouches, or print labels, the outer clearspace perimeter must never cross into the physical bag trim edge, heat-seal crimp line, or gusset folds.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 5: Minimum Size Rules -->
+  <section class="section" aria-label="Minimum Size Guidelines">
+    <div class="section-intro">
+      <span class="section-eyebrow">05 / Minimum Size Rules</span>
+      <h2 class="section-title">Scale Thresholds &amp; Minimum Sizes</h2>
+      <p class="section-desc">
+        Strict minimum sizing ensures the delicate lapidary cuts, internal counter triangles, and fine serifs do not fill in or degrade under low resolution or ink bleed.
+      </p>
+    </div>
+
+    <div class="min-size-grid">
+      <!-- Digital Wordmark Minimum -->
+      <article class="min-size-card">
+        <div class="min-size-header">
+          <h3 class="min-size-title">Wordmark (Digital)</h3>
+          <span class="min-size-metric-badge">24px Height / 100px Width</span>
+        </div>
+        <div class="min-size-render-box">
+          <!-- Actual size rendering -->
+          <div style="height: 24px; display: flex; align-items: center;">
+            <svg viewBox="0 0 500 125" height="24" width="96" xmlns="http://www.w3.org/2000/svg">
+              <g fill="#F7F8F6"><use href="#strata-wordmark-raw" /></g>
+            </svg>
+          </div>
+          <span class="min-size-label">1:1 Actual Screen Scale (24px)</span>
+        </div>
+        <p class="anatomy-desc">
+          The smallest digital height for the standalone wordmark. Below 24px, the internal counter of the 'A' and the waist serifs on the 'R' begin to coalesce.
+        </p>
+      </article>
+
+      <!-- Digital Full Lockup Minimum -->
+      <article class="min-size-card">
+        <div class="min-size-header">
+          <h3 class="min-size-title">Full Lockup + Tagline</h3>
+          <span class="min-size-metric-badge">36px Height / 150px Width</span>
+        </div>
+        <div class="min-size-render-box">
+          <div style="height: 36px; display: flex; align-items: center;">
+            <svg viewBox="0 0 680 150" height="36" width="163" xmlns="http://www.w3.org/2000/svg">
+              <g transform="translate(15, 25)">
+                <rect x="15" y="15" width="50" height="50" rx="6" transform="rotate(45 40 40)" fill="#13191C" stroke="#E25C2B" stroke-width="2.5"/>
+                <path d="M 26 26 L 48 26 L 54 32 L 32 32 Z" fill="#E25C2B"/>
+                <path d="M 20 37 L 60 37 L 60 43 L 20 43 Z" fill="#F7F8F6"/>
+                <path d="M 26 48 L 48 48 L 54 54 L 32 54 Z" fill="#7E8B85"/>
+              </g>
+              <line x1="105" y1="35" x2="105" y2="115" stroke="#2A363C" stroke-width="1.5"/>
+              <g transform="translate(125, 20) scale(0.85)">
+                <g fill="#F7F8F6"><use href="#strata-wordmark-raw" /></g>
+                <text x="243" y="142" fill="#E25C2B" font-family="sans-serif" font-size="11" font-weight="600" letter-spacing="6" text-anchor="middle">COFFEE ROASTERS</text>
+              </g>
+            </svg>
+          </div>
+          <span class="min-size-label">1:1 Actual Screen Scale (36px)</span>
+        </div>
+        <p class="anatomy-desc">
+          When the secondary descriptor is included, minimum height increases to 36px to prevent the tagline tracking from becoming illegible.
+        </p>
+      </article>
+
+      <!-- Digital Standalone Icon Minimum (Favicon) -->
+      <article class="min-size-card">
+        <div class="min-size-header">
+          <h3 class="min-size-title">Elevation Cipher (Favicon)</h3>
+          <span class="min-size-metric-badge">16px × 16px (16 CSS px)</span>
+        </div>
+        <div class="min-size-render-box">
+          <div style="display: flex; gap: 20px; align-items: center;">
+            <!-- 16px actual -->
+            <svg viewBox="0 0 100 100" width="16" height="16" xmlns="http://www.w3.org/2000/svg">
+              <rect x="20" y="20" width="60" height="60" rx="8" transform="rotate(45 50 50)" fill="#13191C" stroke="#E25C2B" stroke-width="4"/>
+              <path d="M 25 45 L 75 45 L 75 55 L 25 55 Z" fill="#F7F8F6"/>
+            </svg>
+            <!-- 32px actual -->
+            <svg viewBox="0 0 100 100" width="32" height="32" xmlns="http://www.w3.org/2000/svg">
+              <rect x="20" y="20" width="60" height="60" rx="8" transform="rotate(45 50 50)" fill="#13191C" stroke="#E25C2B" stroke-width="3"/>
+              <path d="M 30 32 L 60 32 L 68 40 L 38 40 Z" fill="#E25C2B"/>
+              <path d="M 25 46 L 75 46 L 75 54 L 25 54 Z" fill="#F7F8F6"/>
+              <path d="M 30 60 L 60 60 L 68 68 L 38 68 Z" fill="#7E8B85"/>
+            </svg>
+          </div>
+          <span class="min-size-label">16px &amp; 32px Favicon / App Icon Scale</span>
+        </div>
+        <p class="anatomy-desc">
+          Below 24px, the wordmark must be substituted with the Elevation Cipher. Its bold geometric strata tiers retain instant identity recognition at 16×16px.
+        </p>
+      </article>
+
+      <!-- Physical Print Minimum -->
+      <article class="min-size-card">
+        <div class="min-size-header">
+          <h3 class="min-size-title">Physical Print Minimum</h3>
+          <span class="min-size-metric-badge">20 mm (0.78 in) Width</span>
+        </div>
+        <div class="min-size-render-box">
+          <div style="text-align: center;">
+            <div style="font-size: 16px; font-weight: bold; color: var(--color-chalk);">20 mm</div>
+            <div style="font-size: 11px; color: var(--color-vermilion); font-family: ui-monospace, monospace;">Wordmark Print Floor</div>
+          </div>
+          <span class="min-size-label">Offset Lithography &amp; Gravure Packaging</span>
+        </div>
+        <p class="anatomy-desc">
+          For flexographic printing on kraft bags, minimum width is <strong>24 mm</strong>. For foil stamping, blind embossing, or high-definition offset lithography, minimum width is <strong>20 mm</strong>.
+        </p>
+      </article>
+    </div>
+  </section>
+
+  <!-- Section 6: Chromatic & Material Palette -->
+  <section class="section" aria-label="Color System">
+    <div class="section-intro">
+      <span class="section-eyebrow">06 / Color System</span>
+      <h2 class="section-title">Volcanic Soil &amp; Thermal Material Palette</h2>
+      <p class="section-desc">
+        A restrained mineral chromatic palette derived from volcanic soil horizons, Andean cloud forest silica, and convection pyrolysis roasting thermodynamics.
+      </p>
+    </div>
+
+    <div class="palette-grid">
+      <!-- Swatch 1: Basalt Obsidian -->
+      <div class="palette-card">
+        <div class="palette-swatch" style="background: #0F1416;"></div>
+        <div class="palette-details">
+          <span class="swatch-role">Primary Ink &amp; Ground</span>
+          <h3 class="swatch-name">Basalt Obsidian</h3>
+          <span class="swatch-hex">HEX #0F1416</span>
+          <p class="swatch-usage">Primary background for dark packaging, coffee tins, and roastery signage. Represents volcanic parent rock.</p>
+        </div>
+      </div>
+
+      <!-- Swatch 2: Chalk Silica -->
+      <div class="palette-card">
+        <div class="palette-swatch" style="background: #F7F8F6; border-bottom: 1px solid #ddd;"></div>
+        <div class="palette-details">
+          <span class="swatch-role">Canvas &amp; Typographic Ink</span>
+          <h3 class="swatch-name">Chalk Silica</h3>
+          <span class="swatch-hex">HEX #F7F8F6</span>
+          <p class="swatch-usage">High-contrast text on dark surfaces; primary background canvas for cupping forms, stationery, and shipping manifests.</p>
+        </div>
+      </div>
+
+      <!-- Swatch 3: Thermal Vermilion -->
+      <div class="palette-card">
+        <div class="palette-swatch" style="background: #E25C2B;"></div>
+        <div class="palette-details">
+          <span class="swatch-role">Signature Accent</span>
+          <h3 class="swatch-name">Thermal Vermilion</h3>
+          <span class="swatch-hex">HEX #E25C2B</span>
+          <p class="swatch-usage">Single brand accent color. Represents the 205°C first-crack roasting heat and oxidized mineral andisols.</p>
+        </div>
+      </div>
+
+      <!-- Swatch 4: Lichen Slate -->
+      <div class="palette-card">
+        <div class="palette-swatch" style="background: #7E8B85;"></div>
+        <div class="palette-details">
+          <span class="swatch-role">Secondary Technical</span>
+          <h3 class="swatch-name">Lichen Slate</h3>
+          <span class="swatch-hex">HEX #7E8B85</span>
+          <p class="swatch-usage">Subordinate metadata, origin GPS coordinates, batch elevation telemetry, and technical cupping scores.</p>
+        </div>
+      </div>
+
+      <!-- Swatch 5: Bedrock Container -->
+      <div class="palette-card">
+        <div class="palette-swatch" style="background: #1E272B;"></div>
+        <div class="palette-details">
+          <span class="swatch-role">Surface Container</span>
+          <h3 class="swatch-name">Bedrock Slate</h3>
+          <span class="swatch-hex">HEX #1E272B</span>
+          <p class="swatch-usage">Card backgrounds, divider boundaries, digital control surfaces, and secondary structural container panels.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 7: Contextual Brand Touchpoints -->
+  <section class="section" aria-label="Brand Applications">
+    <div class="section-intro">
+      <span class="section-eyebrow">07 / Physical &amp; Digital Applications</span>
+      <h2 class="section-title">Brand Identity in Applied Context</h2>
+      <p class="section-desc">
+        Demonstrating the wordmark and identity system applied across physical micro-lot packaging, ceramic drinkware, and digital roasting telemetry interfaces.
+      </p>
+    </div>
+
+    <div class="touchpoints-grid">
+      <!-- Touchpoint 1: Specialty Coffee Pouch Packaging Mockup -->
+      <div class="packaging-card">
+        <div class="coffee-bag-mockup">
+          <!-- Degassing valve -->
+          <div class="coffee-bag-valve"></div>
+
+          <!-- Bag Header: Wordmark & Emblem -->
+          <div style="display: flex; flex-direction: column; align-items: center; gap: 8px;">
+            <svg viewBox="0 0 100 100" width="36" height="36" xmlns="http://www.w3.org/2000/svg">
+              <rect x="20" y="20" width="60" height="60" rx="8" transform="rotate(45 50 50)" fill="#13191C" stroke="#E25C2B" stroke-width="3"/>
+              <path d="M 30 32 L 60 32 L 68 40 L 38 40 Z" fill="#E25C2B"/>
+              <path d="M 25 46 L 75 46 L 75 54 L 25 54 Z" fill="#F7F8F6"/>
+              <path d="M 30 60 L 60 60 L 68 68 L 38 68 Z" fill="#7E8B85"/>
+            </svg>
+            <svg viewBox="0 0 500 125" width="180" height="42" xmlns="http://www.w3.org/2000/svg">
+              <g fill="#F7F8F6"><use href="#strata-wordmark-raw" /></g>
+            </svg>
+            <span style="font-size: 8px; font-weight: 600; letter-spacing: 3px; color: var(--color-vermilion); text-transform: uppercase;">Single Origin Micro-Lot</span>
+          </div>
+
+          <!-- Die-cut Product Information Label -->
+          <div class="coffee-label">
+            <div style="display: flex; justify-content: space-between; align-items: baseline;">
+              <span style="font-size: 13px; font-weight: 700; color: #fff; letter-spacing: 0.04em;">HUILA · EL MIRADOR</span>
+              <span style="font-size: 10px; font-weight: 600; color: var(--color-vermilion); background: var(--color-vermilion-tint); padding: 2px 6px; border-radius: 2px;">SCA 89.5</span>
+            </div>
+            
+            <div class="label-rule"></div>
+
+            <div class="label-spec-grid">
+              <div class="label-spec-item">
+                <span class="spec-kicker">Elevation</span>
+                <span class="spec-val">1,980m ASL</span>
+              </div>
+              <div class="label-spec-item">
+                <span class="spec-kicker">Varietal</span>
+                <span class="spec-val">Pink Bourbon</span>
+              </div>
+              <div class="label-spec-item">
+                <span class="spec-kicker">Process</span>
+                <span class="spec-val">Thermal Shock Washed</span>
+              </div>
+              <div class="label-spec-item">
+                <span class="spec-kicker">Roast Profile</span>
+                <span class="spec-val">Light Omni / Convection</span>
+              </div>
+            </div>
+
+            <div style="margin-top: 4px; font-size: 9.5px; color: #BAC8C2; line-height: 1.4;">
+              <strong>Sensory Notes:</strong> Blood Orange, White Peach Blossom, Papaya, Raw Orange Blossom Honey.
+            </div>
+
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 4px; font-size: 8px; color: #6D7E78; font-family: ui-monospace, monospace;">
+              <span>NET WT. 250G / 8.8 OZ</span>
+              <span>LOT NO. STR-2024-CO</span>
+            </div>
+          </div>
+
+          <!-- Bag Bottom Telemetry -->
+          <div style="text-align: center; font-size: 7.5px; letter-spacing: 2px; color: #53645F; text-transform: uppercase;">
+            Roasted in Medellín &amp; Portland · Roasted on Order
+          </div>
+        </div>
+        <p style="font-size: 12px; color: var(--color-slate); text-align: center;">
+          Matte obsidian foil bag with heat-sealed valve, debossed foil wordmark, and precision technical origin label.
+        </p>
+      </div>
+
+      <!-- Touchpoint 2 & 3: Ceramic Vessel & Roaster Interface -->
+      <div class="retail-card">
+        <div>
+          <h3 style="font-size: 14px; font-weight: 600; margin-bottom: 12px; color: var(--color-chalk);">Physical Ceramic Drinkware Mockup</h3>
+          <div class="cup-mockup-box">
+            <!-- Simulated ceramic cup profile -->
+            <div style="width: 140px; height: 160px; background: linear-gradient(180deg, #1C2428 0%, #11171A 100%); border-radius: 0 0 24px 24px; border: 1px solid #2F3C42; box-shadow: inset 0 6px 12px rgba(255,255,255,0.05), 0 15px 30px rgba(0,0,0,0.5); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px;">
+              <svg viewBox="0 0 100 100" width="28" height="28" xmlns="http://www.w3.org/2000/svg">
+                <rect x="20" y="20" width="60" height="60" rx="8" transform="rotate(45 50 50)" fill="#11171A" stroke="#E25C2B" stroke-width="3"/>
+                <path d="M 25 46 L 75 46 L 75 54 L 25 54 Z" fill="#F7F8F6"/>
+              </svg>
+              <svg viewBox="0 0 500 125" width="84" height="22" xmlns="http://www.w3.org/2000/svg">
+                <g fill="#E25C2B"><use href="#strata-wordmark-raw" /></g>
+              </svg>
+              <span style="font-size: 6px; letter-spacing: 2px; color: #7E8B85; text-transform: uppercase;">Medellín · Portland</span>
+            </div>
+          </div>
+          <p style="font-size: 12px; color: var(--color-slate); margin-top: 10px;">
+            Stoneware ceramic espresso cup with blind debossed vermilion seal and precision wordmark.
+          </p>
+        </div>
+
+        <div style="border-top: 1px solid var(--color-border-subtle); padding-top: 20px;">
+          <h3 style="font-size: 14px; font-weight: 600; margin-bottom: 12px; color: var(--color-chalk);">Digital Roasting Telemetry Interface</h3>
+          <div style="background: #0A0D0E; border: 1px solid var(--color-border); border-radius: 6px; padding: 14px 18px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #1E272B; padding-bottom: 10px; margin-bottom: 10px;">
+              <div style="display: flex; align-items: center; gap: 10px;">
+                <svg viewBox="0 0 500 125" width="70" height="18" xmlns="http://www.w3.org/2000/svg">
+                  <g fill="#F7F8F6"><use href="#strata-wordmark-raw" /></g>
+                </svg>
+                <span style="font-size: 9px; color: var(--color-vermilion); font-family: monospace; font-weight: bold;">ROAST.SYS // V2.4</span>
+              </div>
+              <span style="font-size: 10px; color: #4ADE80; font-family: monospace;">● LIVE TELEMETRY</span>
+            </div>
+            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; font-family: ui-monospace, monospace; font-size: 11px;">
+              <div>
+                <div style="color: #6D7E78; font-size: 8.5px;">BEAN TEMP</div>
+                <div style="color: #F7F8F6; font-weight: bold;">204.8°C</div>
+              </div>
+              <div>
+                <div style="color: #6D7E78; font-size: 8.5px;">RATE OF RISE</div>
+                <div style="color: #E25C2B; font-weight: bold;">+6.2°C/min</div>
+              </div>
+              <div>
+                <div style="color: #6D7E78; font-size: 8.5px;">AIRFLOW CFM</div>
+                <div style="color: #F7F8F6; font-weight: bold;">85% STAT</div>
+              </div>
+            </div>
+          </div>
+          <p style="font-size: 12px; color: var(--color-slate); margin-top: 10px;">
+            Responsive digital product header integrating the vector wordmark at 18px height alongside real-time roasting telemetry.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 8: Brand Violations & Misuse ("Don'ts") -->
+  <section class="section" aria-label="Brand Misuse Guidelines">
+    <div class="section-intro">
+      <span class="section-eyebrow">08 / Brand Integrity</span>
+      <h2 class="section-title">Brand Violations &amp; Unapproved Misuse</h2>
+      <p class="section-desc">
+        To safeguard the visual authority and optical integrity of STRATA, the following treatments are strictly prohibited across all print, physical, and digital media.
+      </p>
+    </div>
+
+    <div class="misuse-grid">
+      <!-- Violation 1: Distortion -->
+      <article class="misuse-card">
+        <div class="misuse-preview">
+          <div class="misuse-cross">✕</div>
+          <!-- Distorted SVG -->
+          <svg viewBox="0 0 500 125" width="220" height="35" style="transform: scale(1.3, 0.6); opacity: 0.6;" xmlns="http://www.w3.org/2000/svg">
+            <g fill="#F7F8F6"><use href="#strata-wordmark-raw" /></g>
+          </svg>
+        </div>
+        <div class="misuse-info">
+          <h3 class="misuse-title">Do Not Distort Aspect Ratio</h3>
+          <p class="misuse-desc">Never stretch horizontally, compress vertically, or skew the glyphs. Scaling must always remain 100% proportional.</p>
+        </div>
+      </article>
+
+      <!-- Violation 2: Decorative Drop Shadows / Gradients -->
+      <article class="misuse-card">
+        <div class="misuse-preview">
+          <div class="misuse-cross">✕</div>
+          <!-- Shadowed & Gradient SVG -->
+          <svg viewBox="0 0 500 125" width="160" height="40" style="filter: drop-shadow(0px 8px 10px #FF0055);" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="bad-grad" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0%" stop-color="#FF5E62"/>
+                <stop offset="100%" stop-color="#FFD97D"/>
+              </linearGradient>
+            </defs>
+            <g fill="url(#bad-grad)"><use href="#strata-wordmark-raw" /></g>
+          </svg>
+        </div>
+        <div class="misuse-info">
+          <h3 class="misuse-title">Do Not Add Shadows or Gradients</h3>
+          <p class="misuse-desc">Never apply decorative drop shadows, outer glows, 3D extrusions, or multi-color gradients. Keep forms flat and crisp.</p>
+        </div>
+      </article>
+
+      <!-- Violation 3: Reordering / Misalignment -->
+      <article class="misuse-card">
+        <div class="misuse-preview">
+          <div class="misuse-cross">✕</div>
+          <!-- Misaligned Glyphs -->
+          <svg viewBox="0 0 500 125" width="160" height="40" xmlns="http://www.w3.org/2000/svg">
+            <g fill="#F7F8F6" fill-rule="evenodd" opacity="0.6">
+              <use href="#glyph-s" x="0" y="20" />
+              <use href="#glyph-t" x="72" y="-10" />
+              <use href="#glyph-r" x="150" y="15" />
+              <use href="#glyph-a" x="234" y="-15" />
+              <use href="#glyph-t" x="323" y="10" />
+              <use href="#glyph-a" x="401" y="-5" />
+            </g>
+          </svg>
+        </div>
+        <div class="misuse-info">
+          <h3 class="misuse-title">Do Not Alter Kerning or Baseline</h3>
+          <p class="misuse-desc">Never reposition individual glyphs, alter optical kerning offsets, or shift letters off the established horizon datum line.</p>
+        </div>
+      </article>
+
+      <!-- Violation 4: Low-Contrast / Unapproved Colors -->
+      <article class="misuse-card">
+        <div class="misuse-preview" style="background: #A86B32;">
+          <div class="misuse-cross">✕</div>
+          <!-- Low Contrast Wordmark -->
+          <svg viewBox="0 0 500 125" width="160" height="40" opacity="0.5" xmlns="http://www.w3.org/2000/svg">
+            <g fill="#7A481B"><use href="#strata-wordmark-raw" /></g>
+          </svg>
+        </div>
+        <div class="misuse-info">
+          <h3 class="misuse-title">Do Not Place on Clashing Backgrounds</h3>
+          <p class="misuse-desc">Never place the wordmark on low-contrast muddy backgrounds, unapproved kraft textures, or busy photography without sufficient contrast.</p>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <!-- Section 9: SVG Vector Code Inspector -->
+  <section class="section" aria-label="Technical Asset Specifications">
+    <div class="section-intro">
+      <span class="section-eyebrow">09 / Technical Asset Specifications</span>
+      <h2 class="section-title">Vector Path Data &amp; Export</h2>
+      <p class="section-desc">
+        Pure, zero-dependency SVG path definitions for direct integration into production web assets, iOS asset catalogs, and CNC embroidery or engraving machines.
+      </p>
+    </div>
+
+    <div class="code-card">
+      <div class="code-header">
+        <span class="code-title">Production Inline SVG Asset Snippet</span>
+        <button class="copy-btn" id="copy-btn" onclick="copySvgCode()">Copy SVG Source</button>
+      </div>
+      <pre class="code-box" id="code-snippet">&lt;!-- STRATA Master Vector Wordmark (Zero-dependency SVG) --&gt;
+&lt;svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 486 120" width="486" height="120" fill="currentColor" fill-rule="evenodd"&gt;
+  &lt;!-- Glyph S --&gt;
+  &lt;path d="M 66 32 L 52 32 C 48 20, 41 16, 33 16 C 22 16, 15 23, 15 33 C 15 43, 25 49, 40 55 C 58 62, 70 71, 70 88 C 70 104, 56 112, 34 112 C 15 112, 5 101, 3 86 L 17 86 C 19 96, 26 103, 35 103 C 47 103, 55 97, 55 86 C 55 75, 45 69, 31 63 C 14 56, 4 47, 4 33 C 4 18, 17 8, 33 8 C 50 8, 62 18, 66 32 Z" transform="translate(0, 0)" /&gt;
+  &lt;!-- Glyph T --&gt;
+  &lt;path d="M 0 24 L 8 10 L 64 10 L 72 24 L 63 24 L 59 18 L 45 18 L 45 102 L 53 107 L 53 110 L 19 110 L 19 107 L 27 102 L 27 18 L 13 18 L 9 24 Z" transform="translate(72, 0)" /&gt;
+  &lt;!-- Glyph R --&gt;
+  &lt;path d="M 8 110 L 8 107 L 14 102 L 14 18 L 8 13 L 8 10 L 46 10 C 65 10, 75 21, 75 37 C 75 51, 66 60, 50 63 C 54 67, 58 74, 62 82 L 72 102 L 78 107 L 78 110 L 58 110 L 48 88 C 43 78, 38 72, 30 70 L 30 102 L 36 107 L 36 110 Z M 30 20 L 30 58 L 44 58 C 55 58, 60 52, 60 39 C 60 26, 55 20, 44 20 Z" transform="translate(150, 0)" /&gt;
+  &lt;!-- Glyph A --&gt;
+  &lt;path d="M 34 10 L 46 10 L 78 102 L 85 107 L 85 110 L 60 110 L 60 107 L 66 102 L 59 80 L 21 80 L 14 102 L 20 107 L 20 110 L 0 110 L 0 107 L 7 102 Z M 40 26 L 25 70 L 55 70 Z" transform="translate(234, 0)" /&gt;
+  &lt;!-- Glyph T --&gt;
+  &lt;path d="M 0 24 L 8 10 L 64 10 L 72 24 L 63 24 L 59 18 L 45 18 L 45 102 L 53 107 L 53 110 L 19 110 L 19 107 L 27 102 L 27 18 L 13 18 L 9 24 Z" transform="translate(323, 0)" /&gt;
+  &lt;!-- Glyph A --&gt;
+  &lt;path d="M 34 10 L 46 10 L 78 102 L 85 107 L 85 110 L 60 110 L 60 107 L 66 102 L 59 80 L 21 80 L 14 102 L 20 107 L 20 110 L 0 110 L 0 107 L 7 102 Z M 40 26 L 25 70 L 55 70 Z" transform="translate(401, 0)" /&gt;
+&lt;/svg&gt;</pre>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="specimen-footer">
+    <div>
+      <strong>STRATA COFFEE ROASTERS</strong> · Brand Guidelines Specification v1.0
+    </div>
+    <div>
+      All Rights Reserved · Single-file Vector Deliverable · Self-Contained HTML5+CSS+SVG
+    </div>
+  </footer>
+
+</main>
+
+<!-- Interactive Scripts -->
+<script>
+  // 1. Colorway Mode Switching Logic
+  function setColorMode(mode) {
+    const stage = document.getElementById('hero-stage');
+    const buttons = document.querySelectorAll('.segmented-btn');
+    
+    // Reset buttons
+    buttons.forEach(btn => {
+      btn.classList.remove('active');
+      btn.setAttribute('aria-selected', 'false');
+    });
+
+    const activeBtn = document.getElementById(`btn-mode-${mode}`);
+    if (activeBtn) {
+      activeBtn.classList.add('active');
+      activeBtn.setAttribute('aria-selected', 'true');
+    }
+
+    // Apply class to stage
+    stage.className = `hero-stage mode-${mode}`;
+  }
+
+  // 2. Clearspace Toggle Logic
+  let clearspaceActive = false;
+  function toggleClearspace() {
+    clearspaceActive = !clearspaceActive;
+    const toggle = document.getElementById('clearspace-toggle');
+    const overlay = document.getElementById('clearspace-overlay-group');
+    
+    if (clearspaceActive) {
+      toggle.classList.add('active');
+      toggle.setAttribute('aria-checked', 'true');
+      overlay.style.opacity = '1';
+    } else {
+      toggle.classList.remove('active');
+      toggle.setAttribute('aria-checked', 'false');
+      overlay.style.opacity = '0';
+    }
+  }
+
+  // Keyboard accessibility for toggle switch
+  document.getElementById('clearspace-toggle').addEventListener('keydown', function(e) {
+    if (e.key === ' ' || e.key === 'Enter') {
+      e.preventDefault();
+      toggleClearspace();
+    }
+  });
+
+  // 3. Continuous Optical Scale Slider Logic
+  function handleScaleSlider(val) {
+    const stageSvgWrap = document.getElementById('stage-svg-wrap');
+    const readout = document.getElementById('scale-readout');
+    const category = document.getElementById('scale-category');
+    
+    // Scale max-width smoothly from 200px to 900px
+    const widthPx = Math.round((val / 100) * 640);
+    stageSvgWrap.style.maxWidth = `${widthPx}px`;
+    readout.textContent = `${val}px height`;
+
+    // Category label
+    if (val < 30) {
+      category.textContent = "Micro / Favicon Threshold (Switch to Emblem)";
+      category.style.color = "var(--color-vermilion)";
+    } else if (val < 50) {
+      category.textContent = "Mobile & Subhead Navigation Scale";
+      category.style.color = "var(--color-slate-light)";
+    } else if (val < 90) {
+      category.textContent = "Packaging & Hero Display Scale";
+      category.style.color = "var(--color-slate-light)";
+    } else {
+      category.textContent = "Large-Format Architectural & Billboard Scale";
+      category.style.color = "var(--color-chalk)";
+    }
+  }
+
+  // 4. Copy SVG Code Snippet
+  function copySvgCode() {
+    const code = document.getElementById('code-snippet').textContent;
+    const btn = document.getElementById('copy-btn');
+    navigator.clipboard.writeText(code).then(() => {
+      const originalText = btn.textContent;
+      btn.textContent = "Copied to Clipboard!";
+      btn.style.background = "var(--color-vermilion)";
+      btn.style.color = "#fff";
+      setTimeout(() => {
+        btn.textContent = originalText;
+        btn.style.background = "";
+        btn.style.color = "";
+      }, 2000);
+    }).catch(err => {
+      btn.textContent = "Selected!";
+    });
+  }
+</script>
+
+</body>
+</html>

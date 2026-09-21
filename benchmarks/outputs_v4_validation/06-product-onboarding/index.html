@@ -1,0 +1,2917 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Vektor Cloud · Enterprise Workspace Setup</title>
+  <meta name="description" content="Production-ready multi-step onboarding flow for Vektor Cloud telemetry and workflow orchestration.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --canvas: #f8fafc;
+      --surface: #ffffff;
+      --ink: #0f172a;
+      --ink-rgb: 15, 23, 42;
+      --muted: #475569;
+      --muted-rgb: 71, 85, 105;
+      --line: #e2e8f0;
+      --accent: #2563eb;
+      --accent-rgb: 37, 99, 235;
+      --danger: #b91c1c;
+      --danger-rgb: 185, 28, 28;
+      --success: #059669;
+      --success-rgb: 5, 150, 105;
+      --font-ui: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+      /* rgb(5,150,105) itself only reaches 3.27-3.77:1 on the light surfaces it's
+         used against for text (needs 4.5:1); this darker value keeps the same hue
+         but clears that threshold. Kept separate from --line/non-text uses of the
+         original green, which already pass the 3:1 non-text threshold. */
+      --status-success-text: #047857;
+      /* --accent (#2563eb) on its own 10%-tint background reaches only ~4.50:1,
+         a hair under the 4.5:1 text minimum. Same darker-text-variant pattern as
+         --status-success-text: keeps the accent hue, clears the threshold. */
+      --accent-text: #1d4ed8;
+      /* --line (1.23:1 vs white) is fine for decorative dividers, but interactive
+         component boundaries (inputs, buttons, cards) need a 3:1 idle-state border
+         when they have no other idle-state cue. */
+      --border-control: #64748b;
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0px;
+      padding: 0px;
+    }
+
+    body {
+      background-color: var(--canvas);
+      color: var(--ink);
+      font-family: var(--font-ui);
+      font-size: 16px;
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    ul, ol {
+      list-style: none;
+    }
+
+    h1, h2, h3, p, span, strong, label, input, button, select {
+      font-family: var(--font-ui);
+    }
+
+    h1 {
+      font-size: 32px;
+      line-height: 1.25;
+      font-weight: 700;
+      letter-spacing: -0.025em;
+    }
+
+    h2 {
+      font-size: 24px;
+      line-height: 1.33;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      color: var(--ink);
+    }
+
+    h3 {
+      font-size: 20px;
+      line-height: 1.4;
+      font-weight: 600;
+      letter-spacing: -0.015em;
+    }
+
+    p {
+      font-size: 16px;
+      color: var(--muted);
+    }
+
+    .meta-text {
+      font-size: 12px;
+      line-height: 1.5;
+      color: var(--muted);
+    }
+
+    .label-text {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--ink);
+    }
+
+    .mono-text {
+      font-family: var(--font-mono);
+      font-size: 14px;
+    }
+
+    header.site-header {
+      background-color: var(--surface);
+      border-bottom: 1px solid var(--line);
+      padding: 16px 24px;
+    }
+
+    .header-inner {
+      max-width: 1200px;
+      margin: 0px auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .brand-group {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .brand-logo-mark {
+      width: 32px;
+      height: 32px;
+      background-color: var(--ink);
+      color: var(--surface);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 16px;
+      flex-shrink: 0;
+    }
+
+    .brand-title {
+      font-size: 20px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      color: var(--ink);
+    }
+
+    .badge-env {
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      background-color: rgba(var(--ink-rgb), 0.04);
+      color: var(--muted);
+      padding: 4px 8px;
+      border-radius: 4px;
+      border: 1px solid var(--line);
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .btn-text {
+      background: none;
+      border: none;
+      color: var(--muted);
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      padding: 8px 12px;
+      border-radius: 8px;
+      transition: color 120ms ease, background-color 120ms ease;
+    }
+
+    .btn-text:hover {
+      color: var(--ink);
+      background-color: rgba(var(--ink-rgb), 0.04);
+    }
+
+    .btn-text:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 2px;
+    }
+
+    nav.stepper-nav {
+      background-color: var(--surface);
+      border-bottom: 1px solid var(--line);
+      padding: 16px 24px;
+    }
+
+    .stepper-inner {
+      max-width: 1200px;
+      margin: 0px auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .step-track {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex: 1;
+    }
+
+    .step-track-node {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .step-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 8px 12px;
+      border-radius: 8px;
+      text-align: left;
+      transition: background-color 120ms ease;
+    }
+
+    .step-item:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 2px;
+    }
+
+    .step-badge {
+      width: 28px;
+      height: 28px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      font-weight: 600;
+      font-family: var(--font-mono);
+      background-color: rgba(var(--ink-rgb), 0.04);
+      color: var(--muted);
+      border: 1px solid var(--border-control);
+      transition: all 180ms ease;
+      flex-shrink: 0;
+    }
+
+    .step-title-text {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--muted);
+      transition: color 180ms ease;
+    }
+
+    .step-item.is-active .step-badge {
+      background-color: var(--accent);
+      color: var(--surface);
+      border-color: var(--accent);
+    }
+
+    .step-item.is-active .step-title-text {
+      color: var(--ink);
+      font-weight: 600;
+    }
+
+    .step-item.is-complete .step-badge {
+      /* Solid --success border (3.90:1 vs white), not a translucent rgba ring
+         (~1.2:1) -- the boundary is the UI-component graphic 1.4.11 covers. */
+      background-color: rgba(var(--success-rgb), 0.12);
+      color: var(--success);
+      border-color: var(--success);
+    }
+
+    .step-item.is-complete .step-title-text {
+      color: var(--ink);
+    }
+
+    .step-connector {
+      flex: 1;
+      height: 2px;
+      background-color: var(--line);
+      border-radius: 2px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .step-connector-fill {
+      position: absolute;
+      left: 0px;
+      top: 0px;
+      height: 100%;
+      width: 0px;
+      background-color: var(--accent);
+      transition: width 280ms cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    main.onboarding-main {
+      flex: 1;
+      max-width: 1200px;
+      width: 100%;
+      margin: 0px auto;
+      padding: 32px 24px;
+      display: grid;
+      grid-template-columns: 1.4fr 1fr;
+      gap: 32px;
+      align-items: start;
+    }
+
+    .wizard-panel {
+      background-color: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 32px;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .step-header {
+      margin-bottom: 24px;
+    }
+
+    .step-eyebrow {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--accent);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 8px;
+      display: block;
+    }
+
+    .step-header h2 {
+      margin-bottom: 8px;
+    }
+
+    .step-header p {
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    .step-stage {
+      display: none;
+      flex-direction: column;
+      gap: 24px;
+      opacity: 0;
+      transform: translateX(16px);
+      transition: opacity 260ms cubic-bezier(0.16, 1, 0.3, 1), transform 260ms cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .step-stage.is-visible {
+      display: flex;
+      opacity: 1;
+      transform: translateX(0px);
+    }
+
+    .step-stage.slide-reverse {
+      transform: translateX(-16px);
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .form-field-card {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .form-label {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--ink);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .form-label .optional-tag {
+      font-size: 12px;
+      font-weight: 400;
+      color: var(--muted);
+    }
+
+    .input-field {
+      width: 100%;
+      height: 48px;
+      padding: 12px 16px;
+      /* --line only gives 1.23:1 vs --surface; an idle-state input boundary
+         needs 3:1 since it has no other affordance until :focus. */
+      border: 1px solid var(--border-control);
+      border-radius: 8px;
+      background-color: var(--surface);
+      color: var(--ink);
+      font-size: 16px;
+      font-family: var(--font-ui);
+      transition: border-color 120ms ease, box-shadow 120ms ease;
+    }
+
+    .input-field:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(var(--accent-rgb), 0.15);
+    }
+
+    .input-field::placeholder,
+    .subdomain-input::placeholder {
+      /* 0.6 alpha only reaches ~2.88:1 against --surface; 0.8 clears 4.5:1 at ~4.54:1. */
+      color: rgba(var(--muted-rgb), 0.8);
+    }
+
+    .input-field.has-error {
+      border-color: var(--danger);
+      background-color: rgba(var(--danger-rgb), 0.05);
+    }
+
+    .input-field.has-error:focus {
+      border-color: var(--danger);
+      box-shadow: 0 0 0 3px rgba(var(--danger-rgb), 0.15);
+    }
+
+    .input-subdomain-group {
+      display: flex;
+      align-items: center;
+      border: 1px solid var(--border-control);
+      border-radius: 8px;
+      background-color: var(--surface);
+      height: 48px;
+      overflow: hidden;
+      transition: border-color 120ms ease, box-shadow 120ms ease;
+    }
+
+    .input-subdomain-group:focus-within {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(var(--accent-rgb), 0.15);
+    }
+
+    .subdomain-prefix, .subdomain-suffix {
+      padding: 12px 16px;
+      background-color: rgba(var(--ink-rgb), 0.04);
+      color: var(--muted);
+      font-size: 14px;
+      font-family: var(--font-mono);
+      white-space: nowrap;
+      user-select: none;
+      border-right: 1px solid var(--line);
+    }
+
+    .subdomain-suffix {
+      border-right: none;
+      border-left: 1px solid var(--line);
+    }
+
+    .subdomain-input {
+      border: none;
+      flex: 1;
+      height: 100%;
+      padding: 0px 16px;
+      font-size: 14px;
+      font-family: var(--font-mono);
+      color: var(--ink);
+      outline: none;
+    }
+
+    .subdomain-status {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12px;
+      color: var(--status-success-text);
+      margin-top: 4px;
+    }
+
+    .status-indicator-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 4px;
+      background-color: var(--success);
+      display: inline-block;
+    }
+
+    .status-indicator-dot.is-error {
+      background-color: var(--danger);
+    }
+
+    select.input-field {
+      appearance: none;
+      /* stroke='%23475569' is --muted inlined as a literal hex — a data-URI can't
+         reference a CSS custom property, so this must be kept in sync by hand if
+         --muted ever changes. */
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23475569' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 16px center;
+      padding-right: 48px;
+      cursor: pointer;
+    }
+
+    .radio-segment-group {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+    }
+
+    .radio-segment-item {
+      display: flex;
+    }
+
+    .radio-segment-btn {
+      width: 100%;
+      height: 44px;
+      border: 1px solid var(--border-control);
+      background-color: var(--surface);
+      color: var(--muted);
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 120ms ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .radio-segment-btn:hover {
+      border-color: rgba(var(--ink-rgb), 0.2);
+      color: var(--ink);
+    }
+
+    .radio-segment-btn.is-selected {
+      background-color: rgba(var(--accent-rgb), 0.1);
+      border-color: var(--accent);
+      color: var(--accent-text);
+      font-weight: 600;
+    }
+
+    .radio-segment-btn:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 2px;
+    }
+
+    .step-benefits-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      padding: 16px;
+      background-color: var(--canvas);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+    }
+
+    .step-benefit-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .benefit-icon {
+      /* rendered as a visible ✓ text glyph (not an SVG icon), so it needs the
+         4.5:1 text minimum, not just the 3:1 non-text minimum. */
+      color: var(--status-success-text);
+      flex-shrink: 0;
+    }
+
+    .invite-roster-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .invite-row-node {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .invite-row {
+      display: grid;
+      grid-template-columns: 1fr 140px 44px;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .btn-icon-remove {
+      width: 44px;
+      height: 48px;
+      background: none;
+      border: 1px solid var(--border-control);
+      border-radius: 8px;
+      color: var(--muted);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 120ms ease;
+    }
+
+    .btn-icon-remove:hover:not(:disabled) {
+      background-color: rgba(var(--danger-rgb), 0.1);
+      border-color: rgba(var(--danger-rgb), 0.3);
+      color: var(--danger);
+    }
+
+    .btn-icon-remove:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+
+    .btn-icon-remove:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 2px;
+    }
+
+    .roster-actions {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 8px;
+    }
+
+    .btn-secondary {
+      height: 44px;
+      padding: 0px 16px;
+      border: 1px solid var(--border-control);
+      background-color: var(--surface);
+      color: var(--ink);
+      font-size: 14px;
+      font-weight: 600;
+      border-radius: 8px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 120ms ease;
+    }
+
+    .btn-secondary:hover {
+      background-color: var(--canvas);
+      border-color: rgba(var(--ink-rgb), 0.2);
+    }
+
+    .btn-secondary:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 2px;
+    }
+
+    .role-definitions-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      padding: 12px 16px;
+      background-color: var(--canvas);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+    }
+
+    .role-def-node {
+      font-size: 12px;
+      color: var(--muted);
+      line-height: 1.4;
+    }
+
+    .role-def-node strong {
+      color: var(--ink);
+    }
+
+    .share-invite-box {
+      border: 1px dashed var(--line);
+      border-radius: 8px;
+      padding: 16px;
+      background-color: var(--canvas);
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .copy-link-group {
+      display: flex;
+      gap: 8px;
+    }
+
+    .copy-link-input {
+      flex: 1;
+      height: 44px;
+      padding: 0px 12px;
+      border: 1px solid var(--border-control);
+      border-radius: 8px;
+      background-color: var(--surface);
+      color: var(--muted);
+      font-size: 14px;
+      font-family: var(--font-mono);
+      outline: none;
+    }
+
+    .copy-confirm-text {
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--status-success-text);
+      min-height: 18px;
+    }
+
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+
+    .toggle-row-card {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background-color: var(--surface);
+      gap: 16px;
+    }
+
+    .toggle-info strong {
+      display: block;
+      font-size: 14px;
+      color: var(--ink);
+      margin-bottom: 4px;
+    }
+
+    .toggle-info p {
+      font-size: 12px;
+      line-height: 1.4;
+    }
+
+    .switch-control {
+      width: 48px;
+      height: 28px;
+      /* 0.15 alpha only reaches ~1.37:1 against the white card behind it; this
+         binary on/off indicator has no other idle-state cue, so it needs the
+         3:1 non-text UI minimum. This control is reused on two different
+         container backgrounds (plain --surface white, and the tinted
+         .billing-toggle-container at rgba(ink,0.04)) — 0.54 alpha clears 3:1
+         against both (~3.6:1 on white, ~3.0:1 on the tinted container). */
+      background-color: rgba(var(--ink-rgb), 0.54);
+      border-radius: 14px;
+      border: none;
+      position: relative;
+      cursor: pointer;
+      transition: background-color 200ms ease;
+      flex-shrink: 0;
+    }
+
+    .switch-control:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 2px;
+    }
+
+    .switch-control[aria-checked="true"] {
+      background-color: var(--accent);
+    }
+
+    .switch-thumb {
+      width: 20px;
+      height: 20px;
+      background-color: var(--surface);
+      border-radius: 10px;
+      position: absolute;
+      top: 4px;
+      left: 4px;
+      transition: transform 200ms cubic-bezier(0.16, 1, 0.3, 1);
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
+    }
+
+    .switch-control[aria-checked="true"] .switch-thumb {
+      transform: translateX(20px);
+    }
+
+    .billing-toggle-container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      padding: 8px 16px;
+      background-color: rgba(var(--ink-rgb), 0.04);
+      border-radius: 8px;
+      margin-bottom: 8px;
+    }
+
+    .billing-label {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--muted);
+      cursor: pointer;
+    }
+
+    .billing-label.is-active {
+      color: var(--ink);
+      font-weight: 600;
+    }
+
+    .discount-pill {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--status-success-text);
+      /* alpha lowered from the usual 0.12 to 0.08: this pill sits inside
+         .billing-toggle-container's own rgba(--ink-rgb, 0.04) tint, and that
+         doubly-tinted background pulls --status-success-text down to ~4.40:1
+         at 0.12 alpha (fails 4.5:1 for 12px/600 text). 0.08 alpha keeps
+         ~4.62:1 against the doubly-tinted background with margin to spare. */
+      background-color: rgba(var(--success-rgb), 0.08);
+      padding: 4px 8px;
+      border-radius: 4px;
+      border: 1px solid rgba(var(--success-rgb), 0.25);
+      margin-left: 4px;
+    }
+
+    .plan-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+    }
+
+    .plan-grid-item {
+      display: flex;
+    }
+
+    .plan-tier-card {
+      width: 100%;
+      border: 1px solid var(--border-control);
+      border-radius: 8px;
+      padding: 16px;
+      background-color: var(--surface);
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      position: relative;
+      text-align: left;
+      transition: all 120ms ease;
+    }
+
+    .plan-tier-card:hover {
+      border-color: rgba(var(--ink-rgb), 0.3);
+    }
+
+    .plan-tier-card.is-selected {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 2px var(--accent);
+      background-color: rgba(var(--accent-rgb), 0.03);
+    }
+
+    .plan-tier-card:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 2px;
+    }
+
+    .plan-badge-rec {
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--accent-text);
+      background-color: rgba(var(--accent-rgb), 0.1);
+      padding: 4px 8px;
+      border-radius: 4px;
+      position: absolute;
+      top: 12px;
+      right: 12px;
+    }
+
+    .plan-name {
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--ink);
+    }
+
+    .plan-price {
+      display: flex;
+      align-items: baseline;
+      gap: 4px;
+    }
+
+    .plan-price-num {
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--ink);
+      font-family: var(--font-mono);
+    }
+
+    .plan-price-period {
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .plan-desc {
+      font-size: 12px;
+      color: var(--muted);
+      line-height: 1.4;
+      margin-bottom: 4px;
+    }
+
+    .plan-feature-bullets {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      border-top: 1px solid var(--line);
+      padding-top: 8px;
+      margin-top: auto;
+    }
+
+    .plan-bullet-node {
+      font-size: 12px;
+      color: var(--muted);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .plan-bullet-node::before {
+      content: "•";
+      color: var(--accent);
+      font-weight: 700;
+    }
+
+    .slider-interactive-card {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 20px;
+      background-color: var(--canvas);
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .slider-header-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .slider-value-readout {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--accent);
+      font-family: var(--font-mono);
+    }
+
+    .continuous-range-input {
+      width: 100%;
+      height: 8px;
+      border-radius: 4px;
+      background-color: var(--border-control);
+      outline: none;
+      -webkit-appearance: none;
+      cursor: pointer;
+    }
+
+    .continuous-range-input::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 24px;
+      height: 24px;
+      border-radius: 12px;
+      background-color: var(--accent);
+      border: 2px solid var(--surface);
+      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+      cursor: grab;
+      transition: transform 80ms ease;
+    }
+
+    .continuous-range-input::-webkit-slider-thumb:active {
+      transform: scale(1.15);
+      cursor: grabbing;
+    }
+
+    .continuous-range-input:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 4px;
+    }
+
+    .slider-ticks-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 12px;
+      color: var(--muted);
+      font-family: var(--font-mono);
+    }
+
+    .pricing-summary-receipt {
+      border-top: 1px solid var(--line);
+      padding-top: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .receipt-row-node {
+      display: flex;
+      justify-content: space-between;
+      font-size: 14px;
+      color: var(--muted);
+    }
+
+    .receipt-row-node.total-row {
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--ink);
+      border-top: 1px dashed var(--line);
+      padding-top: 8px;
+      margin-top: 4px;
+    }
+
+    .receipt-row-node.total-row strong {
+      font-size: 20px;
+      font-family: var(--font-mono);
+      color: var(--accent);
+    }
+
+    .checkbox-group {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .checkbox-node-wrap {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .checkbox-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      cursor: pointer;
+    }
+
+    .checkbox-item input[type="checkbox"] {
+      width: 20px;
+      height: 20px;
+      accent-color: var(--accent);
+      cursor: pointer;
+    }
+
+    .checkbox-label-content strong {
+      display: block;
+      font-size: 14px;
+      color: var(--ink);
+    }
+
+    .checkbox-label-content p {
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .wizard-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 32px;
+      padding-top: 24px;
+      border-top: 1px solid var(--line);
+      gap: 16px;
+    }
+
+    .footer-left-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .footer-right-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .btn-primary {
+      height: 48px;
+      padding: 0px 24px;
+      background-color: var(--accent);
+      color: var(--surface);
+      font-size: 16px;
+      font-weight: 600;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: background-color 120ms ease, transform 100ms ease;
+    }
+
+    .btn-primary:hover {
+      /* Solid --accent-text, not a translucent --accent overlay: the translucent
+         version composites lighter against the white page (L .1532 -> .1921),
+         dropping the white label to 4.34:1 and failing 1.4.3. Solid #1d4ed8
+         computes to 6.70:1. */
+      background-color: var(--accent-text);
+    }
+
+    .btn-primary:active {
+      transform: scale(0.98);
+    }
+
+    .btn-primary:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 2px;
+    }
+
+    .validation-alert-banner {
+      display: none;
+      padding: 12px 16px;
+      border-radius: 8px;
+      background-color: rgba(var(--danger-rgb), 0.08);
+      border: 1px solid rgba(var(--danger-rgb), 0.25);
+      color: var(--danger);
+      font-size: 14px;
+      font-weight: 500;
+      margin-top: 16px;
+    }
+
+    .validation-alert-banner.is-active {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    aside.manifest-aside {
+      background-color: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      position: sticky;
+      top: 32px;
+    }
+
+    .manifest-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--line);
+      padding-bottom: 16px;
+    }
+
+    .manifest-header h3 {
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--ink);
+    }
+
+    .manifest-status-chip {
+      font-size: 12px;
+      font-weight: 600;
+      font-family: var(--font-mono);
+      padding: 4px 8px;
+      border-radius: 4px;
+      background-color: rgba(var(--ink-rgb), 0.04);
+      color: var(--muted);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .manifest-status-chip.live {
+      background-color: rgba(var(--success-rgb), 0.12);
+      color: var(--status-success-text);
+    }
+
+    .manifest-status-chip.live .pulse-dot {
+      background-color: var(--success);
+      animation: pulse-dot-beat 1.6s ease-in-out infinite;
+    }
+
+    .manifest-header.pulse-paused .manifest-status-chip.live .pulse-dot {
+      animation-play-state: paused;
+      opacity: 1;
+    }
+
+    .pulse-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 4px;
+      background-color: var(--muted);
+    }
+
+    @keyframes pulse-dot-beat {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.4; }
+    }
+
+    .pulse-pause-btn {
+      background: none;
+      border: 1px solid var(--border-control);
+      border-radius: 4px;
+      width: 24px;
+      height: 24px;
+      font-size: 11px;
+      line-height: 1;
+      cursor: pointer;
+      color: var(--muted);
+      flex-shrink: 0;
+      margin-left: 8px;
+    }
+
+    .pulse-pause-btn:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 2px;
+    }
+
+    .manifest-identity-card {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 16px;
+      background-color: var(--canvas);
+      border-radius: 8px;
+      border: 1px solid var(--line);
+    }
+
+    .manifest-avatar {
+      width: 48px;
+      height: 48px;
+      border-radius: 8px;
+      background-color: var(--ink);
+      color: var(--surface);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      font-weight: 700;
+      font-family: var(--font-mono);
+      flex-shrink: 0;
+      text-transform: uppercase;
+    }
+
+    .manifest-identity-meta {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      overflow: hidden;
+    }
+
+    .manifest-org-name {
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--ink);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .manifest-url-endpoint {
+      font-size: 12px;
+      color: var(--accent);
+      font-family: var(--font-mono);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .manifest-section {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      border-bottom: 1px solid var(--line);
+      padding-bottom: 16px;
+    }
+
+    .manifest-section:last-of-type {
+      border-bottom: none;
+      padding-bottom: 0px;
+    }
+
+    .manifest-section-title {
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--muted);
+    }
+
+    .telemetry-node-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .telemetry-node-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 14px;
+    }
+
+    .telemetry-key {
+      color: var(--muted);
+    }
+
+    .telemetry-val {
+      font-weight: 500;
+      color: var(--ink);
+      font-family: var(--font-mono);
+      font-size: 12px;
+    }
+
+    .team-preview-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .chip-node-item {
+      display: inline-flex;
+    }
+
+    .teammate-pill {
+      font-size: 12px;
+      padding: 4px 8px;
+      background-color: rgba(var(--ink-rgb), 0.04);
+      border: 1px solid var(--line);
+      border-radius: 4px;
+      color: var(--ink);
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .role-badge-tag {
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      padding: 4px 8px;
+      border-radius: 4px;
+      background-color: rgba(var(--accent-rgb), 0.1);
+      color: var(--accent-text);
+    }
+
+    .deployment-state-screen {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      padding: 48px 24px;
+      gap: 24px;
+    }
+
+    .deployment-state-screen.is-active {
+      display: flex;
+    }
+
+    .deployment-spinner-icon {
+      width: 48px;
+      height: 48px;
+      color: var(--accent);
+      animation: deployment-spinner-rotate 1s linear infinite;
+    }
+
+    @keyframes deployment-spinner-rotate {
+      to { transform: rotate(360deg); }
+    }
+
+    .provisioning-log-card {
+      width: 100%;
+      max-width: 480px;
+      background-color: var(--ink);
+      color: var(--line);
+      border-radius: 8px;
+      padding: 20px;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      text-align: left;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .log-entry {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .log-entry.success {
+      /* --status-success-text was tuned for light surfaces and only reaches ~3.26:1
+         against this card's dark --ink background. --success itself already clears
+         4.5:1 here (~4.74:1), so use it directly rather than the light-surface variant. */
+      color: var(--success);
+    }
+
+    .ready-banner-box {
+      border: 1px solid rgba(var(--success-rgb), 0.3);
+      background-color: rgba(var(--success-rgb), 0.1);
+      border-radius: 8px;
+      padding: 20px;
+      width: 100%;
+      max-width: 480px;
+      text-align: left;
+    }
+
+    .api-token-box {
+      margin-top: 12px;
+      background-color: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 8px 12px;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    footer.site-footer {
+      background-color: var(--surface);
+      border-top: 1px solid var(--line);
+      padding: 24px;
+      margin-top: auto;
+    }
+
+    .footer-inner {
+      max-width: 1200px;
+      margin: 0px auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 12px;
+      color: var(--muted);
+      gap: 16px;
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 16px;
+    }
+
+    .footer-link-node {
+      display: inline-flex;
+    }
+
+    .footer-link {
+      color: var(--muted);
+      text-decoration: none;
+    }
+
+    .footer-link:hover {
+      color: var(--ink);
+      text-decoration: underline;
+    }
+
+    @media (max-width: 960px) {
+      main.onboarding-main {
+        grid-template-columns: 1fr;
+        gap: 24px;
+      }
+
+      aside.manifest-aside {
+        position: static;
+      }
+    }
+
+    @media (max-width: 640px) {
+      header.site-header, nav.stepper-nav, main.onboarding-main, footer.site-footer {
+        padding: 16px;
+      }
+
+      .wizard-panel {
+        padding: 20px;
+      }
+
+      .radio-segment-group {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .plan-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .invite-row {
+        grid-template-columns: 1fr 100px 44px;
+      }
+
+      .stepper-inner {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .step-track {
+        width: 100%;
+      }
+
+      .step-title-text {
+        display: none;
+      }
+
+      .footer-inner {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        transition: none !important;
+        animation: none !important;
+        scroll-behavior: auto !important;
+      }
+
+      .step-stage {
+        transform: none !important;
+      }
+
+      .step-connector-fill {
+        transition: none !important;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- LANDMARK 1: HEADER -->
+  <header class="site-header">
+    <div class="header-inner">
+      <div class="brand-group">
+        <div class="brand-logo-mark" aria-hidden="true">V</div>
+        <h1 class="brand-title">Vektor Cloud</h1>
+        <span class="badge-env">Onboarding Console</span>
+      </div>
+      <div class="header-actions">
+        <span class="meta-text" id="live-save-status">Not saved yet</span>
+        <button type="button" class="btn-text" id="btn-save-exit">Save Progress</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- LANDMARK 2: NAV STEPPER -->
+  <nav class="stepper-nav" aria-label="Onboarding Progress">
+    <div class="stepper-inner">
+      <ol class="step-track">
+        <li class="step-track-node">
+          <button type="button" class="step-item is-active" id="nav-step-1" aria-current="step">
+            <span class="step-badge" id="badge-step-1">1</span>
+            <span class="step-title-text">Workspace Details</span>
+          </button>
+        </li>
+        <li class="step-connector" aria-hidden="true">
+          <div class="step-connector-fill" id="connector-fill-1"></div>
+        </li>
+
+        <li class="step-track-node">
+          <button type="button" class="step-item" id="nav-step-2">
+            <span class="step-badge" id="badge-step-2">2</span>
+            <span class="step-title-text">Team Access</span>
+          </button>
+        </li>
+        <li class="step-connector" aria-hidden="true">
+          <div class="step-connector-fill" id="connector-fill-2"></div>
+        </li>
+
+        <li class="step-track-node">
+          <button type="button" class="step-item" id="nav-step-3">
+            <span class="step-badge" id="badge-step-3">3</span>
+            <span class="step-title-text">Plan &amp; Deploy</span>
+          </button>
+        </li>
+      </ol>
+      <div class="meta-text" id="step-counter-indicator">Step 1 of 3</div>
+    </div>
+  </nav>
+
+  <!-- LANDMARK 3: MAIN WORKSPACE -->
+  <main class="onboarding-main">
+
+    <!-- PRIMARY WIZARD FORM PANEL -->
+    <div class="wizard-panel">
+      <!-- LANDMARK 4: FORM -->
+      <form id="onboarding-form" novalidate>
+
+        <!-- SCREEN 1: WORKSPACE DETAILS -->
+        <section class="step-stage is-visible" id="stage-step-1" aria-labelledby="heading-step-1">
+          <div class="step-header">
+            <span class="step-eyebrow">Step 1 of 3</span>
+            <h2 id="heading-step-1">Workspace Details</h2>
+            <p>Establish your organization profile, data residency jurisdiction, and team velocity baseline.</p>
+          </div>
+
+          <div class="form-field-card">
+            <label for="input-org-name" class="form-label">
+              Organization Name
+            </label>
+            <input 
+              type="text" 
+              id="input-org-name" 
+              name="orgName" 
+              class="input-field" 
+              placeholder="e.g. Apex Systems" 
+              value="Acme Corp" 
+              required 
+              aria-describedby="org-name-desc"
+              autocomplete="organization"
+            >
+            <p class="meta-text" id="org-name-desc">This name will appear on all audit trails, customer reports, and billing receipts.</p>
+          </div>
+
+          <div class="form-field-card">
+            <label for="input-subdomain" class="form-label">
+              Workspace Subdomain
+            </label>
+            <div class="input-subdomain-group">
+              <span class="subdomain-prefix">https://</span>
+              <input 
+                type="text" 
+                id="input-subdomain" 
+                name="subdomain" 
+                class="subdomain-input" 
+                placeholder="acme-corp"
+                value="acme-corp"
+                required 
+                aria-describedby="subdomain-desc subdomain-feedback-text"
+              >
+              <span class="subdomain-suffix">.vektor.io</span>
+            </div>
+            <div class="subdomain-status" id="subdomain-status-row" role="status">
+              <span class="status-indicator-dot" aria-hidden="true"></span>
+              <span id="subdomain-feedback-text">Valid format</span>
+            </div>
+            <p class="meta-text" id="subdomain-desc">Letters, numbers, and dashes only. Can be mapped to a custom domain in settings later.</p>
+          </div>
+
+          <div class="form-field-card">
+            <label for="select-region" class="form-label">
+              Primary Cloud Telemetry Region
+            </label>
+            <select id="select-region" name="region" class="input-field" aria-describedby="region-desc">
+              <option value="us-east-1" selected>US-East (N. Virginia, us-east-1) · 14ms latency</option>
+              <option value="eu-central-1">EU-Central (Frankfurt, eu-central-1) · 22ms latency · GDPR</option>
+              <option value="ap-southeast-1">AP-Southeast (Tokyo, ap-southeast-1) · 38ms latency</option>
+            </select>
+            <p class="meta-text" id="region-desc">Data sovereignty guarantee: raw spans, traces, and customer payloads remain locked to this region.</p>
+          </div>
+
+          <div class="form-field-card">
+            <span class="label-text">Engineering Team Size</span>
+            <ul class="radio-segment-group" role="radiogroup" aria-label="Engineering Team Size">
+              <li class="radio-segment-item">
+                <button type="button" role="radio" aria-checked="false" class="radio-segment-btn" data-val="1-10">1–10</button>
+              </li>
+              <li class="radio-segment-item">
+                <button type="button" role="radio" aria-checked="true" class="radio-segment-btn is-selected" data-val="11-50">11–50</button>
+              </li>
+              <li class="radio-segment-item">
+                <button type="button" role="radio" aria-checked="false" class="radio-segment-btn" data-val="51-250">51–250</button>
+              </li>
+              <li class="radio-segment-item">
+                <button type="button" role="radio" aria-checked="false" class="radio-segment-btn" data-val="250+">250+</button>
+              </li>
+            </ul>
+          </div>
+
+          <ul class="step-benefits-list">
+            <li class="step-benefit-item">
+              <span class="benefit-icon" aria-hidden="true">&#x2713;</span>
+              <span>SOC2 Type II, ISO-27001, and HIPAA-ready physical data centers.</span>
+            </li>
+            <li class="step-benefit-item">
+              <span class="benefit-icon" aria-hidden="true">&#x2713;</span>
+              <span>Sub-millisecond trace ingestion engine with automated schema discovery.</span>
+            </li>
+            <li class="step-benefit-item">
+              <span class="benefit-icon" aria-hidden="true">&#x2713;</span>
+              <span>Zero-egress private networking via AWS PrivateLink and Azure ExpressRoute.</span>
+            </li>
+          </ul>
+        </section>
+
+        <!-- SCREEN 2: TEAM ACCESS -->
+        <section class="step-stage" id="stage-step-2" aria-labelledby="heading-step-2">
+          <div class="step-header">
+            <span class="step-eyebrow">Step 2 of 3</span>
+            <h2 id="heading-step-2">Team Access &amp; Roles</h2>
+            <p>Invite core engineers and staff. Collaborators will receive single sign-on access to your new workspace.</p>
+          </div>
+
+          <div class="form-field-card">
+            <div class="form-label">
+              <span>Teammate Email Invitations</span>
+              <span class="optional-tag" id="active-invites-counter">2 invites queued</span>
+            </div>
+
+            <ul class="invite-roster-list" id="invite-roster-container">
+              <li class="invite-row-node">
+                <div class="invite-row">
+                  <input 
+                    type="email" 
+                    class="input-field" 
+                    placeholder="colleague@acme.com" 
+                    value="elena.rostova@acme.com" 
+                    aria-label="First teammate email"
+                  >
+                  <select class="input-field" aria-label="First teammate role">
+                    <option value="Admin" selected>Admin</option>
+                    <option value="Member">Member</option>
+                    <option value="Viewer">Viewer</option>
+                  </select>
+                  <button type="button" class="btn-icon-remove" title="Remove invitation" aria-label="Remove first teammate" disabled>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                  </button>
+                </div>
+              </li>
+
+              <li class="invite-row-node">
+                <div class="invite-row">
+                  <input 
+                    type="email" 
+                    class="input-field" 
+                    placeholder="colleague@acme.com" 
+                    value="devon.chen@acme.com" 
+                    aria-label="Second teammate email"
+                  >
+                  <select class="input-field" aria-label="Second teammate role">
+                    <option value="Admin">Admin</option>
+                    <option value="Member" selected>Member</option>
+                    <option value="Viewer">Viewer</option>
+                  </select>
+                  <button type="button" class="btn-icon-remove" title="Remove invitation" aria-label="Remove second teammate">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                  </button>
+                </div>
+              </li>
+            </ul>
+
+            <div class="roster-actions">
+              <button type="button" class="btn-secondary" id="btn-add-teammate">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                Add another teammate
+              </button>
+              <span class="meta-text">Admin: full billing &amp; cluster access · Member: pipeline edits</span>
+            </div>
+          </div>
+
+          <ul class="role-definitions-list">
+            <li class="role-def-node">
+              <strong>Admin:</strong> Full configuration privilege, billing ownership, cluster scaling, and secret management.
+            </li>
+            <li class="role-def-node">
+              <strong>Member:</strong> Create and edit ingestion pipelines, build metric queries, and manage alert monitors.
+            </li>
+            <li class="role-def-node">
+              <strong>Viewer:</strong> Read-only access to runtime dashboards, system telemetry, and incident post-mortems.
+            </li>
+          </ul>
+
+          <div class="share-invite-box">
+            <label for="input-invite-link" class="label-text">Universal Team Join Link</label>
+            <div class="copy-link-group">
+              <input type="text" id="input-invite-link" class="copy-link-input" readonly value="https://acme.vektor.io/join/token-88f2-4a0b">
+              <button type="button" class="btn-secondary" id="btn-copy-join-link">Copy Link</button>
+            </div>
+            <div class="copy-confirm-text" id="copy-feedback-msg" role="status"></div>
+          </div>
+
+          <div class="toggle-row-card">
+            <div class="toggle-info">
+              <strong>Domain Single Sign-On Auto-Join</strong>
+              <p>Automatically allow anyone with an verified @<span id="sso-domain-text">acme-corp.com</span> corporate email to join as Member without prior invitation.</p>
+            </div>
+            <button type="button" role="switch" aria-checked="true" class="switch-control" id="switch-sso" aria-label="Domain Single Sign-On Auto-Join">
+              <span class="switch-thumb" aria-hidden="true"></span>
+            </button>
+          </div>
+        </section>
+
+        <!-- SCREEN 3: PLAN & DEPLOY -->
+        <section class="step-stage" id="stage-step-3" aria-labelledby="heading-step-3">
+          <div class="step-header">
+            <span class="step-eyebrow">Step 3 of 3</span>
+            <h2 id="heading-step-3">Plan &amp; Deploy</h2>
+            <p>Select your runtime compute capacity, estimated seats, and environment pipelines.</p>
+          </div>
+
+          <div class="billing-toggle-container">
+            <span class="billing-label" id="label-monthly-opt">Monthly</span>
+            <button type="button" role="switch" aria-checked="true" class="switch-control" id="switch-billing-cadence" aria-label="Toggle Annual Billing">
+              <span class="switch-thumb" aria-hidden="true"></span>
+            </button>
+            <span class="billing-label is-active" id="label-annual-opt">
+              Annual Billing
+              <span class="discount-pill" id="toggle-discount-pill">Save <span id="toggle-discount-pct">20</span>%</span>
+            </span>
+          </div>
+
+          <ul class="plan-grid" role="radiogroup" aria-label="Choose Subscription Tier">
+            <li class="plan-grid-item">
+              <button type="button" role="radio" aria-checked="false" class="plan-tier-card" data-tier="developer" id="plan-tier-developer">
+                <span class="plan-name">Developer</span>
+                <div class="plan-price">
+                  <span class="plan-price-num">$0</span>
+                  <span class="plan-price-period">/ mo</span>
+                </div>
+                <p class="plan-desc">For solo prototyping and development.</p>
+                <ul class="plan-feature-bullets">
+                  <li class="plan-bullet-node">Up to 2 provisioned seats</li>
+                  <li class="plan-bullet-node">50GB ingestion / month</li>
+                  <li class="plan-bullet-node">3-day raw trace retention</li>
+                  <li class="plan-bullet-node">Community forum support</li>
+                </ul>
+              </button>
+            </li>
+
+            <li class="plan-grid-item">
+              <button type="button" role="radio" aria-checked="true" class="plan-tier-card is-selected" data-tier="pro" id="plan-tier-pro">
+                <span class="plan-badge-rec">Recommended</span>
+                <span class="plan-name">Team Pro</span>
+                <div class="plan-price">
+                  <span class="plan-price-num" id="card-pro-rate">$24</span>
+                  <span class="plan-price-period">/ seat / mo</span>
+                </div>
+                <p class="plan-desc">For fast-moving engineering teams.</p>
+                <ul class="plan-feature-bullets">
+                  <li class="plan-bullet-node">Flexible seat allocation</li>
+                  <li class="plan-bullet-node">Unlimited metrics &amp; spans</li>
+                  <li class="plan-bullet-node">30-day index retention</li>
+                  <li class="plan-bullet-node">99.99% uptime guarantee</li>
+                </ul>
+              </button>
+            </li>
+
+            <li class="plan-grid-item">
+              <button type="button" role="radio" aria-checked="false" class="plan-tier-card" data-tier="enterprise" id="plan-tier-enterprise">
+                <span class="plan-name">Enterprise</span>
+                <div class="plan-price">
+                  <span class="plan-price-num" id="card-ent-rate">$64</span>
+                  <span class="plan-price-period">/ seat / mo</span>
+                </div>
+                <p class="plan-desc">For enterprise workloads requiring VPC.</p>
+                <ul class="plan-feature-bullets">
+                  <li class="plan-bullet-node">Dedicated private tenant</li>
+                  <li class="plan-bullet-node">365-day cold audit vault</li>
+                  <li class="plan-bullet-node">HIPAA &amp; FedRAMP certified</li>
+                  <li class="plan-bullet-node">24/7 designated architect</li>
+                </ul>
+              </button>
+            </li>
+          </ul>
+
+          <div class="slider-interactive-card">
+            <div class="slider-header-row">
+              <label for="seat-slider-input" class="label-text">Estimated Engineering Seats</label>
+              <span class="slider-value-readout" id="seat-readout-text">8 Seats</span>
+            </div>
+            <input 
+              type="range" 
+              min="1" 
+              max="50" 
+              value="8" 
+              class="continuous-range-input" 
+              id="seat-slider-input" 
+              aria-valuemin="1" 
+              aria-valuemax="50" 
+              aria-valuenow="8" 
+              aria-label="Estimated Engineering Seats"
+            >
+            <div class="slider-ticks-row" id="slider-ticks-row">
+              <span>1 Seat</span>
+              <span id="slider-tick-mid">25 Seats</span>
+              <span id="slider-tick-max">50 Seats</span>
+            </div>
+
+            <ul class="pricing-summary-receipt">
+              <li class="receipt-row-node">
+                <span>Selected Tier Base Rate</span>
+                <span class="mono-text" id="receipt-base-rate">$24.00 / seat / mo</span>
+              </li>
+              <li class="receipt-row-node">
+                <span>Allocated Seat Multiplier</span>
+                <span class="mono-text" id="receipt-seat-count">8 seats</span>
+              </li>
+              <li class="receipt-row-node" id="receipt-discount-row">
+                <span>Annual Commitment Discount (<span id="receipt-discount-pct">20</span>%)</span>
+                <span class="mono-text" id="receipt-discount-amount">-$48.00 / mo</span>
+              </li>
+              <li class="receipt-row-node total-row">
+                <span>Estimated Investment</span>
+                <strong id="receipt-total-price">$192.00 / mo</strong>
+              </li>
+            </ul>
+            <p class="meta-text" id="receipt-billing-note">Billed annually ($2,304.00/year). Includes 14-day zero-risk trial.</p>
+          </div>
+
+          <div class="form-field-card">
+            <span class="label-text">Initialize Default Environments</span>
+            <ul class="checkbox-group">
+              <li class="checkbox-node-wrap">
+                <label class="checkbox-item">
+                  <input type="checkbox" checked disabled>
+                  <div class="checkbox-label-content">
+                    <strong>Production Cluster</strong>
+                    <p>High-availability encrypted datastore for live application workloads.</p>
+                  </div>
+                </label>
+              </li>
+              <li class="checkbox-node-wrap">
+                <label class="checkbox-item">
+                  <input type="checkbox" id="check-staging" checked>
+                  <div class="checkbox-label-content">
+                    <strong>Staging &amp; Integration Environment</strong>
+                    <p>Isolated sandbox for pre-release validation and synthetic load testing.</p>
+                  </div>
+                </label>
+              </li>
+              <li class="checkbox-node-wrap">
+                <label class="checkbox-item">
+                  <input type="checkbox" id="check-preview" checked>
+                  <div class="checkbox-label-content">
+                    <strong>Ephemeral Pull Request Previews</strong>
+                    <p>Auto-spawn temporary ingestion routes for branch testing.</p>
+                  </div>
+                </label>
+              </li>
+            </ul>
+          </div>
+        </section>
+
+        <!-- Validation Alert Banner -->
+        <div class="validation-alert-banner" id="form-error-banner" role="alert">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+          <span id="form-error-text">Please review the marked required fields before proceeding.</span>
+        </div>
+
+        <!-- Wizard Navigation Actions -->
+        <div class="wizard-footer">
+          <div class="footer-left-actions">
+            <button type="button" class="btn-secondary" id="btn-nav-back" style="display: none;">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+              Back
+            </button>
+          </div>
+          <div class="footer-right-actions">
+            <button type="button" class="btn-text" id="btn-skip-step" style="display: none;">
+              Skip team invites for now
+            </button>
+            <button type="button" class="btn-primary" id="btn-nav-primary">
+              <span id="btn-primary-label">Continue to Team Access</span>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+            </button>
+          </div>
+        </div>
+
+      </form>
+
+      <!-- PROVISIONING & FINAL DEPLOYMENT STATE -->
+      <div class="deployment-state-screen" id="deployment-screen" role="status">
+        <svg class="deployment-spinner-icon" id="deploy-spinner" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="12" cy="12" r="10" stroke-opacity="0.25"></circle>
+          <path d="M12 2a10 10 0 0 1 10 10"></path>
+        </svg>
+
+        <div class="provisioning-log-card" id="provisioning-log-box">
+          <div class="log-entry" id="log-line-1">&#x27F3; Provisioning dedicated telemetry cluster in us-east-1...</div>
+          <div class="log-entry" id="log-line-2" style="display: none;">&#x27F3; Generating tenant encryption keys &amp; mutual TLS policies...</div>
+          <div class="log-entry" id="log-line-3" style="display: none;">&#x27F3; Sending invitation tokens to core engineering roster...</div>
+        </div>
+
+        <div class="ready-banner-box" id="ready-summary-box" style="display: none;">
+          <h2>Workspace Successfully Deployed!</h2>
+          <p style="margin-top: 8px; color: var(--status-success-text);">Your Vektor Cloud infrastructure is provisioned and ready for streaming telemetry ingestion.</p>
+          
+          <div class="api-token-box">
+            <span>Root Ingest Key: <strong id="deployed-api-key">vkt_live_9f81a7b42e09c811</strong></span>
+            <button type="button" class="btn-text" id="btn-copy-token" style="padding: 4px 8px; font-size: 12px;" aria-describedby="copy-token-feedback">Copy</button>
+            <span id="copy-token-feedback" class="sr-only" role="status"></span>
+          </div>
+          <p style="margin-top: 8px; font-size: 12px; color: var(--muted);">This is a prototype flow — the provisioning sequence and key above are simulated, not a real deployment.</p>
+
+          <div style="margin-top: 24px; display: flex; gap: 12px;">
+            <button type="button" class="btn-primary" id="btn-launch-console">Launch Workspace Console</button>
+            <button type="button" class="btn-secondary" id="btn-restart-flow">Restart Onboarding Flow</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- LANDMARK 5: ASIDE LIVE WORKSPACE MANIFEST -->
+    <aside class="manifest-aside" aria-label="Live Workspace Telemetry Manifest">
+      <div class="manifest-header">
+        <h3>Workspace Manifest</h3>
+        <span class="manifest-status-chip" id="manifest-status-indicator">
+          <span class="pulse-dot" aria-hidden="true"></span>
+          <span id="manifest-status-label">DRAFTING</span>
+        </span>
+        <button type="button" class="pulse-pause-btn" id="btn-pulse-pause" aria-pressed="false" aria-label="Pause live status animation" hidden>⏸</button>
+      </div>
+
+      <div class="manifest-identity-card">
+        <div class="manifest-avatar" id="manifest-avatar-box">AC</div>
+        <div class="manifest-identity-meta">
+          <span class="manifest-org-name" id="manifest-org-display">Acme Corp</span>
+          <span class="manifest-url-endpoint" id="manifest-endpoint-display">https://acme-corp.vektor.io</span>
+        </div>
+      </div>
+
+      <div class="manifest-section">
+        <span class="manifest-section-title">Infrastructure Blueprint</span>
+        <ul class="telemetry-node-list">
+          <li class="telemetry-node-item">
+            <span class="telemetry-key">Data Sovereignty</span>
+            <span class="telemetry-val" id="manifest-region-val">US-East (N. Virginia, us-east-1)</span>
+          </li>
+          <li class="telemetry-node-item">
+            <span class="telemetry-key">Encryption Standard</span>
+            <span class="telemetry-val">AES-256-GCM / TLS 1.3</span>
+          </li>
+          <li class="telemetry-node-item">
+            <span class="telemetry-key">Target Environments</span>
+            <span class="telemetry-val" id="manifest-env-val">Prod · Stage · Preview</span>
+          </li>
+        </ul>
+      </div>
+
+      <div class="manifest-section">
+        <span class="manifest-section-title">Team Access Roster</span>
+        <ul class="telemetry-node-list">
+          <li class="telemetry-node-item">
+            <span class="telemetry-key">Company Size</span>
+            <span class="telemetry-val" id="manifest-team-size-val">11-50 employees</span>
+          </li>
+          <li class="telemetry-node-item">
+            <span class="telemetry-key">Provisioned Seats</span>
+            <span class="telemetry-val" id="manifest-seat-count-val">8 Seats</span>
+          </li>
+          <li class="telemetry-node-item">
+            <span class="telemetry-key">SSO Auto-Join</span>
+            <span class="telemetry-val" id="manifest-sso-val">Active (@acme-corp.com)</span>
+          </li>
+        </ul>
+        <ul class="team-preview-chips" id="manifest-roster-chips">
+          <li class="chip-node-item"><span class="teammate-pill">elena.rostova <span class="role-badge-tag">Admin</span></span></li>
+          <li class="chip-node-item"><span class="teammate-pill">devon.chen <span class="role-badge-tag">Member</span></span></li>
+        </ul>
+      </div>
+
+      <div class="manifest-section">
+        <span class="manifest-section-title">Cost Model &amp; Capacity</span>
+        <ul class="telemetry-node-list">
+          <li class="telemetry-node-item">
+            <span class="telemetry-key">Selected Tier</span>
+            <span class="telemetry-val" id="manifest-tier-val">Team Pro</span>
+          </li>
+          <li class="telemetry-node-item">
+            <span class="telemetry-key">Billing Cadence</span>
+            <span class="telemetry-val" id="manifest-cadence-val">Annual (-20%)</span>
+          </li>
+          <li class="telemetry-node-item">
+            <span class="telemetry-key">Estimated Monthly</span>
+            <span class="telemetry-val" style="color: var(--accent); font-weight: 700;" id="manifest-cost-val">$192.00 / mo</span>
+          </li>
+        </ul>
+      </div>
+    </aside>
+
+  </main>
+
+  <!-- LANDMARK 6: FOOTER -->
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <span>&copy; 2026 Vektor Cloud Systems Inc. All enterprise data encrypted at rest and in transit.</span>
+      <ul class="footer-links">
+        <li class="footer-link-node"><a href="#compliance" class="footer-link">SOC2 Type II</a></li>
+        <li class="footer-link-node"><a href="#iso" class="footer-link">ISO 27001</a></li>
+        <li class="footer-link-node"><a href="#privacy" class="footer-link">Security &amp; Privacy</a></li>
+        <li class="footer-link-node"><a href="#support" class="footer-link">Enterprise Support</a></li>
+      </ul>
+    </div>
+  </footer>
+
+  <script>
+    (function() {
+      'use strict';
+
+      const state = {
+        currentStep: 1,
+        orgName: 'Acme Corp',
+        subdomain: 'acme-corp',
+        region: 'us-east-1',
+        regionName: 'US-East (N. Virginia, us-east-1)',
+        teamSize: '11-50',
+        invites: [
+          { email: 'elena.rostova@acme.com', role: 'Admin' },
+          { email: 'devon.chen@acme.com', role: 'Member' }
+        ],
+        ssoAutoJoin: true,
+        billingCadence: 'annual',
+        planTier: 'pro',
+        seats: 8,
+        environments: { prod: true, staging: true, preview: true }
+      };
+
+      const RATES = {
+        developer: { monthly: 0, annual: 0 },
+        pro: { monthly: 30, annual: 24 },
+        enterprise: { monthly: 79, annual: 64 }
+      };
+
+      const els = {
+        form: document.getElementById('onboarding-form'),
+        stage1: document.getElementById('stage-step-1'),
+        stage2: document.getElementById('stage-step-2'),
+        stage3: document.getElementById('stage-step-3'),
+        btnBack: document.getElementById('btn-nav-back'),
+        btnSkip: document.getElementById('btn-skip-step'),
+        btnPrimary: document.getElementById('btn-nav-primary'),
+        btnPrimaryLabel: document.getElementById('btn-primary-label'),
+        stepCounter: document.getElementById('step-counter-indicator'),
+        errorBanner: document.getElementById('form-error-banner'),
+        errorText: document.getElementById('form-error-text'),
+
+        navStep1: document.getElementById('nav-step-1'),
+        navStep2: document.getElementById('nav-step-2'),
+        navStep3: document.getElementById('nav-step-3'),
+        badge1: document.getElementById('badge-step-1'),
+        badge2: document.getElementById('badge-step-2'),
+        badge3: document.getElementById('badge-step-3'),
+        connectorFill1: document.getElementById('connector-fill-1'),
+        connectorFill2: document.getElementById('connector-fill-2'),
+
+        inputOrgName: document.getElementById('input-org-name'),
+        inputSubdomain: document.getElementById('input-subdomain'),
+        selectRegion: document.getElementById('select-region'),
+        subdomainFeedback: document.getElementById('subdomain-feedback-text'),
+        subdomainStatusDot: document.querySelector('#subdomain-status-row .status-indicator-dot'),
+        teamSizeBtns: document.querySelectorAll('.radio-segment-btn'),
+
+        rosterContainer: document.getElementById('invite-roster-container'),
+        btnAddTeammate: document.getElementById('btn-add-teammate'),
+        invitesCounter: document.getElementById('active-invites-counter'),
+        inputInviteLink: document.getElementById('input-invite-link'),
+        btnCopyLink: document.getElementById('btn-copy-join-link'),
+        copyFeedback: document.getElementById('copy-feedback-msg'),
+        switchSSO: document.getElementById('switch-sso'),
+
+        switchCadence: document.getElementById('switch-billing-cadence'),
+        labelMonthly: document.getElementById('label-monthly-opt'),
+        labelAnnual: document.getElementById('label-annual-opt'),
+        planCards: document.querySelectorAll('.plan-tier-card'),
+        cardProRate: document.getElementById('card-pro-rate'),
+        cardEntRate: document.getElementById('card-ent-rate'),
+        seatSlider: document.getElementById('seat-slider-input'),
+        seatReadout: document.getElementById('seat-readout-text'),
+        sliderTickMid: document.getElementById('slider-tick-mid'),
+        sliderTickMax: document.getElementById('slider-tick-max'),
+        receiptBaseRate: document.getElementById('receipt-base-rate'),
+        receiptSeatCount: document.getElementById('receipt-seat-count'),
+        receiptDiscountRow: document.getElementById('receipt-discount-row'),
+        receiptDiscountAmount: document.getElementById('receipt-discount-amount'),
+        receiptDiscountPct: document.getElementById('receipt-discount-pct'),
+        receiptTotalPrice: document.getElementById('receipt-total-price'),
+        receiptBillingNote: document.getElementById('receipt-billing-note'),
+        toggleDiscountPct: document.getElementById('toggle-discount-pct'),
+        toggleDiscountPill: document.getElementById('toggle-discount-pill'),
+        checkStaging: document.getElementById('check-staging'),
+        checkPreview: document.getElementById('check-preview'),
+
+        manifestAvatar: document.getElementById('manifest-avatar-box'),
+        manifestOrgDisplay: document.getElementById('manifest-org-display'),
+        manifestEndpointDisplay: document.getElementById('manifest-endpoint-display'),
+        manifestRegionVal: document.getElementById('manifest-region-val'),
+        manifestEnvVal: document.getElementById('manifest-env-val'),
+        manifestSeatVal: document.getElementById('manifest-seat-count-val'),
+        manifestTeamSizeVal: document.getElementById('manifest-team-size-val'),
+        manifestSSOVal: document.getElementById('manifest-sso-val'),
+        ssoDomainText: document.getElementById('sso-domain-text'),
+        manifestRosterChips: document.getElementById('manifest-roster-chips'),
+        manifestTierVal: document.getElementById('manifest-tier-val'),
+        manifestCadenceVal: document.getElementById('manifest-cadence-val'),
+        manifestCostVal: document.getElementById('manifest-cost-val'),
+        manifestStatusBadge: document.getElementById('manifest-status-indicator'),
+        manifestStatusLabel: document.getElementById('manifest-status-label'),
+        btnPulsePause: document.getElementById('btn-pulse-pause'),
+        manifestHeader: document.querySelector('.manifest-header'),
+
+        deploymentScreen: document.getElementById('deployment-screen'),
+        deploySpinner: document.getElementById('deploy-spinner'),
+        logLine1: document.getElementById('log-line-1'),
+        logLine2: document.getElementById('log-line-2'),
+        logLine3: document.getElementById('log-line-3'),
+        readyBox: document.getElementById('ready-summary-box'),
+        btnCopyToken: document.getElementById('btn-copy-token'),
+        copyTokenFeedback: document.getElementById('copy-token-feedback'),
+        btnRestartFlow: document.getElementById('btn-restart-flow'),
+        btnLaunchConsole: document.getElementById('btn-launch-console')
+      };
+
+      function getInitials(name) {
+        if (!name || !name.trim()) return 'VK';
+        const parts = name.trim().split(/\s+/);
+        if (parts.length === 1) return parts[0].substring(0, 2).toUpperCase();
+        return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
+      }
+
+      function wireRadioGroup(buttons, onSelect) {
+        const list = Array.from(buttons);
+        function select(target) {
+          list.forEach(b => {
+            const isTarget = b === target;
+            b.classList.toggle('is-selected', isTarget);
+            b.setAttribute('aria-checked', String(isTarget));
+            b.setAttribute('tabindex', isTarget ? '0' : '-1');
+          });
+          onSelect(target);
+        }
+        list.forEach(btn => {
+          btn.setAttribute('tabindex', btn.getAttribute('aria-checked') === 'true' ? '0' : '-1');
+          btn.addEventListener('click', () => select(btn));
+          btn.addEventListener('keydown', (e) => {
+            const idx = list.indexOf(btn);
+            let next = null;
+            if (e.key === 'ArrowRight' || e.key === 'ArrowDown') next = list[(idx + 1) % list.length];
+            else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') next = list[(idx - 1 + list.length) % list.length];
+            else if (e.key === 'Home') next = list[0];
+            else if (e.key === 'End') next = list[list.length - 1];
+            if (next) {
+              e.preventDefault();
+              next.focus();
+              select(next);
+            }
+          });
+        });
+      }
+
+      function slugify(text) {
+        return text.toString().toLowerCase().trim()
+          .replace(/\s+/g, '-')
+          .replace(/[^\w\-]+/g, '')
+          .replace(/\-\-+/g, '-')
+          .replace(/^-+/, '')
+          .replace(/-+$/, '');
+      }
+
+      function updatePricingCalculations() {
+        const tier = state.planTier;
+        const isAnnual = state.billingCadence === 'annual';
+        const ratePerSeat = isAnnual ? RATES[tier].annual : RATES[tier].monthly;
+        const monthlyEquivalent = ratePerSeat * state.seats;
+        const annualBilled = monthlyEquivalent * 12;
+
+        const proRate = isAnnual ? RATES.pro.annual : RATES.pro.monthly;
+        const entRate = isAnnual ? RATES.enterprise.annual : RATES.enterprise.monthly;
+        els.cardProRate.textContent = '$' + proRate;
+        els.cardEntRate.textContent = '$' + entRate;
+
+        if (tier !== 'developer') {
+          const tierAnnualPct = ((RATES[tier].monthly - RATES[tier].annual) / RATES[tier].monthly) * 100;
+          if (tierAnnualPct > 0) {
+            els.toggleDiscountPill.style.display = '';
+            els.toggleDiscountPct.textContent = Number.isInteger(tierAnnualPct) ? tierAnnualPct : tierAnnualPct.toFixed(1);
+          } else {
+            els.toggleDiscountPill.style.display = 'none';
+          }
+        } else {
+          els.toggleDiscountPill.style.display = 'none';
+        }
+
+        if (tier === 'developer') {
+          els.receiptBaseRate.textContent = '$0.00 (Developer Free)';
+          els.receiptSeatCount.textContent = state.seats + ' seats (max 2)';
+          els.receiptDiscountRow.style.display = 'none';
+          els.receiptTotalPrice.textContent = '$0.00 / mo';
+          els.receiptBillingNote.textContent = 'Free community edition. Zero billing commitment.';
+          els.manifestCostVal.textContent = '$0.00 / mo';
+        } else {
+          const standardMonthlyRate = RATES[tier].monthly;
+          const discountDiff = isAnnual ? (standardMonthlyRate - ratePerSeat) * state.seats : 0;
+
+          els.receiptBaseRate.textContent = '$' + ratePerSeat.toFixed(2) + ' / seat / mo';
+          els.receiptSeatCount.textContent = state.seats + ' seats';
+
+          if (isAnnual && discountDiff > 0) {
+            els.receiptDiscountRow.style.display = 'flex';
+            els.receiptDiscountAmount.textContent = '-$' + discountDiff.toFixed(2) + ' / mo';
+            const discountPct = ((standardMonthlyRate - ratePerSeat) / standardMonthlyRate) * 100;
+            els.receiptDiscountPct.textContent = Number.isInteger(discountPct) ? discountPct : discountPct.toFixed(1);
+          } else {
+            els.receiptDiscountRow.style.display = 'none';
+          }
+
+          els.receiptTotalPrice.textContent = '$' + monthlyEquivalent.toFixed(2) + ' / mo';
+          els.receiptBillingNote.textContent = isAnnual 
+            ? 'Billed annually ($' + annualBilled.toLocaleString('en-US', {minimumFractionDigits: 2}) + '/year). Includes 14-day zero-risk trial.'
+            : 'Billed monthly. Cancel, add, or remove seats anytime without contract penalty.';
+          
+          els.manifestCostVal.textContent = '$' + monthlyEquivalent.toFixed(2) + ' / mo';
+        }
+
+        const tierNames = { developer: 'Developer (Free)', pro: 'Team Pro', enterprise: 'Enterprise' };
+        els.manifestTierVal.textContent = tierNames[tier];
+        if (isAnnual && tier !== 'developer') {
+          const cadencePct = ((RATES[tier].monthly - RATES[tier].annual) / RATES[tier].monthly) * 100;
+          const cadencePctStr = Number.isInteger(cadencePct) ? cadencePct : cadencePct.toFixed(1);
+          els.manifestCadenceVal.textContent = 'Annual (-' + cadencePctStr + '%)';
+        } else {
+          els.manifestCadenceVal.textContent = isAnnual ? 'Annual' : 'Monthly';
+        }
+      }
+
+      function updateLiveManifest() {
+        els.manifestAvatar.textContent = getInitials(state.orgName);
+        els.manifestOrgDisplay.textContent = state.orgName || 'Unnamed Workspace';
+        const formattedUrl = 'https://' + (state.subdomain || 'your-space') + '.vektor.io';
+        els.manifestEndpointDisplay.textContent = formattedUrl;
+        els.inputInviteLink.value = formattedUrl + '/join/token-88f2-4a0b';
+        els.manifestRegionVal.textContent = state.regionName;
+
+        const envs = ['Prod'];
+        if (state.environments.staging) envs.push('Stage');
+        if (state.environments.preview) envs.push('Preview');
+        els.manifestEnvVal.textContent = envs.join(' · ');
+
+        els.manifestSeatVal.textContent = state.seats + ' Seats';
+        els.manifestTeamSizeVal.textContent = state.teamSize + ' employees';
+        const domain = (state.subdomain || 'acme') + '.com';
+        els.manifestSSOVal.textContent = state.ssoAutoJoin ? 'Active (@' + domain + ')' : 'Disabled';
+        els.ssoDomainText.textContent = domain;
+
+        els.manifestRosterChips.innerHTML = '';
+        state.invites.forEach(inv => {
+          if (inv.email.trim()) {
+            const li = document.createElement('li');
+            li.className = 'chip-node-item';
+            const chip = document.createElement('span');
+            chip.className = 'teammate-pill';
+            const username = inv.email.split('@')[0];
+            const roleTag = document.createElement('span');
+            roleTag.className = 'role-badge-tag';
+            roleTag.textContent = inv.role;
+            chip.append(username + ' ', roleTag);
+            li.appendChild(chip);
+            els.manifestRosterChips.appendChild(li);
+          }
+        });
+
+        updatePricingCalculations();
+      }
+
+      function goToStep(targetStep, isBack = false) {
+        if (targetStep < 1 || targetStep > 3) return;
+        els.errorBanner.classList.remove('is-active');
+
+        const currentStage = document.getElementById('stage-step-' + state.currentStep);
+        const nextStage = document.getElementById('stage-step-' + targetStep);
+
+        [1, 2, 3].forEach(stepNum => {
+          const navBtn = document.getElementById('nav-step-' + stepNum);
+          const badge = document.getElementById('badge-step-' + stepNum);
+
+          navBtn.classList.remove('is-active');
+          if (stepNum === targetStep) {
+            navBtn.classList.add('is-active');
+            navBtn.setAttribute('aria-current', 'step');
+          } else {
+            navBtn.removeAttribute('aria-current');
+          }
+
+          if (stepNum < targetStep) {
+            navBtn.classList.add('is-complete');
+            badge.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" aria-hidden="true"><polyline points="20 6 9 17 4 12"></polyline></svg>';
+            badge.setAttribute('aria-label', 'Step ' + stepNum + ' complete');
+          } else {
+            navBtn.classList.remove('is-complete');
+            badge.textContent = stepNum;
+            badge.removeAttribute('aria-label');
+          }
+        });
+
+        els.connectorFill1.style.width = targetStep > 1 ? '100%' : '0%';
+        els.connectorFill2.style.width = targetStep > 2 ? '100%' : '0%';
+        els.stepCounter.textContent = 'Step ' + targetStep + ' of 3';
+
+        currentStage.classList.remove('is-visible');
+        nextStage.classList.toggle('slide-reverse', isBack);
+
+        // Paint the pre-transition (hidden, offset) state via inline styles that
+        // outrank the class rules, so there's an actual "before" frame for the
+        // opacity/transform transition to interpolate from once is-visible lands.
+        nextStage.style.display = 'flex';
+        nextStage.style.opacity = '0';
+        nextStage.style.transform = isBack ? 'translateX(-16px)' : 'translateX(16px)';
+
+        if (pendingStageFocusTimeout !== null) {
+          clearTimeout(pendingStageFocusTimeout);
+        }
+        pendingStageFocusTimeout = setTimeout(() => {
+          pendingStageFocusTimeout = null;
+          void nextStage.offsetHeight;
+          nextStage.classList.add('is-visible');
+          nextStage.classList.remove('slide-reverse');
+          nextStage.style.removeProperty('display');
+          nextStage.style.removeProperty('opacity');
+          nextStage.style.removeProperty('transform');
+          const firstField = nextStage.querySelector('input:not([disabled]), select, button[role="radio"][tabindex="0"]');
+          if (firstField) {
+            firstField.focus();
+          }
+        }, 30);
+
+        if (targetStep === 1) {
+          els.btnBack.style.display = 'none';
+          els.btnSkip.style.display = 'none';
+          els.btnPrimaryLabel.textContent = 'Continue to Team Access';
+        } else if (targetStep === 2) {
+          els.btnBack.style.display = 'inline-flex';
+          els.btnSkip.style.display = 'inline-block';
+          els.btnPrimaryLabel.textContent = 'Continue to Plan & Deploy';
+        } else if (targetStep === 3) {
+          els.btnBack.style.display = 'inline-flex';
+          els.btnSkip.style.display = 'none';
+          els.btnPrimaryLabel.textContent = 'Deploy & Launch Workspace';
+        }
+
+        state.currentStep = targetStep;
+        updateLiveManifest();
+      }
+
+      function validateCurrentStep() {
+        return validateStep(state.currentStep);
+      }
+
+      function validateStep(stepNum) {
+        if (stepNum === 1) {
+          const orgVal = els.inputOrgName.value.trim();
+          const subVal = els.inputSubdomain.value.trim();
+          if (!orgVal) {
+            showError('Organization Name is required to initialize your workspace.');
+            els.inputOrgName.classList.add('has-error');
+            els.inputOrgName.focus();
+            return false;
+          }
+          if (!subVal || !/^[a-z0-9-]+$/.test(subVal)) {
+            showError('Workspace Subdomain must contain only lowercase letters, numbers, and hyphens.');
+            els.inputSubdomain.classList.add('has-error');
+            els.inputSubdomain.focus();
+            return false;
+          }
+          if (subVal.length < 3) {
+            showError('Workspace Subdomain must be at least 3 characters.');
+            els.inputSubdomain.classList.add('has-error');
+            els.inputSubdomain.focus();
+            return false;
+          }
+          els.inputOrgName.classList.remove('has-error');
+          els.inputSubdomain.classList.remove('has-error');
+        } else if (stepNum === 2) {
+          const emailInputs = els.rosterContainer.querySelectorAll('input[type="email"]');
+          let hasInvalid = false;
+          let firstInvalidInput = null;
+          emailInputs.forEach(input => {
+            const val = input.value.trim();
+            if (val && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val)) {
+              hasInvalid = true;
+              input.classList.add('has-error');
+              if (!firstInvalidInput) firstInvalidInput = input;
+            } else {
+              input.classList.remove('has-error');
+            }
+          });
+          if (hasInvalid) {
+            showError('Please enter valid corporate email addresses for invited teammates.');
+            firstInvalidInput.focus();
+            return false;
+          }
+        }
+        els.errorBanner.classList.remove('is-active');
+        return true;
+      }
+
+      function showError(msg) {
+        els.errorText.textContent = msg;
+        els.errorBanner.classList.add('is-active');
+      }
+
+      function startDeploymentSequence() {
+        els.form.style.display = 'none';
+        els.deploymentScreen.classList.add('is-active');
+        els.manifestStatusBadge.classList.add('live');
+        els.manifestStatusLabel.textContent = 'PROVISIONING';
+        els.btnPulsePause.hidden = false;
+        els.logLine1.innerHTML = '&#x27F3; Provisioning dedicated telemetry cluster in ' + state.region + '...';
+
+        setTimeout(() => {
+          els.logLine1.classList.add('success');
+          els.logLine1.innerHTML = '&#x2713; Dedicated telemetry cluster provisioned in ' + state.region;
+          els.logLine2.style.display = 'flex';
+        }, 500);
+
+        setTimeout(() => {
+          els.logLine2.classList.add('success');
+          els.logLine2.innerHTML = '&#x2713; Tenant mTLS certs &amp; IAM access policies configured';
+          els.logLine3.style.display = 'flex';
+        }, 1000);
+
+        setTimeout(() => {
+          els.logLine3.classList.add('success');
+          els.logLine3.innerHTML = '&#x2713; Invitation tokens broadcast to ' + state.invites.filter(inv => inv.email.trim()).length + ' engineers';
+          els.deploySpinner.style.display = 'none';
+          els.readyBox.style.display = 'block';
+          els.manifestStatusLabel.textContent = 'LIVE & HEALTHY';
+          els.btnLaunchConsole.focus();
+        }, 1500);
+      }
+
+      let subdomainManuallyEdited = false;
+      let pendingStageFocusTimeout = null;
+
+      function refreshSubdomainFeedback() {
+        if (state.subdomain.length > 2) {
+          els.subdomainFeedback.textContent = 'Valid format';
+          els.subdomainFeedback.style.color = 'var(--status-success-text)';
+          els.subdomainStatusDot.classList.remove('is-error');
+          els.inputSubdomain.classList.remove('has-error');
+        } else {
+          els.subdomainFeedback.textContent = 'Subdomain must be at least 3 characters';
+          els.subdomainFeedback.style.color = 'var(--danger)';
+          els.subdomainStatusDot.classList.add('is-error');
+        }
+      }
+
+      els.inputOrgName.addEventListener('input', (e) => {
+        state.orgName = e.target.value.trim();
+        if (state.orgName) {
+          els.inputOrgName.classList.remove('has-error');
+        }
+        if (state.orgName && !subdomainManuallyEdited) {
+          const autoSlug = slugify(state.orgName);
+          els.inputSubdomain.value = autoSlug;
+          state.subdomain = autoSlug;
+          refreshSubdomainFeedback();
+        }
+        updateLiveManifest();
+      });
+
+      els.inputSubdomain.addEventListener('input', (e) => {
+        subdomainManuallyEdited = true;
+        state.subdomain = slugify(e.target.value);
+        if (e.target.value !== state.subdomain) {
+          const caret = e.target.selectionStart;
+          e.target.value = state.subdomain;
+          e.target.setSelectionRange(caret, caret);
+        }
+        refreshSubdomainFeedback();
+        updateLiveManifest();
+      });
+
+      els.selectRegion.addEventListener('change', (e) => {
+        state.region = e.target.value;
+        state.regionName = e.target.options[e.target.selectedIndex].text.split(' · ')[0];
+        updateLiveManifest();
+      });
+
+      wireRadioGroup(els.teamSizeBtns, (btn) => {
+        state.teamSize = btn.getAttribute('data-val');
+        updateLiveManifest();
+      });
+
+      function refreshRosterFromDOM() {
+        const rows = els.rosterContainer.querySelectorAll('.invite-row-node');
+        state.invites = [];
+        rows.forEach((row, i) => {
+          const emailInput = row.querySelector('input[type="email"]');
+          const roleSelect = row.querySelector('select');
+          const removeBtn = row.querySelector('.btn-icon-remove');
+          emailInput.setAttribute('aria-label', 'Teammate ' + (i + 1) + ' email');
+          roleSelect.setAttribute('aria-label', 'Teammate ' + (i + 1) + ' role');
+          removeBtn.setAttribute('aria-label', 'Remove teammate ' + (i + 1));
+          const email = emailInput.value.trim();
+          const role = roleSelect.value;
+          if (!email || /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+            emailInput.classList.remove('has-error');
+          }
+          state.invites.push({ email, role });
+        });
+        const queuedCount = state.invites.filter(inv => inv.email.trim()).length;
+        els.invitesCounter.textContent = queuedCount + ' invites queued';
+        updateLiveManifest();
+      }
+
+      els.rosterContainer.addEventListener('input', refreshRosterFromDOM);
+      els.rosterContainer.addEventListener('change', refreshRosterFromDOM);
+
+      els.rosterContainer.addEventListener('click', (e) => {
+        const removeBtn = e.target.closest('.btn-icon-remove');
+        if (removeBtn && !removeBtn.disabled) {
+          const row = removeBtn.closest('.invite-row-node');
+          const rows = Array.from(els.rosterContainer.querySelectorAll('.invite-row-node'));
+          const rowIndex = rows.indexOf(row);
+          row.remove();
+          refreshRosterFromDOM();
+          const remainingRows = els.rosterContainer.querySelectorAll('.invite-row-node');
+          const nextFocusRow = remainingRows[rowIndex] || remainingRows[remainingRows.length - 1];
+          if (nextFocusRow) {
+            const removeBtnInRow = nextFocusRow.querySelector('.btn-icon-remove');
+            (removeBtnInRow || nextFocusRow.querySelector('input, select')).focus();
+          } else {
+            els.btnAddTeammate.focus();
+          }
+        }
+      });
+
+      els.btnAddTeammate.addEventListener('click', () => {
+        const newIndex = els.rosterContainer.querySelectorAll('.invite-row-node').length + 1;
+        const newRow = document.createElement('li');
+        newRow.className = 'invite-row-node';
+        newRow.innerHTML = `
+          <div class="invite-row">
+            <input type="email" class="input-field" placeholder="colleague@acme.com" aria-label="Teammate ${newIndex} email">
+            <select class="input-field" aria-label="Teammate ${newIndex} role">
+              <option value="Admin">Admin</option>
+              <option value="Member" selected>Member</option>
+              <option value="Viewer">Viewer</option>
+            </select>
+            <button type="button" class="btn-icon-remove" title="Remove invitation" aria-label="Remove teammate ${newIndex}">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+            </button>
+          </div>
+        `;
+        els.rosterContainer.appendChild(newRow);
+        const newInput = newRow.querySelector('input');
+        newInput.focus();
+        refreshRosterFromDOM();
+      });
+
+      els.btnCopyLink.addEventListener('click', () => {
+        els.inputInviteLink.select();
+        navigator.clipboard.writeText(els.inputInviteLink.value).then(() => {
+          els.copyFeedback.textContent = '✓ Secure join link copied to clipboard!';
+          setTimeout(() => { els.copyFeedback.textContent = ''; }, 3000);
+        }).catch(() => {
+          els.copyFeedback.textContent = 'Copy failed — select the link and copy manually.';
+          setTimeout(() => { els.copyFeedback.textContent = ''; }, 3000);
+        });
+      });
+
+      els.switchSSO.addEventListener('click', () => {
+        const current = els.switchSSO.getAttribute('aria-checked') === 'true';
+        els.switchSSO.setAttribute('aria-checked', !current);
+        state.ssoAutoJoin = !current;
+        updateLiveManifest();
+      });
+
+      els.switchCadence.addEventListener('click', () => {
+        const isAnnual = els.switchCadence.getAttribute('aria-checked') === 'true';
+        const newAnnual = !isAnnual;
+        els.switchCadence.setAttribute('aria-checked', newAnnual);
+        state.billingCadence = newAnnual ? 'annual' : 'monthly';
+        if (newAnnual) {
+          els.labelAnnual.classList.add('is-active');
+          els.labelMonthly.classList.remove('is-active');
+        } else {
+          els.labelAnnual.classList.remove('is-active');
+          els.labelMonthly.classList.add('is-active');
+        }
+        updatePricingCalculations();
+      });
+
+      wireRadioGroup(els.planCards, (card) => {
+        state.planTier = card.getAttribute('data-tier');
+        if (state.planTier === 'developer') {
+          els.seatSlider.setAttribute('max', '2');
+          if (state.seats > 2) {
+            state.seats = 2;
+          }
+          els.sliderTickMid.textContent = '2 Seats';
+          els.sliderTickMax.style.display = 'none';
+        } else {
+          els.seatSlider.setAttribute('max', '50');
+          els.sliderTickMid.textContent = '25 Seats';
+          els.sliderTickMax.style.display = '';
+        }
+        els.seatSlider.value = state.seats;
+        els.seatSlider.setAttribute('aria-valuemax', els.seatSlider.getAttribute('max'));
+        els.seatSlider.setAttribute('aria-valuenow', state.seats);
+        els.seatReadout.textContent = state.seats + ' Seats';
+        updatePricingCalculations();
+        updateLiveManifest();
+      });
+
+      els.seatSlider.addEventListener('input', (e) => {
+        state.seats = parseInt(e.target.value, 10);
+        els.seatReadout.textContent = state.seats + ' Seats';
+        els.seatSlider.setAttribute('aria-valuenow', state.seats);
+        updatePricingCalculations();
+        updateLiveManifest();
+      });
+
+      els.checkStaging.addEventListener('change', (e) => {
+        state.environments.staging = e.target.checked;
+        updateLiveManifest();
+      });
+
+      els.checkPreview.addEventListener('change', (e) => {
+        state.environments.preview = e.target.checked;
+        updateLiveManifest();
+      });
+
+      els.navStep1.addEventListener('click', () => {
+        if (state.currentStep === 1) return;
+        goToStep(1, true);
+      });
+
+      els.navStep2.addEventListener('click', () => {
+        if (state.currentStep === 2) return;
+        if (state.currentStep > 2) {
+          goToStep(2, true);
+          return;
+        }
+        if (validateStep(1)) {
+          goToStep(2, false);
+        }
+      });
+
+      els.navStep3.addEventListener('click', () => {
+        if (state.currentStep === 3) return;
+        if (validateStep(1) && validateStep(2)) {
+          goToStep(3, false);
+        }
+      });
+
+      els.btnPrimary.addEventListener('click', () => {
+        if (!validateCurrentStep()) return;
+        if (state.currentStep === 1) {
+          goToStep(2, false);
+        } else if (state.currentStep === 2) {
+          goToStep(3, false);
+        } else if (state.currentStep === 3) {
+          startDeploymentSequence();
+        }
+      });
+
+      els.btnBack.addEventListener('click', () => {
+        if (state.currentStep > 1) {
+          goToStep(state.currentStep - 1, true);
+        }
+      });
+
+      els.btnSkip.addEventListener('click', () => {
+        els.rosterContainer.querySelectorAll('input[type="email"]').forEach(input => {
+          input.value = '';
+          input.classList.remove('has-error');
+        });
+        refreshRosterFromDOM();
+        els.errorBanner.classList.remove('is-active');
+        goToStep(3, false);
+      });
+
+      els.btnPulsePause.addEventListener('click', () => {
+        const paused = els.manifestHeader.classList.toggle('pulse-paused');
+        els.btnPulsePause.textContent = paused ? '▶' : '⏸';
+        els.btnPulsePause.setAttribute('aria-pressed', String(paused));
+        els.btnPulsePause.setAttribute('aria-label', paused ? 'Resume live status animation' : 'Pause live status animation');
+      });
+
+      document.getElementById('btn-save-exit').addEventListener('click', () => {
+        const status = document.getElementById('live-save-status');
+        try {
+          localStorage.setItem('onboarding-snapshot', JSON.stringify({ state, subdomainManuallyEdited }));
+          status.textContent = '✓ Configuration cached locally';
+          status.style.color = 'var(--status-success-text)';
+        } catch (e) {
+          status.textContent = 'Could not save locally';
+          status.style.color = 'var(--danger)';
+        }
+      });
+
+      els.btnCopyToken.addEventListener('click', () => {
+        const token = document.getElementById('deployed-api-key').textContent;
+        navigator.clipboard.writeText(token).then(() => {
+          els.btnCopyToken.textContent = 'Copied!';
+          els.copyTokenFeedback.textContent = 'Ingest key copied to clipboard';
+          setTimeout(() => { els.btnCopyToken.textContent = 'Copy'; els.copyTokenFeedback.textContent = ''; }, 2000);
+        }).catch(() => {
+          els.btnCopyToken.textContent = 'Copy failed';
+          els.copyTokenFeedback.textContent = 'Copy failed';
+          setTimeout(() => { els.btnCopyToken.textContent = 'Copy'; els.copyTokenFeedback.textContent = ''; }, 2000);
+        });
+      });
+
+      els.btnRestartFlow.addEventListener('click', () => {
+        try {
+          localStorage.removeItem('onboarding-snapshot');
+        } catch (e) {
+          // ignore — reload proceeds regardless
+        }
+        location.reload();
+      });
+
+      els.btnLaunchConsole.addEventListener('click', () => {
+        alert('This onboarding flow is a prototype — the workspace console for ' + state.orgName + ' (' + state.subdomain + '.vektor.io) is not available here.');
+      });
+
+      function restoreFromSnapshot() {
+        let snapshot, saved;
+        try {
+          const raw = localStorage.getItem('onboarding-snapshot');
+          if (!raw) return false;
+          snapshot = JSON.parse(raw);
+          saved = snapshot.state;
+        } catch (e) {
+          return false;
+        }
+
+        els.inputOrgName.value = saved.orgName || '';
+        els.inputOrgName.dispatchEvent(new Event('input', { bubbles: true }));
+        els.inputSubdomain.value = saved.subdomain || '';
+        els.inputSubdomain.dispatchEvent(new Event('input', { bubbles: true }));
+        // The synthetic input event above unconditionally flips subdomainManuallyEdited
+        // to true; restore the actual saved flag so a never-manually-edited subdomain
+        // keeps auto-following Organization Name after a save/reload round-trip.
+        subdomainManuallyEdited = !!snapshot.subdomainManuallyEdited;
+
+        if (saved.region) {
+          els.selectRegion.value = saved.region;
+          els.selectRegion.dispatchEvent(new Event('change', { bubbles: true }));
+        }
+
+        const teamBtn = Array.from(els.teamSizeBtns).find(b => b.getAttribute('data-val') === saved.teamSize);
+        if (teamBtn) teamBtn.click();
+
+        els.rosterContainer.innerHTML = '';
+        (saved.invites || []).forEach((inv, i) => {
+          const newRow = document.createElement('li');
+          newRow.className = 'invite-row-node';
+          newRow.innerHTML = `
+            <div class="invite-row">
+              <input type="email" class="input-field" placeholder="colleague@acme.com" aria-label="Teammate ${i + 1} email" value="${inv.email.replace(/"/g, '&quot;')}">
+              <select class="input-field" aria-label="Teammate ${i + 1} role">
+                <option value="Admin"${inv.role === 'Admin' ? ' selected' : ''}>Admin</option>
+                <option value="Member"${inv.role === 'Member' ? ' selected' : ''}>Member</option>
+                <option value="Viewer"${inv.role === 'Viewer' ? ' selected' : ''}>Viewer</option>
+              </select>
+              <button type="button" class="btn-icon-remove" title="Remove invitation" aria-label="${i === 0 ? 'Remove first teammate' : 'Remove teammate ' + (i + 1)}"${i === 0 ? ' disabled' : ''}>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+              </button>
+            </div>
+          `;
+          els.rosterContainer.appendChild(newRow);
+        });
+        refreshRosterFromDOM();
+
+        if (typeof saved.ssoAutoJoin === 'boolean') {
+          const current = els.switchSSO.getAttribute('aria-checked') === 'true';
+          if (current !== saved.ssoAutoJoin) els.switchSSO.click();
+        }
+
+        if (saved.billingCadence) {
+          const isAnnual = els.switchCadence.getAttribute('aria-checked') === 'true';
+          const wantAnnual = saved.billingCadence === 'annual';
+          if (isAnnual !== wantAnnual) els.switchCadence.click();
+        }
+
+        if (saved.planTier) {
+          const planCard = Array.from(els.planCards).find(c => c.getAttribute('data-tier') === saved.planTier);
+          if (planCard) planCard.click();
+        }
+
+        if (typeof saved.seats === 'number') {
+          els.seatSlider.value = saved.seats;
+          els.seatSlider.dispatchEvent(new Event('input', { bubbles: true }));
+        }
+
+        if (saved.environments) {
+          if (typeof saved.environments.staging === 'boolean' && els.checkStaging.checked !== saved.environments.staging) {
+            els.checkStaging.checked = saved.environments.staging;
+            els.checkStaging.dispatchEvent(new Event('change', { bubbles: true }));
+          }
+          if (typeof saved.environments.preview === 'boolean' && els.checkPreview.checked !== saved.environments.preview) {
+            els.checkPreview.checked = saved.environments.preview;
+            els.checkPreview.dispatchEvent(new Event('change', { bubbles: true }));
+          }
+        }
+
+        if (saved.currentStep && saved.currentStep > 1) {
+          goToStep(saved.currentStep, false);
+        }
+
+        updateLiveManifest();
+        return true;
+      }
+
+      const restored = restoreFromSnapshot();
+      if (restored) {
+        const status = document.getElementById('live-save-status');
+        status.textContent = '✓ Restored your saved progress';
+        status.style.color = 'var(--status-success-text)';
+      }
+
+      updateLiveManifest();
+
+    })();
+  </script>
+</body>
+</html>

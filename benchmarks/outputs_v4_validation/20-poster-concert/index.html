@@ -1,0 +1,959 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FALSE MERIDIAN — The Architecture of Tremor | Album Release Concert Poster</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-wall: #11141a;
+      --bg-panel: #1a1f27;
+      --border-dim: #222730;
+      --text-muted: #636c7a;
+      --text-subtle: #9ba3af;
+      --ink-bone: #f0ece1;
+      --ink-cadmium: #ff4d2e;
+      --font-display: 'Syne', sans-serif;
+      --font-body: 'Space Grotesk', -apple-system, sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: #11141a;
+      color: #f0ece1;
+      font-family: var(--font-body);
+      font-size: 16px;
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+      padding: 32px 16px 64px 16px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+    }
+
+    a:focus-visible,
+    button:focus-visible,
+    input:focus-visible {
+      outline: 2px solid #ff4d2e;
+      outline-offset: 4px;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      * {
+        animation: none !important;
+        transition: none !important;
+      }
+    }
+
+    /* Interactive Archival Toolbar */
+    nav.inspector-nav {
+      width: 100%;
+      max-width: 840px;
+      margin-bottom: 24px;
+      background-color: #1a1f27;
+      border: 1px solid #222730;
+      padding: 16px 20px;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .toolbar-branding {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .toolbar-title {
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #f0ece1;
+    }
+
+    .toolbar-subtitle {
+      font-size: 10px;
+      letter-spacing: 0.08em;
+      color: #9ba3af;
+      text-transform: uppercase;
+    }
+
+    .toolbar-controls {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .mode-group {
+      display: flex;
+      gap: 8px;
+    }
+
+    .mode-btn {
+      background-color: #11141a;
+      color: #9ba3af;
+      border: 1px solid #222730;
+      padding: 8px 12px;
+      font-family: var(--font-body);
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .mode-btn:hover {
+      color: #f0ece1;
+      border-color: #636c7a;
+    }
+
+    .mode-btn.active {
+      background-color: #ff4d2e;
+      color: #11141a;
+      border-color: #ff4d2e;
+    }
+
+    .zoom-control-wrap {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .zoom-label {
+      font-size: 12px;
+      color: #9ba3af;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      min-width: 72px;
+    }
+
+    .zoom-slider-input {
+      width: 100px;
+      cursor: pointer;
+      accent-color: #ff4d2e;
+    }
+
+    .zoom-readout {
+      font-size: 12px;
+      font-weight: 700;
+      color: #f0ece1;
+      min-width: 40px;
+      text-align: right;
+    }
+
+    /* Poster Viewport Container */
+    main.poster-viewport {
+      width: 100%;
+      max-width: 840px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      overflow-x: auto;
+      padding: 16px 0;
+    }
+
+    /* Screenprinted Poster Sheet (Authentic 18x24in / 3:4 Aspect Ratio) */
+    article.poster-sheet {
+      width: 100%;
+      max-width: 760px;
+      background-color: #11141a;
+      border: 1px solid #222730;
+      padding: 32px 36px 40px 36px;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 32px 64px rgba(0, 0, 0, 0.9);
+      transform-origin: top center;
+      transition: transform 0.2s ease-out;
+    }
+
+    /* Print Production Marks */
+    .crop-mark {
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      pointer-events: none;
+    }
+    .crop-mark.tl { top: 8px; left: 8px; border-top: 1px solid #636c7a; border-left: 1px solid #636c7a; }
+    .crop-mark.tr { top: 8px; right: 8px; border-top: 1px solid #636c7a; border-right: 1px solid #636c7a; }
+    .crop-mark.bl { bottom: 8px; left: 8px; border-bottom: 1px solid #636c7a; border-left: 1px solid #636c7a; }
+    .crop-mark.br { bottom: 8px; right: 8px; border-bottom: 1px solid #636c7a; border-right: 1px solid #636c7a; }
+
+    .registration-target {
+      position: absolute;
+      width: 16px;
+      height: 16px;
+      pointer-events: none;
+    }
+    .registration-target.top-center { top: 12px; left: calc(50% - 8px); }
+    .registration-target.bottom-center { bottom: 12px; left: calc(50% - 8px); }
+
+    /* Production Color Density Bars */
+    .color-calibration-bar {
+      display: flex;
+      gap: 4px;
+      align-items: center;
+    }
+    .color-chip {
+      width: 12px;
+      height: 12px;
+      border: 1px solid #222730;
+    }
+    .color-chip.c-bone { background-color: #f0ece1; }
+    .color-chip.c-cadmium { background-color: #ff4d2e; }
+    .color-chip.c-slate { background-color: #636c7a; }
+    .color-chip.c-subtle { background-color: #9ba3af; }
+    .color-chip.c-graphite { background-color: #1a1f27; }
+
+    /* Poster Header Rail */
+    header.poster-header {
+      border-bottom: 1px solid #222730;
+      padding-bottom: 16px;
+      margin-bottom: 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .header-imprint {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.16em;
+      color: #9ba3af;
+      text-transform: uppercase;
+    }
+
+    .header-edition {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.16em;
+      color: #ff4d2e;
+      text-transform: uppercase;
+    }
+
+    /* Monolithic Hero Typographic Section */
+    section.hero-band-title {
+      display: flex;
+      flex-direction: column;
+      margin-bottom: 20px;
+    }
+
+    .monumental-headline {
+      font-family: var(--font-display);
+      font-size: 64px;
+      font-weight: 800;
+      line-height: 0.92;
+      letter-spacing: -0.04em;
+      text-transform: uppercase;
+      color: #f0ece1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .headline-line-one {
+      display: block;
+      color: #f0ece1;
+    }
+
+    .headline-line-two {
+      display: block;
+      color: #ff4d2e;
+      margin-top: 4px;
+    }
+
+    .album-title-banner {
+      margin-top: 16px;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 12px;
+      border-top: 1px solid #222730;
+      padding-top: 12px;
+    }
+
+    .album-heading {
+      font-family: var(--font-display);
+      font-size: 24px;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+      color: #f0ece1;
+      text-transform: uppercase;
+    }
+
+    .album-event-type {
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      color: #9ba3af;
+      text-transform: uppercase;
+    }
+
+    /* Central Architectural Seismograph Vector */
+    figure.seismograph-figure {
+      margin: 0 0 24px 0;
+      background-color: #1a1f27;
+      border: 1px solid #222730;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+
+    .seismograph-svg {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    figcaption.vector-caption {
+      margin-top: 12px;
+      border-top: 1px solid #222730;
+      padding-top: 8px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 10px;
+      letter-spacing: 0.12em;
+      color: #9ba3af;
+      text-transform: uppercase;
+    }
+
+    .caption-spec-accent {
+      color: #ff4d2e;
+      font-weight: 700;
+    }
+
+    /* Event Details Grid (3 Disciplined Architectural Columns) */
+    section.event-details-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 20px;
+      border-top: 1px solid #222730;
+      border-bottom: 1px solid #222730;
+      padding: 24px 0;
+      margin-bottom: 24px;
+    }
+
+    .col-segment {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .col-segment.middle-col {
+      border-left: 1px solid #222730;
+      border-right: 1px solid #222730;
+      padding: 0 16px;
+    }
+
+    .segment-header {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.16em;
+      color: #ff4d2e;
+      text-transform: uppercase;
+      padding-bottom: 4px;
+      border-bottom: 1px solid #222730;
+    }
+
+    .date-monumental {
+      font-family: var(--font-display);
+      font-size: 20px;
+      font-weight: 800;
+      line-height: 1.1;
+      color: #f0ece1;
+      text-transform: uppercase;
+      letter-spacing: -0.02em;
+    }
+
+    .timetable-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      font-size: 12px;
+      color: #9ba3af;
+    }
+
+    .timetable-list strong {
+      color: #f0ece1;
+      font-weight: 600;
+    }
+
+    .venue-name-bold {
+      font-family: var(--font-display);
+      font-size: 16px;
+      font-weight: 700;
+      color: #f0ece1;
+      text-transform: uppercase;
+      line-height: 1.2;
+    }
+
+    .venue-address-block {
+      font-size: 12px;
+      line-height: 1.4;
+      color: #9ba3af;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .venue-transit-note {
+      font-size: 10px;
+      color: #636c7a;
+      letter-spacing: 0.04em;
+      margin-top: 4px;
+    }
+
+    .support-band-entry {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .support-band-name {
+      font-size: 14px;
+      font-weight: 700;
+      color: #f0ece1;
+      text-transform: uppercase;
+    }
+
+    .support-band-genre {
+      font-size: 10px;
+      color: #9ba3af;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    .ticket-policy-block {
+      margin-top: 4px;
+      padding-top: 8px;
+      border-top: 1px solid #222730;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .ticket-price-row {
+      font-size: 14px;
+      font-weight: 700;
+      color: #ff4d2e;
+      letter-spacing: 0.02em;
+    }
+
+    .ticket-terms {
+      font-size: 10px;
+      color: #636c7a;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    /* Production Footer & Archival Colophon */
+    footer.poster-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      gap: 20px;
+      padding-top: 8px;
+    }
+
+    .production-notes {
+      max-width: 440px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .production-summary {
+      font-size: 10px;
+      line-height: 1.4;
+      color: #9ba3af;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    .printer-credit {
+      font-size: 10px;
+      color: #636c7a;
+      letter-spacing: 0.04em;
+    }
+
+    .colophon-barcode-box {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 4px;
+    }
+
+    .barcode-svg {
+      width: 140px;
+      height: 36px;
+      display: block;
+    }
+
+    .barcode-number {
+      font-size: 10px;
+      letter-spacing: 0.18em;
+      color: #9ba3af;
+      font-family: monospace;
+    }
+
+    /* Production Telemetry Overlay (Active when toggled) */
+    aside.print-plate-telemetry {
+      display: none;
+      margin-top: 16px;
+      padding: 12px 16px;
+      background-color: #1a1f27;
+      border: 1px solid #ff4d2e;
+      font-size: 12px;
+      color: #f0ece1;
+      width: 100%;
+    }
+
+    aside.print-plate-telemetry.visible {
+      display: block;
+    }
+
+    .telemetry-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+    }
+
+    .telemetry-item {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .telemetry-label {
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #9ba3af;
+    }
+
+    .telemetry-val {
+      font-size: 12px;
+      font-weight: 700;
+      color: #ff4d2e;
+    }
+
+    /* Plate Mode: High-Contrast Spot Inks */
+    .spot-plate-mode .headline-line-one,
+    .spot-plate-mode .album-heading,
+    .spot-plate-mode .date-monumental,
+    .spot-plate-mode .venue-name-bold,
+    .spot-plate-mode .support-band-name {
+      color: #ffffff !important;
+    }
+
+    .spot-plate-mode .headline-line-two,
+    .spot-plate-mode .header-edition,
+    .spot-plate-mode .segment-header,
+    .spot-plate-mode .ticket-price-row,
+    .spot-plate-mode .caption-spec-accent {
+      color: #ff4d2e !important;
+    }
+
+    /* Production Guides Overlay */
+    .production-guides-active article.poster-sheet {
+      outline: 2px dashed #ff4d2e;
+      outline-offset: -12px;
+    }
+
+    /* Responsive Breakpoints */
+    @media (max-width: 820px) {
+      article.poster-sheet {
+        padding: 24px 20px 32px 20px;
+      }
+      .monumental-headline {
+        font-size: 48px;
+      }
+      section.event-details-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+      }
+      .col-segment.middle-col {
+        border-left: none;
+        border-right: none;
+        border-top: 1px solid #222730;
+        border-bottom: 1px solid #222730;
+        padding: 16px 0;
+      }
+      footer.poster-footer {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      .colophon-barcode-box {
+        align-items: flex-start;
+      }
+      .telemetry-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    @media (max-width: 480px) {
+      body {
+        padding: 16px 8px 40px 8px;
+      }
+      nav.inspector-nav {
+        padding: 12px 12px;
+      }
+      .monumental-headline {
+        font-size: 36px;
+      }
+      .album-heading {
+        font-size: 20px;
+      }
+      .mode-group {
+        width: 100%;
+      }
+      .mode-btn {
+        flex: 1;
+        padding: 8px 4px;
+        font-size: 10px;
+      }
+      .telemetry-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Archival Print Inspector Toolbar (Satisfies Interaction Depth Floor §2.5) -->
+  <nav class="inspector-nav" aria-label="Poster Archival Inspection Controls">
+    <div class="toolbar-branding">
+      <span class="toolbar-title">Archival Gig Poster Presentation</span>
+      <span class="toolbar-subtitle">Catalog: VST-044-P • Serigraph Master Archive</span>
+    </div>
+
+    <div class="toolbar-controls">
+      <div class="mode-group" role="group" aria-label="Poster View Modes">
+        <button type="button" class="mode-btn active" id="btn-mode-standard" aria-pressed="true">
+          Standard Print
+        </button>
+        <button type="button" class="mode-btn" id="btn-mode-guides" aria-pressed="false">
+          Trim &amp; Bleed Specs
+        </button>
+        <button type="button" class="mode-btn" id="btn-mode-spot" aria-pressed="false">
+          Spot Inks Plate
+        </button>
+      </div>
+
+      <div class="zoom-control-wrap">
+        <label for="zoom-slider" class="zoom-label">Loupe / Zoom:</label>
+        <input type="range" id="zoom-slider" class="zoom-slider-input" min="100" max="140" value="100" step="5" role="slider" aria-label="Poster inspection magnification level" aria-valuemin="100" aria-valuemax="140" aria-valuenow="100">
+        <span class="zoom-readout" id="zoom-value-text" aria-live="polite">100%</span>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Live Inspection Telemetry (Activated in Guides Mode) -->
+  <aside class="print-plate-telemetry" id="print-telemetry" aria-label="Print Production Telemetry Specs">
+    <div class="telemetry-grid">
+      <div class="telemetry-item">
+        <span class="telemetry-label">Trim Dimensions:</span>
+        <span class="telemetry-val">18.0 × 24.0 in (457 × 610 mm)</span>
+      </div>
+      <div class="telemetry-item">
+        <span class="telemetry-label">Bleed Margin:</span>
+        <span class="telemetry-val">0.125 in (3.175 mm) 4-Sided</span>
+      </div>
+      <div class="telemetry-item">
+        <span class="telemetry-label">Paper Substrate:</span>
+        <span class="telemetry-val">300gsm French Speckletone Charcoal</span>
+      </div>
+      <div class="telemetry-item">
+        <span class="telemetry-label">Spot Inks:</span>
+        <span class="telemetry-val">Titanium Bone + Cadmium Tangerine</span>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Poster Viewport -->
+  <main class="poster-viewport" id="poster-viewport">
+    <!-- Physical Poster Canvas (3:4 Standard 18x24in Proportion) -->
+    <article class="poster-sheet" id="poster-canvas">
+
+      <!-- Corner Crop / Trim Registration Marks -->
+      <div class="crop-mark tl" aria-hidden="true"></div>
+      <div class="crop-mark tr" aria-hidden="true"></div>
+      <div class="crop-mark bl" aria-hidden="true"></div>
+      <div class="crop-mark br" aria-hidden="true"></div>
+
+      <!-- Registration Target Crosshairs -->
+      <div class="registration-target top-center" aria-hidden="true">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+          <circle cx="8" cy="8" r="6" stroke="#636c7a" stroke-width="1" />
+          <line x1="8" y1="0" x2="8" y2="16" stroke="#636c7a" stroke-width="1" />
+          <line x1="0" y1="8" x2="16" y2="8" stroke="#636c7a" stroke-width="1" />
+          <circle cx="8" cy="8" r="2" fill="#636c7a" />
+        </svg>
+      </div>
+      <div class="registration-target bottom-center" aria-hidden="true">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+          <circle cx="8" cy="8" r="6" stroke="#636c7a" stroke-width="1" />
+          <line x1="8" y1="0" x2="8" y2="16" stroke="#636c7a" stroke-width="1" />
+          <line x1="0" y1="8" x2="16" y2="8" stroke="#636c7a" stroke-width="1" />
+          <circle cx="8" cy="8" r="2" fill="#636c7a" />
+        </svg>
+      </div>
+
+      <!-- Top Utility Header Rail -->
+      <header class="poster-header">
+        <div class="color-calibration-bar" aria-label="Silkscreen Ink Density Color Control Patches">
+          <span class="color-chip c-bone" title="Titanium Bone White Ink"></span>
+          <span class="color-chip c-cadmium" title="Cadmium Vermilion Spot Ink"></span>
+          <span class="color-chip c-slate" title="Litho Midtone Slate"></span>
+          <span class="color-chip c-subtle" title="Cool Boundary Tint"></span>
+          <span class="color-chip c-graphite" title="Substrate Baseline"></span>
+        </div>
+        <div class="header-imprint">Meridian Audio Works // Constellation Series No. 14</div>
+        <div class="header-edition">Limited Serigraph Run: 084 / 175</div>
+      </header>
+
+      <!-- Monumental Hero Typography -->
+      <section class="hero-band-title">
+        <h1 class="monumental-headline">
+          <span class="headline-line-one">False</span>
+          <span class="headline-line-two">Meridian</span>
+        </h1>
+        <div class="album-title-banner">
+          <h2 class="album-heading">The Architecture of Tremor</h2>
+          <span class="album-event-type">Official Album Release Performance</span>
+        </div>
+      </section>
+
+      <!-- Central Acoustic Seismograph Vector Illustration -->
+      <figure class="seismograph-figure">
+        <svg class="seismograph-svg" viewBox="0 0 680 340" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Tectonic acoustic seismograph showing soundwave resonance interference patterns in Bay 4 Foundry">
+          <!-- Background Grid Coordinate Lattice -->
+          <line x1="40" y1="40" x2="640" y2="40" stroke="#222730" stroke-width="1" />
+          <line x1="40" y1="90" x2="640" y2="90" stroke="#222730" stroke-width="1" />
+          <line x1="40" y1="140" x2="640" y2="140" stroke="#222730" stroke-width="1" />
+          <line x1="40" y1="190" x2="640" y2="190" stroke="#222730" stroke-width="1" />
+          <line x1="40" y1="240" x2="640" y2="240" stroke="#222730" stroke-width="1" />
+          <line x1="40" y1="290" x2="640" y2="290" stroke="#222730" stroke-width="1" />
+
+          <!-- Vertical Frequency Division Lines -->
+          <line x1="100" y1="30" x2="100" y2="300" stroke="#222730" stroke-width="1" />
+          <line x1="190" y1="30" x2="190" y2="300" stroke="#222730" stroke-width="1" />
+          <line x1="280" y1="30" x2="280" y2="300" stroke="#222730" stroke-width="1" />
+          <line x1="370" y1="30" x2="370" y2="300" stroke="#222730" stroke-width="1" />
+          <line x1="460" y1="30" x2="460" y2="300" stroke="#222730" stroke-width="1" />
+          <line x1="550" y1="30" x2="550" y2="300" stroke="#222730" stroke-width="1" />
+
+          <!-- Isometric Architectural Rafters & Pillars (Foundry Wireframe) -->
+          <path d="M 60 270 L 220 130 L 520 130 L 620 210" stroke="#636c7a" stroke-width="1.5" stroke-dasharray="4 4" />
+          <path d="M 220 130 L 220 280" stroke="#636c7a" stroke-width="1" stroke-dasharray="2 2" />
+          <path d="M 520 130 L 520 280" stroke="#636c7a" stroke-width="1" stroke-dasharray="2 2" />
+          <path d="M 140 200 L 370 70 L 600 170" stroke="#222730" stroke-width="1" />
+          <path d="M 370 70 L 370 290" stroke="#ff4d2e" stroke-width="1" stroke-dasharray="6 3" />
+
+          <!-- Acoustic Sine Waveforms (Low Swell Resonance) -->
+          <path d="M 40 190 Q 90 120, 140 190 T 240 190 T 340 190 T 440 190 T 540 190 T 640 190" stroke="#636c7a" stroke-width="1.5" />
+          <path d="M 40 190 Q 80 80, 120 190 T 200 190 T 280 190 T 360 190 T 440 190 T 520 190 T 600 190 T 640 190" stroke="#9ba3af" stroke-width="1.2" />
+
+          <!-- High Amplitude Tremor Fault Line (Cadmium Spot Stroke) -->
+          <path d="M 40 210 C 120 210, 160 260, 220 160 C 270 75, 310 310, 370 60 C 430 300, 480 90, 530 230 C 580 200, 610 210, 640 210" stroke="#ff4d2e" stroke-width="2.5" />
+
+          <!-- Secondary Harmonic Reflection (Bone Ink) -->
+          <path d="M 40 170 C 130 170, 170 120, 230 220 C 290 280, 330 90, 370 240 C 420 80, 470 260, 520 150 C 570 180, 610 170, 640 170" stroke="#f0ece1" stroke-width="1.8" />
+
+          <!-- Moiré Acoustic Radial Rings radiating from Center Epicenter -->
+          <circle cx="370" cy="190" r="30" stroke="#222730" stroke-width="1" />
+          <circle cx="370" cy="190" r="60" stroke="#222730" stroke-width="1" />
+          <circle cx="370" cy="190" r="90" stroke="#222730" stroke-width="1" />
+          <circle cx="370" cy="190" r="130" stroke="#222730" stroke-width="1" stroke-dasharray="2 4" />
+          <circle cx="370" cy="190" r="180" stroke="#222730" stroke-width="1" stroke-dasharray="1 5" />
+
+          <!-- Resonance Nodes & Registration Crosses -->
+          <circle cx="370" cy="60" r="4" fill="#ff4d2e" />
+          <circle cx="370" cy="240" r="3" fill="#f0ece1" />
+          <circle cx="220" cy="160" r="3" fill="#ff4d2e" />
+          <circle cx="530" cy="230" r="3" fill="#ff4d2e" />
+
+          <!-- Telemetric Technical Notation Text Inside SVG -->
+          <text x="45" y="35" fill="#636c7a" font-family="'Space Grotesk', monospace" font-size="9" letter-spacing="1">COORD: 41.8500° N, 87.6500° W</text>
+          <text x="45" y="315" fill="#636c7a" font-family="'Space Grotesk', monospace" font-size="9" letter-spacing="1">FREQ: 27.5 Hz (SUB-OCTAVE A0)</text>
+          <text x="500" y="35" fill="#636c7a" font-family="'Space Grotesk', monospace" font-size="9" letter-spacing="1">BANDWIDTH: 12.4 kHz</text>
+          <text x="530" y="315" fill="#ff4d2e" font-family="'Space Grotesk', monospace" font-size="9" font-weight="bold" letter-spacing="1">PEAK: +6.2 dB SPL</text>
+        </svg>
+
+        <figcaption class="vector-caption">
+          <span>Figure 04 — Structural Shear &amp; Acoustic Resonance Phase Profile</span>
+          <span class="caption-spec-accent">Subterranean Foundry Acoustic Survey 19.30–23.30</span>
+        </figcaption>
+      </figure>
+
+      <!-- Event Details Grid (3 Disciplined Architectural Columns) -->
+      <section class="event-details-grid">
+        <!-- Column 1: Date & Hours -->
+        <div class="col-segment">
+          <h3 class="segment-header">01 // Date &amp; Hours</h3>
+          <div class="date-monumental">Friday<br>23 Oct 2026</div>
+          <ul class="timetable-list">
+            <li><strong>19:30</strong> — Doors &amp; Vinyl Archive Open</li>
+            <li><strong>20:15</strong> — Bury The Needle (Opening Set)</li>
+            <li><strong>21:00</strong> — Kestrel / Wire (Guest Duo)</li>
+            <li><strong>21:45</strong> — False Meridian (Full Album Live)</li>
+            <li><strong>23:30</strong> — Strict Sound Curfew</li>
+          </ul>
+        </div>
+
+        <!-- Column 2: Venue & Transit -->
+        <div class="col-segment middle-col">
+          <h3 class="segment-header">02 // Venue Coordinates</h3>
+          <div class="venue-name-bold">The Subterranean Foundry</div>
+          <div class="venue-address-block">
+            <span>Bay 4 • Old Copper Works</span>
+            <span>482 Pulaski Basin, Lower Canal</span>
+            <span>Chicago, Illinois 60608</span>
+          </div>
+          <p class="venue-transit-note">
+            Transit: Pink Line to Damen or Canal Water Taxi Pier 4. Heavy coat check available. Strictly 18+ valid government photo ID mandatory at door.
+          </p>
+        </div>
+
+        <!-- Column 3: Supporting Acts & Admission -->
+        <div class="col-segment">
+          <h3 class="segment-header">03 // Guest Artists &amp; Box Office</h3>
+          <div class="support-band-entry">
+            <span class="support-band-name">Kestrel / Wire</span>
+            <span class="support-band-genre">Analog Drone &amp; Prepared Cello Duo</span>
+          </div>
+          <div class="support-band-entry">
+            <span class="support-band-name">Bury The Needle</span>
+            <span class="support-band-genre">Tape Loop Collage &amp; Feedback Chimes</span>
+          </div>
+          <div class="ticket-policy-block">
+            <span class="ticket-price-row">$24.00 ADV / $28.00 DOOR</span>
+            <span class="ticket-terms">Capacity strictly limited to 250 tickets. No guestlist additions after 20:00.</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- Production Footer & Archival Colophon -->
+      <footer class="poster-footer">
+        <div class="production-notes">
+          <p class="production-summary">
+            Recorded live to 2-inch 16-track analog tape at Electrical Audio, Chicago. Mastered by Golden Mastering. First pressing 180g clear-smoke double vinyl edition of 500 includes 24-page risograph exhibition monograph.
+          </p>
+          <p class="printer-credit">
+            Screenprinted by hand at Dead Letter Press on 300gsm French Speckletone Charcoal paper. Hand-pulled edition of 175. Designed by False Meridian Archival Collective.
+          </p>
+        </div>
+
+        <div class="colophon-barcode-box">
+          <svg class="barcode-svg" viewBox="0 0 140 36" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Concert catalog barcode serial VST-044">
+            <!-- Precise Screenprinted Barcode Pattern -->
+            <rect x="0" y="0" width="3" height="30" fill="#f0ece1" />
+            <rect x="5" y="0" width="1" height="30" fill="#f0ece1" />
+            <rect x="8" y="0" width="2" height="30" fill="#f0ece1" />
+            <rect x="13" y="0" width="4" height="30" fill="#f0ece1" />
+            <rect x="19" y="0" width="1" height="30" fill="#f0ece1" />
+            <rect x="23" y="0" width="3" height="30" fill="#f0ece1" />
+            <rect x="28" y="0" width="2" height="30" fill="#f0ece1" />
+            <rect x="33" y="0" width="1" height="30" fill="#f0ece1" />
+            <rect x="36" y="0" width="5" height="30" fill="#f0ece1" />
+            <rect x="44" y="0" width="2" height="30" fill="#f0ece1" />
+            <rect x="49" y="0" width="1" height="30" fill="#f0ece1" />
+            <rect x="53" y="0" width="3" height="30" fill="#f0ece1" />
+            <rect x="58" y="0" width="4" height="30" fill="#f0ece1" />
+            <rect x="65" y="0" width="2" height="30" fill="#f0ece1" />
+            <rect x="70" y="0" width="1" height="30" fill="#f0ece1" />
+            <rect x="73" y="0" width="3" height="30" fill="#f0ece1" />
+            <rect x="79" y="0" width="2" height="30" fill="#f0ece1" />
+            <rect x="84" y="0" width="4" height="30" fill="#f0ece1" />
+            <rect x="91" y="0" width="1" height="30" fill="#f0ece1" />
+            <rect x="94" y="0" width="3" height="30" fill="#f0ece1" />
+            <rect x="100" y="0" width="2" height="30" fill="#f0ece1" />
+            <rect x="104" y="0" width="5" height="30" fill="#f0ece1" />
+            <rect x="112" y="0" width="1" height="30" fill="#f0ece1" />
+            <rect x="116" y="0" width="3" height="30" fill="#f0ece1" />
+            <rect x="122" y="0" width="2" height="30" fill="#f0ece1" />
+            <rect x="127" y="0" width="4" height="30" fill="#f0ece1" />
+            <rect x="134" y="0" width="2" height="30" fill="#f0ece1" />
+            <rect x="138" y="0" width="2" height="30" fill="#f0ece1" />
+          </svg>
+          <span class="barcode-number">VST-044-84175</span>
+        </div>
+      </footer>
+
+    </article>
+  </main>
+
+  <!-- Interactive State Management Script (Satisfies §2.5 Control Functionality) -->
+  <script>
+    (function () {
+      const btnStandard = document.getElementById('btn-mode-standard');
+      const btnGuides = document.getElementById('btn-mode-guides');
+      const btnSpot = document.getElementById('btn-mode-spot');
+      const telemetry = document.getElementById('print-telemetry');
+      const posterCanvas = document.getElementById('poster-canvas');
+      const zoomSlider = document.getElementById('zoom-slider');
+      const zoomText = document.getElementById('zoom-value-text');
+
+      const modeButtons = [btnStandard, btnGuides, btnSpot];
+
+      function setActiveMode(button) {
+        modeButtons.forEach(btn => {
+          btn.classList.remove('active');
+          btn.setAttribute('aria-pressed', 'false');
+        });
+        button.classList.add('active');
+        button.setAttribute('aria-pressed', 'true');
+
+        // Reset classes
+        document.body.classList.remove('production-guides-active', 'spot-plate-mode');
+        telemetry.classList.remove('visible');
+
+        if (button === btnGuides) {
+          document.body.classList.add('production-guides-active');
+          telemetry.classList.add('visible');
+        } else if (button === btnSpot) {
+          document.body.classList.add('spot-plate-mode');
+        }
+      }
+
+      btnStandard.addEventListener('click', function () {
+        setActiveMode(btnStandard);
+      });
+
+      btnGuides.addEventListener('click', function () {
+        setActiveMode(btnGuides);
+      });
+
+      btnSpot.addEventListener('click', function () {
+        setActiveMode(btnSpot);
+      });
+
+      // Zoom loupe continuous inspection
+      zoomSlider.addEventListener('input', function (e) {
+        const val = e.target.value;
+        zoomText.textContent = val + '%';
+        zoomSlider.setAttribute('aria-valuenow', val);
+        const scale = val / 100;
+        posterCanvas.style.transform = 'scale(' + scale + ')';
+      });
+    })();
+  </script>
+</body>
+</html>

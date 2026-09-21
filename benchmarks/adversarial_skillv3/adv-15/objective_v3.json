@@ -1,0 +1,15 @@
+{
+  "semantic_landmarks": true,
+  "has_viewport_meta": true,
+  "has_media_query": true,
+  "alt_text_present": true,
+  "img_missing_alt": false,
+  "keyboard_inaccessible_controls": false,
+  "uses_real_button_element": false,
+  "body_text_contrast_ratio": 16.07,
+  "contrast_passes_wcag_aa": true,
+  "touch_target_min_44px": true,
+  "left_border_accent_strip_tell": false,
+  "uniform_radius_no_hierarchy": false,
+  "gradient_hero_default": false
+}

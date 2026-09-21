@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>FORMA CLINICAL — Biomimetic Skincare 3-Product Packaging System</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,500;0,6..72,700;1,6..72,400&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --ground-vellum: #f7f5f0;
+      --surface-card: #ffffff;
+      --surface-subtle: #eeeae0;
+      --line-pharma: #d8d3c5;
+      --ink-charcoal: #1a1816;
+      --ink-muted: #7d756b;
+      --accent-cobalt: #0047ba;
+      --font-brand: 'Newsreader', serif;
+      --font-clinical: 'Plus Jakarta Sans', sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body{background:#f7f5f0;color:#1a1816;
+      font-family: var(--font-clinical);
+      font-size: 16px;
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    a:focus-visible, button:focus-visible {
+      outline: 2px solid #0047ba;
+      outline-offset: 4px;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      * {
+        animation: none !important;
+        transition: none !important;
+      }
+    }
+
+    .packaging-wrapper {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 32px 24px 64px;
+    }
+
+    header.pharma-masthead {
+      border-bottom: 1px solid #d8d3c5;
+      padding-bottom: 24px;
+      margin-bottom: 40px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .meta-spec-strip {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+      border-bottom: 1px solid #d8d3c5;
+      padding-bottom: 16px;
+    }
+
+    .meta-point {
+      font-size: 12px;
+      color: #7d756b;
+      letter-spacing: 0.04em;
+    }
+
+    .meta-point strong {
+      color: #1a1816;
+      font-weight: 600;
+    }
+
+    .brand-statement-area {
+      max-width: 800px;
+    }
+
+    h1.brand-title-main {
+      font-family: var(--font-brand);
+      font-size: 40px;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+      line-height: 1.1;
+      color: #1a1816;
+      margin-bottom: 8px;
+    }
+
+    em{color:#0047ba;font-style:normal;}
+
+    .brand-rationale {
+      font-size: 16px;
+      color: #7d756b;
+      line-height: 1.5;
+    }
+
+    main.packaging-system-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 32px;
+    }
+
+    section.packaging-panel {
+      background: #ffffff;
+      border: 1px solid #d8d3c5;
+      border-radius: 4px;
+      padding: 32px;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    .panel-top-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid #d8d3c5;
+      padding-bottom: 12px;
+    }
+
+    h2.panel-heading {
+      font-family: var(--font-brand);
+      font-size: 20px;
+      font-weight: 700;
+      color: #1a1816;
+    }
+
+    .panel-badge {
+      font-size: 12px;
+      color: #0047ba;
+      font-weight: 600;
+    }
+
+    /* 3-Product Shelf Lineup Stage */
+    .shelf-lineup-stage {
+      background: #f7f5f0;
+      border: 1px solid #d8d3c5;
+      border-radius: 2px;
+      padding: 48px 24px;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+      align-items: flex-end;
+    }
+
+    .package-unit {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+    }
+
+    /* Product 01 Bottle */
+    .bottle-mockup-01 {
+      width: 140px;
+      height: 220px;
+      background: #eeeae0;
+      border: 1px solid #d8d3c5;
+      border-radius: 8px 8px 4px 4px;
+      padding: 16px 12px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      box-shadow: 0 12px 24px rgba(26,24,22,0.06);
+      position: relative;
+    }
+
+    /* Product 02 Dropper Bottle */
+    .bottle-mockup-02 {
+      width: 120px;
+      height: 180px;
+      background: #1a1816;
+      border: 1px solid #1a1816;
+      border-radius: 6px 6px 4px 4px;
+      padding: 16px 12px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      box-shadow: 0 12px 24px rgba(26,24,22,0.12);
+      color: #f7f5f0;
+    }
+
+    /* Product 03 Cream Jar */
+    .jar-mockup-03 {
+      width: 150px;
+      height: 140px;
+      background: #ffffff;
+      border: 1px solid #d8d3c5;
+      border-radius: 4px;
+      padding: 16px 12px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      box-shadow: 0 12px 24px rgba(26,24,22,0.06);
+    }
+
+    .step-index-tag {
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      color: #0047ba;
+      text-transform: uppercase;
+    }
+
+    .product-label-brand {
+      font-family: var(--font-brand);
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .product-descriptor {
+      font-size: 12px;
+      font-weight: 600;
+      line-height: 1.2;
+      margin-top: 4px;
+    }
+
+    .product-net-vol {
+      font-size: 12px;
+      letter-spacing: 0.04em;
+      color: #7d756b;
+      border-top: 1px solid #d8d3c5;
+      padding-top: 4px;
+    }
+
+    .unit-caption-block {
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .unit-title {
+      font-size: 14px;
+      font-weight: 700;
+      color: #1a1816;
+    }
+
+    .unit-spec {
+      font-size: 12px;
+      color: #7d756b;
+    }
+
+    /* Label Architecture & Regulatory Disclosure */
+    .label-spec-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+    }
+
+    .regulatory-box {
+      background: #f7f5f0;
+      border: 1px solid #d8d3c5;
+      border-radius: 2px;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    h3.reg-heading {
+      font-family: var(--font-brand);
+      font-size: 14px;
+      font-weight: 700;
+      color: #1a1816;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      border-bottom: 1px solid #d8d3c5;
+      padding-bottom: 8px;
+    }
+
+    .inci-formula-text {
+      font-size: 12px;
+      line-height: 1.5;
+      color: #1a1816;
+    }
+
+    .batch-id-strip {
+      display: flex;
+      justify-content: space-between;
+      font-size: 12px;
+      color: #7d756b;
+      border-top: 1px solid #d8d3c5;
+      padding-top: 8px;
+    }
+
+    /* Footer Navigation */
+    footer.packaging-footer {
+      margin-top: 48px;
+      padding-top: 24px;
+      border-top: 1px solid #d8d3c5;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .footer-reg-status {
+      font-size: 12px;
+      color: #7d756b;
+    }
+
+    .btn{background:#0047ba;color:#ffffff;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 44px;
+      padding: 0 24px;
+      font-family: var(--font-clinical);
+      font-size: 14px;
+      font-weight: 600;
+      border-radius: 2px;
+      cursor: pointer;
+      text-decoration: none;
+      border: 1px solid transparent;
+    }
+
+    .btn-secondary {
+      background-color: transparent;
+      color: #1a1816;
+      border: 1px solid #d8d3c5;
+    }
+
+    .btn-secondary:hover {
+      background-color: #eeeae0;
+    }
+
+    @media (max-width: 840px) {
+      .shelf-lineup-stage {
+        grid-template-columns: 1fr;
+        align-items: center;
+      }
+      .label-spec-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .packaging-wrapper {
+        padding: 20px 16px 40px;
+      }
+      h1.brand-title-main {
+        font-size: 32px;
+      }
+      footer.packaging-footer {
+        flex-direction: column;
+        align-items: stretch;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="packaging-wrapper">
+    <header class="pharma-masthead">
+      <div class="meta-spec-strip">
+        <div class="meta-point">Brand: <strong>FORMA CLINICAL DERMACEUTICALS</strong></div>
+        <div class="meta-point">Protocol: <strong>3-Step Biomimetic Barrier Family</strong></div>
+        <div class="meta-point">Substrates: <strong>Amber Borosilicate &bull; Matte Vellum</strong></div>
+        <div class="meta-point">Compliance: <strong>FDA OTC / EU CPNP Ready</strong></div>
+      </div>
+
+      <div class="brand-statement-area">
+        <h1 class="brand-title-main">FORMA: <em>Cellular Architecture</em></h1>
+        <p class="brand-rationale">
+          A minimalist cosmeceutical packaging system designed for clinical credibility and tactile shelf impact. Every panel adheres to strict pharmaceutical hierarchy: Step Index, Brand Mark, Functional Descriptor, Active Potency, and Net Volume.
+        </p>
+      </div>
+    </header>
+
+    <main class="packaging-system-grid">
+      <!-- Section 1: 3-Product Shelf Family Display -->
+      <section class="packaging-panel" aria-labelledby="shelf-family-title">
+        <div class="panel-top-row">
+          <h2 id="shelf-family-title" class="panel-heading">01. 3-Product Family Shelf Architecture</h2>
+          <span class="panel-badge">Step 01 &bull; Step 02 &bull; Step 03</span>
+        </div>
+
+        <div class="shelf-lineup-stage">
+          <!-- Step 01: Cleanser -->
+          <div class="package-unit">
+            <article class="bottle-mockup-01" aria-label="Step 01 Cleanser bottle packaging mockup">
+              <div>
+                <div class="step-index-tag">STEP 01</div>
+                <div class="product-label-brand">FORMA</div>
+                <div class="product-descriptor">Clarifying Enzyme Cleanser</div>
+              </div>
+              <div>
+                <div style="font-size:12px;color:#7d756b;margin-bottom:4px;">Papain 1.5% + Zinc PCA</div>
+                <div class="product-net-vol">150 mL / 5.1 FL. OZ.</div>
+              </div>
+            </article>
+            <div class="unit-caption-block">
+              <span class="unit-title">01. Enzyme Cleanser</span>
+              <span class="unit-spec">Recycled Matte Stone PET</span>
+            </div>
+          </div>
+
+          <!-- Step 02: Serum -->
+          <div class="package-unit">
+            <article class="bottle-mockup-02" aria-label="Step 02 Copper Peptide serum bottle packaging mockup">
+              <div>
+                <div class="step-index-tag" style="color:#0047ba;">STEP 02</div>
+                <div class="product-label-brand" style="color:#f7f5f0;">FORMA</div>
+                <div class="product-descriptor" style="color:#f7f5f0;">Copper Tripeptide-1 Serum</div>
+              </div>
+              <div>
+                <div style="font-size:12px;color:#7d756b;margin-bottom:4px;">GHK-Cu 2.0% + Ectoin</div>
+                <div class="product-net-vol" style="color:#7d756b;border-color:#1a1816;">30 mL / 1.0 FL. OZ.</div>
+              </div>
+            </article>
+            <div class="unit-caption-block">
+              <span class="unit-title">02. Cellular Serum</span>
+              <span class="unit-spec">Amber Borosilicate Dropper</span>
+            </div>
+          </div>
+
+          <!-- Step 03: Emulsion -->
+          <div class="package-unit">
+            <article class="jar-mockup-03" aria-label="Step 03 Barrier Emulsion jar packaging mockup">
+              <div>
+                <div class="step-index-tag">STEP 03</div>
+                <div class="product-label-brand">FORMA</div>
+                <div class="product-descriptor">Lipid Barrier Emulsion</div>
+              </div>
+              <div>
+                <div style="font-size:12px;color:#7d756b;margin-bottom:4px;">Ceramides NP/AP/EOP 3:1:1</div>
+                <div class="product-net-vol">50 mL / 1.69 FL. OZ.</div>
+              </div>
+            </article>
+            <div class="unit-caption-block">
+              <span class="unit-title">03. Replenish Emulsion</span>
+              <span class="unit-spec">Heavy-Walled Frosted Glass</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 2: Clinical Label Grid & INCI Compliance -->
+      <section class="packaging-panel" aria-labelledby="regulatory-title">
+        <div class="panel-top-row">
+          <h2 id="regulatory-title" class="panel-heading">02. Primary Panel &amp; INCI Regulatory Standards</h2>
+          <span class="panel-badge">Full Disclosure Compliance</span>
+        </div>
+
+        <div class="label-spec-grid">
+          <div class="regulatory-box">
+            <h3 class="reg-heading">Active Mechanism &amp; Directions</h3>
+            <p class="inci-formula-text">
+              <strong>Indications:</strong> Formulated for compromised lipid barriers undergoing clinical retinoid therapy. Apply 3–4 drops of Step 02 serum to clean damp epidermis, followed immediately by Step 03 emulsion to lock moisture.
+            </p>
+            <div class="batch-id-strip">
+              <span>FORMULA NO. 702-B</span>
+              <span>PAO: 12M &bull; DERM TESTED</span>
+            </div>
+          </div>
+
+          <div class="regulatory-box">
+            <h3 class="reg-heading">Full INCI Ingredients Disclosure</h3>
+            <p class="inci-formula-text">
+              Aqua (Water), Copper Tripeptide-1, Ectoin, Niacinamide (4%), Sodium Hyaluronate Crosspolymer, Glycerin, Ceramide NP, Ceramide AP, Phytosphingosine, Cholesterol, Carbomer, Phenoxyethanol, Ethylhexylglycerin.
+            </p>
+            <div class="batch-id-strip">
+              <span>LOT: FC-2026-99</span>
+              <span>100% POST-CONSUMER RECYCLED</span>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="packaging-footer">
+      <div class="footer-reg-status">
+        Packaging Specification Validated // Complies with 21 CFR Part 701 Cosmetic Labeling Acts
+      </div>
+      <nav style="display: flex; gap: 12px;" aria-label="Packaging downloads">
+        <button class="btn btn-secondary" type="button">Download Master Die-Line</button>
+        <button class="btn" type="button">Export Packaging Specs</button>
+      </nav>
+    </footer>
+  </div>
+</body>
+</html>

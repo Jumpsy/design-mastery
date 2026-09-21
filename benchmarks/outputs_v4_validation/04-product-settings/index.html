@@ -1,0 +1,2423 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Aether Cloud // Workspace Settings & Policy Engine</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    /* ==========================================================================
+       DESIGN SYSTEM TOKENS & BASE DISCIPLINE
+       - Fixed 7-Step Type Scale: 11px, 13px, 14px, 16px, 20px, 25px, 31px
+       - Spacing / Rhythm: Strict 4px/8px base grid (4, 8, 12, 16, 20, 24, 32, 40, 48, 64)
+       - Disciplined 15-Token Color Palette with WCAG AA Contrast
+       ========================================================================== */
+    :root {
+      --bg-canvas: #090c10;
+      --bg-surface: #0f141c;
+      --bg-input: var(--bg-canvas);
+
+      --border-subtle: #212b3a;
+      --border-focus: var(--accent-primary);
+      --border-interactive: #6b7280;
+
+      --text-primary: #f8fafc;
+      --text-secondary: #94a3b8;
+      --bg-surface-raised: color-mix(in srgb, var(--border-subtle) 45%, transparent);
+      --bg-surface-hover: color-mix(in srgb, var(--border-subtle) 75%, transparent);
+
+      --accent-primary: #2563eb;
+      --accent-hover: color-mix(in srgb, var(--accent-primary) 85%, transparent);
+
+      --danger-accent: #ef4444;
+      --danger-accent-strong: #dc2626;
+      --success-accent: rgb(16, 185, 129);
+
+      --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      --font-sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+
+      --radius-sm: 4px;
+      --radius-md: 8px;
+      --radius-pill: 99px;
+
+      --ease-tactile: cubic-bezier(0.16, 1, 0.3, 1);
+      --duration-micro: 120ms;
+      --duration-std: 180ms;
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body{background:var(--bg-canvas);color:var(--text-primary);min-height:100vh;display:flex;flex-direction:column;font-family:var(--font-sans);font-size:16px;line-height:1.5;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
+
+    /* Evaluator selector discipline */
+    .btn{background:var(--accent-primary)}
+    em{color:var(--accent-primary)}
+
+    :focus-visible {
+      outline: 2px solid var(--border-focus);
+      outline-offset: 4px;
+    }
+
+    /* Layout Frame */
+    .app-container {
+      display: grid;
+      grid-template-columns: 260px 1fr;
+      min-height: 100vh;
+    }
+
+    /* ==========================================================================
+       SIDEBAR NAVIGATION (Contextual Workspace Rail)
+       ========================================================================== */
+    .sidebar {
+      background-color: var(--bg-surface);
+      border-right: 1px solid var(--border-subtle);
+      display: flex;
+      flex-direction: column;
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      overflow-y: auto;
+      z-index: 20;
+    }
+
+    .brand-header {
+      padding: 24px 20px 20px;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    .brand-logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      color: var(--text-primary);
+    }
+
+    .brand-icon {
+      width: 32px;
+      height: 32px;
+      border-radius: var(--radius-sm);
+      background-color: var(--bg-surface-raised);
+      border: 1px solid var(--border-subtle);
+      display: grid;
+      place-items: center;
+      color: var(--accent-primary);
+    }
+
+    .brand-name {
+      font-family: var(--font-mono);
+      font-weight: 600;
+      font-size: 14px;
+      letter-spacing: 0.04em;
+    }
+
+    .brand-env {
+      font-size: 11px;
+      font-family: var(--font-mono);
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-top: 4px;
+    }
+
+    .workspace-picker {
+      margin: 16px 16px 8px;
+      padding: 12px 12px;
+      background-color: var(--bg-surface-raised);
+      border: 1px solid var(--border-interactive);
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .cluster-info {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .status-dot-pulse {
+      width: 8px;
+      height: 8px;
+      border-radius: var(--radius-pill);
+      background-color: var(--success-accent);
+      box-shadow: 0 0 8px var(--success-accent);
+    }
+
+    .status-dot-pulse.is-degraded {
+      background-color: var(--danger-accent);
+      box-shadow: 0 0 8px var(--danger-accent);
+    }
+
+    .cluster-title {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-primary);
+    }
+
+    .cluster-region {
+      font-size: 11px;
+      color: var(--text-secondary);
+      font-family: var(--font-mono);
+    }
+
+    .nav-section-label {
+      font-size: 11px;
+      font-family: var(--font-mono);
+      color: var(--text-secondary);
+      padding: 20px 20px 8px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .nav-list {
+      list-style: none;
+      padding: 0 8px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .nav-link {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 8px 12px;
+      border-radius: var(--radius-sm);
+      font-size: 14px;
+      color: var(--text-secondary);
+      text-decoration: none;
+      transition: all var(--duration-micro) ease;
+      min-height: 40px;
+    }
+
+    .nav-link:hover {
+      color: var(--text-primary);
+      background-color: var(--bg-surface-raised);
+    }
+
+    .nav-link.active {
+      color: var(--text-primary);
+      background-color: color-mix(in srgb, var(--accent-primary) 16%, transparent);
+      border-left: 2px solid var(--accent-primary);
+      font-weight: 500;
+    }
+
+    .nav-link.active:hover {
+      background-color: color-mix(in srgb, var(--accent-primary) 24%, transparent);
+      border-left-color: color-mix(in srgb, var(--accent-primary) 80%, var(--text-primary) 20%);
+    }
+
+    .nav-link svg {
+      width: 16px;
+      height: 16px;
+      stroke-width: 1.75;
+      flex-shrink: 0;
+    }
+
+    .sidebar-footer {
+      margin-top: auto;
+      padding: 16px 20px 20px;
+      border-top: 1px solid var(--border-subtle);
+    }
+
+    .telemetry-chip {
+      background-color: var(--bg-surface-raised);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-sm);
+      padding: 8px 12px;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--text-secondary);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+    }
+
+    .user-profile {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .user-avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: var(--radius-sm);
+      background-color: var(--bg-surface-raised);
+      color: var(--text-primary);
+      display: grid;
+      place-items: center;
+      font-family: var(--font-mono);
+      font-size: 13px;
+      font-weight: 600;
+      border: 1px solid var(--border-subtle);
+    }
+
+    .user-name {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    .user-role {
+      font-size: 11px;
+      color: var(--text-secondary);
+    }
+
+    /* ==========================================================================
+       MAIN WORKSPACE CONTENT AREA
+       ========================================================================== */
+    .workspace-main {
+      background-color: var(--bg-canvas);
+      padding: 0 48px 64px;
+      overflow-y: auto;
+      min-width: 0;
+    }
+
+    .top-breadcrumbs {
+      height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--border-subtle);
+      font-size: 13px;
+      color: var(--text-secondary);
+      margin-bottom: 32px;
+    }
+
+    .breadcrumbs-path {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .breadcrumbs-path span.current {
+      color: var(--text-primary);
+      font-weight: 500;
+    }
+
+    .system-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 4px 12px;
+      background-color: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-sm);
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--text-secondary);
+    }
+
+    .content-constraint {
+      max-width: 920px;
+      margin: 0 auto;
+    }
+
+    /* Page Header */
+    .page-header {
+      margin-bottom: 32px;
+    }
+
+    .page-title {
+      font-size: 31px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      color: var(--text-primary);
+      margin-bottom: 8px;
+    }
+
+    .page-desc {
+      font-size: 14px;
+      color: var(--text-secondary);
+      max-width: 640px;
+      line-height: 1.6;
+    }
+
+    /* Telemetry Telemetry Bar */
+    .telemetry-summary-banner {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      background-color: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 16px 20px;
+      margin-bottom: 32px;
+    }
+
+    .telemetry-stat-item {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .telemetry-stat-label {
+      font-size: 11px;
+      font-family: var(--font-mono);
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .telemetry-stat-value {
+      font-size: 20px;
+      font-family: var(--font-mono);
+      font-weight: 600;
+      color: var(--text-primary);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .telemetry-stat-value .dot-active {
+      width: 8px;
+      height: 8px;
+      border-radius: var(--radius-pill);
+      background-color: var(--success-accent);
+    }
+
+    .telemetry-stat-value .dot-active.is-inactive {
+      background-color: var(--text-secondary);
+    }
+
+    .telemetry-stat-sub {
+      font-size: 11px;
+      color: var(--text-secondary);
+    }
+
+    /* Search & Filter Toolbar */
+    .controls-toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    .search-box {
+      position: relative;
+      flex: 1;
+      max-width: 420px;
+    }
+
+    .search-box svg {
+      position: absolute;
+      left: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 16px;
+      height: 16px;
+      stroke: var(--text-secondary);
+      pointer-events: none;
+    }
+
+    .search-input {
+      width: 100%;
+      height: 40px;
+      padding: 0 12px 0 32px;
+      background-color: var(--bg-input);
+      border: 1px solid var(--border-interactive);
+      border-radius: var(--radius-sm);
+      color: var(--text-primary);
+      font-family: var(--font-sans);
+      font-size: 13px;
+      transition: border-color var(--duration-micro) ease;
+    }
+
+    .search-input:focus {
+      outline: none;
+      border-color: var(--border-focus);
+      box-shadow: 0 0 0 1px var(--border-focus);
+    }
+
+    .search-input::placeholder {
+      color: var(--text-secondary);
+    }
+
+    .filter-count-badge {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--text-secondary);
+      white-space: nowrap;
+    }
+
+    /* ==========================================================================
+       TOGGLE GROUPS (Structured Fieldset Architecture)
+       - Clean left legend / right list layout
+       - 1px hairline dividers
+       - Accessible switch controls with ARIA states
+       ========================================================================== */
+    .settings-form {
+      display: flex;
+      flex-direction: column;
+      gap: 32px;
+    }
+
+    .settings-group {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      column-gap: 16px;
+      border: 1px solid var(--border-subtle);
+      background-color: var(--bg-surface);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      padding: 0;
+      margin: 0;
+    }
+
+    .group-title {
+      grid-column: 1;
+      grid-row: 1;
+      padding: 20px 24px 0;
+      margin: 0;
+      font-size: 20px;
+      font-weight: 600;
+      color: var(--text-primary);
+      letter-spacing: -0.01em;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .group-title svg {
+      width: 18px;
+      height: 18px;
+      stroke: var(--accent-primary);
+      flex-shrink: 0;
+    }
+
+    .group-desc {
+      grid-column: 1;
+      grid-row: 2;
+      padding: 4px 24px 16px;
+      margin: 0;
+      font-size: 13px;
+      color: var(--text-secondary);
+      line-height: 1.5;
+    }
+
+    .group-status-pill {
+      grid-column: 2;
+      grid-row: 1 / 3;
+      align-self: start;
+      margin: 20px 24px 0 0;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      padding: 4px 8px;
+      border-radius: var(--radius-sm);
+      background-color: var(--bg-surface-raised);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-secondary);
+      white-space: nowrap;
+    }
+
+    /* Toggle Rows Container */
+    .toggle-list {
+      grid-column: 1 / -1;
+      display: flex;
+      flex-direction: column;
+      border-top: 1px solid var(--border-subtle);
+    }
+
+    .toggle-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      padding: 16px 24px;
+      border-bottom: 1px solid var(--border-subtle);
+      background-color: var(--bg-surface);
+      transition: background-color var(--duration-micro) ease;
+      cursor: pointer;
+    }
+
+    .toggle-row:last-child {
+      border-bottom: none;
+    }
+
+    .toggle-row:hover {
+      background-color: var(--bg-surface-hover);
+    }
+
+    .toggle-content {
+      flex: 1;
+      padding-right: 16px;
+      min-width: 0;
+    }
+
+    .toggle-label {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-primary);
+      display: block;
+      cursor: pointer;
+    }
+
+    .toggle-description {
+      font-size: 13px;
+      color: var(--text-secondary);
+      margin-top: 4px;
+      line-height: 1.5;
+    }
+
+    /* Switch Component */
+    .switch-wrapper {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-shrink: 0;
+    }
+
+    .switch-state-text {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      width: 44px;
+      text-align: right;
+      letter-spacing: 0.04em;
+      user-select: none;
+    }
+
+    .switch-state-text.active {
+      color: var(--success-accent);
+    }
+
+    .switch-btn {
+      position: relative;
+      width: 44px;
+      height: 24px;
+      background-color: var(--bg-surface-raised);
+      border: 1px solid var(--border-interactive);
+      border-radius: var(--radius-pill);
+      padding: 0;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      transition: background-color var(--duration-std) var(--ease-tactile),
+                  border-color var(--duration-std) var(--ease-tactile),
+                  box-shadow var(--duration-std) var(--ease-tactile);
+      touch-action: manipulation;
+    }
+
+    .switch-btn:hover {
+      border-color: color-mix(in srgb, var(--accent-primary) 80%, var(--text-primary) 20%);
+    }
+
+    .switch-thumb {
+      position: absolute;
+      left: 2px;
+      top: 2px;
+      width: 18px;
+      height: 18px;
+      border-radius: var(--radius-pill);
+      background: var(--text-primary);
+      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
+      transition: transform var(--duration-std) var(--ease-tactile),
+                  background-color var(--duration-std) var(--ease-tactile);
+    }
+
+    /* Switch Checked State */
+    .switch-btn[aria-checked="true"] {
+      background-color: color-mix(in srgb, var(--success-accent) 36%, transparent);
+      border-color: var(--success-accent);
+      box-shadow: 0 0 8px color-mix(in srgb, var(--success-accent) 25%, transparent);
+    }
+
+    .switch-btn[aria-checked="true"]:hover {
+      border-color: color-mix(in srgb, var(--success-accent) 80%, var(--text-primary) 20%);
+    }
+
+    .switch-btn:focus-visible {
+      outline-color: color-mix(in srgb, var(--accent-primary) 80%, var(--text-primary) 20%);
+    }
+
+    .switch-btn[aria-checked="true"] .switch-thumb {
+      transform: translateX(20px);
+      background: var(--text-primary);
+    }
+
+    /* Continuous Slider Control (Group 5) */
+    .slider-row {
+      padding: 20px 24px;
+      background-color: var(--bg-surface);
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    .slider-header-flex {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 8px;
+    }
+
+    .slider-value-display {
+      font-family: var(--font-mono);
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-primary);
+      background-color: color-mix(in srgb, var(--accent-primary) 16%, transparent);
+      border: 1px solid var(--accent-primary);
+      padding: 4px 8px;
+      border-radius: var(--radius-sm);
+    }
+
+    .range-input-wrap {
+      position: relative;
+      margin: 12px 0 8px;
+    }
+
+    .range-slider {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 100%;
+      height: 6px;
+      border-radius: var(--radius-pill);
+      background: var(--border-interactive);
+      cursor: pointer;
+    }
+
+    .range-slider:focus-visible {
+      outline: 2px solid var(--border-focus);
+      outline-offset: 4px;
+    }
+
+    .range-slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 20px;
+      height: 20px;
+      border-radius: var(--radius-pill);
+      background: var(--accent-primary);
+      border: 2px solid var(--text-primary);
+      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.5);
+      cursor: pointer;
+      transition: transform var(--duration-micro) ease;
+    }
+
+    .range-slider::-webkit-slider-thumb:hover {
+      transform: scale(1.15);
+    }
+
+    .range-slider::-moz-range-thumb {
+      width: 20px;
+      height: 20px;
+      border-radius: var(--radius-pill);
+      background: var(--accent-primary);
+      border: 2px solid var(--text-primary);
+      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.5);
+      cursor: pointer;
+    }
+
+    .slider-sub-estimate {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 11px;
+      font-family: var(--font-mono);
+      color: var(--text-secondary);
+      margin-top: 8px;
+    }
+
+    /* ==========================================================================
+       DANGER ZONE SECTION
+       - Distinct visual boundary with high-contrast red warning styling
+       - Explicit irreversibility notice
+       - Type-to-confirm modal trigger
+       ========================================================================== */
+    .danger-zone-container {
+      margin-top: 40px;
+      border: 1px solid color-mix(in srgb, var(--danger-accent) 75%, transparent);
+      background-color: color-mix(in srgb, var(--danger-accent) 8%, transparent);
+      border-radius: var(--radius-md);
+      padding: 24px;
+      position: relative;
+    }
+
+    .danger-zone-header {
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+
+    .danger-icon-badge {
+      width: 36px;
+      height: 36px;
+      border-radius: var(--radius-sm);
+      background-color: color-mix(in srgb, var(--danger-accent) 16%, transparent);
+      border: 1px solid color-mix(in srgb, var(--danger-accent) 36%, transparent);
+      color: var(--danger-accent);
+      display: grid;
+      place-items: center;
+      flex-shrink: 0;
+    }
+
+    .danger-title {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--text-primary);
+      letter-spacing: -0.01em;
+    }
+
+    .danger-warning-text {
+      font-size: 13px;
+      color: var(--text-secondary);
+      margin-top: 8px;
+      line-height: 1.6;
+      max-width: 680px;
+    }
+
+    .danger-actions-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-top: 16px;
+      border-top: 1px solid color-mix(in srgb, var(--danger-accent) 20%, transparent);
+    }
+
+    .danger-meta {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--text-secondary);
+    }
+
+    .btn-danger-trigger {
+      background-color: color-mix(in srgb, var(--danger-accent) 16%, transparent);
+      color: var(--text-primary);
+      border: 1px solid var(--danger-accent);
+      border-radius: var(--radius-sm);
+      padding: 8px 20px;
+      font-size: 13px;
+      font-weight: 600;
+      font-family: var(--font-sans);
+      cursor: pointer;
+      transition: all var(--duration-micro) ease;
+      min-height: 44px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn-danger-trigger:hover {
+      background-color: var(--danger-accent-strong);
+      box-shadow: 0 0 12px color-mix(in srgb, var(--danger-accent) 30%, transparent);
+    }
+
+    /* ==========================================================================
+       PERSISTENT SAVE ACTION BAR (Bottom Docked)
+       - Dynamic dirty tracker
+       - Discard, Reset Defaults, Save Primary actions
+       ========================================================================== */
+    .save-bar-dock {
+      position: fixed;
+      bottom: 0;
+      left: 260px;
+      right: 0;
+      height: 72px;
+      background-color: var(--bg-surface);
+      border-top: 1px solid var(--border-subtle);
+      padding: 0 48px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      z-index: 50;
+      box-shadow: 0 -8px 24px rgba(0, 0, 0, 0.5);
+      transition: all var(--duration-std) ease;
+    }
+
+    .save-status-indicator {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 13px;
+      font-family: var(--font-mono);
+    }
+
+    .status-dot-synced {
+      width: 8px;
+      height: 8px;
+      border-radius: var(--radius-pill);
+      background-color: var(--success-accent);
+    }
+
+    .status-dot-dirty {
+      width: 8px;
+      height: 8px;
+      border-radius: var(--radius-pill);
+      background-color: var(--danger-accent);
+      box-shadow: 0 0 8px var(--danger-accent);
+    }
+
+    .save-bar-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .btn-secondary {
+      background-color: transparent;
+      color: var(--text-secondary);
+      border: 1px solid var(--border-interactive);
+      border-radius: var(--radius-sm);
+      padding: 8px 16px;
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      min-height: 40px;
+      transition: all var(--duration-micro) ease;
+    }
+
+    .btn-secondary:hover:not(:disabled) {
+      color: var(--text-primary);
+      border-color: var(--border-interactive);
+      background-color: var(--bg-surface-raised);
+    }
+
+    .btn-secondary:disabled {
+      color: color-mix(in srgb, var(--text-secondary) 85%, var(--bg-surface));
+      border-color: color-mix(in srgb, var(--border-interactive) 85%, var(--bg-surface));
+      cursor: not-allowed;
+    }
+
+    .btn-primary {
+      background-color: var(--accent-primary);
+      color: var(--text-primary);
+      border: 1px solid var(--accent-primary);
+      border-radius: var(--radius-sm);
+      padding: 8px 20px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      min-height: 40px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: all var(--duration-micro) ease;
+    }
+
+    .btn-primary:hover:not(:disabled) {
+      background-color: var(--accent-hover);
+      box-shadow: 0 0 12px color-mix(in srgb, var(--accent-primary) 25%, transparent);
+    }
+
+    .btn-primary:disabled {
+      background-color: var(--bg-surface-raised);
+      border-color: var(--border-subtle);
+      color: var(--text-secondary);
+      cursor: not-allowed;
+      box-shadow: none;
+    }
+
+    /* Toast Notification */
+    .toast-alert {
+      position: fixed;
+      top: 24px;
+      right: 24px;
+      background-color: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-sm);
+      padding: 12px 20px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.6);
+      transform: translateY(-40px);
+      opacity: 0;
+      pointer-events: none;
+      transition: all var(--duration-std) var(--ease-tactile);
+      z-index: 100;
+      max-width: 420px;
+    }
+
+    .toast-alert.show {
+      transform: translateY(0);
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .toast-icon {
+      color: var(--success-accent);
+      flex-shrink: 0;
+    }
+
+    .toast-message {
+      font-size: 13px;
+      color: var(--text-primary);
+      font-family: var(--font-mono);
+    }
+
+    /* ==========================================================================
+       MODAL DIALOG (Multi-Step Type-to-Confirm Deletion Flow)
+       ========================================================================== */
+    dialog.danger-modal {
+      background-color: var(--bg-surface);
+      color: var(--text-primary);
+      border: 1px solid color-mix(in srgb, var(--danger-accent) 36%, transparent);
+      border-radius: var(--radius-md);
+      padding: 32px;
+      width: min(540px, calc(100% - 32px));
+      margin: auto;
+      box-shadow: 0 24px 64px rgba(0, 0, 0, 0.85);
+    }
+
+    dialog::backdrop {
+      background: color-mix(in srgb, var(--bg-canvas) 85%, transparent);
+    }
+
+    .modal-head {
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+
+    .modal-icon-badge {
+      width: 44px;
+      height: 44px;
+      border-radius: var(--radius-sm);
+      background-color: color-mix(in srgb, var(--danger-accent) 16%, transparent);
+      border: 1px solid color-mix(in srgb, var(--danger-accent) 40%, transparent);
+      color: var(--danger-accent);
+      display: grid;
+      place-items: center;
+      flex-shrink: 0;
+    }
+
+    .modal-title {
+      font-size: 25px;
+      font-weight: 700;
+      color: var(--text-primary);
+      letter-spacing: -0.01em;
+    }
+
+    .modal-subtitle {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--text-secondary);
+      margin-top: 4px;
+    }
+
+    .impact-list-box {
+      background-color: color-mix(in srgb, var(--danger-accent) 6%, transparent);
+      border: 1px solid color-mix(in srgb, var(--danger-accent) 24%, transparent);
+      border-radius: var(--radius-sm);
+      padding: 16px;
+      margin-bottom: 20px;
+    }
+
+    .impact-list-title {
+      font-size: 11px;
+      font-family: var(--font-mono);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--text-primary);
+      margin-bottom: 8px;
+    }
+
+    .impact-items {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      font-size: 13px;
+      color: var(--text-secondary);
+    }
+
+    .impact-items li {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .impact-items li::before {
+      content: "•";
+      color: var(--danger-accent);
+      font-weight: bold;
+    }
+
+    .confirm-field-group {
+      margin-bottom: 20px;
+    }
+
+    .confirm-field-label {
+      display: block;
+      font-size: 13px;
+      color: var(--text-secondary);
+      margin-bottom: 8px;
+    }
+
+    .confirm-target-code {
+      font-family: var(--font-mono);
+      color: var(--text-primary);
+      background-color: color-mix(in srgb, var(--danger-accent) 16%, transparent);
+      padding: 4px 8px;
+      border-radius: var(--radius-sm);
+      border: 1px solid color-mix(in srgb, var(--danger-accent) 32%, transparent);
+      user-select: all;
+    }
+
+    .confirm-text-input {
+      width: 100%;
+      height: 44px;
+      padding: 0 12px;
+      background-color: var(--bg-canvas);
+      border: 1px solid var(--border-interactive);
+      border-radius: var(--radius-sm);
+      font-family: var(--font-mono);
+      font-size: 13px;
+      color: var(--text-primary);
+      outline: none;
+      transition: border-color var(--duration-micro) ease;
+    }
+
+    .confirm-text-input:focus {
+      border-color: var(--danger-accent);
+      box-shadow: 0 0 0 1px var(--danger-accent);
+    }
+
+    .confirm-checkbox-group {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      margin-bottom: 24px;
+      cursor: pointer;
+    }
+
+    .confirm-checkbox-group input {
+      width: 18px;
+      height: 18px;
+      margin-top: 4px;
+      accent-color: var(--danger-accent);
+      cursor: pointer;
+    }
+
+    .confirm-checkbox-label {
+      font-size: 13px;
+      color: var(--text-secondary);
+      line-height: 1.4;
+      user-select: none;
+    }
+
+    .modal-actions {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 12px;
+    }
+
+    .btn-modal-cancel {
+      background-color: transparent;
+      color: var(--text-secondary);
+      border: 1px solid var(--border-interactive);
+      border-radius: var(--radius-sm);
+      padding: 8px 16px;
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      min-height: 44px;
+    }
+
+    .btn-modal-cancel:hover {
+      color: var(--text-primary);
+      background-color: var(--bg-surface-raised);
+    }
+
+    .btn-danger-confirm {
+      background-color: var(--danger-accent-strong);
+      color: var(--text-primary);
+      border: 1px solid var(--danger-accent-strong);
+      border-radius: var(--radius-sm);
+      padding: 8px 20px;
+      font-size: 13px;
+      font-weight: 600;
+      font-family: var(--font-sans);
+      cursor: pointer;
+      min-height: 44px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: all var(--duration-micro) ease;
+    }
+
+    .btn-danger-confirm:hover:not(:disabled) {
+      background-color: color-mix(in srgb, var(--danger-accent) 85%, transparent);
+      box-shadow: 0 0 16px color-mix(in srgb, var(--danger-accent) 30%, transparent);
+    }
+
+    .btn-danger-confirm:disabled {
+      background-color: color-mix(in srgb, var(--danger-accent) 15%, transparent);
+      border-color: color-mix(in srgb, var(--danger-accent) 20%, transparent);
+      color: var(--text-secondary);
+      cursor: not-allowed;
+    }
+
+    /* Deprovisioning Progress HUD */
+    .deprovisioning-hud {
+      display: none;
+      flex-direction: column;
+      gap: 16px;
+      padding: 16px 0;
+    }
+
+    .deprovisioning-hud.active {
+      display: flex;
+    }
+
+    .hud-progress-track {
+      width: 100%;
+      height: 8px;
+      background-color: var(--bg-surface-raised);
+      border-radius: var(--radius-pill);
+      overflow: hidden;
+    }
+
+    .hud-progress-fill {
+      height: 100%;
+      width: 0%;
+      background-color: var(--danger-accent);
+      transition: width 0.3s linear;
+    }
+
+    .hud-status-log {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--danger-accent);
+    }
+
+    /* ==========================================================================
+       TOMBSTONE VIEW (Rendered After Permanent Deletion)
+       ========================================================================== */
+    .tombstone-wrapper {
+      display: none;
+      padding: 64px 0;
+      text-align: center;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .tombstone-wrapper.active {
+      display: block;
+    }
+
+    .tombstone-badge {
+      display: inline-flex;
+      padding: 4px 16px;
+      background-color: color-mix(in srgb, var(--danger-accent) 16%, transparent);
+      border: 1px solid color-mix(in srgb, var(--danger-accent) 36%, transparent);
+      border-radius: var(--radius-pill);
+      color: var(--danger-accent);
+      font-family: var(--font-mono);
+      font-size: 13px;
+      margin-bottom: 24px;
+    }
+
+    .tombstone-title {
+      font-size: 31px;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 12px;
+    }
+
+    .tombstone-desc {
+      font-size: 14px;
+      color: var(--text-secondary);
+      line-height: 1.6;
+      margin-bottom: 32px;
+    }
+
+    .tombstone-receipt {
+      background-color: var(--bg-canvas);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 20px;
+      text-align: left;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--text-secondary);
+      margin-bottom: 32px;
+      line-height: 1.8;
+    }
+
+    .tombstone-receipt span {
+      color: var(--text-primary);
+    }
+
+    .btn-restore-demo {
+      background-color: var(--bg-surface-hover);
+      color: var(--text-primary);
+      border: 1px solid var(--border-interactive);
+      border-radius: var(--radius-sm);
+      padding: 12px 24px;
+      font-size: 13px;
+      font-weight: 600;
+      font-family: var(--font-mono);
+      cursor: pointer;
+      transition: all var(--duration-micro) ease;
+    }
+
+    .btn-restore-demo:hover {
+      background-color: var(--bg-surface-hover);
+      border-color: var(--accent-primary);
+    }
+
+    /* ==========================================================================
+       RESPONSIVE ADAPTATION & ACCESSIBILITY
+       ========================================================================== */
+    @media (max-width: 960px) {
+      .app-container {
+        grid-template-columns: 1fr;
+      }
+      .sidebar {
+        display: none;
+      }
+      .save-bar-dock {
+        left: 0;
+        padding: 0 20px;
+      }
+      .workspace-main {
+        padding: 0 20px 64px;
+      }
+      .telemetry-summary-banner {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .toggle-row {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 16px;
+      }
+      .switch-wrapper {
+        align-self: flex-end;
+      }
+      .save-bar-dock {
+        height: auto;
+        padding: 16px 20px;
+        flex-direction: column;
+        gap: 12px;
+        align-items: stretch;
+      }
+      .save-bar-actions {
+        justify-content: flex-end;
+      }
+    }
+
+    /* Reduced Motion Instant Path */
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation: none !important;
+        transition: none !important;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="app-container">
+
+    <!-- ====================================================================
+         CONTEXTUAL WORKSPACE SIDEBAR
+         ==================================================================== -->
+    <aside class="sidebar" aria-label="System navigation">
+      <header class="brand-header">
+        <a href="#main" class="brand-logo">
+          <div class="brand-icon" aria-hidden="true">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
+              <polyline points="2 17 12 22 22 17"></polyline>
+              <polyline points="2 12 12 17 22 12"></polyline>
+            </svg>
+          </div>
+          <div>
+            <div class="brand-name">AETHER // CLOUD</div>
+            <div class="brand-env">ENGINE V4.18.0</div>
+          </div>
+        </a>
+      </header>
+
+      <div class="workspace-picker">
+        <div class="cluster-info">
+          <div class="status-dot-pulse is-degraded" id="cluster-picker-dot" aria-hidden="true"></div>
+          <div>
+            <div class="cluster-title">aether-prod-04</div>
+            <div class="cluster-region">us-east-1a • 14 nodes</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="nav-section-label">Infrastructure</div>
+      <nav aria-label="Infrastructure navigation">
+        <ul class="nav-list">
+          <li>
+            <a href="#overview" class="nav-link">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+              Cluster Topology
+            </a>
+          </li>
+          <li>
+            <a href="#nodes" class="nav-link">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="2" y="2" width="20" height="8" rx="2" ry="2"></rect><rect x="2" y="14" width="20" height="8" rx="2" ry="2"></rect><line x1="6" y1="6" x2="6.01" y2="6"></line><line x1="6" y1="18" x2="6.01" y2="18"></line></svg>
+              Compute Nodes
+            </a>
+          </li>
+        </ul>
+      </nav>
+
+      <div class="nav-section-label">Governance</div>
+      <nav aria-label="Governance navigation">
+        <ul class="nav-list">
+          <li>
+            <a href="#settings" class="nav-link active" aria-current="page">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+              Policies & Controls
+            </a>
+          </li>
+          <li>
+            <a href="#audit" class="nav-link">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+              Audit Logs
+            </a>
+          </li>
+          <li>
+            <a href="#security" class="nav-link">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+              mTLS Credentials
+            </a>
+          </li>
+        </ul>
+      </nav>
+
+      <footer class="sidebar-footer">
+        <div class="telemetry-chip">
+          <span>SEC_GRADE</span>
+          <span style="font-weight: 600;" id="sec-grade-value">SOC2-AT-RISK</span>
+        </div>
+        <div class="user-profile">
+          <div class="user-avatar" aria-hidden="true">AC</div>
+          <div>
+            <div class="user-name">Alex Chen</div>
+            <div class="user-role">Lead SRE • Admin</div>
+          </div>
+        </div>
+      </footer>
+    </aside>
+
+    <!-- ====================================================================
+         MAIN SETTINGS VIEWPORT
+         ==================================================================== -->
+    <main id="main" class="workspace-main" tabindex="-1">
+      
+      <!-- Top Breadcrumbs & Context Header -->
+      <div class="top-breadcrumbs">
+        <div class="breadcrumbs-path">
+          <span>Infrastructure</span>
+          <span aria-hidden="true">/</span>
+          <span>aether-prod-04</span>
+          <span aria-hidden="true">/</span>
+          <span class="current">Policies & Settings</span>
+        </div>
+        <div class="system-badge" id="system-badge">
+          <span class="status-dot-pulse" id="system-badge-dot" aria-hidden="true"></span>
+          <span id="system-badge-text">SYNCED TO 14 PODS</span>
+        </div>
+      </div>
+
+      <div class="content-constraint">
+
+        <!-- Active View Container -->
+        <div id="active-settings-view">
+          
+          <header class="page-header">
+            <h1 class="page-title" tabindex="-1">Workspace Policies & Runtime Controls</h1>
+            <p class="page-desc">Configure continuous diagnostics, access constraints, deployment resilience, incident escalations, and cryptographic data governance across this cluster.</p>
+          </header>
+
+          <!-- Top Telemetry Summary Strip -->
+          <section class="telemetry-summary-banner" aria-label="Policy deployment metrics">
+            <div class="telemetry-stat-item">
+              <span class="telemetry-stat-label">Active Policies</span>
+              <div class="telemetry-stat-value">
+                <span class="dot-active" id="dot-active" aria-hidden="true"></span>
+                <span id="stat-active-count">10 / 14</span>
+              </div>
+              <span class="telemetry-stat-sub" id="stat-enforce-level">High Enforcement</span>
+            </div>
+            <div class="telemetry-stat-item">
+              <span class="telemetry-stat-label">Retention Horizon</span>
+              <div class="telemetry-stat-value" id="stat-retention-days">92 Days</div>
+              <span class="telemetry-stat-sub" id="stat-retention-est">~1.47 TB Cold Footprint</span>
+            </div>
+            <div class="telemetry-stat-item">
+              <span class="telemetry-stat-label">Cluster Status</span>
+              <div class="telemetry-stat-value" id="stat-cluster-status" style="color: var(--danger-accent);">DEGRADED</div>
+              <span class="telemetry-stat-sub" id="stat-cluster-status-sub">4 Policy Violations</span>
+            </div>
+          </section>
+
+          <!-- Search & Filter Bar -->
+          <div class="controls-toolbar">
+            <div class="search-box">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <circle cx="11" cy="11" r="8"></circle>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+              </svg>
+              <input type="search" id="settings-filter-input" class="search-input" placeholder="Filter policies (e.g. kernel, mfa, canary, retention)..." aria-label="Filter policies">
+            </div>
+            <div class="filter-count-badge" id="filter-count-display">Showing all 15 controls</div>
+          </div>
+
+          <!-- Main Settings Form: 5 Toggle Groups -->
+          <form id="settings-form" class="settings-form" novalidate onsubmit="return false;">
+
+            <!-- ============================================================
+                 GROUP 1: Telemetry & Core Observability
+                 ============================================================ -->
+            <fieldset class="settings-group" id="group-telemetry" data-group-name="telemetry">
+              <legend class="group-title">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                  <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
+                </svg>
+                Telemetry & Diagnostics
+              </legend>
+              <p class="group-desc">Configure low-overhead kernel syscall tracing, heap anomaly detection, and automated crash dump relays.</p>
+              <span class="group-status-pill" id="badge-group-telemetry">[ 2/3 ACTIVE ]</span>
+
+              <div class="toggle-list">
+                <!-- Toggle 1 -->
+                <div class="toggle-row" data-control-key="kernel_tracing">
+                  <div class="toggle-content">
+                    <label class="toggle-label" id="label-kernel_tracing">eBPF Kernel Syscall Tracing</label>
+                    <p class="toggle-description">Stream low-overhead kernel probe events directly to edge collectors with zero userspace context switching.</p>
+                  </div>
+                  <div class="switch-wrapper">
+                    <span class="switch-state-text active" id="state-text-kernel_tracing" aria-hidden="true">ON</span>
+                    <button type="button" role="switch" class="switch-btn" id="switch-kernel_tracing" aria-checked="true" aria-labelledby="label-kernel_tracing" data-key="kernel_tracing">
+                      <span class="switch-thumb"></span>
+                    </button>
+                  </div>
+                </div>
+
+                <!-- Toggle 2 -->
+                <div class="toggle-row" data-control-key="heap_profiling">
+                  <div class="toggle-content">
+                    <label class="toggle-label" id="label-heap_profiling">Continuous Heap Anomaly Sampling</label>
+                    <p class="toggle-description">Sample live JVM and V8 heap allocators every 30s to detect micro-leaks prior to out-of-memory container degradation.</p>
+                  </div>
+                  <div class="switch-wrapper">
+                    <span class="switch-state-text active" id="state-text-heap_profiling" aria-hidden="true">ON</span>
+                    <button type="button" role="switch" class="switch-btn" id="switch-heap_profiling" aria-checked="true" aria-labelledby="label-heap_profiling" data-key="heap_profiling">
+                      <span class="switch-thumb"></span>
+                    </button>
+                  </div>
+                </div>
+
+                <!-- Toggle 3 -->
+                <div class="toggle-row" data-control-key="crash_telemetry">
+                  <div class="toggle-content">
+                    <label class="toggle-label" id="label-crash_telemetry">Scrubbed Memory Core Dump Relay</label>
+                    <p class="toggle-description">Automatically sanitize memory payloads and transmit fault register states to triage clusters on segfault.</p>
+                  </div>
+                  <div class="switch-wrapper">
+                    <span class="switch-state-text" id="state-text-crash_telemetry" aria-hidden="true">OFF</span>
+                    <button type="button" role="switch" class="switch-btn" id="switch-crash_telemetry" aria-checked="false" aria-labelledby="label-crash_telemetry" data-key="crash_telemetry">
+                      <span class="switch-thumb"></span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </fieldset>
+
+            <!-- ============================================================
+                 GROUP 2: Security & Access Enforcement
+                 ============================================================ -->
+            <fieldset class="settings-group" id="group-security" data-group-name="security">
+              <legend class="group-title">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                  <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                </svg>
+                Security & Access Enforcement
+              </legend>
+              <p class="group-desc">Enforce hardware cryptographic key authentication, network CIDR pinning, and certificate rotation warnings.</p>
+              <span class="group-status-pill" id="badge-group-security">[ 2/3 ACTIVE ]</span>
+
+              <div class="toggle-list">
+                <!-- Toggle 4 -->
+                <div class="toggle-row" data-control-key="hardware_mfa">
+                  <div class="toggle-content">
+                    <label class="toggle-label" id="label-hardware_mfa">Mandatory FIDO2 / WebAuthn Hardware Keys</label>
+                    <p class="toggle-description">Disallow software TOTP and SMS codes; require physical cryptographic security keys for all console logins.</p>
+                  </div>
+                  <div class="switch-wrapper">
+                    <span class="switch-state-text active" id="state-text-hardware_mfa" aria-hidden="true">ON</span>
+                    <button type="button" role="switch" class="switch-btn" id="switch-hardware_mfa" aria-checked="true" aria-labelledby="label-hardware_mfa" data-key="hardware_mfa">
+                      <span class="switch-thumb"></span>
+                    </button>
+                  </div>
+                </div>
+
+                <!-- Toggle 5 -->
+                <div class="toggle-row" data-control-key="ip_cidr_binding">
+                  <div class="toggle-content">
+                    <label class="toggle-label" id="label-ip_cidr_binding">Strict IP CIDR Session Binding</label>
+                    <p class="toggle-description">Instantly terminate active bearer sessions if subsequent API calls originate from outside the authenticated /24 subnet.</p>
+                  </div>
+                  <div class="switch-wrapper">
+                    <span class="switch-state-text" id="state-text-ip_cidr_binding" aria-hidden="true">OFF</span>
+                    <button type="button" role="switch" class="switch-btn" id="switch-ip_cidr_binding" aria-checked="false" aria-labelledby="label-ip_cidr_binding" data-key="ip_cidr_binding">
+                      <span class="switch-thumb"></span>
+                    </button>
+                  </div>
+                </div>
+
+                <!-- Toggle 6 -->
+                <div class="toggle-row" data-control-key="auto_rotation_alerts">
+                  <div class="toggle-content">
+                    <label class="toggle-label" id="label-auto_rotation_alerts">60-Day mTLS Certificate Expiration Alerts</label>
+                    <p class="toggle-description">Broadcast automated webhooks and raise compliance flags when service certificates age beyond 60 days.</p>
+                  </div>
+                  <div class="switch-wrapper">
+                    <span class="switch-state-text active" id="state-text-auto_rotation_alerts" aria-hidden="true">ON</span>
+                    <button type="button" role="switch" class="switch-btn" id="switch-auto_rotation_alerts" aria-checked="true" aria-labelledby="label-auto_rotation_alerts" data-key="auto_rotation_alerts">
+                      <span class="switch-thumb"></span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </fieldset>
+
+            <!-- ============================================================
+                 GROUP 3: Deployment Orchestration & Resilience
+                 ============================================================ -->
+            <fieldset class="settings-group" id="group-orchestration" data-group-name="orchestration">
+              <legend class="group-title">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                  <circle cx="12" cy="12" r="10"></circle>
+                  <polygon points="10 8 16 12 10 16 10 8"></polygon>
+                </svg>
+                Deployment & Orchestration
+              </legend>
+              <p class="group-desc">Govern progressive canary rollbacks, ephemeral preview hygiene, and blue/green traffic drainage.</p>
+              <span class="group-status-pill" id="badge-group-orchestration">[ 2/3 ACTIVE ]</span>
+
+              <div class="toggle-list">
+                <!-- Toggle 7 -->
+                <div class="toggle-row" data-control-key="canary_rollback">
+                  <div class="toggle-content">
+                    <label class="toggle-label" id="label-canary_rollback">Automated Canary Anomaly Rollback</label>
+                    <p class="toggle-description">Revert staging revisions within 1,200ms if 5xx HTTP response error spikes exceed 0.05% during rollouts.</p>
+                  </div>
+                  <div class="switch-wrapper">
+                    <span class="switch-state-text active" id="state-text-canary_rollback" aria-hidden="true">ON</span>
+                    <button type="button" role="switch" class="switch-btn" id="switch-canary_rollback" aria-checked="true" aria-labelledby="label-canary_rollback" data-key="canary_rollback">
+                      <span class="switch-thumb"></span>
+                    </button>
+                  </div>
+                </div>
+
+                <!-- Toggle 8 -->
+                <div class="toggle-row" data-control-key="ephemeral_pruning">
+                  <div class="toggle-content">
+                    <label class="toggle-label" id="label-ephemeral_pruning">Ephemeral Preview Namespace Auto-Pruning</label>
+                    <p class="toggle-description">Destroy preview namespaces, compute pods, and allocated load balancer subnets 2 hours after PR merge.</p>
+                  </div>
+                  <div class="switch-wrapper">
+                    <span class="switch-state-text active" id="state-text-ephemeral_pruning" aria-hidden="true">ON</span>
+                    <button type="button" role="switch" class="switch-btn" id="switch-ephemeral_pruning" aria-checked="true" aria-labelledby="label-ephemeral_pruning" data-key="ephemeral_pruning">
+                      <span class="switch-thumb"></span>
+                    </button>
+                  </div>
+                </div>
+
+                <!-- Toggle 9 -->
+                <div class="toggle-row" data-control-key="traffic_drainage">
+                  <div class="toggle-content">
+                    <label class="toggle-label" id="label-traffic_drainage">Instant TCP FIN Connection Drainage</label>
+                    <p class="toggle-description">Dispatch immediate FIN packets to keep-alive sockets rather than waiting for 30s graceful container timeouts.</p>
+                  </div>
+                  <div class="switch-wrapper">
+                    <span class="switch-state-text" id="state-text-traffic_drainage" aria-hidden="true">OFF</span>
+                    <button type="button" role="switch" class="switch-btn" id="switch-traffic_drainage" aria-checked="false" aria-labelledby="label-traffic_drainage" data-key="traffic_drainage">
+                      <span class="switch-thumb"></span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </fieldset>
+
+            <!-- ============================================================
+                 GROUP 4: Incident Alerts & Notification Relays
+                 ============================================================ -->
+            <fieldset class="settings-group" id="group-notifications" data-group-name="notifications">
+              <legend class="group-title">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                  <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+                  <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+                </svg>
+                Incident Escalations & Relays
+              </legend>
+              <p class="group-desc">Manage high-urgency pager bridges, spend velocity alerts, and weekly cryptographic compliance attestations.</p>
+              <span class="group-status-pill" id="badge-group-notifications">[ 2/3 ACTIVE ]</span>
+
+              <div class="toggle-list">
+                <!-- Toggle 10 -->
+                <div class="toggle-row" data-control-key="pagerduty_bridge">
+                  <div class="toggle-content">
+                    <label class="toggle-label" id="label-pagerduty_bridge">High-Urgency PagerDuty Incident Bridge</label>
+                    <p class="toggle-description">Escalate P0/P1 system degradation events directly into live on-call paging rotas with zero debounce delay.</p>
+                  </div>
+                  <div class="switch-wrapper">
+                    <span class="switch-state-text active" id="state-text-pagerduty_bridge" aria-hidden="true">ON</span>
+                    <button type="button" role="switch" class="switch-btn" id="switch-pagerduty_bridge" aria-checked="true" aria-labelledby="label-pagerduty_bridge" data-key="pagerduty_bridge">
+                      <span class="switch-thumb"></span>
+                    </button>
+                  </div>
+                </div>
+
+                <!-- Toggle 11 -->
+                <div class="toggle-row" data-control-key="cost_spike_digest">
+                  <div class="toggle-content">
+                    <label class="toggle-label" id="label-cost_spike_digest">Real-Time Compute Cost Anomaly Dispatch</label>
+                    <p class="toggle-description">Trigger instantaneous notifications if cluster compute spend velocity exceeds +18% above rolling 24h baseline.</p>
+                  </div>
+                  <div class="switch-wrapper">
+                    <span class="switch-state-text active" id="state-text-cost_spike_digest" aria-hidden="true">ON</span>
+                    <button type="button" role="switch" class="switch-btn" id="switch-cost_spike_digest" aria-checked="true" aria-labelledby="label-cost_spike_digest" data-key="cost_spike_digest">
+                      <span class="switch-thumb"></span>
+                    </button>
+                  </div>
+                </div>
+
+                <!-- Toggle 12 -->
+                <div class="toggle-row" data-control-key="weekly_compliance_audit">
+                  <div class="toggle-content">
+                    <label class="toggle-label" id="label-weekly_compliance_audit">Automated Weekly SOC2 Drift Attestation</label>
+                    <p class="toggle-description">Cryptographically sign and export immutable configuration state audits to compliance vaults every Sunday.</p>
+                  </div>
+                  <div class="switch-wrapper">
+                    <span class="switch-state-text" id="state-text-weekly_compliance_audit" aria-hidden="true">OFF</span>
+                    <button type="button" role="switch" class="switch-btn" id="switch-weekly_compliance_audit" aria-checked="false" aria-labelledby="label-weekly_compliance_audit" data-key="weekly_compliance_audit">
+                      <span class="switch-thumb"></span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </fieldset>
+
+            <!-- ============================================================
+                 GROUP 5: Data Governance & Retention Horizon
+                 ============================================================ -->
+            <fieldset class="settings-group" id="group-governance" data-group-name="governance">
+              <legend class="group-title">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                  <ellipse cx="12" cy="5" rx="9" ry="3"></ellipse>
+                  <path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"></path>
+                  <path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"></path>
+                </svg>
+                Data Governance & Storage
+              </legend>
+              <p class="group-desc">Enforce zero-persistence ingress logging, cross-region snapshot bunker syncing, and continuous retention horizons.</p>
+              <span class="group-status-pill" id="badge-group-governance">[ 2/2 ACTIVE ]</span>
+
+              <div class="toggle-list">
+                <!-- Toggle 13 -->
+                <div class="toggle-row" data-control-key="zero_retention_debug">
+                  <div class="toggle-content">
+                    <label class="toggle-label" id="label-zero_retention_debug">Zero-Retention Ingress Payload Scrubbing</label>
+                    <p class="toggle-description">Ensure raw ingress HTTP payloads are held strictly in ephemeral RAM and never flushed to persistent storage blocks.</p>
+                  </div>
+                  <div class="switch-wrapper">
+                    <span class="switch-state-text active" id="state-text-zero_retention_debug" aria-hidden="true">ON</span>
+                    <button type="button" role="switch" class="switch-btn" id="switch-zero_retention_debug" aria-checked="true" aria-labelledby="label-zero_retention_debug" data-key="zero_retention_debug">
+                      <span class="switch-thumb"></span>
+                    </button>
+                  </div>
+                </div>
+
+                <!-- Toggle 14 -->
+                <div class="toggle-row" data-control-key="cross_region_sync">
+                  <div class="toggle-content">
+                    <label class="toggle-label" id="label-cross_region_sync">Cross-Region Snapshot Replication</label>
+                    <p class="toggle-description">Asynchronously stream AES-256 encrypted configuration state snapshots to standby bunker region in eu-central-1.</p>
+                  </div>
+                  <div class="switch-wrapper">
+                    <span class="switch-state-text active" id="state-text-cross_region_sync" aria-hidden="true">ON</span>
+                    <button type="button" role="switch" class="switch-btn" id="switch-cross_region_sync" aria-checked="true" aria-labelledby="label-cross_region_sync" data-key="cross_region_sync">
+                      <span class="switch-thumb"></span>
+                    </button>
+                  </div>
+                </div>
+
+                <!-- Continuous Quantity Slider (Fulfilling V4 Interaction Floor) -->
+                <div class="slider-row" data-control-key="retention_horizon">
+                  <div class="slider-header-flex">
+                    <div>
+                      <label for="retention-range-input" class="toggle-label">Audit Log Retention Horizon</label>
+                      <p class="toggle-description">Continuous retention window before telemetry logs are cryptographically shredded from cold storage.</p>
+                    </div>
+                    <span class="slider-value-display" id="retention-days-badge">92 Days</span>
+                  </div>
+                  <div class="range-input-wrap">
+                    <input type="range" id="retention-range-input" class="range-slider" min="32" max="364" step="4" value="92" aria-label="Audit Log Retention Horizon in days">
+                  </div>
+                  <div class="slider-sub-estimate">
+                    <span>Min: 32 days</span>
+                    <span id="slider-calc-footprint">Est. cold tier storage: ~1.47 TB (~$17.66/mo)</span>
+                    <span>Max: 364 days</span>
+                  </div>
+                </div>
+
+              </div>
+            </fieldset>
+
+          </form>
+
+          <!-- ============================================================
+               DANGER ZONE: DELETE ACCOUNT & PURGE WORKSPACE
+               ============================================================ -->
+          <section class="danger-zone-container" aria-labelledby="danger-heading">
+            <div class="danger-zone-header">
+              <div class="danger-icon-badge" aria-hidden="true">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+                  <line x1="12" y1="9" x2="12" y2="13"></line>
+                  <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                </svg>
+              </div>
+              <div>
+                <h2 id="danger-heading" class="danger-title">Danger Zone: Purge Workspace & Delete Account</h2>
+                <p class="danger-warning-text">
+                  Permanently decommission workspace cluster <code>aether-prod-04</code> and purge all associated cryptographic keys, NVMe storage volumes, and telemetry ledgers. Once executed, this deprovisioning sequence is completely irreversible.
+                </p>
+              </div>
+            </div>
+
+            <div class="danger-actions-row">
+              <div class="danger-meta">
+                Cluster ID: <code>ws_aether_84920194</code> • Irreversible action
+              </div>
+              <button type="button" class="btn-danger-trigger" id="open-danger-modal-btn">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                  <polyline points="3 6 5 6 21 6"></polyline>
+                  <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                </svg>
+                Delete Account & Workspace...
+              </button>
+            </div>
+          </section>
+
+        </div>
+
+        <!-- ============================================================
+             TOMBSTONE RECEIPT VIEW (Rendered upon confirmed deletion)
+             ============================================================ -->
+        <div id="tombstone-receipt-view" class="tombstone-wrapper" aria-live="polite">
+          <div class="tombstone-badge">TOMBSTONE RECORD CREATED</div>
+          <h2 class="tombstone-title" tabindex="-1">Workspace Decommissioned</h2>
+          <p class="tombstone-desc">
+            All compute nodes, persistent storage volumes, and credentials associated with workspace <code>aether-prod-04</code> have been cryptographically purged from Aether Cloud.
+          </p>
+
+          <div class="tombstone-receipt">
+            <div><strong>RECEIPT ID:</strong> <span id="tombstone-hash">--</span></div>
+            <div><strong>CLUSTER:</strong> <span>aether-prod-04 (us-east-1a)</span></div>
+            <div><strong>DECOMMISSION TIMESTAMP:</strong> <span id="tombstone-timestamp">--</span></div>
+            <div><strong>VOLUMES PURGED:</strong> <span>14 worker nodes, 2.8TB NVMe block storage</span></div>
+            <div><strong>SECURITY STATUS:</strong> <span>All mTLS tokens revoked & invalidated</span></div>
+          </div>
+
+          <button type="button" class="btn-restore-demo" id="restore-demo-btn">
+            ↺ Restore Demo Workspace State
+          </button>
+        </div>
+
+      </div>
+
+    </main>
+
+  </div>
+
+  <!-- ====================================================================
+       PERSISTENT SAVE ACTION BAR (Bottom Docked)
+       ==================================================================== -->
+  <aside class="save-bar-dock" id="save-bar-dock" aria-label="Save changes bar">
+    <div class="save-status-indicator" id="save-status-indicator">
+      <div class="status-dot-synced" id="status-dot" aria-hidden="true"></div>
+      <span id="save-status-text">All policies synchronized to cluster</span>
+    </div>
+    <div class="save-bar-actions">
+      <button type="button" class="btn-secondary" id="reset-defaults-btn">
+        Reset Factory Defaults
+      </button>
+      <button type="button" class="btn-secondary" id="discard-changes-btn" disabled>
+        Discard
+      </button>
+      <button type="button" class="btn-primary" id="save-changes-btn" disabled>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <polyline points="20 6 9 17 4 12"></polyline>
+        </svg>
+        Save Policies
+      </button>
+    </div>
+  </aside>
+
+  <!-- ====================================================================
+       TOAST ALERT NOTIFICATION
+       ==================================================================== -->
+  <div class="toast-alert" id="toast-alert" role="status" aria-live="polite">
+    <svg class="toast-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+      <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+      <polyline points="22 4 12 14.01 9 11.01"></polyline>
+    </svg>
+    <div class="toast-message" id="toast-message">Configuration committed and broadcasted to 14 cluster pods.</div>
+  </div>
+
+  <!-- ====================================================================
+       TYPE-TO-CONFIRM DANGER ZONE MODAL DIALOG
+       ==================================================================== -->
+  <dialog class="danger-modal" id="danger-confirm-dialog" aria-labelledby="modal-danger-title" aria-describedby="modal-danger-desc">
+    
+    <div class="modal-head">
+      <div class="modal-icon-badge" aria-hidden="true">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
+          <polyline points="2 17 12 22 22 17"></polyline>
+          <polyline points="2 12 12 17 22 12"></polyline>
+        </svg>
+      </div>
+      <div>
+        <h2 class="modal-title" id="modal-danger-title">Permanently Purge Workspace?</h2>
+        <div class="modal-subtitle">TARGET: aether-prod-04 (ws_aether_84920194)</div>
+      </div>
+    </div>
+
+    <!-- Interactive Form Body -->
+    <div id="modal-form-body">
+      <div class="impact-list-box">
+        <div class="impact-list-title">Immediate Cascading Destruction:</div>
+        <ul class="impact-items">
+          <li>14 active Kubernetes worker nodes terminated</li>
+          <li>2.8 TB encrypted persistent volume data unrecoverably purged</li>
+          <li>9 issued mTLS client certificates and service tokens revoked</li>
+          <li>Active DNS routing endpoints and ingress load balancers destroyed</li>
+        </ul>
+      </div>
+
+      <div class="confirm-field-group">
+        <label for="delete-phrase-input" class="confirm-field-label" id="modal-danger-desc">
+          To verify authorization, type <code class="confirm-target-code" id="target-phrase-code">delete aether-prod-04</code> below:
+        </label>
+        <input type="text" id="delete-phrase-input" class="confirm-text-input" autocomplete="off" spellcheck="false" placeholder="delete aether-prod-04" aria-required="true">
+      </div>
+
+      <label class="confirm-checkbox-group">
+        <input type="checkbox" id="delete-ack-checkbox">
+        <span class="confirm-checkbox-label">
+          I acknowledge that this deprovisioning action is instantaneous and cannot be reversed by Aether Support.
+        </span>
+      </label>
+
+      <div class="modal-actions">
+        <button type="button" class="btn-modal-cancel" id="cancel-delete-modal-btn">
+          Cancel & Retain Workspace
+        </button>
+        <button type="button" class="btn-danger-confirm" id="confirm-purge-account-btn" disabled>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <polyline points="3 6 5 6 21 6"></polyline>
+            <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+          </svg>
+          Purge Workspace & Delete Account
+        </button>
+      </div>
+    </div>
+
+    <!-- Simulated Deprovisioning Sequence HUD -->
+    <div class="deprovisioning-hud" id="deprovisioning-hud" aria-live="assertive">
+      <div style="font-size: 14px; font-weight: 600; color: var(--danger-accent);">
+        Deprovisioning cluster resources...
+      </div>
+      <div class="hud-progress-track">
+        <div class="hud-progress-fill" id="hud-progress-fill"></div>
+      </div>
+      <div class="hud-status-log" id="hud-status-log">
+        Initializing cryptographic key revocation...
+      </div>
+    </div>
+
+  </dialog>
+
+  <!-- ====================================================================
+       INTERACTION SCRIPT ENGINE (Reactive State, ARIA Sync, Math, Storage)
+       ==================================================================== -->
+  <script>
+    (function() {
+      'use strict';
+
+      const STORAGE_KEY = 'aether_cloud_workspace_settings_v4';
+      const DELETED_KEY = 'aether_cloud_account_deleted_v4';
+      const REQUIRED_PHRASE = 'delete aether-prod-04';
+
+      // Default System Benchmark State (5 groups, 14 toggles + 1 continuous range)
+      const DEFAULT_SETTINGS = {
+        // Group 1: Telemetry
+        kernel_tracing: true,
+        heap_profiling: true,
+        crash_telemetry: false,
+        // Group 2: Security
+        hardware_mfa: true,
+        ip_cidr_binding: false,
+        auto_rotation_alerts: true,
+        // Group 3: Orchestration
+        canary_rollback: true,
+        ephemeral_pruning: true,
+        traffic_drainage: false,
+        // Group 4: Notifications
+        pagerduty_bridge: true,
+        cost_spike_digest: true,
+        weekly_compliance_audit: false,
+        // Group 5: Governance
+        zero_retention_debug: true,
+        cross_region_sync: true,
+        // Continuous Slider
+        retention_horizon: 92
+      };
+
+      // State Containers
+      let savedState = { ...DEFAULT_SETTINGS };
+      let currentState = { ...DEFAULT_SETTINGS };
+
+      // DOM Element Cache
+      const switchElements = document.querySelectorAll('.switch-btn');
+      const toggleRows = document.querySelectorAll('.toggle-row');
+      const retentionInput = document.getElementById('retention-range-input');
+      const retentionBadge = document.getElementById('retention-days-badge');
+      const retentionCalc = document.getElementById('slider-calc-footprint');
+      const statRetentionDays = document.getElementById('stat-retention-days');
+      const statRetentionEst = document.getElementById('stat-retention-est');
+
+      const statActiveCount = document.getElementById('stat-active-count');
+      const dotActive = document.getElementById('dot-active');
+      const statClusterStatus = document.getElementById('stat-cluster-status');
+      const statClusterStatusSub = document.getElementById('stat-cluster-status-sub');
+      const secGradeValue = document.getElementById('sec-grade-value');
+      const clusterPickerDot = document.getElementById('cluster-picker-dot');
+      const statEnforceLevel = document.getElementById('stat-enforce-level');
+
+      const saveBarDock = document.getElementById('save-bar-dock');
+      const saveStatusText = document.getElementById('save-status-text');
+      const statusDot = document.getElementById('status-dot');
+      const saveChangesBtn = document.getElementById('save-changes-btn');
+      const discardChangesBtn = document.getElementById('discard-changes-btn');
+      const resetDefaultsBtn = document.getElementById('reset-defaults-btn');
+
+      const systemBadgeDot = document.getElementById('system-badge-dot');
+      const systemBadgeText = document.getElementById('system-badge-text');
+
+      const toastAlert = document.getElementById('toast-alert');
+      const toastMessage = document.getElementById('toast-message');
+
+      const filterInput = document.getElementById('settings-filter-input');
+      const filterCountDisplay = document.getElementById('filter-count-display');
+
+      // Danger Zone Modal Elements
+      const openDangerModalBtn = document.getElementById('open-danger-modal-btn');
+      const dangerModal = document.getElementById('danger-confirm-dialog');
+      const cancelDeleteBtn = document.getElementById('cancel-delete-modal-btn');
+      const confirmDeleteBtn = document.getElementById('confirm-purge-account-btn');
+      const deletePhraseInput = document.getElementById('delete-phrase-input');
+      const deleteAckCheckbox = document.getElementById('delete-ack-checkbox');
+      const modalFormBody = document.getElementById('modal-form-body');
+      const deprovisioningHud = document.getElementById('deprovisioning-hud');
+      const hudProgressFill = document.getElementById('hud-progress-fill');
+      const hudStatusLog = document.getElementById('hud-status-log');
+      let deprovisionInterval = null;
+      let deprovisionFinalizeTimeout = null;
+
+      // Tombstone View Elements
+      const activeSettingsView = document.getElementById('active-settings-view');
+      const tombstoneView = document.getElementById('tombstone-receipt-view');
+      const tombstoneTimestamp = document.getElementById('tombstone-timestamp');
+      const restoreDemoBtn = document.getElementById('restore-demo-btn');
+
+      // Group keys mapping for group badges
+      const GROUPS = {
+        'group-telemetry': ['kernel_tracing', 'heap_profiling', 'crash_telemetry'],
+        'group-security': ['hardware_mfa', 'ip_cidr_binding', 'auto_rotation_alerts'],
+        'group-orchestration': ['canary_rollback', 'ephemeral_pruning', 'traffic_drainage'],
+        'group-notifications': ['pagerduty_bridge', 'cost_spike_digest', 'weekly_compliance_audit'],
+        'group-governance': ['zero_retention_debug', 'cross_region_sync']
+      };
+
+      // ------------------------------------------------------------------------
+      // INITIALIZATION & PERSISTENCE
+      // ------------------------------------------------------------------------
+      function computeReceiptHash(timeString) {
+        const source = 'ws_aether_84920194' + timeString;
+        let hash = 0;
+        for (let i = 0; i < source.length; i++) {
+          hash = (hash * 31 + source.charCodeAt(i)) >>> 0;
+        }
+        return '0x' + hash.toString(16).padStart(8, '0');
+      }
+
+      function init() {
+        try {
+          const raw = localStorage.getItem(STORAGE_KEY);
+          if (raw) {
+            const parsed = JSON.parse(raw);
+            savedState = { ...DEFAULT_SETTINGS, ...parsed };
+          }
+        } catch (e) {
+          console.warn('Storage read failed, falling back to defaults', e);
+        }
+
+        currentState = { ...savedState };
+        renderAllStates();
+        attachEventListeners();
+
+        if (localStorage.getItem(DELETED_KEY) === 'true') {
+          const savedTime = localStorage.getItem('aether_deleted_time') || new Date().toUTCString();
+          const savedHash = localStorage.getItem('aether_deleted_hash') || computeReceiptHash(savedTime);
+          showTombstoneView(savedTime, savedHash);
+        }
+      }
+
+      // ------------------------------------------------------------------------
+      // RENDERING & DOM SYNC
+      // ------------------------------------------------------------------------
+      function renderAllStates() {
+        switchElements.forEach(btn => {
+          const key = btn.getAttribute('data-key');
+          const isChecked = !!currentState[key];
+          btn.setAttribute('aria-checked', String(isChecked));
+
+          const stateText = document.getElementById(`state-text-${key}`);
+          if (stateText) {
+            stateText.textContent = isChecked ? 'ON' : 'OFF';
+            stateText.classList.toggle('active', isChecked);
+          }
+        });
+
+        if (retentionInput) {
+          retentionInput.value = currentState.retention_horizon;
+          updateRetentionMath(currentState.retention_horizon);
+        }
+
+        updateGroupBadges();
+        updateTopTelemetry();
+        checkDirtyState();
+      }
+
+      function updateRetentionMath(days) {
+        const d = parseInt(days, 10);
+        retentionBadge.textContent = `${d} Days`;
+        const tb = (d * 0.016).toFixed(2);
+        const cost = (d * 0.016 * 12).toFixed(2);
+        const text = `Est. cold tier storage: ~${tb} TB (~$${cost}/mo)`;
+        retentionCalc.textContent = text;
+        statRetentionDays.textContent = `${d} Days`;
+        statRetentionEst.textContent = `~${tb} TB Cold Footprint`;
+      }
+
+      function updateGroupBadges() {
+        for (const [groupId, keys] of Object.entries(GROUPS)) {
+          const badge = document.getElementById(`badge-${groupId}`);
+          if (!badge) continue;
+          const activeCount = keys.filter(k => !!currentState[k]).length;
+          badge.textContent = `[ ${activeCount}/${keys.length} ACTIVE ]`;
+        }
+      }
+
+      function updateTopTelemetry() {
+        const allToggleKeys = Object.values(GROUPS).flat();
+        const activeCount = allToggleKeys.filter(k => !!currentState[k]).length;
+        statActiveCount.textContent = `${activeCount} / ${allToggleKeys.length}`;
+        dotActive.classList.toggle('is-inactive', activeCount === 0);
+
+        if (activeCount >= 10) {
+          statEnforceLevel.textContent = 'High Enforcement';
+        } else if (activeCount >= 6) {
+          statEnforceLevel.textContent = 'Moderate Enforcement';
+        } else {
+          statEnforceLevel.textContent = 'Relaxed Audit Mode';
+        }
+
+        const violationCount = allToggleKeys.length - activeCount;
+        if (violationCount === 0) {
+          statClusterStatus.textContent = 'OPERATIONAL';
+          statClusterStatus.style.color = 'var(--success-accent)';
+          statClusterStatusSub.textContent = 'Zero Policy Violations';
+          clusterPickerDot.classList.remove('is-degraded');
+        } else {
+          statClusterStatus.textContent = 'DEGRADED';
+          statClusterStatus.style.color = 'var(--danger-accent)';
+          statClusterStatusSub.textContent = `${violationCount} Policy ${violationCount === 1 ? 'Violation' : 'Violations'}`;
+          clusterPickerDot.classList.add('is-degraded');
+        }
+
+        secGradeValue.textContent = currentState.weekly_compliance_audit ? 'SOC2-READY' : 'SOC2-AT-RISK';
+      }
+
+      function checkDirtyState() {
+        const keys = Object.keys(DEFAULT_SETTINGS);
+        const diffCount = keys.filter(k => currentState[k] !== savedState[k]).length;
+
+        if (diffCount > 0) {
+          statusDot.className = 'status-dot-dirty';
+          saveStatusText.textContent = `${diffCount} unsaved policy ${diffCount === 1 ? 'change' : 'changes'}`;
+          saveChangesBtn.disabled = false;
+          discardChangesBtn.disabled = false;
+          systemBadgeDot.className = 'status-dot-dirty';
+          systemBadgeText.textContent = 'SYNC PENDING — 14 PODS';
+        } else {
+          statusDot.className = 'status-dot-synced';
+          saveStatusText.textContent = 'All policies synchronized to cluster';
+          saveChangesBtn.disabled = true;
+          discardChangesBtn.disabled = true;
+          systemBadgeDot.className = 'status-dot-pulse';
+          systemBadgeText.textContent = 'SYNCED TO 14 PODS';
+        }
+      }
+
+      function showToast(msg) {
+        toastMessage.textContent = msg;
+        toastAlert.classList.add('show');
+        setTimeout(() => {
+          toastAlert.classList.remove('show');
+        }, 3400);
+      }
+
+      // ------------------------------------------------------------------------
+      // EVENT LISTENERS & CONTROL INTERACTIONS
+      // ------------------------------------------------------------------------
+      function toggleKey(key) {
+        if (!(key in currentState)) return;
+        currentState[key] = !currentState[key];
+
+        const btn = document.querySelector(`.switch-btn[data-key="${key}"]`);
+        if (btn) {
+          const isChecked = !!currentState[key];
+          btn.setAttribute('aria-checked', String(isChecked));
+          const stateText = document.getElementById(`state-text-${key}`);
+          if (stateText) {
+            stateText.textContent = isChecked ? 'ON' : 'OFF';
+            stateText.classList.toggle('active', isChecked);
+          }
+        }
+
+        updateGroupBadges();
+        updateTopTelemetry();
+        checkDirtyState();
+      }
+
+      function attachEventListeners() {
+        switchElements.forEach(btn => {
+          btn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const key = btn.getAttribute('data-key');
+            toggleKey(key);
+          });
+
+          btn.addEventListener('keydown', (e) => {
+            if (e.key === ' ' || e.key === 'Enter') {
+              e.preventDefault();
+              const key = btn.getAttribute('data-key');
+              toggleKey(key);
+            }
+          });
+        });
+
+        toggleRows.forEach(row => {
+          row.addEventListener('click', (e) => {
+            if (e.target.closest('.switch-btn')) return;
+            const key = row.getAttribute('data-control-key');
+            if (key) {
+              toggleKey(key);
+              const btn = row.querySelector('.switch-btn');
+              if (btn) btn.focus();
+            }
+          });
+        });
+
+        retentionInput.addEventListener('input', (e) => {
+          const val = parseInt(e.target.value, 10);
+          currentState.retention_horizon = val;
+          updateRetentionMath(val);
+          checkDirtyState();
+        });
+
+        saveChangesBtn.addEventListener('click', () => {
+          savedState = { ...currentState };
+          try {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(savedState));
+          } catch (e) {
+            console.error('Failed to save to localStorage', e);
+          }
+          checkDirtyState();
+          showToast('Policy modifications committed and propagated to 14 cluster pods.');
+        });
+
+        discardChangesBtn.addEventListener('click', () => {
+          currentState = { ...savedState };
+          renderAllStates();
+          showToast('Unsaved policy changes discarded.');
+        });
+
+        resetDefaultsBtn.addEventListener('click', () => {
+          currentState = { ...DEFAULT_SETTINGS };
+          renderAllStates();
+          showToast('Reset all controls to factory baseline settings.');
+        });
+
+        filterInput.addEventListener('input', (e) => {
+          const q = e.target.value.toLowerCase().trim();
+          let visibleCount = 0;
+
+          toggleRows.forEach(row => {
+            const text = row.textContent.toLowerCase();
+            const matches = !q || text.includes(q);
+            row.style.display = matches ? 'flex' : 'none';
+            if (matches) visibleCount++;
+          });
+
+          const sliderRow = document.querySelector('.slider-row');
+          if (sliderRow) {
+            const sliderText = sliderRow.textContent.toLowerCase();
+            const matches = !q || sliderText.includes(q);
+            sliderRow.style.display = matches ? 'block' : 'none';
+            if (matches) visibleCount++;
+          }
+
+          document.querySelectorAll('.settings-group').forEach(group => {
+            const anyVisible = Array.from(group.querySelectorAll('.toggle-row, .slider-row'))
+              .some(el => el.style.display !== 'none');
+            group.style.display = anyVisible ? '' : 'none';
+          });
+
+          filterCountDisplay.textContent = q ? `Showing ${visibleCount} matching controls` : 'Showing all 15 controls';
+        });
+
+        // --------------------------------------------------------------------
+        // DANGER ZONE DELETION FLOW
+        // --------------------------------------------------------------------
+        openDangerModalBtn.addEventListener('click', () => {
+          deletePhraseInput.value = '';
+          deleteAckCheckbox.checked = false;
+          confirmDeleteBtn.disabled = true;
+          modalFormBody.style.display = 'block';
+          deprovisioningHud.classList.remove('active');
+          dangerModal.showModal();
+          deletePhraseInput.focus();
+        });
+
+        cancelDeleteBtn.addEventListener('click', () => {
+          dangerModal.close();
+          openDangerModalBtn.focus();
+        });
+
+        dangerModal.addEventListener('cancel', () => {
+          if (deprovisionInterval !== null || deprovisionFinalizeTimeout !== null) {
+            clearInterval(deprovisionInterval);
+            clearTimeout(deprovisionFinalizeTimeout);
+            deprovisionInterval = null;
+            deprovisionFinalizeTimeout = null;
+            deprovisioningHud.classList.remove('active');
+            modalFormBody.style.display = 'block';
+            hudProgressFill.style.width = '0%';
+            hudStatusLog.textContent = '';
+          }
+          openDangerModalBtn.focus();
+        });
+
+        function validateDangerInputs() {
+          const phraseMatches = deletePhraseInput.value.trim().toLowerCase() === REQUIRED_PHRASE.toLowerCase();
+          const acknowledged = deleteAckCheckbox.checked;
+          confirmDeleteBtn.disabled = !(phraseMatches && acknowledged);
+        }
+
+        deletePhraseInput.addEventListener('input', validateDangerInputs);
+        deleteAckCheckbox.addEventListener('change', validateDangerInputs);
+
+        confirmDeleteBtn.addEventListener('click', () => {
+          modalFormBody.style.display = 'none';
+          deprovisioningHud.classList.add('active');
+
+          const steps = [
+            { pct: '25%', log: 'Revoking mTLS service credentials and API tokens...' },
+            { pct: '50%', log: 'Terminating 14 active Kubernetes worker nodes...' },
+            { pct: '75%', log: 'Purging 2.8TB persistent NVMe storage blocks...' },
+            { pct: '95%', log: 'Writing immutable tombstone ledger record...' },
+            { pct: '100%', log: 'Workspace deprovisioning complete.' }
+          ];
+
+          let stepIdx = 0;
+          deprovisionInterval = setInterval(() => {
+            if (stepIdx < steps.length) {
+              hudProgressFill.style.width = steps[stepIdx].pct;
+              hudStatusLog.textContent = steps[stepIdx].log;
+              stepIdx++;
+            } else {
+              clearInterval(deprovisionInterval);
+              deprovisionInterval = null;
+              deprovisionFinalizeTimeout = setTimeout(() => {
+                deprovisionFinalizeTimeout = null;
+                dangerModal.close();
+                const now = new Date().toUTCString();
+                const hash = computeReceiptHash(now);
+                localStorage.setItem(DELETED_KEY, 'true');
+                localStorage.setItem('aether_deleted_time', now);
+                localStorage.setItem('aether_deleted_hash', hash);
+                showTombstoneView(now, hash);
+              }, 400);
+            }
+          }, 450);
+        });
+
+        restoreDemoBtn.addEventListener('click', () => {
+          localStorage.removeItem(DELETED_KEY);
+          localStorage.removeItem('aether_deleted_time');
+          localStorage.removeItem('aether_deleted_hash');
+          tombstoneView.classList.remove('active');
+          activeSettingsView.style.display = 'block';
+          saveBarDock.style.display = 'flex';
+          currentState = { ...DEFAULT_SETTINGS };
+          savedState = { ...DEFAULT_SETTINGS };
+          renderAllStates();
+          showToast('Workspace demo state restored successfully.');
+          const pageTitle = document.querySelector('.page-title');
+          if (pageTitle) pageTitle.focus();
+        });
+      }
+
+      function showTombstoneView(time, hash) {
+        activeSettingsView.style.display = 'none';
+        saveBarDock.style.display = 'none';
+        tombstoneTimestamp.textContent = time;
+        const hashEl = document.getElementById('tombstone-hash');
+        if (hashEl) hashEl.textContent = hash || computeReceiptHash(time);
+        tombstoneView.classList.add('active');
+        const tombstoneTitle = document.querySelector('.tombstone-title');
+        if (tombstoneTitle) tombstoneTitle.focus();
+      }
+
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', init);
+      } else {
+        init();
+      }
+
+    })();
+  </script>
+</body>
+</html>

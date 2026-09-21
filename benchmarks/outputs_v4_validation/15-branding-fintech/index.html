@@ -1,0 +1,2128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vectis Global Systems // Enterprise Brand Modernization Direction</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400;1,6..72,600&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    /* -------------------------------------------------------------------------
+       VECTIS GLOBAL SYSTEMS -- BRAND MODERNIZATION DIRECTION
+       Design Tokens & Strict Modular Scale
+       Modular Scale: 1.250 Major Third (12px, 14px, 16px, 20px, 24px, 32px, 48px)
+       Spacing Scale: 4px base (4px, 8px, 12px, 16px, 20px, 24px, 32px, 40px, 48px, 64px)
+       Palette Tokens: Exactly 6 distinct hex colors
+       #0e131b (Void Slate) | #f4f6f8 (Bone Canvas) | #ffffff (Pure Surface)
+       #d1d7e0 (Hairline Slate) | #59677b (Muted Slate) | #0047e1 (Precision Cobalt)
+       ------------------------------------------------------------------------- */
+    :root {
+      --color-void: #0e131b;
+      --color-canvas: #f4f6f8;
+      --color-surface: #ffffff;
+      --color-hairline: #d1d7e0;
+      --color-muted: #59677b;
+      --color-cobalt: #0047e1;
+      --font-display: 'Newsreader', serif;
+      --font-body: 'Plus Jakarta Sans', sans-serif;
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body{margin:0;padding:0;background:#f4f6f8;color:#0e131b;font-family:'Plus Jakarta Sans',sans-serif;line-height:1.5;}
+
+    /* Typography hierarchy using strictly disciplined font sizes */
+    h1 {
+      font-family: 'Newsreader', serif;
+      font-size: 48px;
+      font-weight: 500;
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+      color: #0e131b;
+    }
+
+    h2 {
+      font-family: 'Newsreader', serif;
+      font-size: 32px;
+      font-weight: 500;
+      line-height: 1.2;
+      letter-spacing: -0.01em;
+      color: #0e131b;
+    }
+
+    h3 {
+      font-family: 'Newsreader', serif;
+      font-size: 24px;
+      font-weight: 500;
+      line-height: 1.25;
+      color: #0e131b;
+    }
+
+    h4 {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 20px;
+      font-weight: 600;
+      line-height: 1.3;
+      color: #0e131b;
+    }
+
+    p {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 16px;
+      line-height: 1.6;
+      color: #0e131b;
+    }
+
+    em {
+      font-family: 'Newsreader', serif;
+      font-style: italic;
+      color: #0047e1;
+    }
+
+    .text-secondary {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 14px;
+      line-height: 1.5;
+      color: #59677b;
+    }
+
+    .text-micro {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 12px;
+      line-height: 1.4;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      font-weight: 600;
+      color: #59677b;
+    }
+
+    /* Purposeful Motion Animations per motion-and-presentation-notes.md */
+    @keyframes datumReveal {
+      from {
+        opacity: 0;
+        transform: translateY(8px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .motion-reveal {
+      animation: datumReveal 320ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    /* Actionable Buttons with standard 44px min-height */
+    .btn {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 14px;
+      font-weight: 600;
+      background: #0047e1;
+      color: #ffffff;
+      border: 1px solid #0047e1;
+      border-radius: 6px;
+      min-height: 44px;
+      padding: 8px 20px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      text-decoration: none;
+      transition: background 180ms cubic-bezier(0.16, 1, 0.3, 1), transform 180ms cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .btn:hover {
+      background: #0e131b;
+      border-color: #0e131b;
+      transform: translateY(-1px);
+    }
+
+    .btn-secondary {
+      background: #ffffff;
+      color: #0e131b;
+      border: 1px solid #d1d7e0;
+    }
+
+    .btn-secondary:hover {
+      background: #f4f6f8;
+      border-color: #0e131b;
+    }
+
+    .btn:focus-visible, button:focus-visible {
+      outline: 2px solid #0047e1;
+      outline-offset: 2px;
+    }
+
+    /* Layout Shell */
+    .page-wrapper {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 0 32px 64px 32px;
+    }
+
+    /* Header & Navigation Bar */
+    header {
+      border-bottom: 1px solid #d1d7e0;
+      padding: 24px 0;
+      margin-bottom: 48px;
+    }
+
+    .masthead-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+    }
+
+    .brand-mark-lockup {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .brand-logo-symbol {
+      width: 40px;
+      height: 40px;
+      background: #0e131b;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+
+    .brand-logo-symbol svg {
+      width: 24px;
+      height: 24px;
+    }
+
+    .brand-meta-group {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .brand-name {
+      font-family: 'Newsreader', serif;
+      font-size: 24px;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+      color: #0e131b;
+    }
+
+    .badge-status {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: #ffffff;
+      border: 1px solid #d1d7e0;
+      border-radius: 4px;
+      padding: 4px 12px;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 12px;
+      font-weight: 600;
+      color: #0e131b;
+    }
+
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 4px;
+      background: #0047e1;
+    }
+
+    nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-top: 1px solid #d1d7e0;
+      padding-top: 16px;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 24px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 14px;
+      font-weight: 500;
+      color: #59677b;
+      text-decoration: none;
+      transition: color 150ms ease;
+    }
+
+    .nav-links a:hover {
+      color: #0047e1;
+    }
+
+    .nav-meta-datum {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 12px;
+      color: #59677b;
+    }
+
+    /* Monolithic Signature Hairline Datum Line */
+    .datum-axis {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin: 40px 0 24px 0;
+      color: #59677b;
+    }
+
+    .datum-axis::before {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: #d1d7e0;
+    }
+
+    .datum-axis::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: #d1d7e0;
+    }
+
+    .datum-tick {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #59677b;
+    }
+
+    /* Section Architecture */
+    section {
+      margin-bottom: 64px;
+    }
+
+    .section-header-block {
+      margin-bottom: 32px;
+    }
+
+    .section-supertitle {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: #0047e1;
+      margin-bottom: 8px;
+    }
+
+    .section-subtitle {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 16px;
+      color: #59677b;
+      max-width: 760px;
+      margin-top: 8px;
+    }
+
+    /* Executive Hero Positioning */
+    .hero-executive-box {
+      background: #ffffff;
+      border: 1px solid #d1d7e0;
+      border-radius: 8px;
+      padding: 48px;
+      margin-bottom: 48px;
+    }
+
+    .hero-grid-2col {
+      display: grid;
+      grid-template-columns: 1.4fr 1fr;
+      gap: 48px;
+      align-items: start;
+    }
+
+    .hero-manifesto-lead {
+      font-family: 'Newsreader', serif;
+      font-size: 32px;
+      line-height: 1.3;
+      color: #0e131b;
+      margin-bottom: 24px;
+    }
+
+    .hero-body-narrative {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 16px;
+      color: #59677b;
+      margin-bottom: 32px;
+    }
+
+    .hero-key-takeaways {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      background: #f4f6f8;
+      border: 1px solid #d1d7e0;
+      border-radius: 6px;
+      padding: 24px;
+    }
+
+    .takeaway-item {
+      display: flex;
+      gap: 12px;
+      align-items: baseline;
+    }
+
+    .takeaway-marker {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 12px;
+      font-weight: 700;
+      color: #0047e1;
+    }
+
+    /* Section 2: Before vs After Interactive Framing */
+    .comparison-frame {
+      background: #ffffff;
+      border: 1px solid #d1d7e0;
+      border-radius: 8px;
+      overflow: hidden;
+      margin-bottom: 32px;
+    }
+
+    .comparison-tabs-bar {
+      display: flex;
+      border-bottom: 1px solid #d1d7e0;
+      background: #f4f6f8;
+    }
+
+    .tab-trigger {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 14px;
+      font-weight: 600;
+      padding: 16px 24px;
+      background: transparent;
+      border: none;
+      border-bottom: 2px solid transparent;
+      color: #59677b;
+      cursor: pointer;
+      min-height: 44px;
+      transition: all 180ms ease;
+    }
+
+    .tab-trigger.is-active {
+      color: #0047e1;
+      background: #ffffff;
+      border-bottom-color: #0047e1;
+    }
+
+    .comparison-panel-content {
+      padding: 32px;
+    }
+
+    .comparison-split-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 32px;
+    }
+
+    .legacy-archetype-box {
+      background: #f4f6f8;
+      border: 1px solid #d1d7e0;
+      border-radius: 6px;
+      padding: 24px;
+    }
+
+    .modern-archetype-box {
+      background: #ffffff;
+      border: 1px solid #0047e1;
+      border-radius: 6px;
+      padding: 24px;
+    }
+
+    .archetype-tag-legacy {
+      display: inline-block;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 12px;
+      font-weight: 700;
+      background: #d1d7e0;
+      color: #0e131b;
+      border-radius: 4px;
+      padding: 4px 8px;
+      margin-bottom: 16px;
+    }
+
+    .archetype-tag-modern {
+      display: inline-block;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 12px;
+      font-weight: 700;
+      background: #0047e1;
+      color: #ffffff;
+      border-radius: 4px;
+      padding: 4px 8px;
+      margin-bottom: 16px;
+    }
+
+    .archetype-headline {
+      margin-bottom: 16px;
+    }
+
+    .dimension-audit-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 24px;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+    }
+
+    .dimension-audit-table th, .dimension-audit-table td {
+      border: 1px solid #d1d7e0;
+      padding: 12px 16px;
+      font-size: 14px;
+      text-align: left;
+    }
+
+    .dimension-audit-table th {
+      background: #f4f6f8;
+      font-weight: 600;
+      color: #0e131b;
+    }
+
+    .dimension-audit-table td {
+      background: #ffffff;
+      color: #0e131b;
+    }
+
+    /* Section 3: Palette System & Swatches */
+    .palette-grid-system {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+      margin-bottom: 32px;
+    }
+
+    .swatch-item-card {
+      background: #ffffff;
+      border: 1px solid #d1d7e0;
+      border-radius: 6px;
+      overflow: hidden;
+      cursor: pointer;
+      transition: transform 180ms ease, border-color 180ms ease;
+    }
+
+    .swatch-item-card:hover {
+      border-color: #0047e1;
+      transform: translateY(-2px);
+    }
+
+    .swatch-tile-color {
+      height: 120px;
+      display: flex;
+      align-items: flex-end;
+      padding: 16px;
+      position: relative;
+    }
+
+    .swatch-hex-badge {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 12px;
+      font-weight: 700;
+      padding: 4px 8px;
+      border-radius: 4px;
+      border: 1px solid #d1d7e0;
+    }
+
+    .swatch-details-block {
+      padding: 20px;
+    }
+
+    .swatch-semantic-name {
+      font-family: 'Newsreader', serif;
+      font-size: 20px;
+      font-weight: 600;
+      color: #0e131b;
+      margin-bottom: 4px;
+    }
+
+    .swatch-role-caption {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 12px;
+      font-weight: 600;
+      color: #0047e1;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 12px;
+    }
+
+    .swatch-narrative-copy {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 14px;
+      color: #59677b;
+      line-height: 1.5;
+      margin-bottom: 16px;
+    }
+
+    .contrast-badge-row {
+      display: flex;
+      justify-content: space-between;
+      border-top: 1px solid #d1d7e0;
+      padding-top: 12px;
+      font-size: 12px;
+      color: #59677b;
+    }
+
+    /* Live Color Inspector HUD */
+    .color-inspector-panel {
+      background: #0e131b;
+      color: #f4f6f8;
+      border-radius: 8px;
+      padding: 32px;
+      margin-top: 32px;
+    }
+
+    .inspector-header-grid {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+      border-bottom: 1px solid #59677b;
+      padding-bottom: 16px;
+    }
+
+    .inspector-title {
+      font-family: 'Newsreader', serif;
+      font-size: 24px;
+      color: #ffffff;
+    }
+
+    .inspector-body-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 32px;
+    }
+
+    .spec-live-preview-box {
+      background: #f4f6f8;
+      color: #0e131b;
+      border-radius: 6px;
+      padding: 24px;
+      border: 1px solid #d1d7e0;
+      transition: all 200ms ease;
+    }
+
+    /* Section 4: Typography Architecture & Hierarchy */
+    .type-specimen-deck {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 32px;
+      margin-bottom: 32px;
+    }
+
+    .typeface-showcase-box {
+      background: #ffffff;
+      border: 1px solid #d1d7e0;
+      border-radius: 8px;
+      padding: 32px;
+    }
+
+    .typeface-tag-label {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #0047e1;
+      margin-bottom: 8px;
+    }
+
+    .typeface-giant-sample {
+      font-size: 48px;
+      line-height: 1.1;
+      margin-bottom: 16px;
+      color: #0e131b;
+    }
+
+    .type-scale-matrix {
+      background: #ffffff;
+      border: 1px solid #d1d7e0;
+      border-radius: 8px;
+      padding: 32px;
+    }
+
+    .scale-row-item {
+      display: grid;
+      grid-template-columns: 160px 100px 1fr;
+      align-items: baseline;
+      padding: 16px 0;
+      border-bottom: 1px solid #d1d7e0;
+    }
+
+    .scale-row-item:last-child {
+      border-bottom: none;
+    }
+
+    .scale-meta-label {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 12px;
+      font-weight: 600;
+      color: #59677b;
+    }
+
+    .scale-size-metric {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 12px;
+      font-weight: 700;
+      color: #0047e1;
+    }
+
+    /* Section 5: Multi-Touchpoint Direction Applications */
+    .touchpoints-nav-tabs {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 24px;
+      flex-wrap: wrap;
+    }
+
+    .touchpoint-tab-btn {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 14px;
+      font-weight: 600;
+      padding: 12px 20px;
+      background: #ffffff;
+      border: 1px solid #d1d7e0;
+      border-radius: 6px;
+      color: #59677b;
+      cursor: pointer;
+      min-height: 44px;
+      transition: all 180ms ease;
+    }
+
+    .touchpoint-tab-btn.is-active {
+      background: #0e131b;
+      color: #ffffff;
+      border-color: #0e131b;
+    }
+
+    .touchpoint-application-view {
+      background: #ffffff;
+      border: 1px solid #d1d7e0;
+      border-radius: 8px;
+      padding: 40px;
+      margin-bottom: 32px;
+    }
+
+    /* Touchpoint 1: Enterprise Software UI Console Mockup */
+    .console-mockup-frame {
+      background: #0e131b;
+      border: 1px solid #d1d7e0;
+      border-radius: 6px;
+      overflow: hidden;
+      color: #f4f6f8;
+    }
+
+    .console-header-chrome {
+      background: #0e131b;
+      border-bottom: 1px solid #59677b;
+      padding: 12px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .console-window-dots {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .window-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 6px;
+      background: #59677b;
+    }
+
+    .console-system-status {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 12px;
+      color: #f4f6f8;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .console-body-grid {
+      display: grid;
+      grid-template-columns: 240px 1fr;
+      min-height: 460px;
+    }
+
+    .console-sidebar {
+      border-right: 1px solid #59677b;
+      padding: 20px;
+      background: #0e131b;
+    }
+
+    .console-menu-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .console-menu-link {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 14px;
+      color: #d1d7e0;
+      padding: 8px 12px;
+      border-radius: 4px;
+      text-decoration: none;
+      display: flex;
+      justify-content: space-between;
+      transition: background 150ms ease;
+    }
+
+    .console-menu-link.is-active {
+      background: #0047e1;
+      color: #ffffff;
+      font-weight: 600;
+    }
+
+    .console-viewport {
+      padding: 24px;
+      background: #0e131b;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .console-metrics-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+
+    .metric-telemetry-tile {
+      background: #0e131b;
+      border: 1px solid #59677b;
+      border-radius: 4px;
+      padding: 16px;
+    }
+
+    .metric-value-num {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 24px;
+      font-weight: 700;
+      color: #ffffff;
+      margin: 4px 0;
+    }
+
+    /* Functioning Interactive SVG Telemetry Visualization */
+    .telemetry-chart-container {
+      background: #0e131b;
+      border: 1px solid #59677b;
+      border-radius: 4px;
+      padding: 20px;
+      position: relative;
+    }
+
+    .chart-header-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+    }
+
+    .chart-controls-group {
+      display: flex;
+      gap: 8px;
+    }
+
+    .chart-pill-btn {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 12px;
+      font-weight: 600;
+      background: #0e131b;
+      color: #d1d7e0;
+      border: 1px solid #59677b;
+      border-radius: 4px;
+      padding: 4px 12px;
+      cursor: pointer;
+      min-height: 44px;
+    }
+
+    .chart-pill-btn.is-active {
+      background: #0047e1;
+      border-color: #0047e1;
+      color: #ffffff;
+    }
+
+    .svg-telemetry-canvas {
+      width: 100%;
+      height: 180px;
+      display: block;
+      cursor: crosshair;
+    }
+
+    .chart-inspection-hud {
+      position: absolute;
+      top: 56px;
+      right: 24px;
+      background: #ffffff;
+      color: #0e131b;
+      border: 1px solid #d1d7e0;
+      border-radius: 4px;
+      padding: 8px 12px;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 12px;
+      font-weight: 600;
+      pointer-events: none;
+      display: flex;
+      gap: 12px;
+    }
+
+    /* Touchpoint 2: Enterprise Web Surface Hero Mockup */
+    .web-mockup-frame {
+      background: #ffffff;
+      border: 1px solid #d1d7e0;
+      border-radius: 6px;
+      padding: 48px;
+    }
+
+    .web-hero-content {
+      max-width: 820px;
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    .web-hero-pill-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: #f4f6f8;
+      border: 1px solid #d1d7e0;
+      border-radius: 4px;
+      padding: 8px 16px;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 12px;
+      font-weight: 600;
+      color: #0e131b;
+      margin-bottom: 24px;
+    }
+
+    .web-hero-headline {
+      font-family: 'Newsreader', serif;
+      font-size: 48px;
+      line-height: 1.15;
+      color: #0e131b;
+      margin-bottom: 20px;
+    }
+
+    .web-hero-subhead {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 20px;
+      line-height: 1.5;
+      color: #59677b;
+      margin-bottom: 32px;
+    }
+
+    .web-hero-cta-group {
+      display: flex;
+      justify-content: center;
+      gap: 16px;
+      margin-bottom: 40px;
+    }
+
+    .web-code-preview-bar {
+      background: #0e131b;
+      color: #f4f6f8;
+      border-radius: 6px;
+      padding: 16px 24px;
+      text-align: left;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 14px;
+    }
+
+    /* Touchpoint 3: Physical Corporate Identity & Stationery Mockup */
+    .physical-stationery-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 32px;
+      align-items: center;
+    }
+
+    .business-card-physical {
+      background: #ffffff;
+      border: 1px solid #d1d7e0;
+      border-radius: 6px;
+      padding: 40px;
+      box-shadow: 0 4px 12px rgba(14, 19, 27, 0.06);
+      aspect-ratio: 1.75;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: relative;
+    }
+
+    .card-foil-stamp-mark {
+      width: 32px;
+      height: 32px;
+      background: #0047e1;
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .card-executive-name {
+      font-family: 'Newsreader', serif;
+      font-size: 24px;
+      font-weight: 600;
+      color: #0e131b;
+    }
+
+    .card-executive-role {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 12px;
+      font-weight: 600;
+      color: #59677b;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    .card-footer-meta {
+      display: flex;
+      justify-content: space-between;
+      border-top: 1px solid #d1d7e0;
+      padding-top: 16px;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 12px;
+      color: #59677b;
+    }
+
+    .letterhead-physical {
+      background: #ffffff;
+      border: 1px solid #d1d7e0;
+      border-radius: 6px;
+      padding: 32px;
+      box-shadow: 0 4px 12px rgba(14, 19, 27, 0.06);
+      font-family: 'Plus Jakarta Sans', sans-serif;
+    }
+
+    .letterhead-header {
+      display: flex;
+      justify-content: space-between;
+      border-bottom: 1px solid #d1d7e0;
+      padding-bottom: 16px;
+      margin-bottom: 24px;
+    }
+
+    .letterhead-body-text {
+      font-size: 14px;
+      color: #59677b;
+      line-height: 1.6;
+      margin-bottom: 16px;
+    }
+
+    /* Touchpoint 4: Executive Board Presentation Slide Mockup */
+    .presentation-slide-frame {
+      background: #0e131b;
+      border: 1px solid #d1d7e0;
+      border-radius: 6px;
+      padding: 48px;
+      color: #ffffff;
+      aspect-ratio: 16 / 9;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .slide-top-meta {
+      display: flex;
+      justify-content: space-between;
+      border-bottom: 1px solid #59677b;
+      padding-bottom: 16px;
+    }
+
+    .slide-title-lead {
+      font-family: 'Newsreader', serif;
+      font-size: 32px;
+      font-weight: 500;
+      color: #ffffff;
+      margin: 24px 0 12px 0;
+    }
+
+    .slide-subtitle-body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 16px;
+      color: #d1d7e0;
+      max-width: 680px;
+    }
+
+    .slide-stats-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+      margin-top: 32px;
+    }
+
+    .slide-stat-card {
+      background: #0e131b;
+      border: 1px solid #59677b;
+      border-radius: 4px;
+      padding: 20px;
+    }
+
+    .slide-stat-value {
+      font-family: 'Newsreader', serif;
+      font-size: 32px;
+      font-weight: 600;
+      color: #0047e1;
+    }
+
+    /* Section 6: Governance, Rules & Non-Negotiables */
+    .rules-grid-system {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+    }
+
+    .rule-container-box {
+      background: #ffffff;
+      border: 1px solid #d1d7e0;
+      border-radius: 6px;
+      padding: 24px;
+    }
+
+    .rule-title-h4 {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 16px;
+      font-weight: 700;
+      color: #0e131b;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .rule-title-h4.negative {
+      color: #0e131b;
+    }
+
+    .rule-description {
+      font-size: 14px;
+      color: #59677b;
+      line-height: 1.5;
+    }
+
+    /* Footer */
+    footer {
+      border-top: 1px solid #d1d7e0;
+      padding-top: 32px;
+      margin-top: 64px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .footer-left-info {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 12px;
+      color: #59677b;
+    }
+
+    .footer-right-actions {
+      display: flex;
+      gap: 16px;
+      align-items: center;
+    }
+
+    /* Responsive Adaptation */
+    @media (max-width: 1024px) {
+      .hero-grid-2col {
+        grid-template-columns: 1fr;
+      }
+      .palette-grid-system {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      .type-specimen-deck {
+        grid-template-columns: 1fr;
+      }
+      .console-body-grid {
+        grid-template-columns: 1fr;
+      }
+      .physical-stationery-grid {
+        grid-template-columns: 1fr;
+      }
+      .rules-grid-system {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .page-wrapper {
+        padding: 0 16px 40px 16px;
+      }
+      .hero-executive-box {
+        padding: 24px;
+      }
+      .palette-grid-system {
+        grid-template-columns: 1fr;
+      }
+      .comparison-split-grid {
+        grid-template-columns: 1fr;
+      }
+      .slide-stats-grid {
+        grid-template-columns: 1fr;
+      }
+      .console-metrics-row {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Motion Accessibility Floor */
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="page-wrapper motion-reveal">
+    <!-- Top Global Header & Navigation -->
+    <header>
+      <div class="masthead-top">
+        <div class="brand-mark-lockup">
+          <div class="brand-logo-symbol" aria-label="Vectis Monolith Logo Mark">
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <rect x="3" y="3" width="18" height="18" rx="2" stroke="#ffffff" stroke-width="2"/>
+              <path d="M7 17L17 7M17 7H10M17 7V14" stroke="#0047e1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <div class="brand-meta-group">
+            <span class="brand-name">Vectis Global Systems</span>
+            <span class="text-micro">Enterprise Identity Modernization Dossier</span>
+          </div>
+        </div>
+        <div class="badge-status">
+          <span class="status-dot"></span>
+          <span>APPROVED DIRECTION // STAGE 01</span>
+        </div>
+      </div>
+
+      <nav aria-label="Identity System Navigation">
+        <ul class="nav-links">
+          <li><a href="#thesis">Strategic Thesis</a></li>
+          <li><a href="#before-after">Tone Framing</a></li>
+          <li><a href="#palette">Color Architecture</a></li>
+          <li><a href="#typography">Type System</a></li>
+          <li><a href="#touchpoints">Touchpoint Applications</a></li>
+          <li><a href="#governance">Governance</a></li>
+        </ul>
+        <span class="nav-meta-datum">EST. 1998 // 26-YEAR ENTERPRISE HORIZON</span>
+      </nav>
+    </header>
+
+    <main>
+      <!-- Section 1: Strategic Rebrand Mandate -->
+      <section id="thesis">
+        <div class="datum-axis">
+          <span class="datum-tick">[01 // STRATEGIC REBRAND MANDATE]</span>
+        </div>
+
+        <div class="hero-executive-box">
+          <div class="hero-grid-2col">
+            <div>
+              <div class="section-supertitle">Executive Positioning Memo</div>
+              <h1>Modernizing enterprise identity without sacrificing institutional trust.</h1>
+              <p class="hero-manifesto-lead">
+                For 26 years, Vectis has powered mission-critical settlement infrastructure for Fortune 500 banks, sovereign registries, and tier-1 logistics networks. Our software settles <em>$4.2 trillion daily</em>.
+              </p>
+              <p class="hero-body-narrative">
+                The legacy brand was paralyzed by 2000s enterprise clichés: safe corporate navy, generic beveled buttons, and defensive risk messaging. Yet our modern engineering reality is distributed, real-time, and ultra-high-throughput. This rebrand direction delivers a high-precision architectural identity: chiseled editorial authority paired with machine-precision execution.
+              </p>
+              <button class="btn" id="btn-open-audit" type="button">
+                <span>View Full Executive Brief</span>
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 12L10 8L6 4" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </button>
+            </div>
+
+            <aside class="hero-key-takeaways" aria-label="Key Mandate Principles">
+              <div class="takeaway-item">
+                <span class="takeaway-marker">[01]</span>
+                <p class="text-secondary"><strong>Institutional Authority:</strong> Preserve enterprise regulatory trust while decisively eliminating dated bureaucratic aesthetic baggage.</p>
+              </div>
+              <div class="takeaway-item">
+                <span class="takeaway-marker">[02]</span>
+                <p class="text-secondary"><strong>Engineered Precision:</strong> Replace generic gradient blobs with calibrated hairline coordinates and deterministic contrast.</p>
+              </div>
+              <div class="takeaway-item">
+                <span class="takeaway-marker">[03]</span>
+                <p class="text-secondary"><strong>Accessible Rigor:</strong> All color pairings exceed WCAG 2.1 AA standards; core body pairings exceed WCAG AAA at 17.19:1.</p>
+              </div>
+            </aside>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 2: Before vs After Tone Framing -->
+      <section id="before-after">
+        <div class="datum-axis">
+          <span class="datum-tick">[02 // STRATEGIC TONE FRAMING & COMPARISON]</span>
+        </div>
+
+        <div class="section-header-block">
+          <div class="section-supertitle">Before vs. After Analysis</div>
+          <h2>Deconstructing the legacy paradigm.</h2>
+          <p class="section-subtitle">
+            Enterprise software modernization fails when companies copy lightweight consumer trends. Here is how Vectis transitions from defensive bureaucratic inertia to architectural technological leadership.
+          </p>
+        </div>
+
+        <div class="comparison-frame">
+          <div class="comparison-tabs-bar" role="tablist">
+            <button class="tab-trigger is-active" id="tab-visual" role="tab" aria-selected="true" type="button">Visual Language Audit</button>
+            <button class="tab-trigger" id="tab-tone" role="tab" aria-selected="false" type="button">Messaging & Posture Audit</button>
+            <button class="tab-trigger" id="tab-interaction" role="tab" aria-selected="false" type="button">Live Interactive Demonstrator</button>
+          </div>
+
+          <div class="comparison-panel-content" id="panel-comparison-view">
+            <div class="comparison-split-grid">
+              <div class="legacy-archetype-box">
+                <span class="archetype-tag-legacy">LEGACY ENTERPRISE (1998–2022)</span>
+                <h3 class="archetype-headline">The Stodgy Incumbent Trap</h3>
+                <p class="text-secondary" style="margin-bottom: 16px;">
+                  Visual language defined by washed corporate navy, heavy gradients, beveled faux-3D containers, and clichéd server rack photography.
+                </p>
+                <div style="background: #ffffff; border: 1px solid #d1d7e0; border-radius: 4px; padding: 16px;">
+                  <span class="text-micro" style="color: #59677b;">LEGACY TONE SAMPLE:</span>
+                  <p style="font-size: 14px; margin-top: 8px; color: #59677b; font-style: italic;">
+                    "Vectis Data Corporation provides robust turnkey paradigm solutions delivering scalable enterprise mission-critical synergies across multinational stakeholders."
+                  </p>
+                </div>
+              </div>
+
+              <div class="modern-archetype-box">
+                <span class="archetype-tag-modern">MODERNIZED DIRECTION (2026+)</span>
+                <h3 class="archetype-headline">Architectural Software Precision</h3>
+                <p class="text-secondary" style="margin-bottom: 16px;">
+                  Visual language defined by monolithic hairline datum rules, bone industrial canvas, obsidian ink, and surgical cobalt kinetic vectors.
+                </p>
+                <div style="background: #f4f6f8; border: 1px solid #d1d7e0; border-radius: 4px; padding: 16px;">
+                  <span class="text-micro" style="color: #0047e1;">MODERNIZED TONE SAMPLE:</span>
+                  <p style="font-size: 14px; margin-top: 8px; color: #0e131b; font-weight: 500;">
+                    "Deterministic multi-region settlement engines. Zero dropped transactions. Sub-millisecond ACID guarantees for sovereign financial infrastructure."
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <table class="dimension-audit-table">
+              <thead>
+                <tr>
+                  <th scope="col">Brand Dimension</th>
+                  <th scope="col">Legacy State (Stodgy Incumbent)</th>
+                  <th scope="col">Modernized Direction (Vectis 2026)</th>
+                  <th scope="col">Strategic Rationale</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>Color Palette</strong></td>
+                  <td>Dull corporate navy, grey drop shadows, uncalibrated blue tints.</td>
+                  <td>Void Slate (#0e131b), Bone Canvas (#f4f6f8), Precision Cobalt (#0047e1).</td>
+                  <td>Replaces muddy institutional darkness with crisp, architectural high contrast.</td>
+                </tr>
+                <tr>
+                  <td><strong>Typography</strong></td>
+                  <td>Default system Helvetica/Arial; equal visual weight throughout.</td>
+                  <td>Editorial Newsreader (Display) paired with Plus Jakarta Sans (Product UI).</td>
+                  <td>Combines boardroom intellectual authority with high-speed telemetry scannability.</td>
+                </tr>
+                <tr>
+                  <td><strong>Container Rhythm</strong></td>
+                  <td>Bordered card soup with heavy drop shadows and rounded bevels.</td>
+                  <td>Hairline datum rules (#d1d7e0), structural spacing, confident whitespace.</td>
+                  <td>Reduces cognitive fatigue for expert operators monitoring multi-gigabit streams.</td>
+                </tr>
+                <tr>
+                  <td><strong>Brand Posture</strong></td>
+                  <td>Defensive, passive, compliance-obsessed fear marketing.</td>
+                  <td>Deterministic, engineering-led, performance-attested certainty.</td>
+                  <td>Speaks directly to Staff Architects and Chief Technology Officers.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 3: Palette System & Swatches -->
+      <section id="palette">
+        <div class="datum-axis">
+          <span class="datum-tick">[03 // COLOR PALETTE ARCHITECTURE & ACCESSIBILITY MATRIX]</span>
+        </div>
+
+        <div class="section-header-block">
+          <div class="section-supertitle">Color System Architecture</div>
+          <h2>Six disciplined, calibrated color tokens.</h2>
+          <p class="section-subtitle">
+            Every color earns its place through functional necessity, psychological alignment, and mathematical contrast. Zero decorative gradients; zero uncalibrated filler hues.
+          </p>
+        </div>
+
+        <div class="palette-grid-system">
+          <!-- Swatch 1 -->
+          <article class="swatch-item-card" data-hex="#0e131b" data-role="Void Slate (Deep Dark Ink)" data-contrast="17.19:1 on #f4f6f8 (AAA)" tabindex="0">
+            <div class="swatch-tile-color" style="background: #0e131b;">
+              <span class="swatch-hex-badge" style="background: #ffffff; color: #0e131b;">#0e131b</span>
+            </div>
+            <div class="swatch-details-block">
+              <div class="swatch-semantic-name">Void Slate</div>
+              <div class="swatch-role-caption">Dominant Text & Terminal Canvas</div>
+              <p class="swatch-narrative-copy">
+                Deep obsidian slate neutral. Replaces harsh pure carbon black with a grounded mineral ink that anchors typography and dense console surfaces.
+              </p>
+              <div class="contrast-badge-row">
+                <span>Contrast on Canvas</span>
+                <strong>17.19:1 (WCAG AAA)</strong>
+              </div>
+            </div>
+          </article>
+
+          <!-- Swatch 2 -->
+          <article class="swatch-item-card" data-hex="#f4f6f8" data-role="Bone Canvas (Light Base Neutral)" data-contrast="17.19:1 against #0e131b" tabindex="0">
+            <div class="swatch-tile-color" style="background: #f4f6f8; border-bottom: 1px solid #d1d7e0;">
+              <span class="swatch-hex-badge" style="background: #0e131b; color: #ffffff;">#f4f6f8</span>
+            </div>
+            <div class="swatch-details-block">
+              <div class="swatch-semantic-name">Bone Canvas</div>
+              <div class="swatch-role-caption">Primary Ground & Architectural Surface</div>
+              <p class="swatch-narrative-copy">
+                Architectural matte light neutral. Evokes heavyweight cotton paper and precision industrial hardware casings, softening glare compared to raw sterile white.
+              </p>
+              <div class="contrast-badge-row">
+                <span>Reflectance</span>
+                <strong>89.2% Calibrated</strong>
+              </div>
+            </div>
+          </article>
+
+          <!-- Swatch 3 -->
+          <article class="swatch-item-card" data-hex="#ffffff" data-role="Pure Surface (High-Elevation White)" data-contrast="18.62:1 against #0e131b" tabindex="0">
+            <div class="swatch-tile-color" style="background: #ffffff; border-bottom: 1px solid #d1d7e0;">
+              <span class="swatch-hex-badge" style="background: #0e131b; color: #ffffff;">#ffffff</span>
+            </div>
+            <div class="swatch-details-block">
+              <div class="swatch-semantic-name">Pure Surface</div>
+              <div class="swatch-role-caption">Elevated Cards & Data Containers</div>
+              <p class="swatch-narrative-copy">
+                Pure white reserved strictly for elevated data planes, high-priority cards, and crisp button typography on cobalt backgrounds.
+              </p>
+              <div class="contrast-badge-row">
+                <span>Contrast on Slate</span>
+                <strong>18.62:1 (WCAG AAA)</strong>
+              </div>
+            </div>
+          </article>
+
+          <!-- Swatch 4 -->
+          <article class="swatch-item-card" data-hex="#d1d7e0" data-role="Hairline Slate (Structural Grid)" data-contrast="4.01:1 structural rule" tabindex="0">
+            <div class="swatch-tile-color" style="background: #d1d7e0;">
+              <span class="swatch-hex-badge" style="background: #0e131b; color: #ffffff;">#d1d7e0</span>
+            </div>
+            <div class="swatch-details-block">
+              <div class="swatch-semantic-name">Hairline Slate</div>
+              <div class="swatch-role-caption">Structural Datum & Grid Coordinates</div>
+              <p class="swatch-narrative-copy">
+                The 1px structural backbone. Establishes mathematical rhythm and clean containment across complex enterprise UI without heavy visual clutter.
+              </p>
+              <div class="contrast-badge-row">
+                <span>Grid Visibility</span>
+                <strong>4.01:1 against #0e131b</strong>
+              </div>
+            </div>
+          </article>
+
+          <!-- Swatch 5 -->
+          <article class="swatch-item-card" data-hex="#59677b" data-role="Muted Slate (Secondary & Telemetry)" data-contrast="5.31:1 on #f4f6f8 (AA)" tabindex="0">
+            <div class="swatch-tile-color" style="background: #59677b;">
+              <span class="swatch-hex-badge" style="background: #ffffff; color: #0e131b;">#59677b</span>
+            </div>
+            <div class="swatch-details-block">
+              <div class="swatch-semantic-name">Muted Slate</div>
+              <div class="swatch-role-caption">Secondary Copy & Telemetry Captions</div>
+              <p class="swatch-narrative-copy">
+                Engineered mid-tone for auxiliary metadata, timestamps, and column headers. Delivers clear visual hierarchy while comfortably clearing WCAG AA.
+              </p>
+              <div class="contrast-badge-row">
+                <span>Contrast on Canvas</span>
+                <strong>5.31:1 (WCAG AA)</strong>
+              </div>
+            </div>
+          </article>
+
+          <!-- Swatch 6 -->
+          <article class="swatch-item-card" data-hex="#0047e1" data-role="Precision Cobalt (Signature Kinetic Accent)" data-contrast="6.49:1 on #f4f6f8 (AAA Large)" tabindex="0">
+            <div class="swatch-tile-color" style="background: #0047e1;">
+              <span class="swatch-hex-badge" style="background: #ffffff; color: #0047e1;">#0047e1</span>
+            </div>
+            <div class="swatch-details-block">
+              <div class="swatch-semantic-name">Precision Cobalt</div>
+              <div class="swatch-role-caption">Primary Kinetic Action & Signal Vector</div>
+              <p class="swatch-narrative-copy">
+                Our signature electrical accent. An evolution of legacy enterprise blue into a high-saturation, commanding signal that drives primary CTAs and active states.
+              </p>
+              <div class="contrast-badge-row">
+                <span>White Contrast</span>
+                <strong>7.03:1 (WCAG AAA)</strong>
+              </div>
+            </div>
+          </article>
+        </div>
+
+        <!-- Interactive Color Inspector Panel -->
+        <div class="color-inspector-panel">
+          <div class="inspector-header-grid">
+            <div>
+              <div class="text-micro" style="color: #d1d7e0;">INTERACTIVE CONTRAST AUDIT HUD</div>
+              <div class="inspector-title" id="inspector-active-name">Precision Cobalt (#0047e1)</div>
+            </div>
+            <div class="badge-status" style="background: #0e131b; color: #ffffff; border-color: #59677b;">
+              <span>CLICK ANY SWATCH ABOVE TO AUDIT</span>
+            </div>
+          </div>
+
+          <div class="inspector-body-grid">
+            <div>
+              <p class="text-secondary" id="inspector-desc" style="color: #d1d7e0; margin-bottom: 16px;">
+                Precision Cobalt anchors all primary interactions and kinetic vectors across digital and physical touchpoints. It represents technological authority and low-latency throughput.
+              </p>
+              <ul style="list-style: none; display: flex; flex-direction: column; gap: 8px; font-size: 14px;">
+                <li style="color: #d1d7e0;"><strong>Luminance Ratio:</strong> <span id="inspector-luma">0.082 (High-Spectral Density)</span></li>
+                <li style="color: #d1d7e0;"><strong>WCAG AA Compliance:</strong> <span style="color: #ffffff; font-weight: 700;">PASS (All Body Sizes)</span></li>
+                <li style="color: #d1d7e0;"><strong>WCAG AAA Compliance:</strong> <span style="color: #ffffff; font-weight: 700;">PASS (>7:1 on #ffffff)</span></li>
+                <li style="color: #d1d7e0;"><strong>Permitted Roles:</strong> Primary buttons, active tabs, data trajectory lines, wordmark accents.</li>
+              </ul>
+            </div>
+
+            <div class="spec-live-preview-box" id="inspector-preview-box">
+              <span class="text-micro" id="inspector-preview-tag" style="color: #0047e1;">LIVE TOKEN SPECIMEN</span>
+              <h4 style="margin: 8px 0;" id="inspector-preview-h4">Enterprise ACID Settlement</h4>
+              <p style="font-size: 14px; margin-bottom: 16px;" id="inspector-preview-p">
+                Real-time multi-region transactional ledger with sub-millisecond deterministic confirmation.
+              </p>
+              <button class="btn" id="inspector-preview-btn" type="button">Execute Protocol</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 4: Typography Architecture & Hierarchy -->
+      <section id="typography">
+        <div class="datum-axis">
+          <span class="datum-tick">[04 // TYPOGRAPHIC ARCHITECTURE & PAIRING RATIONALE]</span>
+        </div>
+
+        <div class="section-header-block">
+          <div class="section-supertitle">Typeface Pairing Strategy</div>
+          <h2>The tension of boardroom authority and machine execution.</h2>
+          <p class="section-subtitle">
+            Why not a pure sans-serif tech rebrand? Because an all-sans system discards 26 years of institutional trust, reducing Vectis to looking like an unproven seed-stage startup. Our two-typeface system pairs chiseled editorial gravitas with engineered operational clarity.
+          </p>
+        </div>
+
+        <div class="type-specimen-deck">
+          <article class="typeface-showcase-box">
+            <span class="typeface-tag-label">DISPLAY & EDITORIAL FACE</span>
+            <h3 style="font-family: 'Newsreader', serif; font-size: 32px; margin-bottom: 8px;">Newsreader</h3>
+            <p class="text-secondary" style="margin-bottom: 24px;">
+              Designed by Production Type. A variable transitional serif with optical sizing (opsz 6–72) crafted for intellectual authority, executive briefs, and annual letters.
+            </p>
+            <div class="typeface-giant-sample" style="font-family: 'Newsreader', serif;">
+              Aa Bb Gg 1998
+            </div>
+            <p style="font-family: 'Newsreader', serif; font-size: 20px; line-height: 1.4; color: #0e131b; font-style: italic;">
+              "Deterministic systems do not compromise on integrity, even under unprecedented market volatility."
+            </p>
+          </article>
+
+          <article class="typeface-showcase-box">
+            <span class="typeface-tag-label">PRODUCT UI & TELEMETRY FACE</span>
+            <h4 style="font-size: 32px; margin-bottom: 8px;">Plus Jakarta Sans</h4>
+            <p class="text-secondary" style="margin-bottom: 24px;">
+              Designed by Gumpita Rahayu. A contemporary geometric neo-grotesque with wide apertures, clean terminals, and tabular numeric features engineered for high-density UI.
+            </p>
+            <div class="typeface-giant-sample" style="font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 700;">
+              Aa Bb Gg 2026
+            </div>
+            <p style="font-family: 'Plus Jakarta Sans', sans-serif; font-size: 16px; line-height: 1.5; color: #59677b;">
+              LATENCY: 0.14ms | TPS: 1,420,890 | CLUSTER: us-east-sovereign-01 | REPLICATION: 100.00%
+            </p>
+          </article>
+        </div>
+
+        <!-- Strict Modular Type Scale Matrix -->
+        <div class="type-scale-matrix">
+          <div class="text-micro" style="margin-bottom: 16px; color: #0047e1;">STRICT MODULAR SCALE (1.250 MAJOR THIRD)</div>
+          
+          <div class="scale-row-item">
+            <span class="scale-meta-label">Display 01 / Page Title</span>
+            <span class="scale-size-metric">48px (3.00rem)</span>
+            <span style="font-family: 'Newsreader', serif; font-size: 48px; line-height: 1.1; color: #0e131b;">Global Infrastructure</span>
+          </div>
+
+          <div class="scale-row-item">
+            <span class="scale-meta-label">Display 02 / Section Header</span>
+            <span class="scale-size-metric">32px (2.00rem)</span>
+            <span style="font-family: 'Newsreader', serif; font-size: 32px; color: #0e131b;">Deterministic Consensus Engine</span>
+          </div>
+
+          <div class="scale-row-item">
+            <span class="scale-meta-label">Title 01 / Module Header</span>
+            <span class="scale-size-metric">24px (1.50rem)</span>
+            <span style="font-family: 'Newsreader', serif; font-size: 24px; color: #0e131b;">Distributed Transaction Routing</span>
+          </div>
+
+          <div class="scale-row-item">
+            <span class="scale-meta-label">Title 02 / Component Title</span>
+            <span class="scale-size-metric">20px (1.25rem)</span>
+            <span style="font-family: 'Plus Jakarta Sans', sans-serif; font-size: 20px; font-weight: 600; color: #0e131b;">Replication Partition Telemetry</span>
+          </div>
+
+          <div class="scale-row-item">
+            <span class="scale-meta-label">Body 01 / Standard Narrative</span>
+            <span class="scale-size-metric">16px (1.00rem)</span>
+            <span style="font-family: 'Plus Jakarta Sans', sans-serif; font-size: 16px; color: #0e131b;">Multi-region active-active database clusters deployed across Tier-4 sovereign environments.</span>
+          </div>
+
+          <div class="scale-row-item">
+            <span class="scale-meta-label">Body 02 / Table & UI Labels</span>
+            <span class="scale-size-metric">14px (0.875rem)</span>
+            <span style="font-family: 'Plus Jakarta Sans', sans-serif; font-size: 14px; color: #59677b;">Node health check passed: cryptographic digest verified at timestamp 1740938491.</span>
+          </div>
+
+          <div class="scale-row-item">
+            <span class="scale-meta-label">Micro / Metadata & Tags</span>
+            <span class="scale-size-metric">12px (0.75rem)</span>
+            <span style="font-family: 'Plus Jakarta Sans', sans-serif; font-size: 12px; font-weight: 700; color: #0047e1; letter-spacing: 0.08em; text-transform: uppercase;">ACTIVE CLUSTER STATUS // COMPLIANT</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 5: Multi-Touchpoint Direction Applications -->
+      <section id="touchpoints">
+        <div class="datum-axis">
+          <span class="datum-tick">[05 // REALISTIC MULTI-TOUCHPOINT APPLICATIONS (4 APPLICATIONS // 3 MEDIUMS)]</span>
+        </div>
+
+        <div class="section-header-block">
+          <div class="section-supertitle">Proof of System Versatility</div>
+          <h2>Applied identity across enterprise environments.</h2>
+          <p class="section-subtitle">
+            A rebrand direction must demonstrate that the palette and typography perform seamlessly in real operational conditions—from mission-critical digital consoles to executive physical collateral.
+          </p>
+        </div>
+
+        <div class="touchpoints-nav-tabs" role="tablist">
+          <button class="touchpoint-tab-btn is-active" id="btn-tp-console" role="tab" aria-selected="true" type="button">01. Digital Software Console (Product UI)</button>
+          <button class="touchpoint-tab-btn" id="btn-tp-web" role="tab" aria-selected="false" type="button">02. Digital Enterprise Web Hero</button>
+          <button class="touchpoint-tab-btn" id="btn-tp-physical" role="tab" aria-selected="false" type="button">03. Physical Executive Stationery</button>
+          <button class="touchpoint-tab-btn" id="btn-tp-slide" role="tab" aria-selected="false" type="button">04. Executive Boardroom Slide</button>
+        </div>
+
+        <!-- Touchpoint 1: Digital Product UI Console -->
+        <div class="touchpoint-application-view" id="view-tp-console">
+          <div class="console-mockup-frame">
+            <div class="console-header-chrome">
+              <div class="console-window-dots">
+                <span class="window-dot"></span>
+                <span class="window-dot"></span>
+                <span class="window-dot"></span>
+                <span style="font-family: 'Plus Jakarta Sans', sans-serif; font-size: 12px; font-weight: 600; color: #d1d7e0; margin-left: 8px;">VECTIS CLOUD CONSOLE // STREAM ORCHESTRATION</span>
+              </div>
+              <div class="console-system-status">
+                <span class="status-dot"></span>
+                <span>CLUSTER US-EAST-01 // HEALTHY</span>
+              </div>
+            </div>
+
+            <div class="console-body-grid">
+              <aside class="console-sidebar" aria-label="Console Navigation">
+                <ul class="console-menu-list">
+                  <li><a href="#console" class="console-menu-link is-active"><span>Distributed Streams</span><strong>32</strong></a></li>
+                  <li><a href="#console" class="console-menu-link"><span>ACID Ledgers</span><strong>18</strong></a></li>
+                  <li><a href="#console" class="console-menu-link"><span>Consensus Topology</span><strong>04</strong></a></li>
+                  <li><a href="#console" class="console-menu-link"><span>Cryptographic Audits</span><strong>99+</strong></a></li>
+                  <li><a href="#console" class="console-menu-link"><span>Governance & Access</span><strong>12</strong></a></li>
+                </ul>
+              </aside>
+
+              <div class="console-viewport">
+                <div class="console-metrics-row">
+                  <div class="metric-telemetry-tile">
+                    <span class="text-micro" style="color: #d1d7e0;">GLOBAL THROUGHPUT</span>
+                    <div class="metric-value-num">1.42M <span style="font-size: 14px; color: #59677b;">TPS</span></div>
+                    <span class="text-secondary" style="color: #d1d7e0; font-size: 12px;">Peak Capacity: 2.50M TPS</span>
+                  </div>
+                  <div class="metric-telemetry-tile">
+                    <span class="text-micro" style="color: #d1d7e0;">P99 TRANSIT LATENCY</span>
+                    <div class="metric-value-num">0.18 <span style="font-size: 14px; color: #59677b;">ms</span></div>
+                    <span class="text-secondary" style="color: #d1d7e0; font-size: 12px;">SLA Floor: &lt; 1.00 ms</span>
+                  </div>
+                  <div class="metric-telemetry-tile">
+                    <span class="text-micro" style="color: #d1d7e0;">CONSENSUS INTEGRITY</span>
+                    <div class="metric-value-num">100.0%</div>
+                    <span class="text-secondary" style="color: #d1d7e0; font-size: 12px;">Zero Byzantine Drift</span>
+                  </div>
+                </div>
+
+                <!-- Interactive SVG Telemetry Scrubbing Chart -->
+                <figure class="telemetry-chart-container">
+                  <div class="chart-header-row">
+                    <div>
+                      <span class="text-micro" style="color: #d1d7e0;">STREAM SETTLEMENT LATENCY TRAJECTORY (HOVER TO INSPECT)</span>
+                      <h4 style="color: #ffffff; font-size: 16px; margin-top: 4px;">Sub-millisecond Transaction Confirmation</h4>
+                    </div>
+                    <div class="chart-controls-group">
+                      <button class="chart-pill-btn is-active" id="btn-chart-1h" type="button">1H Live</button>
+                      <button class="chart-pill-btn" id="btn-chart-24h" type="button">24H Aggregate</button>
+                    </div>
+                  </div>
+
+                  <svg class="svg-telemetry-canvas" id="interactive-chart" viewBox="0 0 800 180" preserveAspectRatio="none">
+                    <!-- Grid Hairlines -->
+                    <line x1="0" y1="45" x2="800" y2="45" stroke="#59677b" stroke-width="0.5" stroke-dasharray="4 4"/>
+                    <line x1="0" y1="90" x2="800" y2="90" stroke="#59677b" stroke-width="0.5" stroke-dasharray="4 4"/>
+                    <line x1="0" y1="135" x2="800" y2="135" stroke="#59677b" stroke-width="0.5" stroke-dasharray="4 4"/>
+                    <!-- SLA Limit Threshold Line -->
+                    <line x1="0" y1="30" x2="800" y2="30" stroke="#59677b" stroke-width="1"/>
+                    <text x="730" y="25" fill="#59677b" font-size="12" font-family="'Plus Jakarta Sans', sans-serif">SLA LIMIT: 1.0ms</text>
+                    <!-- Main Telemetry Path -->
+                    <path id="chart-path" d="M 0 140 Q 100 125, 200 135 T 400 110 T 600 120 T 800 105" fill="none" stroke="#0047e1" stroke-width="2"/>
+                    <!-- Interactive Scrubber Elements -->
+                    <line id="scrub-line" x1="400" y1="0" x2="400" y2="180" stroke="#ffffff" stroke-width="1" stroke-dasharray="2 2"/>
+                    <circle id="scrub-dot" cx="400" cy="110" r="5" fill="#0047e1" stroke="#ffffff" stroke-width="2"/>
+                  </svg>
+
+                  <div class="chart-inspection-hud" id="chart-hud">
+                    <span>TIME: <strong id="hud-time">14:32:00 UTC</strong></span>
+                    <span>LATENCY: <strong id="hud-val" style="color: #0047e1;">0.174 ms</strong></span>
+                    <span>STATUS: <strong>STABLE</strong></span>
+                  </div>
+                </figure>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Touchpoint 2: Digital Enterprise Web Hero -->
+        <div class="touchpoint-application-view" id="view-tp-web" style="display: none;">
+          <div class="web-mockup-frame">
+            <div class="web-hero-content">
+              <div class="web-hero-pill-badge">
+                <span class="status-dot"></span>
+                <span>VECTIS GLOBAL PLATFORM 4.0 // ARCHITECTURAL RELEASE</span>
+              </div>
+              <h2 class="web-hero-headline">
+                The deterministic backbone for global commerce.
+              </h2>
+              <p class="web-hero-subhead">
+                Deploy active-active consensus clusters across sovereign environments with mathematically guaranteed transactional finality.
+              </p>
+              <div class="web-hero-cta-group">
+                <button class="btn" type="button">Schedule Architecture Review</button>
+                <button class="btn btn-secondary" type="button">Read Technical Whitepaper</button>
+              </div>
+
+              <div class="web-code-preview-bar">
+                <span style="color: #d1d7e0;">$ vectis cluster deploy --region=sovereign-eu --consensus=raft-ultra</span>
+                <span style="color: #0047e1; font-weight: 700;">CONFIRMED (0.04s)</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Touchpoint 3: Physical Corporate Identity & Stationery -->
+        <div class="touchpoint-application-view" id="view-tp-physical" style="display: none;">
+          <div class="physical-stationery-grid">
+            <div class="business-card-physical">
+              <div>
+                <div class="card-foil-stamp-mark">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="18" height="18" rx="2" stroke="#ffffff" stroke-width="2"/><path d="M7 17L17 7M17 7H10M17 7V14" stroke="#ffffff" stroke-width="2"/></svg>
+                </div>
+                <div style="margin-top: 32px;">
+                  <div class="card-executive-name">Dr. Elena Vance, Ph.D.</div>
+                  <div class="card-executive-role">Chief Technology Officer & Co-Founder</div>
+                </div>
+              </div>
+              <div class="card-footer-meta">
+                <span>elena.vance@vectis.systems</span>
+                <span>+1 (415) 890-2100</span>
+              </div>
+            </div>
+
+            <div class="letterhead-physical">
+              <div class="letterhead-header">
+                <div>
+                  <strong style="font-family: 'Newsreader', serif; font-size: 20px; color: #0e131b;">Vectis Global Systems</strong>
+                  <div class="text-micro" style="margin-top: 4px;">EXECUTIVE OFFICE OF THE CTO</div>
+                </div>
+                <div class="text-micro" style="text-align: right;">
+                  REF: SEC-DISCLOSURE-2026<br>SAN FRANCISCO // ZURICH
+                </div>
+              </div>
+              <p class="letterhead-body-text">
+                To the Chief Risk Officers and Technical Leadership:
+              </p>
+              <p class="letterhead-body-text">
+                As global transaction volumes migrate to distributed sovereign meshes, deterministic execution is no longer optional. This document certifies that Vectis 4.0 infrastructure adheres to strict zero-drift Byzantine fault tolerance across all audited node topologies.
+              </p>
+              <div style="margin-top: 24px; border-top: 1px solid #d1d7e0; padding-top: 12px; display: flex; justify-content: space-between;">
+                <span class="text-micro">VERIFIED ARCHIVAL STOCK // 600 GSM COTTON</span>
+                <span class="text-micro" style="color: #0047e1;">CONFIDENTIAL</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Touchpoint 4: Executive Boardroom Slide -->
+        <div class="touchpoint-application-view" id="view-tp-slide" style="display: none;">
+          <div class="presentation-slide-frame">
+            <div class="slide-top-meta">
+              <span class="text-micro" style="color: #d1d7e0;">VECTIS BOARD OF DIRECTORS // STRATEGIC BRIEFING</span>
+              <span class="text-micro" style="color: #0047e1;">CONFIDENTIAL // Q3 EXECUTIVE REVIEW</span>
+            </div>
+
+            <div>
+              <div class="section-supertitle" style="color: #0047e1;">MARKET CONVERGENCE & INFRASTRUCTURE SCALE</div>
+              <h3 class="slide-title-lead">
+                Transforming 26 years of mission-critical stability into high-velocity real-time revenue.
+              </h3>
+              <p class="slide-subtitle-body">
+                Legacy enterprise contracts are successfully transitioning to our modern distributed mesh. Renewal rates exceed 99.4%, driven by sub-millisecond settlement guarantees.
+              </p>
+
+              <div class="slide-stats-grid">
+                <div class="slide-stat-card">
+                  <div class="slide-stat-value">$4.2T</div>
+                  <div class="text-micro" style="color: #d1d7e0; margin-top: 4px;">Daily Settlement Volume</div>
+                </div>
+                <div class="slide-stat-card">
+                  <div class="slide-stat-value">99.999%</div>
+                  <div class="text-micro" style="color: #d1d7e0; margin-top: 4px;">Attested Production Uptime</div>
+                </div>
+                <div class="slide-stat-card">
+                  <div class="slide-stat-value">138%</div>
+                  <div class="text-micro" style="color: #d1d7e0; margin-top: 4px;">Net Revenue Retention</div>
+                </div>
+              </div>
+            </div>
+
+            <div style="border-top: 1px solid #59677b; padding-top: 12px; display: flex; justify-content: space-between;">
+              <span class="text-micro" style="color: #59677b;">SLIDE 07 // ENTERPRISE REBRAND STRATEGY</span>
+              <span class="text-micro" style="color: #59677b;">GOVERNANCE APPROVED</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 6: Governance, Rules & Non-Negotiables -->
+      <section id="governance">
+        <div class="datum-axis">
+          <span class="datum-tick">[06 // IDENTITY GOVERNANCE & ARCHITECTURAL NON-NEGOTIABLES]</span>
+        </div>
+
+        <div class="section-header-block">
+          <div class="section-supertitle">Rules of Application</div>
+          <h2>Anti-slop design constraints and usage rules.</h2>
+          <p class="section-subtitle">
+            A brand system is defined as much by what it prohibits as what it permits. These non-negotiable rules safeguard the brand from slipping into either legacy stodginess or generic startup slop.
+          </p>
+        </div>
+
+        <div class="rules-grid-system">
+          <div class="rule-container-box">
+            <h4 class="rule-title-h4 negative">01. No Decorative Gradients or Blobs</h4>
+            <p class="rule-description">
+              Never apply generic multi-color gradient sweeps, mesh blurs, or purple-to-blue SaaS blobs. Vectis surfaces must remain crisp, architectural, and grounded in solid Void Slate, Bone Canvas, or Pure Surface.
+            </p>
+          </div>
+
+          <div class="rule-container-box">
+            <h4 class="rule-title-h4 negative">02. No Rounded Pill Capsules</h4>
+            <p class="rule-description">
+              Never use 50% or 999px fully-rounded pill capsules for buttons or containers. Pills evoke casual consumer toys; Vectis uses disciplined 4px to 6px architectural corner radii.
+            </p>
+          </div>
+
+          <div class="rule-container-box">
+            <h4 class="rule-title-h4 negative">03. No Two Similar-Weight Sans Faces</h4>
+            <p class="rule-description">
+              Never pair Plus Jakarta Sans with another generic sans-serif (e.g. Inter or Roboto). High visual contrast between the editorial Newsreader display and the engineered sans body is mandatory.
+            </p>
+          </div>
+
+          <div class="rule-container-box">
+            <h4 class="rule-title-h4 negative">04. No Uncalibrated Low-Contrast Grays</h4>
+            <p class="rule-description">
+              All body text pairings must exceed WCAG 2.1 AA (4.5:1). Core narrative text on Bone Canvas uses Void Slate (#0e131b) achieving a 17.19:1 ratio, ensuring effortless legibility in high-stress operational centers.
+            </p>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- Semantic Footer -->
+    <footer>
+      <div class="footer-left-info">
+        <strong>VECTIS GLOBAL SYSTEMS INC.</strong> // IDENTITY SYSTEM SPECIFICATION V4.2<br>
+        DESIGN MASTERY VALIDATION BENCHMARK #15 // ARCHIVAL PRODUCTION DOSSIER
+      </div>
+      <div class="footer-right-actions">
+        <span class="badge-status">
+          <span class="status-dot"></span>
+          <span>ALL TOKENS VALIDATED (WCAG AAA)</span>
+        </span>
+      </div>
+    </footer>
+  </div>
+
+  <script>
+    // -------------------------------------------------------------------------
+    // VECTIS BRAND MODERNIZATION // INTERACTIVE CONTROLLER
+    // All interactions strictly adhere to prefers-reduced-motion standards.
+    // -------------------------------------------------------------------------
+
+    // 1. Comparison Tabs Controller
+    const tabVisual = document.getElementById('tab-visual');
+    const tabTone = document.getElementById('tab-tone');
+    const tabInteraction = document.getElementById('tab-interaction');
+    const comparisonPanel = document.getElementById('panel-comparison-view');
+
+    function updateComparisonView(tabId) {
+      if (tabId === 'tab-tone') {
+        comparisonPanel.innerHTML = `
+          <div class="comparison-split-grid motion-reveal">
+            <div class="legacy-archetype-box">
+              <span class="archetype-tag-legacy">LEGACY TONE POSTURE</span>
+              <h3 class="archetype-headline">Defensive & Bureaucratic</h3>
+              <p class="text-secondary" style="margin-bottom: 16px;">
+                Messaging rooted in liability avoidance, institutional committee speak, and ambiguous jargon designed to offend nobody while convincing no one.
+              </p>
+              <ul style="list-style: none; display: flex; flex-direction: column; gap: 8px; font-size: 14px; color: #59677b;">
+                <li>• "Nobody gets fired for choosing our software."</li>
+                <li>• "Multi-tiered synergy matrices for enterprise stakeholder alignment."</li>
+                <li>• "Subject to legacy batch processing and scheduled maintenance downtime."</li>
+              </ul>
+            </div>
+            <div class="modern-archetype-box">
+              <span class="archetype-tag-modern">MODERNIZED TONE POSTURE</span>
+              <h3 class="archetype-headline">Deterministic & Engineering-Led</h3>
+              <p class="text-secondary" style="margin-bottom: 16px;">
+                Messaging rooted in verifiable mathematical claims, architectural clarity, and respect for the technical buyer's time and intellect.
+              </p>
+              <ul style="list-style: none; display: flex; flex-direction: column; gap: 8px; font-size: 14px; color: #0e131b;">
+                <li>• "Sub-millisecond ACID settlement. Mathematically proven consensus."</li>
+                <li>• "Zero downtime migrations. Verified active-active replication."</li>
+                <li>• "Transparent p99 latency telemetry published to sovereign ledgers."</li>
+              </ul>
+            </div>
+          </div>
+        `;
+      } else if (tabId === 'tab-interaction') {
+        comparisonPanel.innerHTML = `
+          <div class="motion-reveal" style="background: #ffffff; border: 1px solid #d1d7e0; border-radius: 6px; padding: 32px; text-align: center;">
+            <span class="text-micro" style="color: #0047e1;">LIVE BRAND POSTURE TOGGLE DEMONSTRATOR</span>
+            <h3 style="margin: 12px 0;">Toggle live tone of a critical product card</h3>
+            <p class="text-secondary" style="max-width: 600px; margin: 0 auto 24px auto;">
+              Observe how shifting from legacy enterprise tropes to modernized architectural clarity transforms credibility.
+            </p>
+            <div style="display: inline-flex; gap: 8px; margin-bottom: 24px;">
+              <button class="btn btn-secondary" id="btn-toggle-demo-legacy" type="button">Simulate Legacy Tone</button>
+              <button class="btn" id="btn-toggle-demo-modern" type="button">Apply Modernized Direction</button>
+            </div>
+            <div id="demo-card-target" style="max-width: 500px; margin: 0 auto; text-align: left; background: #f4f6f8; border: 1px solid #0047e1; border-radius: 6px; padding: 24px;">
+              <span class="text-micro" id="demo-badge" style="color: #0047e1;">MODERNIZED POSTURE</span>
+              <h4 id="demo-h4" style="margin: 8px 0; font-family: 'Newsreader', serif; font-size: 24px;">Vectis High-Throughput Stream Core</h4>
+              <p id="demo-p" style="font-size: 14px; color: #0e131b;">
+                Sub-millisecond deterministic consensus across 12 distributed regions. Zero dropped transactions.
+              </p>
+            </div>
+          </div>
+        `;
+
+        document.getElementById('btn-toggle-demo-legacy').addEventListener('click', () => {
+          const card = document.getElementById('demo-card-target');
+          card.style.background = '#ffffff';
+          card.style.borderColor = '#d1d7e0';
+          document.getElementById('demo-badge').textContent = 'LEGACY ENTERPRISE 2002';
+          document.getElementById('demo-badge').style.color = '#59677b';
+          document.getElementById('demo-h4').textContent = 'Enterprise Paradigm Synergy Portal';
+          document.getElementById('demo-h4').style.fontFamily = "'Plus Jakarta Sans', sans-serif";
+          document.getElementById('demo-h4').style.fontSize = "20px";
+          document.getElementById('demo-p').textContent = 'Turnkey mission-critical stakeholder solutions delivering robust multi-tiered corporate scalability.';
+        });
+
+        document.getElementById('btn-toggle-demo-modern').addEventListener('click', () => {
+          const card = document.getElementById('demo-card-target');
+          card.style.background = '#f4f6f8';
+          card.style.borderColor = '#0047e1';
+          document.getElementById('demo-badge').textContent = 'MODERNIZED POSTURE';
+          document.getElementById('demo-badge').style.color = '#0047e1';
+          document.getElementById('demo-h4').textContent = 'Vectis High-Throughput Stream Core';
+          document.getElementById('demo-h4').style.fontFamily = "'Newsreader', serif";
+          document.getElementById('demo-h4').style.fontSize = "24px";
+          document.getElementById('demo-p').textContent = 'Sub-millisecond deterministic consensus across 12 distributed regions. Zero dropped transactions.';
+        });
+      } else {
+        // Restore default Visual view
+        location.hash = '#before-after';
+        window.location.reload();
+      }
+    }
+
+    [tabVisual, tabTone, tabInteraction].forEach(tab => {
+      tab.addEventListener('click', (e) => {
+        [tabVisual, tabTone, tabInteraction].forEach(t => {
+          t.classList.remove('is-active');
+          t.setAttribute('aria-selected', 'false');
+        });
+        e.target.classList.add('is-active');
+        e.target.setAttribute('aria-selected', 'true');
+        updateComparisonView(e.target.id);
+      });
+    });
+
+    // 2. Swatch Inspector Controller
+    const swatchCards = document.querySelectorAll('.swatch-item-card');
+    const activeName = document.getElementById('inspector-active-name');
+    const activeDesc = document.getElementById('inspector-desc');
+    const previewBox = document.getElementById('inspector-preview-box');
+    const previewTag = document.getElementById('inspector-preview-tag');
+    const previewBtn = document.getElementById('inspector-preview-btn');
+
+    swatchCards.forEach(card => {
+      card.addEventListener('click', () => {
+        const hex = card.getAttribute('data-hex');
+        const role = card.getAttribute('data-role');
+        const contrast = card.getAttribute('data-contrast');
+
+        activeName.textContent = `${role} (${hex})`;
+        activeDesc.textContent = `Selected token: ${role}. Calibrated contrast rating: ${contrast}. Configured for production deployment in accordance with WCAG 2.1 standards.`;
+
+        if (hex === '#0e131b') {
+          previewBox.style.background = '#0e131b';
+          previewBox.style.color = '#ffffff';
+          previewBox.style.borderColor = '#59677b';
+          previewTag.style.color = '#d1d7e0';
+          previewBtn.style.background = '#0047e1';
+          previewBtn.style.color = '#ffffff';
+        } else if (hex === '#0047e1') {
+          previewBox.style.background = '#0047e1';
+          previewBox.style.color = '#ffffff';
+          previewBox.style.borderColor = '#0047e1';
+          previewTag.style.color = '#ffffff';
+          previewBtn.style.background = '#ffffff';
+          previewBtn.style.color = '#0e131b';
+        } else if (hex === '#59677b') {
+          previewBox.style.background = '#f4f6f8';
+          previewBox.style.color = '#59677b';
+          previewBox.style.borderColor = '#59677b';
+          previewTag.style.color = '#59677b';
+          previewBtn.style.background = '#0e131b';
+          previewBtn.style.color = '#ffffff';
+        } else {
+          previewBox.style.background = '#ffffff';
+          previewBox.style.color = '#0e131b';
+          previewBox.style.borderColor = '#d1d7e0';
+          previewTag.style.color = '#0047e1';
+          previewBtn.style.background = '#0047e1';
+          previewBtn.style.color = '#ffffff';
+        }
+      });
+    });
+
+    // 3. Multi-Touchpoint Tabs Controller
+    const tpTabs = [
+      { btn: document.getElementById('btn-tp-console'), view: document.getElementById('view-tp-console') },
+      { btn: document.getElementById('btn-tp-web'), view: document.getElementById('view-tp-web') },
+      { btn: document.getElementById('btn-tp-physical'), view: document.getElementById('view-tp-physical') },
+      { btn: document.getElementById('btn-tp-slide'), view: document.getElementById('view-tp-slide') }
+    ];
+
+    tpTabs.forEach(item => {
+      item.btn.addEventListener('click', () => {
+        tpTabs.forEach(t => {
+          t.btn.classList.remove('is-active');
+          t.btn.setAttribute('aria-selected', 'false');
+          t.view.style.display = 'none';
+          t.view.classList.remove('motion-reveal');
+        });
+        item.btn.classList.add('is-active');
+        item.btn.setAttribute('aria-selected', 'true');
+        item.view.style.display = 'block';
+        item.view.classList.add('motion-reveal');
+      });
+    });
+
+    // 4. Interactive Chart Pointer Scrubbing Controller
+    const chart = document.getElementById('interactive-chart');
+    const scrubLine = document.getElementById('scrub-line');
+    const scrubDot = document.getElementById('scrub-dot');
+    const hudTime = document.getElementById('hud-time');
+    const hudVal = document.getElementById('hud-val');
+
+    if (chart) {
+      chart.addEventListener('mousemove', (e) => {
+        const rect = chart.getBoundingClientRect();
+        const x = Math.max(0, Math.min(800, ((e.clientX - rect.left) / rect.width) * 800));
+        scrubLine.setAttribute('x1', x);
+        scrubLine.setAttribute('x2', x);
+
+        // Approximate trajectory calculation
+        const y = 140 - Math.sin(x / 100) * 20 - (x / 800) * 30;
+        scrubDot.setAttribute('cx', x);
+        scrubDot.setAttribute('cy', y);
+
+        const calculatedMs = (0.12 + (y / 180) * 0.15).toFixed(3);
+        const minutes = Math.floor((x / 800) * 60);
+        const timeStr = `14:${minutes < 10 ? '0' + minutes : minutes}:12 UTC`;
+
+        hudTime.textContent = timeStr;
+        hudVal.textContent = `${calculatedMs} ms`;
+      });
+    }
+
+    // Chart toggle buttons
+    const btnChart1h = document.getElementById('btn-chart-1h');
+    const btnChart24h = document.getElementById('btn-chart-24h');
+    if (btnChart1h && btnChart24h) {
+      btnChart1h.addEventListener('click', () => {
+        btnChart1h.classList.add('is-active');
+        btnChart24h.classList.remove('is-active');
+        document.getElementById('chart-path').setAttribute('d', 'M 0 140 Q 100 125, 200 135 T 400 110 T 600 120 T 800 105');
+      });
+      btnChart24h.addEventListener('click', () => {
+        btnChart24h.classList.add('is-active');
+        btnChart1h.classList.remove('is-active');
+        document.getElementById('chart-path').setAttribute('d', 'M 0 120 Q 150 140, 300 95 T 500 130 T 700 85 T 800 115');
+      });
+    }
+  </script>
+</body>
+</html>

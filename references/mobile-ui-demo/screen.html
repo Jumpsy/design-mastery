@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: #0d0d0d; display: flex; align-items: center; justify-content: center; min-height: 100vh; font-family: -apple-system, system-ui, sans-serif; }
+  .screen { width: 390px; height: 844px; background: #121212; color: #f2f0ea; position: relative; overflow: hidden; border-radius: 40px; }
+  .header { padding: 60px 20px 16px; display: flex; align-items: center; justify-content: space-between; }
+  .header h1 { font-size: 22px; font-weight: 600; }
+  .header .icon { width: 32px; height: 32px; border-radius: 50%; background: #2a2a2a; }
+  .list { padding: 8px 16px; display: flex; flex-direction: column; gap: 10px; }
+  .row { background: #1a1a1a; border-radius: 14px; padding: 14px 16px; display: flex; align-items: center; gap: 12px; min-height: 44px; }
+  .row .dot { width: 36px; height: 36px; border-radius: 10px; background: #a35a2e; flex-shrink: 0; }
+  .row .txt .t { font-size: 15px; font-weight: 500; }
+  .row .txt .s { font-size: 12px; color: #8c8577; margin-top: 2px; }
+  .tabbar { position: absolute; bottom: 0; left: 0; right: 0; height: 88px; background: #161616; border-top: 1px solid #262626; display: flex; }
+  .tab { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; padding-bottom: 20px; }
+  .tab .ic { width: 24px; height: 24px; border-radius: 6px; background: #3a3a3a; }
+  .tab.active .ic { background: #a35a2e; }
+  .tab .l { font-size: 10px; color: #8c8577; }
+  .tab.active .l { color: #f2f0ea; }
+</style>
+</head>
+<body>
+  <div class="screen">
+    <div class="header"><h1>Today</h1><div class="icon"></div></div>
+    <div class="list">
+      <div class="row"><div class="dot"></div><div class="txt"><div class="t">Morning check-in</div><div class="s">9:00 AM · 5 min</div></div></div>
+      <div class="row"><div class="dot"></div><div class="txt"><div class="t">Focus block</div><div class="s">10:30 AM · 90 min</div></div></div>
+      <div class="row"><div class="dot"></div><div class="txt"><div class="t">Team sync</div><div class="s">1:00 PM · 30 min</div></div></div>
+      <div class="row"><div class="dot"></div><div class="txt"><div class="t">Review notes</div><div class="s">4:00 PM · 20 min</div></div></div>
+    </div>
+    <div class="tabbar">
+      <div class="tab active"><div class="ic"></div><div class="l">Today</div></div>
+      <div class="tab"><div class="ic"></div><div class="l">Calendar</div></div>
+      <div class="tab"><div class="ic"></div><div class="l">Tasks</div></div>
+      <div class="tab"><div class="ic"></div><div class="l">Profile</div></div>
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,1503 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Arterial Illusion — Editorial Spread // Metropolis Quarterly</title>
+  
+  <!-- Editorial Webfonts: Newsreader (Transitional Editorial Serif), Plus Jakarta Sans (Grotesque), JetBrains Mono (Technical Specimen) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,400;0,500;0,600;1,400&family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,300;1,6..72,400;1,6..72,500&family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+
+  <style>
+    /* ==========================================================================
+       DESIGN SYSTEM & TYPOGRAPHIC SCALE (V4 Editorial Architecture)
+       ========================================================================== */
+    :root {
+      /* Editorial CMYK-Safe Ink & Paper Palette */
+      --paper-cream: #faf6ed;
+      --paper-warm-edge: #f2ebd9;
+      --paper-crease-deep: rgba(28, 24, 20, 0.20);
+      --paper-crease-soft: rgba(28, 24, 20, 0.04);
+      
+      --ink-carbon: #181614;       /* Primary text ink (WCAG AAA 15.6:1 on paper) */
+      --ink-charcoal: #36322d;     /* Secondary editorial text (WCAG AAA 10.1:1) */
+      --ink-muted: #5c554c;        /* Metadata, running heads, captions (WCAG AAA 7.2:1) */
+      --ink-subtle: #877e72;       /* Minor notes, folios (WCAG AA 4.6:1) */
+      
+      --rule-hairline: #ddd5c5;
+      --rule-medium: #877e72;
+      --rule-strong: #181614;
+      
+      --accent-terracotta: #b84227; /* Cadmium terracotta drafting ink (WCAG AA 4.8:1) */
+      --accent-verdigris: #315c4d;  /* Deep oxidized copper / park green */
+      --accent-ochre: #b58022;      /* Architectural gold ochre */
+      
+      --plate-ground: #f3ecde;
+      --plate-border: #cec3b0;
+
+      /* Studio Lighting Rig */
+      --desk-base: #111215;
+      --desk-surface: #1a1c22;
+      --desk-border: #2c2f38;
+      --desk-text: #d8dde6;
+      --desk-text-dim: #7d8494;
+
+      /* Typography Stacks */
+      --font-serif: 'Newsreader', Georgia, 'Times New Roman', serif;
+      --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      --font-mono: 'JetBrains Mono', SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+
+      /* 24pt Architectural Baseline Grid */
+      --baseline: 24px;
+      --spread-zoom: 1;
+
+      /* Page Dimensions: Proportional to European 230 × 300 mm Journal Spread */
+      --page-width: 560px;
+      --page-height: 820px;
+    }
+
+    /* Lighting Presets */
+    body[data-lighting="drafting"] {
+      --desk-base: #101114;
+      --desk-surface: #181a20;
+      --paper-cream: #faf6ed;
+    }
+    body[data-lighting="prepress"] {
+      --desk-base: #222327;
+      --desk-surface: #2d2f36;
+      --paper-cream: #fdfbf7;
+      --rule-hairline: #e3ded2;
+    }
+    body[data-lighting="archive"] {
+      --desk-base: #0c0d0f;
+      --desk-surface: #14161a;
+      --paper-cream: #f3edd9;
+      --rule-hairline: #d3c9b5;
+    }
+
+    /* CSS Reset */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html, body {
+      min-height: 100vh;
+      background-color: var(--desk-base);
+      color: var(--desk-text);
+      font-family: var(--font-sans);
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      overflow-x: auto;
+      overflow-y: scroll;
+    }
+
+    /* Semantic Focus Outline */
+    a:focus-visible, button:focus-visible, input:focus-visible {
+      outline: 2px solid var(--accent-terracotta);
+      outline-offset: 3px;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+
+    /* Studio Presentation Container */
+    .studio-viewport {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 16px 20px 60px;
+      min-width: 1180px;
+      width: 100%;
+    }
+
+    /* ==========================================================================
+       SPECIMEN CONTROL CONSOLE (§2.5 Interaction Floor)
+       ========================================================================== */
+    .specimen-toolbar {
+      position: sticky;
+      top: 12px;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      background: rgba(22, 24, 30, 0.94);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid var(--desk-border);
+      border-radius: 6px;
+      padding: 7px 16px;
+      margin-bottom: 20px;
+      box-shadow: 0 16px 36px -8px rgba(0, 0, 0, 0.65);
+      width: min(1140px, 96vw);
+    }
+
+    .toolbar-section {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .toolbar-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 8px;
+      background: #0f1013;
+      border: 1px solid #282b33;
+      border-radius: 4px;
+      font-family: var(--font-mono);
+      font-size: 10.5px;
+      font-weight: 500;
+      color: #9aa2b3;
+      letter-spacing: 0.04em;
+    }
+
+    .toolbar-badge .dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--accent-terracotta);
+    }
+
+    .toolbar-label {
+      font-family: var(--font-mono);
+      font-size: 10.5px;
+      color: var(--desk-text-dim);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .control-group {
+      display: flex;
+      align-items: center;
+      gap: 3px;
+      background: #101216;
+      padding: 3px;
+      border: 1px solid #262933;
+      border-radius: 4px;
+    }
+
+    .btn-tool {
+      background: transparent;
+      border: none;
+      color: var(--desk-text-dim);
+      font-family: var(--font-mono);
+      font-size: 10.5px;
+      font-weight: 500;
+      padding: 5px 10px;
+      border-radius: 3px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: color 120ms ease, background-color 120ms ease;
+    }
+
+    .btn-tool:hover {
+      color: #ffffff;
+      background-color: #1f232b;
+    }
+
+    .btn-tool[aria-pressed="true"], .btn-tool.active {
+      background-color: #272d38;
+      color: #ffffff;
+    }
+
+    .btn-tool .tool-indicator {
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background-color: #4a5160;
+    }
+
+    .btn-tool[aria-pressed="true"] .tool-indicator,
+    .btn-tool.active .tool-indicator {
+      background-color: var(--accent-terracotta);
+    }
+
+    .zoom-slider-wrap {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+    }
+
+    .zoom-slider {
+      appearance: none;
+      -webkit-appearance: none;
+      width: 84px;
+      height: 4px;
+      background: #282c36;
+      border-radius: 2px;
+      outline: none;
+      cursor: ew-resize;
+    }
+
+    .zoom-slider::-webkit-slider-thumb {
+      appearance: none;
+      -webkit-appearance: none;
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background: #d8dde6;
+      border: 1px solid #101216;
+      cursor: pointer;
+      transition: transform 100ms ease;
+    }
+
+    .zoom-slider::-webkit-slider-thumb:hover {
+      transform: scale(1.18);
+      background: #ffffff;
+    }
+
+    .zoom-value {
+      font-family: var(--font-mono);
+      font-size: 10.5px;
+      color: #d8dde6;
+      min-width: 36px;
+    }
+
+    /* ==========================================================================
+       SPREAD STAGE & PROOF CANVAS
+       ========================================================================== */
+    .spread-stage {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+      margin: 6px auto 30px;
+      transform-origin: top center;
+      transition: transform 140ms cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    /* Pre-Press Registration Crop Marks */
+    .prepress-guides {
+      position: absolute;
+      top: -26px;
+      bottom: -26px;
+      left: -26px;
+      right: -26px;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 160ms ease;
+    }
+
+    .show-marks .prepress-guides {
+      opacity: 1;
+    }
+
+    .corner-mark {
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      border: 1px solid rgba(216, 221, 230, 0.35);
+    }
+    .corner-mark.top-left { top: 0; left: 0; border-right: none; border-bottom: none; }
+    .corner-mark.top-right { top: 0; right: 0; border-left: none; border-bottom: none; }
+    .corner-mark.bottom-left { bottom: 0; left: 0; border-right: none; border-top: none; }
+    .corner-mark.bottom-right { bottom: 0; right: 0; border-left: none; border-top: none; }
+
+    /* CMYK Calibration Color Bars on Bleed Margin */
+    .cmyk-strip {
+      position: absolute;
+      top: -16px;
+      right: 42px;
+      display: flex;
+      gap: 3px;
+    }
+    .cmyk-chip {
+      width: 12px;
+      height: 7px;
+      border: 0.5px solid rgba(0,0,0,0.4);
+    }
+
+    .center-slug {
+      position: absolute;
+      top: -18px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-family: var(--font-mono);
+      font-size: 8px;
+      color: rgba(216, 221, 230, 0.45);
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+    }
+
+    /* Master Facing Pages Container */
+    .spread-container {
+      display: flex;
+      width: calc(var(--page-width) * 2);
+      height: var(--page-height);
+      background-color: var(--paper-cream);
+      box-shadow: 
+        0 40px 90px -20px rgba(0, 0, 0, 0.7),
+        0 20px 40px -10px rgba(0, 0, 0, 0.45),
+        0 0 0 1px rgba(0, 0, 0, 0.3);
+      position: relative;
+    }
+
+    /* Central Book Crease & Spine Shadow */
+    .spread-crease {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 50%;
+      width: 44px;
+      transform: translateX(-50%);
+      background: linear-gradient(
+        to right,
+        rgba(24, 22, 20, 0.22) 0%,
+        rgba(24, 22, 20, 0.10) 22%,
+        rgba(24, 22, 20, 0.02) 44%,
+        rgba(24, 22, 20, 0.08) 50%,
+        rgba(24, 22, 20, 0.02) 56%,
+        rgba(24, 22, 20, 0.10) 78%,
+        rgba(24, 22, 20, 0.22) 100%
+      );
+      pointer-events: none;
+      z-index: 25;
+    }
+
+    .spread-crease::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 50%;
+      width: 1px;
+      background: rgba(36, 32, 28, 0.25);
+    }
+
+    /* ==========================================================================
+       PAGE CONTAINER ARCHITECTURE (Verso / Left & Recto / Right)
+       ========================================================================== */
+    .editorial-page {
+      width: var(--page-width);
+      height: var(--page-height);
+      position: relative;
+      background-color: var(--paper-cream);
+      color: var(--ink-carbon);
+      padding: 34px 38px 36px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      overflow: hidden;
+    }
+
+    /* Asymmetric Gutter & Outer Margins */
+    .page-verso {
+      padding-right: 48px; /* Gutter binding safety margin */
+      padding-left: 36px;  /* Outer margin */
+      border-right: 1px solid rgba(0, 0, 0, 0.04);
+    }
+
+    .page-recto {
+      padding-left: 48px;  /* Gutter binding safety margin */
+      padding-right: 36px; /* Outer margin */
+    }
+
+    /* Running Folio / Page Headers */
+    .page-folio-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      border-bottom: 1px solid var(--rule-hairline);
+      padding-bottom: 6px;
+      margin-bottom: 16px;
+      font-family: var(--font-mono);
+      font-size: 8.5px;
+      color: var(--ink-muted);
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    .folio-title {
+      font-weight: 600;
+      color: var(--ink-carbon);
+    }
+
+    .folio-meta {
+      display: flex;
+      gap: 12px;
+    }
+
+    .page-folio-bottom {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      border-top: 1px solid var(--rule-hairline);
+      padding-top: 6px;
+      margin-top: 10px;
+      font-family: var(--font-mono);
+      font-size: 8.5px;
+      color: var(--ink-subtle);
+      letter-spacing: 0.08em;
+    }
+
+    .page-num {
+      font-family: var(--font-mono);
+      font-size: 10.5px;
+      font-weight: 600;
+      color: var(--ink-carbon);
+    }
+
+    /* ==========================================================================
+       VERSO (PAGE 64): HERO, HEADLINE, SVG PLATE & DATA MATRIX
+       ========================================================================== */
+    .verso-content {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      justify-content: space-between;
+    }
+
+    .kicker {
+      font-family: var(--font-mono);
+      font-size: 9px;
+      font-weight: 600;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--accent-terracotta);
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 7px;
+    }
+
+    .kicker::before {
+      content: '';
+      display: inline-block;
+      width: 12px;
+      height: 1.5px;
+      background-color: var(--accent-terracotta);
+    }
+
+    .editorial-headline {
+      font-family: var(--font-serif);
+      font-size: 40px;
+      line-height: 0.94;
+      font-weight: 400;
+      letter-spacing: -0.025em;
+      color: var(--ink-carbon);
+      margin-bottom: 10px;
+    }
+
+    .editorial-headline .em-title {
+      font-style: italic;
+      font-weight: 300;
+      color: var(--accent-terracotta);
+    }
+
+    .deck-standfirst {
+      font-family: var(--font-serif);
+      font-size: 13.5px;
+      line-height: 1.4;
+      font-weight: 400;
+      color: var(--ink-charcoal);
+      margin-bottom: 12px;
+      max-width: 460px;
+      border-left: 2px solid var(--accent-terracotta);
+      padding-left: 10px;
+    }
+
+    /* Byline Metadata Band */
+    .byline-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      padding: 5px 0;
+      border-top: 1px solid var(--rule-strong);
+      border-bottom: 1px solid var(--rule-hairline);
+      margin-bottom: 14px;
+      font-family: var(--font-mono);
+      font-size: 9px;
+      color: var(--ink-muted);
+      letter-spacing: 0.05em;
+    }
+
+    .author-name {
+      font-weight: 600;
+      color: var(--ink-carbon);
+      text-transform: uppercase;
+    }
+
+    /* Morphology Figure Box */
+    .morphology-figure {
+      background: var(--plate-ground);
+      border: 1px solid var(--plate-border);
+      padding: 10px 12px 8px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      margin-bottom: 12px;
+      position: relative;
+    }
+
+    .plate-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      border-bottom: 1px solid rgba(45, 41, 38, 0.16);
+      padding-bottom: 4px;
+    }
+
+    .plate-number {
+      font-family: var(--font-mono);
+      font-size: 8.5px;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--accent-terracotta);
+    }
+
+    .plate-caption-title {
+      font-family: var(--font-sans);
+      font-size: 9.5px;
+      font-weight: 700;
+      color: var(--ink-carbon);
+      letter-spacing: 0.02em;
+    }
+
+    .plate-svg-container {
+      width: 100%;
+      height: 156px;
+    }
+
+    .plate-legend {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 6px;
+      border-top: 1px solid rgba(45, 41, 38, 0.12);
+      padding-top: 5px;
+      font-family: var(--font-mono);
+      font-size: 7.5px;
+      color: var(--ink-muted);
+      line-height: 1.2;
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      cursor: pointer;
+      transition: color 120ms ease;
+    }
+    .legend-item:hover {
+      color: var(--ink-carbon);
+    }
+
+    .legend-color-box {
+      width: 7px;
+      height: 7px;
+      border-radius: 1px;
+      flex-shrink: 0;
+    }
+
+    /* Analytical Telemetry Data Card */
+    .analytical-card {
+      border: 1px solid var(--rule-hairline);
+      background: rgba(255, 255, 255, 0.5);
+      padding: 9px 11px;
+    }
+
+    .table-title {
+      font-family: var(--font-mono);
+      font-size: 8px;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--ink-carbon);
+      margin-bottom: 5px;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 9px;
+      line-height: 1.3;
+    }
+
+    .data-table th {
+      text-align: left;
+      font-family: var(--font-mono);
+      font-weight: 600;
+      font-size: 7.5px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--ink-muted);
+      border-bottom: 1px solid var(--rule-hairline);
+      padding-bottom: 3px;
+    }
+
+    .data-table tr.highlight-row {
+      background-color: rgba(184, 66, 39, 0.09);
+    }
+
+    .data-table td {
+      padding: 3px 0;
+      border-bottom: 0.5px solid rgba(221, 213, 197, 0.6);
+      color: var(--ink-charcoal);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .data-table td.num {
+      text-align: right;
+      font-family: var(--font-mono);
+      font-weight: 500;
+    }
+
+    .data-table td.delta {
+      text-align: right;
+      font-family: var(--font-mono);
+      font-weight: 600;
+      color: var(--accent-terracotta);
+    }
+
+    .table-footnote {
+      font-family: var(--font-serif);
+      font-style: italic;
+      font-size: 7.5px;
+      color: var(--ink-subtle);
+      margin-top: 4px;
+    }
+
+    /* ==========================================================================
+       RECTO (PAGE 65): 3-COLUMN EDITORIAL ARCHITECTURE & PULL QUOTE
+       ========================================================================== */
+    .recto-content {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      justify-content: space-between;
+    }
+
+    /* Asymmetric Split: Column 1 on Left, Columns 2 & 3 Clustered */
+    .recto-essay-grid {
+      display: grid;
+      grid-template-columns: 1fr 2fr;
+      column-gap: 18px;
+      flex: 1;
+      overflow: hidden;
+    }
+
+    /* Column 1 (Left Third of Page 65) */
+    .essay-col-left {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      font-family: var(--font-serif);
+      font-size: 10px;
+      line-height: 1.48;
+      color: var(--ink-carbon);
+      text-align: justify;
+      hyphens: auto;
+      -webkit-hyphens: auto;
+    }
+
+    .essay-col-left p {
+      text-indent: 10px;
+      margin: 0;
+    }
+
+    .essay-col-left p.first-para {
+      text-indent: 0;
+    }
+
+    /* Classical 4-Line Architectural Drop Cap */
+    .drop-cap {
+      float: left;
+      font-family: var(--font-serif);
+      font-size: 46px;
+      line-height: 0.78;
+      font-weight: 400;
+      color: var(--accent-terracotta);
+      padding-top: 3px;
+      padding-right: 6px;
+      padding-bottom: 0px;
+      margin-left: -2px;
+    }
+
+    .small-caps {
+      font-family: var(--font-sans);
+      font-size: 8.5px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--ink-charcoal);
+    }
+
+    /* Right Two-Thirds Container */
+    .essay-col-right-cluster {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    /* Pull Quote Spanning Across the Top of Columns 2 & 3 */
+    .pull-quote-feature {
+      border-top: 1.5px solid var(--ink-carbon);
+      border-bottom: 1px solid var(--rule-hairline);
+      padding: 8px 0 10px;
+      position: relative;
+    }
+
+    .quote-glyph {
+      position: absolute;
+      top: -12px;
+      left: -3px;
+      font-family: var(--font-serif);
+      font-size: 50px;
+      line-height: 1;
+      color: rgba(184, 66, 39, 0.18);
+      pointer-events: none;
+    }
+
+    .pull-quote-text {
+      font-family: var(--font-serif);
+      font-size: 14.5px;
+      line-height: 1.34;
+      font-style: italic;
+      color: var(--ink-carbon);
+      padding-left: 16px;
+      border-left: 2.5px solid var(--accent-terracotta);
+    }
+
+    .pull-quote-author {
+      display: block;
+      margin-top: 5px;
+      padding-left: 16px;
+      font-family: var(--font-mono);
+      font-size: 8px;
+      font-style: normal;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      color: var(--ink-muted);
+      text-transform: uppercase;
+    }
+
+    /* Sub-Columns 2 & 3 Side by Side */
+    .sub-columns-wrap {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      column-gap: 16px;
+    }
+
+    .essay-sub-col {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      font-family: var(--font-serif);
+      font-size: 10px;
+      line-height: 1.48;
+      color: var(--ink-carbon);
+      text-align: justify;
+      hyphens: auto;
+      -webkit-hyphens: auto;
+    }
+
+    .essay-sub-col p {
+      text-indent: 10px;
+      margin: 0;
+    }
+
+    .essay-sub-col p.first-para {
+      text-indent: 0;
+    }
+
+    /* Editorial Section Subheads */
+    .essay-subhead {
+      font-family: var(--font-sans);
+      font-size: 9px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--ink-carbon);
+      margin-top: 2px;
+      margin-bottom: 0px;
+      padding-bottom: 2.5px;
+      border-bottom: 1px solid var(--rule-hairline);
+    }
+
+    .subhead-num {
+      font-family: var(--font-mono);
+      color: var(--accent-terracotta);
+      margin-right: 3px;
+    }
+
+    .colophon-mark {
+      display: inline-block;
+      color: var(--accent-terracotta);
+      font-size: 8px;
+      margin-left: 4px;
+    }
+
+    /* Scholarly Citations Band */
+    .endnotes-band {
+      border-top: 1px solid var(--rule-hairline);
+      padding-top: 5px;
+      margin-top: 6px;
+      font-family: var(--font-serif);
+      font-size: 7.5px;
+      line-height: 1.32;
+      color: var(--ink-muted);
+    }
+
+    .endnotes-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      column-gap: 16px;
+    }
+
+    .endnote-entry {
+      display: flex;
+      gap: 3px;
+    }
+
+    .endnote-num {
+      font-family: var(--font-mono);
+      font-size: 7px;
+      font-weight: 600;
+      color: var(--accent-terracotta);
+    }
+
+    /* ==========================================================================
+       DYNAMIC 12-COLUMN & BASELINE GRID OVERLAY (§2 Typographic Discipline)
+       ========================================================================== */
+    .grid-overlay {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      pointer-events: none;
+      z-index: 50;
+      opacity: 0;
+      transition: opacity 140ms ease;
+    }
+
+    .show-grid .grid-overlay {
+      opacity: 1;
+    }
+
+    .grid-column-guides {
+      display: flex;
+      width: 100%;
+      height: 100%;
+      padding: 34px 36px 36px;
+    }
+
+    .grid-page-half {
+      width: 50%;
+      height: 100%;
+      display: flex;
+      gap: 14px;
+    }
+
+    .grid-page-half.verso-half {
+      padding-right: 24px;
+    }
+
+    .grid-page-half.recto-half {
+      padding-left: 24px;
+    }
+
+    .grid-col-line {
+      flex: 1;
+      height: 100%;
+      background: rgba(184, 66, 39, 0.04);
+      border-left: 1px dashed rgba(184, 66, 39, 0.22);
+      border-right: 1px dashed rgba(184, 66, 39, 0.22);
+      position: relative;
+    }
+
+    .grid-col-line::before {
+      content: attr(data-col);
+      position: absolute;
+      top: 3px;
+      left: 2px;
+      font-family: var(--font-mono);
+      font-size: 6.5px;
+      color: var(--accent-terracotta);
+      opacity: 0.65;
+    }
+
+    .grid-baseline-guides {
+      position: absolute;
+      top: 34px;
+      bottom: 36px;
+      left: 36px;
+      right: 36px;
+      background-image: linear-gradient(to bottom, rgba(43, 90, 138, 0.14) 1px, transparent 1px);
+      background-size: 100% var(--baseline);
+    }
+  </style>
+</head>
+
+<body data-lighting="drafting">
+
+  <div class="studio-viewport">
+
+    <!-- ==========================================================================
+         SPECIMEN CONTROL CONSOLE (§2.5 Interaction Floor)
+         ========================================================================== -->
+    <header class="specimen-toolbar" role="toolbar" aria-label="Editorial Spread Inspection Controls">
+      <div class="toolbar-section">
+        <span class="toolbar-badge">
+          <span class="dot"></span>
+          <span>METROPOLIS QUARTERLY // VOL. 28 NO. 4</span>
+        </span>
+        <span class="toolbar-label">Trim: 460 &times; 300 mm Facing Spread</span>
+      </div>
+
+      <div class="toolbar-section">
+        <!-- 12-Column & Baseline Grid Toggle -->
+        <button type="button" class="btn-tool" id="toggleGridBtn" aria-pressed="false" aria-label="Toggle Typographic 12-Column and Baseline Grid Overlay">
+          <span class="tool-indicator"></span>
+          <span>Grid &amp; Baseline (G)</span>
+        </button>
+
+        <!-- Pre-Press Crop Marks Toggle -->
+        <button type="button" class="btn-tool" id="toggleMarksBtn" aria-pressed="false" aria-label="Toggle Pre-Press Trim and Bleed Registration Guides">
+          <span class="tool-indicator"></span>
+          <span>Crop Marks (C)</span>
+        </button>
+
+        <!-- Curated Lighting Mode Radios -->
+        <div class="control-group" role="radiogroup" aria-label="Paper Lighting Environment">
+          <button type="button" class="btn-tool active" data-light="drafting" role="radio" aria-checked="true" aria-label="Drafting Desk Warm Light">Warm Desk</button>
+          <button type="button" class="btn-tool" data-light="prepress" role="radio" aria-checked="false" aria-label="Pre-Press Neutral Daylight">Gallery White</button>
+          <button type="button" class="btn-tool" data-light="archive" role="radio" aria-checked="false" aria-label="Archival Deep Shadow">Archival</button>
+        </div>
+
+        <!-- Continuous Zoom Scale Slider (§2.5 Continuous Control) -->
+        <div class="zoom-slider-wrap">
+          <label for="zoomRange" class="toolbar-label">Scale</label>
+          <input type="range" id="zoomRange" class="zoom-slider" min="0.75" max="1.35" step="0.05" value="1.0" aria-label="Spread Inspection Zoom Scale">
+          <span class="zoom-value" id="zoomValReadout">100%</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- ==========================================================================
+         SPREAD STAGE & FACING PRINT PAGES
+         ========================================================================== -->
+    <main class="spread-stage" id="spreadStage">
+
+      <!-- Pre-press Corner Crop & Bleed Marks -->
+      <div class="prepress-guides" aria-hidden="true">
+        <div class="corner-mark top-left"></div>
+        <div class="corner-mark top-right"></div>
+        <div class="corner-mark bottom-left"></div>
+        <div class="corner-mark bottom-right"></div>
+        <div class="center-slug">METROPOLIS // PLATE PROOF B-442 // CMYK PROFILE ISO-COATED-V2</div>
+        
+        <!-- CMYK Density Wedges -->
+        <div class="cmyk-strip">
+          <div class="cmyk-chip" style="background: #009ee3;" title="Cyan 100%"></div>
+          <div class="cmyk-chip" style="background: #e5007d;" title="Magenta 100%"></div>
+          <div class="cmyk-chip" style="background: #fff100;" title="Yellow 100%"></div>
+          <div class="cmyk-chip" style="background: #1a1a18;" title="Key Black 100%"></div>
+          <div class="cmyk-chip" style="background: #b84227;" title="Spot Terracotta"></div>
+        </div>
+      </div>
+
+      <div class="spread-container" id="spreadContainer">
+
+        <!-- ======================================================================
+             PAGE 64 (VERSO / LEFT PAGE)
+             ====================================================================== -->
+        <article class="editorial-page page-verso" id="page-64" aria-label="Editorial Spread Left Page (Page 64)">
+          
+          <!-- Running Top Header / Folio -->
+          <header class="page-folio-top">
+            <span class="folio-meta">
+              <span>VOL. 28 &bull; NO. 4</span>
+              <span>AUTUMN / WINTER</span>
+            </span>
+            <span class="folio-title">METROPOLIS QUARTERLY // ESSAY</span>
+            <span>CADASTRAL TOPOLOGY</span>
+          </header>
+
+          <div class="verso-content">
+            <!-- Headline & Opening Deck -->
+            <section class="headline-block">
+              <div class="kicker">Urban Morphology &bull; Spatial Politics</div>
+              <h1 class="editorial-headline">
+                The Arterial <span class="em-title">Illusion</span>
+              </h1>
+              <p class="deck-standfirst">
+                How mid-century traffic engineering severed the civic nervous system, and why the restorative geometry of the Catalan <em>superilles</em> offers more than nostalgic pedestrianism.
+              </p>
+              
+              <!-- Byline & Editorial Metadata -->
+              <div class="byline-bar">
+                <div>TEXT BY <span class="author-name">Elena Vance-Reyes</span></div>
+                <div>CARTOGRAPHY BY <span class="author-name">Studio Terrene</span></div>
+                <div>READ TIME &bull; 16 MIN</div>
+              </div>
+            </section>
+
+            <!-- Architectural Vector Plate IV: The Cerdà Inversion -->
+            <figure class="morphology-figure">
+              <div class="plate-header">
+                <span class="plate-number">Plate IV &bull; Cadastral Topology</span>
+                <span class="plate-caption-title">The Cerd&agrave; Superblock Inversion: Barcelona Eixample (3&times;3 Block Matrix)</span>
+              </div>
+
+              <!-- High-Fidelity Architectural SVG Drawing -->
+              <div class="plate-svg-container">
+                <svg viewBox="0 0 540 160" width="100%" height="100%" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Architectural diagram illustrating Barcelona Superblock traffic morphology">
+                  <!-- Ground Tint -->
+                  <rect width="540" height="160" fill="#ede6d8" />
+
+                  <!-- Grid Base: Conventional 9 Blocks (Left) -->
+                  <!-- Row 1 -->
+                  <rect x="25" y="14" width="58" height="32" rx="3" fill="#dfd6c3" stroke="#b5ab96" stroke-width="1" />
+                  <rect x="100" y="14" width="58" height="32" rx="3" fill="#dfd6c3" stroke="#b5ab96" stroke-width="1" />
+                  <rect x="175" y="14" width="58" height="32" rx="3" fill="#dfd6c3" stroke="#b5ab96" stroke-width="1" />
+
+                  <!-- Row 2 -->
+                  <rect x="25" y="56" width="58" height="32" rx="3" fill="#dfd6c3" stroke="#b5ab96" stroke-width="1" />
+                  <rect x="100" y="56" width="58" height="32" rx="3" fill="#dfd6c3" stroke="#b5ab96" stroke-width="1" />
+                  <rect x="175" y="56" width="58" height="32" rx="3" fill="#dfd6c3" stroke="#b5ab96" stroke-width="1" />
+
+                  <!-- Row 3 -->
+                  <rect x="25" y="98" width="58" height="32" rx="3" fill="#dfd6c3" stroke="#b5ab96" stroke-width="1" />
+                  <rect x="100" y="98" width="58" height="32" rx="3" fill="#dfd6c3" stroke="#b5ab96" stroke-width="1" />
+                  <rect x="175" y="98" width="58" height="32" rx="3" fill="#dfd6c3" stroke="#b5ab96" stroke-width="1" />
+
+                  <!-- Conventional Grid Flow (Left Side Corridors) -->
+                  <path d="M12 30 H245" stroke="#b84227" stroke-width="1.5" stroke-dasharray="3 2" />
+                  <path d="M12 72 H245" stroke="#b84227" stroke-width="1.5" stroke-dasharray="3 2" />
+                  <path d="M12 114 H245" stroke="#b84227" stroke-width="1.5" stroke-dasharray="3 2" />
+                  <path d="M54 6 V138" stroke="#b84227" stroke-width="1.5" stroke-dasharray="3 2" />
+                  <path d="M129 6 V138" stroke="#b84227" stroke-width="1.5" stroke-dasharray="3 2" />
+                  <path d="M204 6 V138" stroke="#b84227" stroke-width="1.5" stroke-dasharray="3 2" />
+
+                  <!-- Conflict Dots at Intersections -->
+                  <circle cx="54" cy="30" r="2.5" fill="#b84227" />
+                  <circle cx="129" cy="30" r="2.5" fill="#b84227" />
+                  <circle cx="204" cy="30" r="2.5" fill="#b84227" />
+                  <circle cx="54" cy="72" r="2.5" fill="#b84227" />
+                  <circle cx="129" cy="72" r="2.5" fill="#b84227" />
+                  <circle cx="204" cy="72" r="2.5" fill="#b84227" />
+                  <circle cx="54" cy="114" r="2.5" fill="#b84227" />
+                  <circle cx="129" cy="114" r="2.5" fill="#b84227" />
+                  <circle cx="204" cy="114" r="2.5" fill="#b84227" />
+
+                  <!-- Divider Datum Line -->
+                  <line x1="262" y1="8" x2="262" y2="152" stroke="#cfc6b5" stroke-width="1" stroke-dasharray="2 2" />
+
+                  <!-- Superblock Inversion Model (Right Side) -->
+                  <!-- 9 Blocks Transformed -->
+                  <!-- Row 1 -->
+                  <rect x="285" y="14" width="58" height="32" rx="3" fill="#dfd6c3" stroke="#b5ab96" stroke-width="1" />
+                  <rect x="360" y="14" width="58" height="32" rx="3" fill="#dfd6c3" stroke="#b5ab96" stroke-width="1" />
+                  <rect x="435" y="14" width="58" height="32" rx="3" fill="#dfd6c3" stroke="#b5ab96" stroke-width="1" />
+
+                  <!-- Row 2 -->
+                  <rect x="285" y="56" width="58" height="32" rx="3" fill="#dfd6c3" stroke="#b5ab96" stroke-width="1" />
+                  <!-- Center Core Reclaimed Block -->
+                  <rect x="360" y="56" width="58" height="32" rx="3" fill="#d0dfcb" stroke="#315c4d" stroke-width="1.5" />
+                  <rect x="435" y="56" width="58" height="32" rx="3" fill="#dfd6c3" stroke="#b5ab96" stroke-width="1" />
+
+                  <!-- Row 3 -->
+                  <rect x="285" y="98" width="58" height="32" rx="3" fill="#dfd6c3" stroke="#b5ab96" stroke-width="1" />
+                  <rect x="360" y="98" width="58" height="32" rx="3" fill="#dfd6c3" stroke="#b5ab96" stroke-width="1" />
+                  <rect x="435" y="98" width="58" height="32" rx="3" fill="#dfd6c3" stroke="#b5ab96" stroke-width="1" />
+
+                  <!-- Outer Heavy Perimeter Flow (Red Solid Arterial 50 km/h) -->
+                  <rect x="274" y="6" width="230" height="132" fill="none" stroke="#b84227" stroke-width="2.5" />
+                  <!-- Directional Flow Arrows -->
+                  <polygon points="390,3 400,6 390,9" fill="#b84227" />
+                  <polygon points="507,67 504,77 501,67" fill="#b84227" />
+                  <polygon points="390,135 380,138 390,141" fill="#b84227" />
+                  <polygon points="271,67 274,57 277,67" fill="#b84227" />
+
+                  <!-- Calmed Pedestrian Green Loops (Interior 10 km/h) -->
+                  <path d="M343 30 C343 42, 360 45, 389 45 C418 45, 418 30, 418 30" stroke="#315c4d" stroke-width="2" stroke-dasharray="2 2" />
+                  <path d="M343 114 C343 102, 360 99, 389 99 C418 99, 418 114, 418 114" stroke="#315c4d" stroke-width="2" stroke-dasharray="2 2" />
+
+                  <!-- Central Reclaimed Chamfer Plaza -->
+                  <circle cx="389" cy="72" r="13" fill="#315c4d" fill-opacity="0.22" stroke="#315c4d" stroke-width="1.5" />
+                  <circle cx="389" cy="72" r="3" fill="#315c4d" />
+                  
+                  <!-- Canopy / Bioswale Nodes -->
+                  <circle cx="343" cy="72" r="2.5" fill="#315c4d" />
+                  <circle cx="435" cy="72" r="2.5" fill="#315c4d" />
+                  <circle cx="389" cy="46" r="2.5" fill="#315c4d" />
+                  <circle cx="389" cy="98" r="2.5" fill="#315c4d" />
+
+                  <!-- Crisp Diagram Labels -->
+                  <text x="25" y="146" font-family="'JetBrains Mono', monospace" font-size="7.5" font-weight="600" fill="#877e72" letter-spacing="0.06em">FIG. 1A: CONVENTIONAL THROUGH-GRID</text>
+                  <text x="25" y="155" font-family="'JetBrains Mono', monospace" font-size="6.5" fill="#877e72">36 vehicular conflict intersections</text>
+
+                  <text x="285" y="146" font-family="'JetBrains Mono', monospace" font-size="7.5" font-weight="600" fill="#315c4d" letter-spacing="0.06em">FIG. 1B: SUPERBLOCK (SUPERILLA) CELL</text>
+                  <text x="285" y="155" font-family="'JetBrains Mono', monospace" font-size="6.5" fill="#315c4d">50 km/h perimeter &bull; 10 km/h interior loops</text>
+                  
+                  <!-- Technical Annotations -->
+                  <text x="442" y="20" font-family="'JetBrains Mono', monospace" font-size="6.5" font-weight="500" fill="#b84227">50 KM/H</text>
+                  <text x="372" y="75" font-family="'JetBrains Mono', monospace" font-size="6" font-weight="600" fill="#315c4d">PLA&Ccedil;A</text>
+                </svg>
+              </div>
+
+              <!-- Cartographic Key -->
+              <div class="plate-legend">
+                <div class="legend-item" id="legPerimeter" title="Click to highlight perimeter arterial data">
+                  <div class="legend-color-box" style="background: #b84227;"></div>
+                  <span>Perimeter Arterial (50 km/h)</span>
+                </div>
+                <div class="legend-item" id="legCitizen" title="Click to highlight citizen chamber data">
+                  <div class="legend-color-box" style="background: #315c4d;"></div>
+                  <span>Citizen Chamber (10 km/h loop)</span>
+                </div>
+                <div class="legend-item" id="legChamfer" title="Click to highlight chamfer plaza data">
+                  <div class="legend-color-box" style="background: #dfd6c3; border: 1px solid #b5ab96;"></div>
+                  <span>Cerd&agrave; Octagonal Chamfer</span>
+                </div>
+              </div>
+            </figure>
+
+            <!-- Table 2.1: Empirical Urban Telemetry Card -->
+            <section class="analytical-card" aria-label="Empirical Urban Design Telemetry Table">
+              <div class="table-title">
+                <span>Table 2.1 &bull; Urban Telemetry Comparison</span>
+                <span>Poblenou Pilot vs. Orthogonal Baseline</span>
+              </div>
+              <table class="data-table" id="telemetryTable">
+                <thead>
+                  <tr>
+                    <th>Environmental / Social Vector</th>
+                    <th style="text-align: right;">Corridor Baseline</th>
+                    <th style="text-align: right;">Superblock Cell</th>
+                    <th style="text-align: right;">Net Civic Delta</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr data-vector="ground">
+                    <td>Public Ground Reallocated to Pedestrian Life</td>
+                    <td class="num">18.4%</td>
+                    <td class="num">73.6%</td>
+                    <td class="delta">+300.0%</td>
+                  </tr>
+                  <tr data-vector="noise">
+                    <td>Ambient Roadway Noise Exposure (Leq 24h)</td>
+                    <td class="num">68.2 dBA</td>
+                    <td class="num">53.8 dBA</td>
+                    <td class="delta">&minus;14.4 dBA</td>
+                  </tr>
+                  <tr data-vector="no2">
+                    <td>NO<sub>2</sub> Ambient Particulate Concentration</td>
+                    <td class="num">47.1 &micro;g/m&sup3;</td>
+                    <td class="num">28.3 &micro;g/m&sup3;</td>
+                    <td class="delta">&minus;39.9%</td>
+                  </tr>
+                  <tr data-vector="heat">
+                    <td>Surface Heat Albedo Peak (Bituminous vs. Paving)</td>
+                    <td class="num">36.4&deg;C</td>
+                    <td class="num">31.9&deg;C</td>
+                    <td class="delta">&minus;4.5&deg;C</td>
+                  </tr>
+                  <tr data-vector="social">
+                    <td>Spontaneous Social Encounters / 100m&sup2; / Hr</td>
+                    <td class="num">1.2</td>
+                    <td class="num">8.7</td>
+                    <td class="delta">+625.0%</td>
+                  </tr>
+                </tbody>
+              </table>
+              <div class="table-footnote">
+                Source: Ag&egrave;ncia d'Ecologia Urbana de Barcelona &amp; ISGlobal Epidemiological Review (2018&ndash;2024).
+              </div>
+            </section>
+          </div>
+
+          <!-- Folio Bottom Left -->
+          <footer class="page-folio-bottom">
+            <span class="page-num">64</span>
+            <span>METROPOLIS QUARTERLY &bull; AUTUMN / WINTER ISSUE</span>
+          </footer>
+        </article>
+
+        <!-- Central Physical Book Crease / Spine Shadow Texture -->
+        <div class="spread-crease" aria-hidden="true"></div>
+
+        <!-- ======================================================================
+             PAGE 65 (RECTO / RIGHT PAGE)
+             ====================================================================== -->
+        <article class="editorial-page page-recto" id="page-65" aria-label="Editorial Spread Right Page (Page 65)">
+          
+          <!-- Running Top Header / Folio -->
+          <header class="page-folio-top">
+            <span>ELENA VANCE-REYES</span>
+            <span class="folio-title">THE ARTERIAL ILLUSION</span>
+            <span class="folio-meta">
+              <span>SECTION II: MORPHOLOGY</span>
+              <span class="page-num">65</span>
+            </span>
+          </header>
+
+          <div class="recto-content">
+            <!-- Asymmetric Editorial Grid: Column 1 on Left, Columns 2 & 3 Clustered -->
+            <div class="recto-essay-grid">
+              
+              <!-- Column 1 (Left Third of Page 65) -->
+              <div class="essay-col-left">
+                <p class="first-para">
+                  <span class="drop-cap">W</span><span class="small-caps">hen Robert Moses</span> commenced his surgical vivisection of the East Bronx in the autumn of 1948, the ideological conviction undergirding the wrecking ball was deceptively simple: cities were hydraulic conduits. Human beings, industrial freight, and private automobiles were treated as identical particles suspended in an incompressible fluid. According to this orthodox mid-century mechanical formula, velocity was the sole guarantor of civil vitality. To brake was to stagnate; to encounter civic friction was to invite municipal thrombosis.
+                </p>
+                <p>
+                  For seven decades, municipal transportation departments across five continents have operated under this catastrophic fluid fallacy. They transmuted the historic, porous spatial matrix of the street&mdash;an architecture refined over millennia as the primary forum of democratic encounter&mdash;into a single-purpose drainage flume engineered solely to flush privately owned combustion engines out of downtown cores at the highest attainable velocity.
+                </p>
+                
+                <h2 class="essay-subhead"><span class="subhead-num">I.</span> The Buchanan Compromise</h2>
+                <p>
+                  The devastating consequence of treating human habitat as an open-air plumbing challenge was not merely visual or acoustic degradation, though the elevated concrete freeway remains the twentieth century&rsquo;s most durable monument to bureaucratic violence. The deeper catastrophe was cadastral.
+                </p>
+                <p>
+                  As the British urbanist Colin Buchanan confessed in his seminal 1963 report, <em>Traffic in Towns</em>, the physical geometry of the automobile is fundamentally irreconcilable with the fine-grained scale of historical urbanism. Buchanan recognized that motor vehicles consume an exponential footprint for every modest increment of speed. Yet his proposed resolution&mdash;the total vertical segregation of human pedestrians onto elevated decks while surrendering the ground plane to vehicle velocity&mdash;conceded the decisive battle before it had even begun.
+                </p>
+              </div>
+
+              <!-- Right Two-Thirds Cluster: Pull Quote Banner Across Top, Columns 2 & 3 Below -->
+              <div class="essay-col-right-cluster">
+                
+                <!-- Editorial Pull Quote Spanning Columns 2 & 3 -->
+                <div class="pull-quote-feature">
+                  <div class="quote-glyph" aria-hidden="true">&ldquo;</div>
+                  <blockquote class="pull-quote-text">
+                    A street is not a drainage flume for internal combustion engines; it is the fundamental living room of the democratic polity.
+                  </blockquote>
+                  <cite class="pull-quote-author">&mdash; Salvador Rueda, Ag&egrave;ncia d'Ecologia Urbana de Barcelona</cite>
+                </div>
+
+                <!-- Sub-Columns 2 and 3 -->
+                <div class="sub-columns-wrap">
+                  
+                  <!-- Column 2 -->
+                  <div class="essay-sub-col">
+                    <p class="first-para">
+                      By conceding the street level to machine passage, twentieth-century planners shattered the spatial threshold that had sustained urban civilization since the Athenian agora: the continuous, low-velocity friction between domestic interiority and the civic commons.
+                    </p>
+
+                    <h2 class="essay-subhead"><span class="subhead-num">II.</span> The Cadastral Inversion</h2>
+                    <p>
+                      In Barcelona, a quiet counter-geometry has dismantled the hydraulic dogma without regressing into the nostalgic pastiche of suburban lifestyle centers. Championed by urban ecologist Salvador Rueda, the <em>superilla</em> (superblock) operates through an astonishingly elegant cadastral realignment: aggregating clusters of nine contiguous blocks within Ildefons Cerd&agrave;&rsquo;s legendary 1859 orthogonal grid into unified civic sanctuaries.
+                    </p>
+                    <p>
+                      Through-traffic, rapid buses, and heavy freight are restricted exclusively to the peripheral avenues bounding the 3&times;3 perimeter, preserving metropolitan mobility. Inside the cell, however, through-transit is physically eliminated. Vehicular ingress is reserved for residents, emergency response, and localized deliveries, strictly governed by a 10 km/h walking pace.
+                    </p>
+                  </div>
+
+                  <!-- Column 3 -->
+                  <div class="essay-sub-col">
+                    <h2 class="essay-subhead"><span class="subhead-num">III.</span> Democratic Friction</h2>
+                    <p class="first-para">
+                      What occurs when through-traffic is expelled from the interior grid is not merely an acoustic victory&mdash;though a documented drop of 14.4 dBA transforms asphalt into an environment where human voices can converse without shouting. Nor is it solely an ecological sanctuary, despite the measured 4.5&deg;C cooling of surface heat islands achieved by replacing bituminous tar with permeable limestone pavers and mature canopy trees.
+                    </p>
+                    <p>
+                      The decisive reclamation is political. In standard metropolitan centers, between 65 and 75 percent of all public ground is monopolized by vehicular tarmac and parking storage. This represents an unprecedented enclosure of common civic wealth for the storage of private industrial machinery that sits idle ninety-five percent of its lifespan.
+                    </p>
+                    <p>
+                      Under the established principle of &ldquo;reduced demand&rdquo;&mdash;the inverse of induced travel&mdash;when capacity for private vehicle velocity is curtailed, vehicular trips do not merely redistribute; they dissolve. Citizens shift to bicycles, surface rail, or recalibrate their daily routines.
+                    </p>
+                    <p>
+                      The lesson of the superblock is that democratic assembly requires friction. A city optimized solely for velocity is a city that has abandoned the very reason human beings gather in proximity.<span class="colophon-mark">&#9632;</span>
+                    </p>
+                  </div>
+
+                </div>
+
+              </div>
+
+            </div>
+
+            <!-- Scholarly Citations & References Rule -->
+            <footer class="endnotes-band" aria-label="Essay Citations and Scholarly References">
+              <div class="endnotes-grid">
+                <div class="endnote-entry">
+                  <span class="endnote-num">[1]</span>
+                  <span>Buchanan, C. (1963). <em>Traffic in Towns</em>. HMSO, London, pp. 42&ndash;58.</span>
+                </div>
+                <div class="endnote-entry">
+                  <span class="endnote-num">[2]</span>
+                  <span>Rueda, S. (2018). &ldquo;Superblocks for Shaping Cities.&rdquo; <em>Ag&egrave;ncia d'Ecologia</em>, pp. 112&ndash;130.</span>
+                </div>
+                <div class="endnote-entry">
+                  <span class="endnote-num">[3]</span>
+                  <span>Jacobs, J. (1961). <em>Death and Life of Great American Cities</em>. Random House.</span>
+                </div>
+              </div>
+            </footer>
+          </div>
+
+          <!-- Folio Bottom Right -->
+          <footer class="page-folio-bottom">
+            <span>ELENA VANCE-REYES // ESSAY &bull; SPATIAL COMMONS</span>
+            <span class="page-num">65</span>
+          </footer>
+        </article>
+
+      </div>
+
+      <!-- ======================================================================
+           DYNAMIC 12-COLUMN & BASELINE GRID OVERLAY (§2 Typographic Discipline)
+           ====================================================================== -->
+      <div class="grid-overlay" id="gridOverlay" aria-hidden="true">
+        <div class="grid-column-guides">
+          <!-- Verso 6 Columns -->
+          <div class="grid-page-half verso-half">
+            <div class="grid-col-line" data-col="C1"></div>
+            <div class="grid-col-line" data-col="C2"></div>
+            <div class="grid-col-line" data-col="C3"></div>
+            <div class="grid-col-line" data-col="C4"></div>
+            <div class="grid-col-line" data-col="C5"></div>
+            <div class="grid-col-line" data-col="C6"></div>
+          </div>
+          <!-- Recto 6 Columns -->
+          <div class="grid-page-half recto-half">
+            <div class="grid-col-line" data-col="C7"></div>
+            <div class="grid-col-line" data-col="C8"></div>
+            <div class="grid-col-line" data-col="C9"></div>
+            <div class="grid-col-line" data-col="C10"></div>
+            <div class="grid-col-line" data-col="C11"></div>
+            <div class="grid-col-line" data-col="C12"></div>
+          </div>
+        </div>
+        <div class="grid-baseline-guides"></div>
+      </div>
+
+    </main>
+
+  </div>
+
+  <!-- ==========================================================================
+       CLIENT SCRIPTING: INTERACTIVE SPECIMEN HARNESS & AFFORDANCES
+       ========================================================================== -->
+  <script>
+    (function() {
+      'use strict';
+
+      const spreadStage = document.getElementById('spreadStage');
+      const toggleGridBtn = document.getElementById('toggleGridBtn');
+      const toggleMarksBtn = document.getElementById('toggleMarksBtn');
+      const zoomRange = document.getElementById('zoomRange');
+      const zoomValReadout = document.getElementById('zoomValReadout');
+      const lightingBtns = document.querySelectorAll('[data-light]');
+      const telemetryTable = document.getElementById('telemetryTable');
+
+      // State
+      let isGridActive = false;
+      let isMarksActive = false;
+
+      // 1. Grid & Baseline Overlay Toggle
+      function toggleGrid() {
+        isGridActive = !isGridActive;
+        toggleGridBtn.setAttribute('aria-pressed', isGridActive ? 'true' : 'false');
+        toggleGridBtn.classList.toggle('active', isGridActive);
+        spreadStage.classList.toggle('show-grid', isGridActive);
+      }
+
+      toggleGridBtn.addEventListener('click', toggleGrid);
+
+      // 2. Prepress Marks Toggle
+      function toggleMarks() {
+        isMarksActive = !isMarksActive;
+        toggleMarksBtn.setAttribute('aria-pressed', isMarksActive ? 'true' : 'false');
+        toggleMarksBtn.classList.toggle('active', isMarksActive);
+        spreadStage.classList.toggle('show-marks', isMarksActive);
+      }
+
+      toggleMarksBtn.addEventListener('click', toggleMarks);
+
+      // 3. Lighting Mode Selector
+      lightingBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+          lightingBtns.forEach(b => {
+            b.classList.remove('active');
+            b.setAttribute('aria-checked', 'false');
+          });
+          btn.classList.add('active');
+          btn.setAttribute('aria-checked', 'true');
+          const lightMode = btn.getAttribute('data-light');
+          document.body.setAttribute('data-lighting', lightMode);
+        });
+      });
+
+      // 4. Continuous Zoom Scale Slider (§2.5 Continuous Controls)
+      function updateZoom(val) {
+        const scaleVal = parseFloat(val);
+        spreadStage.style.transform = `scale(${scaleVal})`;
+        zoomValReadout.textContent = `${Math.round(scaleVal * 100)}%`;
+      }
+
+      zoomRange.addEventListener('input', (e) => {
+        updateZoom(e.target.value);
+      });
+
+      // 5. Interactive Legend & Telemetry Table Cross-Highlight (§2.5 Interactivity)
+      const legPerimeter = document.getElementById('legPerimeter');
+      const legCitizen = document.getElementById('legCitizen');
+      const legChamfer = document.getElementById('legChamfer');
+
+      function highlightRows(vectors) {
+        const rows = telemetryTable.querySelectorAll('tbody tr');
+        rows.forEach(r => {
+          if (vectors.includes(r.getAttribute('data-vector'))) {
+            r.classList.add('highlight-row');
+          } else {
+            r.classList.remove('highlight-row');
+          }
+        });
+      }
+
+      function clearRowHighlights() {
+        const rows = telemetryTable.querySelectorAll('tbody tr');
+        rows.forEach(r => r.classList.remove('highlight-row'));
+      }
+
+      legPerimeter.addEventListener('mouseenter', () => highlightRows(['noise', 'no2']));
+      legPerimeter.addEventListener('mouseleave', clearRowHighlights);
+
+      legCitizen.addEventListener('mouseenter', () => highlightRows(['ground', 'heat']));
+      legCitizen.addEventListener('mouseleave', clearRowHighlights);
+
+      legChamfer.addEventListener('mouseenter', () => highlightRows(['social']));
+      legChamfer.addEventListener('mouseleave', clearRowHighlights);
+
+      // 6. Keyboard Shortcuts
+      window.addEventListener('keydown', (e) => {
+        if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+
+        if (e.key === 'g' || e.key === 'G') {
+          toggleGrid();
+        } else if (e.key === 'c' || e.key === 'C') {
+          toggleMarks();
+        } else if (e.key === '0') {
+          zoomRange.value = 1.0;
+          updateZoom(1.0);
+        } else if (e.key === '+' || e.key === '=') {
+          const newVal = Math.min(1.35, parseFloat(zoomRange.value) + 0.05);
+          zoomRange.value = newVal;
+          updateZoom(newVal);
+        } else if (e.key === '-' || e.key === '_') {
+          const newVal = Math.max(0.75, parseFloat(zoomRange.value) - 0.05);
+          zoomRange.value = newVal;
+          updateZoom(newVal);
+        }
+      });
+
+    })();
+  </script>
+</body>
+</html>

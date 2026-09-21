@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ORBITAL SURGICAL — Series A Investor Pitch Deck (Slides 01–03)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-darkroom: #0b1017;
+      --surface-slide: #141d2a;
+      --surface-inner: #1c2738;
+      --border-reticle: #223044;
+      --text-pure: #ffffff;
+      --text-muted: #8293a6;
+      --accent-cyan: #00d2b4;
+      --font-display: 'Space Grotesk', sans-serif;
+      --font-body: 'Plus Jakarta Sans', sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body{background:#0b1017;color:#ffffff;
+      font-family: var(--font-body);
+      font-size: 16px;
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    a:focus-visible, button:focus-visible {
+      outline: 2px solid #00d2b4;
+      outline-offset: 4px;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      * {
+        animation: none !important;
+        transition: none !important;
+      }
+    }
+
+    .deck-viewport-wrap {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 32px 24px 64px;
+    }
+
+    header.deck-masthead {
+      border-bottom: 1px solid #223044;
+      padding-bottom: 24px;
+      margin-bottom: 32px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .deck-meta-info {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .deck-tagline {
+      font-family: var(--font-display);
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      color: #00d2b4;
+    }
+
+    h1.deck-main-heading {
+      font-family: var(--font-display);
+      font-size: 28px;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+      color: #ffffff;
+    }
+
+    em{color:#00d2b4;font-style:normal;}
+
+    /* 3-Slide Side-by-Side Gallery Grid */
+    main.slides-gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+
+    /* 16:9 Presentation Slide Container */
+    article.pitch-slide {
+      background: #141d2a;
+      border: 1px solid #223044;
+      border-radius: 4px;
+      aspect-ratio: 16 / 9;
+      padding: 32px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: relative;
+      box-shadow: 0 16px 32px rgba(0,0,0,0.4);
+    }
+
+    .slide-top-nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid #223044;
+      padding-bottom: 12px;
+      font-family: var(--font-display);
+      font-size: 12px;
+      color: #8293a6;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .slide-number {
+      color: #00d2b4;
+      font-weight: 700;
+    }
+
+    /* Slide 1: Title Slide Specifics */
+    .slide-1-content {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      margin: auto 0;
+    }
+
+    .title-logo-lockup {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .reticle-icon {
+      width: 44px;
+      height: 44px;
+    }
+
+    .brand-wordmark-big {
+      font-family: var(--font-display);
+      font-size: 32px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      color: #ffffff;
+    }
+
+    h2.slide-thesis-title {
+      font-family: var(--font-display);
+      font-size: 20px;
+      font-weight: 700;
+      line-height: 1.25;
+      color: #ffffff;
+    }
+
+    .slide-deck-sub {
+      font-size: 14px;
+      color: #8293a6;
+      line-height: 1.4;
+    }
+
+    /* Slide 2: Problem Slide Specifics */
+    .slide-2-content {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      margin: auto 0;
+    }
+
+    .problem-metrics-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+    }
+
+    .metric-card {
+      background: #1c2738;
+      border: 1px solid #223044;
+      border-radius: 2px;
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .metric-big-number {
+      font-family: var(--font-display);
+      font-size: 24px;
+      font-weight: 700;
+      color: #00d2b4;
+    }
+
+    .metric-caption {
+      font-size: 12px;
+      color: #8293a6;
+      line-height: 1.3;
+    }
+
+    /* Slide 3: Solution Architecture */
+    .slide-3-content {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      margin: auto 0;
+    }
+
+    .solution-trio-steps {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+    }
+
+    .solution-step-item {
+      background: #1c2738;
+      border: 1px solid #223044;
+      border-radius: 2px;
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .step-number-tag {
+      font-family: var(--font-display);
+      font-size: 12px;
+      color: #00d2b4;
+      font-weight: 700;
+    }
+
+    .step-title {
+      font-size: 14px;
+      font-weight: 700;
+      color: #ffffff;
+    }
+
+    .step-desc {
+      font-size: 12px;
+      color: #8293a6;
+      line-height: 1.3;
+    }
+
+    /* Slide Footer Strip */
+    .slide-bottom-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-top: 1px solid #223044;
+      padding-top: 12px;
+      font-size: 12px;
+      color: #8293a6;
+    }
+
+    /* Deck Action Toolbar */
+    footer.deck-actions-footer {
+      margin-top: 48px;
+      padding-top: 24px;
+      border-top: 1px solid #223044;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .confidential-notice {
+      font-size: 12px;
+      color: #8293a6;
+    }
+
+    .btn{background:#00d2b4;color:#0b1017;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 44px;
+      padding: 0 24px;
+      font-family: var(--font-display);
+      font-size: 14px;
+      font-weight: 700;
+      border-radius: 2px;
+      cursor: pointer;
+      text-decoration: none;
+      border: 1px solid transparent;
+    }
+
+    .btn-secondary {
+      background-color: transparent;
+      color: #ffffff;
+      border: 1px solid #223044;
+    }
+
+    .btn-secondary:hover {
+      background-color: #141d2a;
+    }
+
+    @media (max-width: 1024px) {
+      main.slides-gallery-grid {
+        grid-template-columns: 1fr;
+      }
+      article.pitch-slide {
+        aspect-ratio: auto;
+        min-height: 400px;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .deck-viewport-wrap {
+        padding: 20px 16px 40px;
+      }
+      h1.deck-main-heading {
+        font-size: 24px;
+      }
+      .problem-metrics-grid, .solution-trio-steps {
+        grid-template-columns: 1fr;
+      }
+      footer.deck-actions-footer {
+        flex-direction: column;
+        align-items: stretch;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="deck-viewport-wrap">
+    <header class="deck-masthead">
+      <div class="deck-meta-info">
+        <span class="deck-tagline">Series A Financing &bull; $18,000,000</span>
+        <h1 class="deck-main-heading">ORBITAL SURGICAL: <em>Investor Pitch Deck</em></h1>
+      </div>
+      <div style="font-size:12px;color:#8293a6;text-align:right;">
+        Executive Review &bull; 16:9 Widescreen Sequence
+      </div>
+    </header>
+
+    <main class="slides-gallery-grid">
+      <!-- Slide 01: Title Slide -->
+      <article class="pitch-slide" aria-label="Slide 1 Title">
+        <div class="slide-top-nav">
+          <span>ORBITAL SURGICAL</span>
+          <span class="slide-number">SLIDE 01 / 03</span>
+        </div>
+
+        <div class="slide-1-content">
+          <div class="title-logo-lockup">
+            <svg class="reticle-icon" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Orbital surgical reticle logo">
+              <circle cx="22" cy="22" r="20" stroke="#223044" stroke-width="1.5" />
+              <circle cx="22" cy="22" r="12" stroke="#00d2b4" stroke-width="1.5" stroke-dasharray="2 2" />
+              <line x1="22" y1="2" x2="22" y2="42" stroke="#00d2b4" stroke-width="1.5" />
+              <line x1="2" y1="22" x2="42" y2="22" stroke="#00d2b4" stroke-width="1.5" />
+              <circle cx="22" cy="22" r="3" fill="#ffffff" />
+            </svg>
+            <span class="brand-wordmark-big">ORBITAL</span>
+          </div>
+
+          <h2 class="slide-thesis-title">
+            Autonomous Micro-Vascular Anastomosis at Sub-Millimeter Scale.
+          </h2>
+
+          <p class="slide-deck-sub">
+            Eliminating human hand tremor in micro-vascular and neural reconstruction. Raising $18M Series A to complete FDA De Novo pivotal trials.
+          </p>
+        </div>
+
+        <div class="slide-bottom-bar">
+          <span>Founded: Johns Hopkins / Intuitive Surgical</span>
+          <span>Confidential // Q4 2026</span>
+        </div>
+      </article>
+
+      <!-- Slide 02: Problem Slide -->
+      <article class="pitch-slide" aria-label="Slide 2 The Problem">
+        <div class="slide-top-nav">
+          <span>THE CLINICAL BOTTLENECK</span>
+          <span class="slide-number">SLIDE 02 / 03</span>
+        </div>
+
+        <div class="slide-2-content">
+          <h2 class="slide-thesis-title">
+            Sub-millimeter vascular repair has reached the biological limit of the human hand.
+          </h2>
+
+          <div class="problem-metrics-grid">
+            <div class="metric-card">
+              <span class="metric-big-number">0.2mm</span>
+              <span class="metric-caption">Natural human tremor exceeds vessel diameter in 80-micron anastomoses.</span>
+            </div>
+            <div class="metric-card">
+              <span class="metric-big-number">34%</span>
+              <span class="metric-caption">30-day thrombosis revision rate in vessels under 0.8mm caliber.</span>
+            </div>
+            <div class="metric-card">
+              <span class="metric-big-number">$14.2B</span>
+              <span class="metric-caption">Annual US hospital burden from surgical micro-vascular failures.</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="slide-bottom-bar">
+          <span>Source: Journal of Vascular Surgery &bull; NHS / CMS Audit</span>
+          <span>Target Market: 840,000 Annual Procedures</span>
+        </div>
+      </article>
+
+      <!-- Slide 03: Solution Slide -->
+      <article class="pitch-slide" aria-label="Slide 3 The Solution">
+        <div class="slide-top-nav">
+          <span>THE ORBITAL PLATFORM</span>
+          <span class="slide-number">SLIDE 03 / 03</span>
+        </div>
+
+        <div class="slide-3-content">
+          <h2 class="slide-thesis-title">
+            Real-time optical coherence tomography paired with 5-nanometer piezo robotics.
+          </h2>
+
+          <div class="solution-trio-steps">
+            <div class="solution-step-item">
+              <span class="step-number-tag">01 // VISION</span>
+              <span class="step-title">OCT Sub-Surface</span>
+              <span class="step-desc">120 FPS Doppler imaging verifies lumen patency through blood wall before needle entry.</span>
+            </div>
+            <div class="solution-step-item">
+              <span class="step-number-tag">02 // AI GUIDANCE</span>
+              <span class="step-title">Zero-Lag Trajectory</span>
+              <span class="step-desc">Predictive model cancels patient respiration and cardiac pulse deflection in real time.</span>
+            </div>
+            <div class="solution-step-item">
+              <span class="step-number-tag">03 // HARDWARE</span>
+              <span class="step-title">6-DoF Micro-Wrist</span>
+              <span class="step-desc">Autonomous 10-0 nylon suture placement with 99.8% patency and 4x speed increase.</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="slide-bottom-bar">
+          <span>IP: 14 Issued Patents &bull; 510(k) Pre-Submission Complete</span>
+          <span>Unit Economics: $12k Consumable / Case</span>
+        </div>
+      </article>
+    </main>
+
+    <footer class="deck-actions-footer">
+      <div class="confidential-notice">
+        Securities Disclaimer: Strictly Confidential &bull; For Accredited Institutional Investors Only
+      </div>
+      <nav style="display: flex; gap: 12px;" aria-label="Pitch deck actions">
+        <button class="btn btn-secondary" type="button">Full 18-Slide Data Room</button>
+        <button class="btn" type="button">Request Partner Briefing</button>
+      </nav>
+    </footer>
+  </div>
+</body>
+</html>

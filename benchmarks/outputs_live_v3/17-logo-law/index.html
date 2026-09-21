@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ALDRICH &amp; STERLING — Appellate Counsel &bull; Identity Standards</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;800&family=Plus+Jakarta+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --ground-spruce: #11211b;
+      --surface-vellum: #172d24;
+      --card-deep: #1e382e;
+      --line-spruce: #28473a;
+      --ink-vellum: #f9f6ef;
+      --ink-muted: #9bb0a4;
+      --gold-seal: #c5a059;
+      --font-roman: 'Cinzel', serif;
+      --font-sans: 'Plus Jakarta Sans', sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body{background:#11211b;color:#f9f6ef;
+      font-family: var(--font-sans);
+      font-size: 16px;
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    a:focus-visible, button:focus-visible {
+      outline: 2px solid #c5a059;
+      outline-offset: 4px;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      * {
+        animation: none !important;
+        transition: none !important;
+      }
+    }
+
+    .vellum-container {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 32px 24px 64px;
+    }
+
+    header.counsel-header {
+      border-bottom: 1px solid #28473a;
+      padding-bottom: 24px;
+      margin-bottom: 40px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .registry-meta-strip {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+      border-bottom: 1px solid #28473a;
+      padding-bottom: 16px;
+    }
+
+    .registry-cell {
+      font-size: 12px;
+      color: #9bb0a4;
+      letter-spacing: 0.04em;
+    }
+
+    .registry-cell strong {
+      font-family: var(--font-roman);
+      color: #c5a059;
+      font-weight: 700;
+    }
+
+    .firm-heading-wrap {
+      max-width: 800px;
+    }
+
+    h1.firm-title {
+      font-family: var(--font-roman);
+      font-size: 36px;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      line-height: 1.1;
+      color: #f9f6ef;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+
+    em{color:#c5a059;font-style:normal;}
+
+    .firm-thesis {
+      font-size: 16px;
+      color: #9bb0a4;
+      line-height: 1.5;
+    }
+
+    main.folio-layout {
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 32px;
+    }
+
+    section.folio-card {
+      background: #172d24;
+      border: 1px solid #28473a;
+      border-radius: 4px;
+      padding: 32px;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    .card-mast {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid #28473a;
+      padding-bottom: 12px;
+    }
+
+    h2.card-title {
+      font-family: var(--font-roman);
+      font-size: 18px;
+      font-weight: 700;
+      color: #f9f6ef;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    .card-tag {
+      font-size: 12px;
+      color: #c5a059;
+    }
+
+    /* Primary Crest & Lockup Display */
+    .seal-stage {
+      background: #11211b;
+      border: 1px solid #28473a;
+      border-radius: 2px;
+      padding: 48px 32px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 20px;
+      text-align: center;
+    }
+
+    .crest-svg-wrap {
+      width: 120px;
+      height: 120px;
+    }
+
+    .counsel-wordmark {
+      font-family: var(--font-roman);
+      font-size: 24px;
+      font-weight: 700;
+      letter-spacing: 0.16em;
+      color: #f9f6ef;
+      text-transform: uppercase;
+    }
+
+    .counsel-subline {
+      font-size: 12px;
+      letter-spacing: 0.2em;
+      color: #c5a059;
+      text-transform: uppercase;
+      margin-top: -12px;
+    }
+
+    .firm-principles-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .principle-box {
+      background: #1e382e;
+      padding: 16px;
+      border-radius: 2px;
+      border: 1px solid #28473a;
+    }
+
+    h3.principle-heading {
+      font-family: var(--font-roman);
+      font-size: 12px;
+      font-weight: 700;
+      color: #c5a059;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+
+    .principle-body {
+      font-size: 14px;
+      color: #f9f6ef;
+      line-height: 1.4;
+    }
+
+    /* Classical Geometric Ratios */
+    .ratio-diagram {
+      background: #11211b;
+      border: 1px solid #28473a;
+      padding: 24px;
+      border-radius: 2px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    /* Substrate Application Matrix */
+    .substrate-list {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .substrate-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px;
+      background: #1e382e;
+      border: 1px solid #28473a;
+      border-radius: 2px;
+      gap: 16px;
+    }
+
+    .sub-meta {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .sub-name {
+      font-family: var(--font-roman);
+      font-size: 14px;
+      font-weight: 700;
+      color: #f9f6ef;
+    }
+
+    .sub-desc {
+      font-size: 12px;
+      color: #9bb0a4;
+    }
+
+    .sub-preview {
+      width: 48px;
+      height: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 2px;
+      border: 1px solid #28473a;
+    }
+
+    /* Clearspace & Restraint Rules */
+    .exclusion-zone-wrap {
+      background: #11211b;
+      border: 1px dashed #c5a059;
+      padding: 32px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+    }
+
+    .exclusion-note {
+      font-size: 12px;
+      color: #c5a059;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    /* Footer Navigation */
+    footer.counsel-footer {
+      margin-top: 48px;
+      padding-top: 24px;
+      border-top: 1px solid #28473a;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .footer-seal-note {
+      font-size: 12px;
+      color: #9bb0a4;
+    }
+
+    .footer-actions {
+      display: flex;
+      gap: 12px;
+    }
+
+    .btn{background:#c5a059;color:#11211b;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 44px;
+      padding: 0 24px;
+      font-family: var(--font-roman);
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      border-radius: 2px;
+      cursor: pointer;
+      text-decoration: none;
+      border: 1px solid transparent;
+    }
+
+    .btn-secondary {
+      background-color: transparent;
+      color: #f9f6ef;
+      border: 1px solid #28473a;
+    }
+
+    .btn-secondary:hover {
+      background-color: #1e382e;
+    }
+
+    @media (max-width: 1024px) {
+      main.folio-layout {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .vellum-container {
+        padding: 20px 16px 40px;
+      }
+      h1.firm-title {
+        font-size: 28px;
+      }
+      .firm-principles-grid {
+        grid-template-columns: 1fr;
+      }
+      footer.counsel-footer {
+        flex-direction: column;
+        align-items: stretch;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="vellum-container">
+    <header class="counsel-header">
+      <div class="registry-meta-strip">
+        <div class="registry-cell">Practice: <strong>Aldrich &amp; Sterling LLP</strong></div>
+        <div class="registry-cell">Jurisdiction: <strong>Appellate Courts &amp; Supreme Court of the United States</strong></div>
+        <div class="registry-cell">Established: <strong>Washington, D.C. &bull; 1984</strong></div>
+        <div class="registry-cell">System: <strong>Institutional Identity Folio</strong></div>
+      </div>
+
+      <div class="firm-heading-wrap">
+        <h1 class="firm-title">ALDRICH &amp; <em>STERLING</em></h1>
+        <p class="firm-thesis">
+          Boutique constitutional and appellate litigators. The firm's emblem rejects trite courtroom allegories in favor of an interlocking Roman keystone arch, symbolizing institutional precedent and unshakeable jurisprudence.
+        </p>
+      </div>
+    </header>
+
+    <main class="folio-layout">
+      <!-- Left Column: Master Emblem & Architectural Grid -->
+      <div style="display: flex; flex-direction: column; gap: 32px;">
+        <section class="folio-card" aria-labelledby="crest-heading">
+          <div class="card-mast">
+            <h2 id="crest-heading" class="card-title">01. Master Emblem &amp; Wordmark</h2>
+            <span class="card-tag">Roman Keystone Majuscule</span>
+          </div>
+
+          <div class="seal-stage">
+            <div class="crest-svg-wrap">
+              <svg width="120" height="120" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Aldrich and Sterling emblem: interlocking Roman keystone monogram">
+                <!-- Precision Octagonal Bounding Border -->
+                <polygon points="60,6 114,60 60,114 6,60" stroke="#28473a" stroke-width="1.5" />
+                <polygon points="60,14 106,60 60,106 14,60" stroke="#c5a059" stroke-width="1" stroke-dasharray="2 2" />
+                <!-- Monogram A Arch (Structural Keystone) -->
+                <path d="M60 26 L36 94" stroke="#f9f6ef" stroke-width="4.5" stroke-linecap="square" />
+                <path d="M60 26 L84 94" stroke="#f9f6ef" stroke-width="4.5" stroke-linecap="square" />
+                <path d="M44 72 L76 72" stroke="#c5a059" stroke-width="3" />
+                <!-- Monogram S Keystone Interlock Ribbon -->
+                <path d="M72 40 C66 36 54 36 50 44 C46 52 74 54 70 66 C66 76 52 76 44 70" stroke="#c5a059" stroke-width="3.5" stroke-linecap="square" />
+                <!-- Cardinal Anchor Points -->
+                <circle cx="60" cy="20" r="2.5" fill="#c5a059" />
+                <circle cx="60" cy="100" r="2.5" fill="#c5a059" />
+              </svg>
+            </div>
+
+            <div class="counsel-wordmark">ALDRICH &amp; STERLING</div>
+            <div class="counsel-subline">Appellate Litigators &bull; Washington D.C.</div>
+          </div>
+
+          <div class="firm-principles-grid">
+            <div class="principle-box">
+              <h3 class="principle-heading">Keystone Geometry</h3>
+              <p class="principle-body">Formed by classical Trajan proportions. The central interlocking keystone demonstrates that legal precedent gains its strength from structural balance.</p>
+            </div>
+            <div class="principle-box">
+              <h3 class="principle-heading">Engraving Fidelity</h3>
+              <p class="principle-body">Engineered specifically for steel-die copperplate engraving, blind debossing on 600gsm archival cotton, and watermarked cotton bond legal briefs.</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- Construction Proportions -->
+        <section class="folio-card" aria-labelledby="ratios-heading">
+          <div class="card-mast">
+            <h2 id="ratios-heading" class="card-title">02. Classical Column Proportions</h2>
+            <span class="card-tag">Golden Ratio 1:1.618</span>
+          </div>
+
+          <div class="ratio-diagram">
+            <svg width="300" height="150" viewBox="0 0 300 150" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Trajan column ratio schematic">
+              <rect x="20" y="20" width="260" height="110" stroke="#28473a" stroke-width="1" />
+              <line x1="150" y1="20" x2="150" y2="130" stroke="#c5a059" stroke-width="1" stroke-dasharray="3 3" />
+              <circle cx="150" cy="75" r="45" stroke="#28473a" stroke-width="1" />
+              <path d="M150 30 L115 110 L185 110 Z" stroke="#9bb0a4" stroke-width="1.5" />
+              <text x="155" y="45" fill="#c5a059" font-family="'Cinzel', serif" font-size="10">APEX 1.00</text>
+              <text x="155" y="80" fill="#9bb0a4" font-family="'Plus Jakarta Sans', sans-serif" font-size="10">INTERSECT 1.618</text>
+              <text x="35" y="125" fill="#9bb0a4" font-family="'Plus Jakarta Sans', sans-serif" font-size="10">BASE WIDTH 70MM</text>
+            </svg>
+          </div>
+        </section>
+      </div>
+
+      <!-- Right Column: Substrates, Clearspace, Authority -->
+      <div style="display: flex; flex-direction: column; gap: 32px;">
+        <section class="folio-card" aria-labelledby="substrates-heading">
+          <div class="card-mast">
+            <h2 id="substrates-heading" class="card-title">03. Physical Substrates</h2>
+            <span class="card-tag">Tactile Legal Execution</span>
+          </div>
+
+          <div class="substrate-list">
+            <div class="substrate-row">
+              <div class="sub-meta">
+                <span class="sub-name">600 GSM Cotton Bond</span>
+                <span class="sub-desc">Blind debossed letterhead and counsel cards</span>
+              </div>
+              <div class="sub-preview" style="background:#11211b;">
+                <svg width="24" height="24" viewBox="0 0 120 120" fill="none">
+                  <polygon points="60,14 106,60 60,106 14,60" stroke="#9bb0a4" stroke-width="6" />
+                  <path d="M60 30 L40 90 M60 30 L80 90" stroke="#9bb0a4" stroke-width="8" />
+                </svg>
+              </div>
+            </div>
+
+            <div class="substrate-row">
+              <div class="sub-meta">
+                <span class="sub-name">Antique Gold Foil</span>
+                <span class="sub-desc">Supreme Court petition covers and certiori briefs</span>
+              </div>
+              <div class="sub-preview" style="background:#1e382e;">
+                <svg width="24" height="24" viewBox="0 0 120 120" fill="none">
+                  <polygon points="60,14 106,60 60,106 14,60" stroke="#c5a059" stroke-width="6" />
+                  <path d="M60 30 L40 90 M60 30 L80 90" stroke="#c5a059" stroke-width="8" />
+                </svg>
+              </div>
+            </div>
+
+            <div class="substrate-row">
+              <div class="sub-meta">
+                <span class="sub-name">16px Digital Seal</span>
+                <span class="sub-desc">Federal e-filing docket signatures and secure portal</span>
+              </div>
+              <div class="sub-preview" style="background:#11211b;">
+                <svg width="16" height="16" viewBox="0 0 120 120" fill="none">
+                  <polygon points="60,14 106,60 60,106 14,60" stroke="#c5a059" stroke-width="12" />
+                </svg>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Clearspace Exclusion -->
+        <section class="folio-card" aria-labelledby="clearspace-rule-heading">
+          <div class="card-mast">
+            <h2 id="clearspace-rule-heading" class="card-title">04. Protective Clearance</h2>
+            <span class="card-tag">Exclusion Unit = 1.0X</span>
+          </div>
+
+          <div class="exclusion-zone-wrap">
+            <svg width="80" height="80" viewBox="0 0 120 120" fill="none" role="img" aria-label="Clearspace boundary">
+              <rect x="0" y="0" width="120" height="120" stroke="#c5a059" stroke-width="1" stroke-dasharray="2 2" />
+              <polygon points="60,20 100,60 60,100 20,60" stroke="#f9f6ef" stroke-width="3" />
+              <path d="M60 34 L44 86 M60 34 L76 86" stroke="#f9f6ef" stroke-width="4" />
+            </svg>
+            <div class="exclusion-note">1.0X Clearance Prohibits Overlapping Typography</div>
+          </div>
+        </section>
+      </div>
+    </main>
+
+    <footer class="counsel-footer">
+      <div class="footer-seal-note">
+        Archival Verification: Standards Validated by Senior Managing Partners // Washington D.C. Bar Registry
+      </div>
+      <nav class="footer-actions" aria-label="Identity assets">
+        <button class="btn btn-secondary" type="button">Copperplate Die Spec</button>
+        <button class="btn" type="button">Download Vector Seal</button>
+      </nav>
+    </footer>
+  </div>
+</body>
+</html>

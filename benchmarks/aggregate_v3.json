@@ -1,0 +1,125 @@
+{
+  "main": {
+    "n": 25,
+    "v1_avg": 4.107,
+    "v2_avg": 4.059,
+    "improved": 6,
+    "tied": 0,
+    "regressed": 19,
+    "per_dimension_v1": {
+      "usability": 4.3,
+      "interaction_clarity": 4.2,
+      "accessibility": 4.5,
+      "responsiveness": 3.8,
+      "clarity": 4.0,
+      "typography": 2.3,
+      "spacing_rhythm": 4.75,
+      "composition_layout": 3.6,
+      "brand_context_fit": 3.68,
+      "information_density": 4.924,
+      "unnecessary_complexity": 5.0,
+      "visual_hierarchy": 3.56,
+      "consistency": 4.38,
+      "originality_antislop": 4.5
+    },
+    "per_dimension_v2": {
+      "usability": 4.3,
+      "interaction_clarity": 4.2,
+      "accessibility": 4.5,
+      "responsiveness": 3.8,
+      "clarity": 4.0,
+      "typography": 2.82,
+      "spacing_rhythm": 4.526,
+      "composition_layout": 3.792,
+      "brand_context_fit": 3.709,
+      "information_density": 3.599,
+      "unnecessary_complexity": 5.0,
+      "visual_hierarchy": 3.811,
+      "consistency": 4.263,
+      "originality_antislop": 4.5
+    },
+    "per_category_v2_minus_v1": {
+      "web-landing": 0.042,
+      "product-ui": -0.077,
+      "dashboards": 0.092,
+      "mobile-ui": -0.014,
+      "branding": -0.012,
+      "logos": -0.156,
+      "posters-editorial": -0.127,
+      "packaging": -0.156,
+      "presentation": -0.004,
+      "marketing-creative": -0.138
+    }
+  },
+  "adversarial": {
+    "n": 15,
+    "v1_avg": 4.103,
+    "v2_avg": 4.096,
+    "improved": 7,
+    "tied": 0,
+    "regressed": 8,
+    "per_dimension_v1": {
+      "usability": 4.3,
+      "interaction_clarity": 4.2,
+      "accessibility": 4.5,
+      "responsiveness": 3.8,
+      "clarity": 4.0,
+      "typography": 2.3,
+      "spacing_rhythm": 4.75,
+      "composition_layout": 3.6,
+      "brand_context_fit": 3.68,
+      "information_density": 4.874,
+      "unnecessary_complexity": 5.0,
+      "visual_hierarchy": 3.56,
+      "consistency": 4.38,
+      "originality_antislop": 4.5
+    },
+    "per_dimension_v2": {
+      "usability": 4.3,
+      "interaction_clarity": 4.2,
+      "accessibility": 4.5,
+      "responsiveness": 3.8,
+      "clarity": 4.0,
+      "typography": 2.907,
+      "spacing_rhythm": 4.486,
+      "composition_layout": 3.84,
+      "brand_context_fit": 3.72,
+      "information_density": 3.991,
+      "unnecessary_complexity": 5.0,
+      "visual_hierarchy": 3.859,
+      "consistency": 4.243,
+      "originality_antislop": 4.5
+    },
+    "per_category_v2_minus_v1": {
+      "conflicting-requirements": -0.006,
+      "ugly-source": 0.041,
+      "dense-dashboard": 0.095,
+      "sparse-page": 0.04,
+      "long-labels": -0.033,
+      "missing-imagery": 0.048,
+      "huge-dataset": 0.096,
+      "tiny-dataset": 0.094,
+      "mobile-first-constraint": -0.04,
+      "unusual-brand": -0.009,
+      "accessibility-constraint": -0.071,
+      "card-soup-temptation": -0.075,
+      "gradient-temptation": 0.05,
+      "info-preservation": -0.182,
+      "non-web-medium": -0.159
+    }
+  },
+  "calibration_summary": {
+    "all_pass": true,
+    "overall_scores": {
+      "bad": 2.368,
+      "average": 3.971,
+      "good": 4.164,
+      "excellent": 4.349
+    },
+    "monotonic_dimension_count": "14/14"
+  },
+  "evaluator_variance": {
+    "note": "subjective_score_v3 is a deterministic pure function of (html, objective_checks, discriminative_signals); repeated scoring of the same artifact has 0 variance by construction (see calibration_v3.json repeatability_pass). This measures the evaluator's internal consistency, not generation-to-generation variance, since artifacts are static templates, not live model output.",
+    "repeatability_pass": true
+  }
+}

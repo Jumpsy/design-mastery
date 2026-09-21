@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>KRONOS — 3-Panel Instagram Carousel Ad Launch</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --ground-carbon: #0e1014;
+      --surface-slide: #181c24;
+      --surface-inner: #202632;
+      --line-border: #242b38;
+      --text-white: #ffffff;
+      --text-muted: #8592a3;
+      --focus-gold: #f5a623;
+      --font-display: 'Space Grotesk', sans-serif;
+      --font-body: 'Plus Jakarta Sans', sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body{background:#0e1014;color:#ffffff;
+      font-family: var(--font-body);
+      font-size: 16px;
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    a:focus-visible, button:focus-visible {
+      outline: 2px solid #f5a623;
+      outline-offset: 4px;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      * {
+        animation: none !important;
+        transition: none !important;
+      }
+    }
+
+    .carousel-stage-wrapper {
+      max-width: 1320px;
+      margin: 0 auto;
+      padding: 32px 24px 64px;
+    }
+
+    header.campaign-header {
+      border-bottom: 1px solid #242b38;
+      padding-bottom: 24px;
+      margin-bottom: 32px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .campaign-meta {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .campaign-tag {
+      font-family: var(--font-display);
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      color: #f5a623;
+    }
+
+    h1.campaign-title {
+      font-family: var(--font-display);
+      font-size: 28px;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+      color: #ffffff;
+    }
+
+    em{color:#f5a623;font-style:normal;}
+
+    /* 3-Panel Instagram Feed Carousel Grid (4:5 Aspect Ratio) */
+    main.instagram-carousel-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+
+    /* 4:5 Vertical Feed Ad Slide */
+    article.carousel-panel {
+      background: #181c24;
+      border: 1px solid #242b38;
+      border-radius: 6px;
+      aspect-ratio: 4 / 5;
+      padding: 32px 24px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: relative;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+      overflow: hidden;
+    }
+
+    .slide-header-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid #242b38;
+      padding-bottom: 12px;
+      font-family: var(--font-display);
+      font-size: 12px;
+      color: #8592a3;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .slide-counter-badge {
+      color: #f5a623;
+      font-weight: 700;
+    }
+
+    /* Panel Content Blocks */
+    .panel-core-content {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      margin: auto 0;
+    }
+
+    .problem-tag-pill {
+      font-family: var(--font-display);
+      font-size: 12px;
+      font-weight: 700;
+      color: #f5a623;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    h2.slide-hook-heading {
+      font-family: var(--font-display);
+      font-size: 24px;
+      font-weight: 700;
+      line-height: 1.2;
+      color: #ffffff;
+      letter-spacing: -0.01em;
+    }
+
+    /* Visual Simulations Inside Carousel */
+    .schedule-sim-box {
+      background: #202632;
+      border: 1px solid #242b38;
+      border-radius: 4px;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .fragmented-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12px;
+      color: #8592a3;
+    }
+
+    .meeting-shred {
+      background: #242b38;
+      border-radius: 2px;
+      padding: 4px 8px;
+      color: #ffffff;
+      font-size: 12px;
+    }
+
+    .golden-focus-block {
+      background: #f5a623;
+      color: #0e1014;
+      font-weight: 700;
+      border-radius: 4px;
+      padding: 16px;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .focus-block-title {
+      font-family: var(--font-display);
+      font-size: 18px;
+      font-weight: 700;
+    }
+
+    .focus-block-sub {
+      font-size: 12px;
+    }
+
+    /* Social Proof Elements (Slide 3) */
+    .social-proof-strip {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .rating-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 20px;
+      font-weight: 700;
+      color: #f5a623;
+    }
+
+    .metric-quote {
+      font-size: 14px;
+      color: #ffffff;
+      line-height: 1.4;
+    }
+
+    .integration-note {
+      font-size: 12px;
+      color: #8592a3;
+    }
+
+    /* Directional Swipe Cue */
+    .slide-swipe-prompt {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-top: 1px solid #242b38;
+      padding-top: 12px;
+      font-size: 12px;
+      color: #8592a3;
+    }
+
+    .swipe-arrow {
+      color: #f5a623;
+      font-weight: 700;
+      font-family: var(--font-display);
+    }
+
+    /* Campaign Footer Toolbar */
+    footer.campaign-toolbar {
+      margin-top: 48px;
+      padding-top: 24px;
+      border-top: 1px solid #242b38;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .campaign-specs-note {
+      font-size: 12px;
+      color: #8592a3;
+    }
+
+    .btn{background:#f5a623;color:#0e1014;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 44px;
+      padding: 0 24px;
+      font-family: var(--font-display);
+      font-size: 14px;
+      font-weight: 700;
+      border-radius: 4px;
+      cursor: pointer;
+      text-decoration: none;
+      border: 1px solid transparent;
+    }
+
+    .btn-secondary {
+      background-color: transparent;
+      color: #ffffff;
+      border: 1px solid #242b38;
+    }
+
+    .btn-secondary:hover {
+      background-color: #181c24;
+    }
+
+    @media (max-width: 1024px) {
+      main.instagram-carousel-grid {
+        grid-template-columns: 1fr;
+      }
+      article.carousel-panel {
+        aspect-ratio: auto;
+        min-height: 480px;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .carousel-stage-wrapper {
+        padding: 20px 16px 40px;
+      }
+      h1.campaign-title {
+        font-size: 24px;
+      }
+      footer.campaign-toolbar {
+        flex-direction: column;
+        align-items: stretch;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="carousel-stage-wrapper">
+    <header class="campaign-header">
+      <div class="campaign-meta">
+        <span class="campaign-tag">Direct Response Launch &bull; Q4 Paid Social</span>
+        <h1 class="campaign-title">KRONOS: <em>Instagram Carousel Ad</em></h1>
+      </div>
+      <div style="font-size:12px;color:#8592a3;text-align:right;">
+        Format: 1080 &times; 1350 (4:5 Feed Ratio) &bull; 3-Slide Sequence
+      </div>
+    </header>
+
+    <main class="instagram-carousel-grid">
+      <!-- Slide 01: The Hook / Problem -->
+      <article class="carousel-panel" aria-label="Carousel Slide 1 Problem">
+        <div class="slide-header-bar">
+          <span>KRONOS DEFENSE</span>
+          <span class="slide-counter-badge">01 / 03</span>
+        </div>
+
+        <div class="panel-core-content">
+          <div class="problem-tag-pill">THE PROBLEM</div>
+          <h2 class="slide-hook-heading">
+            Your calendar didn't fail you. It was hijacked.
+          </h2>
+
+          <div class="schedule-sim-box">
+            <div class="fragmented-row">
+              <span>09:30</span>
+              <div class="meeting-shred">Quick Standup (15m)</div>
+            </div>
+            <div class="fragmented-row">
+              <span>10:45</span>
+              <div class="meeting-shred">Sync w/ Product (30m)</div>
+            </div>
+            <div class="fragmented-row">
+              <span>11:30</span>
+              <div class="meeting-shred">Design Review (30m)</div>
+            </div>
+            <div style="font-size:12px;color:#f5a623;font-weight:700;margin-top:4px;">
+              Max uninterrupted build time: 42 mins
+            </div>
+          </div>
+        </div>
+
+        <div class="slide-swipe-prompt">
+          <span>Swipe to defragment</span>
+          <span class="swipe-arrow">SWIPE &rarr;</span>
+        </div>
+      </article>
+
+      <!-- Slide 02: The Solution / Mechanism -->
+      <article class="carousel-panel" aria-label="Carousel Slide 2 Solution">
+        <div class="slide-header-bar">
+          <span>THE BREAKTHROUGH</span>
+          <span class="slide-counter-badge">02 / 03</span>
+        </div>
+
+        <div class="panel-core-content">
+          <div class="problem-tag-pill">AUTONOMOUS DEFRAG</div>
+          <h2 class="slide-hook-heading">
+            Kronos packs shallow syncs into a single 90-minute pocket.
+          </h2>
+
+          <div class="golden-focus-block">
+            <span class="focus-block-title">09:00 &ndash; 13:00 &bull; UNBROKEN DEEP WORK</span>
+            <span class="focus-block-sub">4.0 Hours Protected Focus Sanctuary</span>
+          </div>
+
+          <p style="font-size:14px;color:#8592a3;line-height:1.4;">
+            AI calendar negotiation shifts recurring team touchpoints together without offending colleagues or declining invitations.
+          </p>
+        </div>
+
+        <div class="slide-swipe-prompt">
+          <span>See proof &amp; get app</span>
+          <span class="swipe-arrow">SWIPE &rarr;</span>
+        </div>
+      </article>
+
+      <!-- Slide 03: Social Proof & Primary CTA -->
+      <article class="carousel-panel" aria-label="Carousel Slide 3 Offer">
+        <div class="slide-header-bar">
+          <span>START TODAY</span>
+          <span class="slide-counter-badge">03 / 03</span>
+        </div>
+
+        <div class="panel-core-content">
+          <div class="problem-tag-pill">RESULTS &bull; 4.9 RATING</div>
+          <h2 class="slide-hook-heading">
+            Reclaim 11 hours of deep build time this week.
+          </h2>
+
+          <div class="social-proof-strip">
+            <div class="rating-row">
+              <span>&#9733;&#9733;&#9733;&#9733;&#9733;</span>
+              <span>4.9 / 5.0 (84,000+ Engineers)</span>
+            </div>
+            <p class="metric-quote">
+              "Gave our entire engineering team half their week back."
+            </p>
+            <div class="integration-note">
+              Connects to Google Calendar &amp; Outlook in 30 seconds.
+            </div>
+          </div>
+        </div>
+
+        <div class="slide-swipe-prompt" style="border:none;padding-top:0;">
+          <button class="btn" style="width:100%;" type="button">Install Kronos Free &rarr;</button>
+        </div>
+      </article>
+    </main>
+
+    <footer class="campaign-toolbar">
+      <div class="campaign-specs-note">
+        Meta Ads Placement: Instagram Feed (4:5 / 1080 &times; 1350px) &bull; Verified Safe-Zone Crop
+      </div>
+      <nav style="display: flex; gap: 12px;" aria-label="Campaign assets">
+        <button class="btn btn-secondary" type="button">Export Carousel Frames</button>
+        <button class="btn" type="button">View Live Meta Preview</button>
+      </nav>
+    </footer>
+  </div>
+</body>
+</html>

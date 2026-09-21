@@ -1,0 +1,2861 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vortex Cloud Infrastructure — System Status & Telemetry</title>
+  <style>
+    /* ==========================================================================
+       DESIGN TOKENS & SYSTEM VARIABLES (4px / 8px Base Rhythm)
+       ========================================================================== */
+    :root {
+      /* Palette: Precision SRE Dark Telemetry */
+      --bg-base: #080c14;
+      --bg-subtle: #0d1320;
+      --bg-surface: #121a2d;
+      --bg-surface-elevated: #18233c;
+      --bg-surface-active: #1f2d4e;
+      --border-subtle: #1c273e;
+      --border-medium: #273756;
+      --border-bright: #394d75;
+
+      /* Typography colors */
+      --text-primary: #f8fafc;
+      --text-secondary: #94a3b8;
+      --text-tertiary: #64748b;
+      --text-subtle: #475569;
+
+      /* Semantic Status Colors (Rigorous: 1 Green, 1 Amber, 1 Rose, 1 Sky) */
+      --status-operational: #10b981;
+      --status-operational-bg: rgba(16, 185, 129, 0.12);
+      --status-operational-border: rgba(16, 185, 129, 0.3);
+
+      --status-degraded: #f59e0b;
+      --status-degraded-bg: rgba(245, 158, 11, 0.14);
+      --status-degraded-border: rgba(245, 158, 11, 0.35);
+
+      --status-outage: #f43f5e;
+      --status-outage-bg: rgba(244, 63, 94, 0.14);
+      --status-outage-border: rgba(244, 63, 94, 0.35);
+
+      --status-maintenance: #38bdf8;
+      --status-maintenance-bg: rgba(56, 189, 248, 0.12);
+      --status-maintenance-border: rgba(56, 189, 248, 0.3);
+
+      /* Typography Scale (Modular Ratio 1.25) */
+      --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Inter", "Helvetica Neue", Arial, sans-serif;
+      --font-mono: ui-monospace, "SF Mono", "JetBrains Mono", Menlo, Consolas, monospace;
+      
+      --text-2xs: 11px;
+      --text-xs: 12px;
+      --text-sm: 13px;
+      --text-base: 14px;
+      --text-md: 16px;
+      --text-lg: 18px;
+      --text-xl: 22px;
+      --text-2xl: 28px;
+      --text-3xl: 36px;
+
+      /* Motion Variables */
+      --ease-settle: cubic-bezier(0.16, 1, 0.3, 1);
+      --ease-standard: cubic-bezier(0.4, 0, 0.2, 1);
+      --ease-in: cubic-bezier(0.4, 0, 1, 1);
+      --duration-micro: 120ms;
+      --duration-standard: 240ms;
+      --duration-panel: 320ms;
+
+      /* Layout */
+      --max-width: 1240px;
+    }
+
+    /* Light Theme Tokens (Optional High-Contrast Operational Mode) */
+    [data-theme="light"] {
+      --bg-base: #f8fafc;
+      --bg-subtle: #f1f5f9;
+      --bg-surface: #ffffff;
+      --bg-surface-elevated: #f8fafc;
+      --bg-surface-active: #e2e8f0;
+      --border-subtle: #e2e8f0;
+      --border-medium: #cbd5e1;
+      --border-bright: #94a3b8;
+
+      --text-primary: #0f172a;
+      --text-secondary: #475569;
+      --text-tertiary: #64748b;
+      --text-subtle: #94a3b8;
+
+      --status-operational: #059669;
+      --status-operational-bg: rgba(5, 150, 105, 0.1);
+      --status-operational-border: rgba(5, 150, 105, 0.25);
+
+      --status-degraded: #d97706;
+      --status-degraded-bg: rgba(217, 119, 6, 0.1);
+      --status-degraded-border: rgba(217, 119, 6, 0.25);
+
+      --status-outage: #e11d48;
+      --status-outage-bg: rgba(225, 29, 72, 0.1);
+      --status-outage-border: rgba(225, 29, 72, 0.25);
+
+      --status-maintenance: #0284c7;
+      --status-maintenance-bg: rgba(2, 132, 199, 0.1);
+      --status-maintenance-border: rgba(2, 132, 199, 0.25);
+    }
+
+    /* ==========================================================================
+       RESET & ACCESSIBLE FOUNDATION
+       ========================================================================== */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      font-size: 14px;
+      line-height: 1.5;
+      font-family: var(--font-sans);
+      background-color: var(--bg-base);
+      color: var(--text-primary);
+      text-rendering: optimizeLegibility;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    body {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      background: radial-gradient(circle at 50% 0%, rgba(30, 45, 78, 0.2) 0%, transparent 600px), var(--bg-base);
+    }
+
+    button, input, select {
+      font-family: inherit;
+      font-size: inherit;
+      color: inherit;
+      border: none;
+      background: none;
+    }
+
+    button {
+      cursor: pointer;
+      user-select: none;
+    }
+
+    button:focus-visible, a:focus-visible, input:focus-visible {
+      outline: 2px solid var(--status-maintenance);
+      outline-offset: 2px;
+    }
+
+    .tabular-nums {
+      font-family: var(--font-mono);
+      font-variant-numeric: tabular-nums;
+    }
+
+    /* ==========================================================================
+       PAGE CONTAINER & HEADER MASTHEAD
+       ========================================================================== */
+    .app-shell {
+      max-width: var(--max-width);
+      margin: 0 auto;
+      width: 100%;
+      padding: 24px 20px 64px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    .top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 20px;
+      border-bottom: 1px solid var(--border-subtle);
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .brand-group {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .brand-logo {
+      width: 32px;
+      height: 32px;
+      background: linear-gradient(135deg, #1e293b, #0f172a);
+      border: 1px solid var(--border-medium);
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+
+    .brand-logo svg {
+      width: 18px;
+      height: 18px;
+      fill: none;
+      stroke: var(--status-maintenance);
+      stroke-width: 2;
+    }
+
+    .brand-title-wrap {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .brand-name {
+      font-size: var(--text-md);
+      font-weight: 700;
+      letter-spacing: -0.01em;
+      color: var(--text-primary);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .brand-badge {
+      font-size: var(--text-2xs);
+      font-family: var(--font-mono);
+      padding: 1px 6px;
+      border-radius: 4px;
+      background: var(--bg-surface-elevated);
+      color: var(--text-secondary);
+      border: 1px solid var(--border-subtle);
+      font-weight: 500;
+    }
+
+    .brand-sub {
+      font-size: var(--text-xs);
+      color: var(--text-tertiary);
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .heartbeat-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 5px 10px;
+      border-radius: 6px;
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      font-size: var(--text-xs);
+      color: var(--text-secondary);
+    }
+
+    .pulse-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background-color: var(--status-degraded);
+      box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.6);
+      animation: pulse-ring 2.5s infinite var(--ease-settle);
+    }
+
+    @keyframes pulse-ring {
+      0% {
+        box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.7);
+      }
+      70% {
+        box-shadow: 0 0 0 6px rgba(245, 158, 11, 0);
+      }
+      100% {
+        box-shadow: 0 0 0 0 rgba(245, 158, 11, 0);
+      }
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 7px 14px;
+      border-radius: 6px;
+      font-size: var(--text-sm);
+      font-weight: 500;
+      transition: all var(--duration-micro) var(--ease-standard);
+    }
+
+    .btn-secondary {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-medium);
+      color: var(--text-primary);
+    }
+
+    .btn-secondary:hover {
+      background: var(--bg-surface-elevated);
+      border-color: var(--border-bright);
+    }
+
+    .btn-primary {
+      background: #2563eb;
+      border: 1px solid #3b82f6;
+      color: #ffffff;
+    }
+
+    .btn-primary:hover {
+      background: #1d4ed8;
+    }
+
+    /* ==========================================================================
+       HERO SYSTEM BANNER (Dominant Signal < 1s Read Time)
+       ========================================================================== */
+    .system-status-hero {
+      background: var(--bg-surface);
+      border-radius: 8px;
+      padding: 20px 24px;
+      border: 1px solid var(--status-degraded-border);
+      border-left: 6px solid var(--status-degraded);
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      position: relative;
+      overflow: hidden;
+      animation: fadeIn 240ms var(--ease-settle);
+    }
+
+    .hero-main-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .hero-status-title-group {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+    }
+
+    .status-icon-badge {
+      width: 36px;
+      height: 36px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--status-degraded-bg);
+      border: 1px solid var(--status-degraded-border);
+      color: var(--status-degraded);
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    .hero-status-heading {
+      font-size: var(--text-xl);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      color: var(--text-primary);
+      line-height: 1.2;
+    }
+
+    .hero-status-desc {
+      font-size: var(--text-sm);
+      color: var(--text-secondary);
+      max-width: 820px;
+      line-height: 1.5;
+      margin-top: 6px;
+    }
+
+    .hero-meta-badges {
+      display: flex;
+      align-items: center;
+      gap: 8px 16px;
+      font-size: var(--text-xs);
+      color: var(--text-tertiary);
+      border-top: 1px solid var(--border-subtle);
+      padding-top: 12px;
+      margin-top: 4px;
+      flex-wrap: wrap;
+    }
+
+    .meta-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .meta-tag strong {
+      color: var(--text-secondary);
+    }
+
+    .meta-separator {
+      color: var(--border-medium);
+      user-select: none;
+    }
+
+    @media (max-width: 640px) {
+      .meta-separator {
+        display: none;
+      }
+      .hero-meta-badges {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 6px;
+      }
+      .system-status-hero {
+        padding: 16px;
+      }
+    }
+
+    /* ==========================================================================
+       KEY METRICS TELEMETRY STRIP (4-Column Bento on Base Grid)
+       ========================================================================== */
+    .metrics-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+    }
+
+    @media (max-width: 900px) {
+      .metrics-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 480px) {
+      .metrics-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .metric-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: 8px;
+      padding: 14px 16px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 8px;
+      position: relative;
+    }
+
+    .metric-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: var(--text-tertiary);
+      font-size: var(--text-xs);
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .metric-value-row {
+      display: flex;
+      align-items: baseline;
+      gap: 8px;
+    }
+
+    .metric-value {
+      font-size: var(--text-2xl);
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      color: var(--text-primary);
+      line-height: 1;
+    }
+
+    .metric-delta {
+      font-size: var(--text-xs);
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 2px;
+    }
+
+    .metric-delta.positive {
+      color: var(--status-operational);
+    }
+
+    .metric-delta.negative {
+      color: var(--status-degraded);
+    }
+
+    .metric-footer {
+      font-size: var(--text-2xs);
+      color: var(--text-tertiary);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 4px;
+      border-top: 1px dashed var(--border-subtle);
+    }
+
+    /* ==========================================================================
+       SECTION CONTAINER & HEADINGS
+       ========================================================================== */
+    .section-box {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .section-title-wrap {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .section-title {
+      font-size: var(--text-lg);
+      font-weight: 700;
+      letter-spacing: -0.01em;
+      color: var(--text-primary);
+    }
+
+    .section-count-badge {
+      font-size: var(--text-xs);
+      font-family: var(--font-mono);
+      background: var(--bg-surface-elevated);
+      color: var(--text-secondary);
+      border: 1px solid var(--border-subtle);
+      padding: 1px 8px;
+      border-radius: 12px;
+    }
+
+    /* Segmented Control / Filters */
+    .filter-bar {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .segmented-control {
+      display: inline-flex;
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: 6px;
+      padding: 3px;
+      gap: 2px;
+    }
+
+    .segment-btn {
+      padding: 5px 12px;
+      font-size: var(--text-xs);
+      font-weight: 500;
+      color: var(--text-secondary);
+      border-radius: 4px;
+      transition: all var(--duration-micro) var(--ease-standard);
+    }
+
+    .segment-btn:hover {
+      color: var(--text-primary);
+    }
+
+    .segment-btn[aria-selected="true"] {
+      background: var(--bg-surface-elevated);
+      color: var(--text-primary);
+      border: 1px solid var(--border-medium);
+      font-weight: 600;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+    }
+
+    .search-input-wrap {
+      position: relative;
+      min-width: 220px;
+    }
+
+    .search-input-wrap svg {
+      position: absolute;
+      left: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 14px;
+      height: 14px;
+      stroke: var(--text-tertiary);
+      stroke-width: 2;
+      pointer-events: none;
+    }
+
+    .search-input {
+      width: 100%;
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: 6px;
+      padding: 6px 12px 6px 32px;
+      font-size: var(--text-xs);
+      color: var(--text-primary);
+      transition: border-color var(--duration-micro) var(--ease-standard);
+    }
+
+    .search-input:focus {
+      border-color: var(--border-bright);
+      outline: none;
+    }
+
+    .search-input::placeholder {
+      color: var(--text-tertiary);
+    }
+
+    /* ==========================================================================
+       INTERACTIVE ACTIVE INCIDENT TIMELINE (Expandable Accordion)
+       ========================================================================== */
+    .incidents-container {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .incident-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: 8px;
+      overflow: hidden;
+      transition: border-color var(--duration-micro) var(--ease-standard);
+    }
+
+    .incident-card:hover {
+      border-color: var(--border-medium);
+    }
+
+    .incident-card.severity-high {
+      border-left: 4px solid var(--status-degraded);
+    }
+
+    .incident-card.severity-critical {
+      border-left: 4px solid var(--status-outage);
+    }
+
+    .incident-summary-btn {
+      width: 100%;
+      text-align: left;
+      padding: 16px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      cursor: pointer;
+      background: transparent;
+      transition: background var(--duration-micro) var(--ease-standard);
+    }
+
+    .incident-summary-btn:hover {
+      background: var(--bg-surface-elevated);
+    }
+
+    .incident-info-col {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .incident-top-line {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .incident-id {
+      font-family: var(--font-mono);
+      font-size: var(--text-xs);
+      font-weight: 600;
+      color: var(--text-tertiary);
+    }
+
+    .incident-title {
+      font-size: var(--text-base);
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    .incident-meta-line {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: var(--text-xs);
+      color: var(--text-tertiary);
+      flex-wrap: wrap;
+    }
+
+    .status-pill {
+      font-size: var(--text-2xs);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      padding: 2px 8px;
+      border-radius: 4px;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .status-pill.operational {
+      background: var(--status-operational-bg);
+      color: var(--status-operational);
+      border: 1px solid var(--status-operational-border);
+    }
+
+    .status-pill.degraded {
+      background: var(--status-degraded-bg);
+      color: var(--status-degraded);
+      border: 1px solid var(--status-degraded-border);
+    }
+
+    .status-pill.outage {
+      background: var(--status-outage-bg);
+      color: var(--status-outage);
+      border: 1px solid var(--status-outage-border);
+    }
+
+    .status-pill.investigating {
+      background: rgba(245, 158, 11, 0.15);
+      color: #fbbf24;
+      border: 1px solid rgba(245, 158, 11, 0.4);
+    }
+
+    .status-pill.monitoring {
+      background: rgba(56, 189, 248, 0.15);
+      color: #38bdf8;
+      border: 1px solid rgba(56, 189, 248, 0.4);
+    }
+
+    .status-pill.resolved {
+      background: rgba(148, 163, 184, 0.12);
+      color: #94a3b8;
+      border: 1px solid rgba(148, 163, 184, 0.3);
+    }
+
+    .impacted-component-tag {
+      background: var(--bg-surface-elevated);
+      color: var(--text-secondary);
+      border: 1px solid var(--border-subtle);
+      font-family: var(--font-mono);
+      font-size: var(--text-2xs);
+      padding: 1px 6px;
+      border-radius: 4px;
+    }
+
+    .accordion-indicator {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--text-tertiary);
+      font-size: var(--text-xs);
+      font-weight: 500;
+      flex-shrink: 0;
+    }
+
+    .chevron-icon {
+      width: 16px;
+      height: 16px;
+      stroke: var(--text-secondary);
+      stroke-width: 2;
+      transition: transform var(--duration-panel) var(--ease-settle);
+    }
+
+    .incident-card.open .chevron-icon {
+      transform: rotate(180deg);
+    }
+
+    /* Expandable Accordion Body */
+    .incident-details-drawer {
+      display: grid;
+      grid-template-rows: 0fr;
+      transition: grid-template-rows var(--duration-panel) var(--ease-settle);
+      background: var(--bg-subtle);
+      border-top: 1px solid transparent;
+    }
+
+    .incident-card.open .incident-details-drawer {
+      grid-template-rows: 1fr;
+      border-top-color: var(--border-subtle);
+    }
+
+    .drawer-content {
+      overflow: hidden;
+      padding: 0 20px;
+      transition: padding var(--duration-panel) var(--ease-settle);
+    }
+
+    .incident-card.open .drawer-content {
+      padding: 20px 20px 24px 20px;
+    }
+
+    /* Chronological Vertical Timeline Spine */
+    .timeline-spine {
+      position: relative;
+      padding-left: 28px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .timeline-spine::before {
+      content: '';
+      position: absolute;
+      left: 7px;
+      top: 6px;
+      bottom: 6px;
+      width: 2px;
+      background: var(--border-medium);
+    }
+
+    .timeline-step {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .timeline-step-bullet {
+      position: absolute;
+      left: -28px;
+      top: 3px;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: var(--bg-surface);
+      border: 2px solid var(--border-bright);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1;
+    }
+
+    .timeline-step.active .timeline-step-bullet {
+      border-color: var(--status-degraded);
+      background: var(--status-degraded);
+      box-shadow: 0 0 8px rgba(245, 158, 11, 0.4);
+    }
+
+    .timeline-step.resolved .timeline-step-bullet {
+      border-color: var(--status-operational);
+      background: var(--status-operational);
+    }
+
+    .timeline-step-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .timeline-step-stage {
+      font-size: var(--text-xs);
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    .timeline-step-time {
+      font-family: var(--font-mono);
+      font-size: var(--text-2xs);
+      color: var(--text-tertiary);
+    }
+
+    .timeline-step-body {
+      font-size: var(--text-sm);
+      color: var(--text-secondary);
+      line-height: 1.55;
+    }
+
+    .timeline-step-technical-note {
+      font-family: var(--font-mono);
+      font-size: var(--text-2xs);
+      background: var(--bg-base);
+      border: 1px solid var(--border-subtle);
+      border-radius: 4px;
+      padding: 8px 12px;
+      color: var(--text-secondary);
+      margin-top: 4px;
+      overflow-x: auto;
+    }
+
+    /* ==========================================================================
+       SERVICES & COMPONENT UPTIME SECTION (90-Day Interactive Scrubbing)
+       ========================================================================== */
+    .services-tier-group {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+
+    .tier-header {
+      font-size: var(--text-xs);
+      font-weight: 700;
+      color: var(--text-tertiary);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      padding: 8px 4px 4px 4px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .tier-header-line {
+      flex: 1;
+      height: 1px;
+      background: var(--border-subtle);
+    }
+
+    .service-row {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: 8px;
+      padding: 14px 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      transition: background var(--duration-micro) var(--ease-standard), border-color var(--duration-micro) var(--ease-standard);
+    }
+
+    .service-row:hover {
+      border-color: var(--border-medium);
+      background: var(--bg-surface-elevated);
+    }
+
+    .service-main-line {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .service-identity {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .status-indicator-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    .status-indicator-dot.operational {
+      background-color: var(--status-operational);
+      box-shadow: 0 0 6px rgba(16, 185, 129, 0.4);
+    }
+
+    .status-indicator-dot.degraded {
+      background-color: var(--status-degraded);
+      box-shadow: 0 0 6px rgba(245, 158, 11, 0.4);
+    }
+
+    .status-indicator-dot.outage {
+      background-color: var(--status-outage);
+      box-shadow: 0 0 6px rgba(244, 63, 94, 0.5);
+    }
+
+    .service-name {
+      font-size: var(--text-base);
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    .service-tags {
+      display: flex;
+      gap: 6px;
+      align-items: center;
+    }
+
+    .service-region-tag {
+      font-family: var(--font-mono);
+      font-size: var(--text-2xs);
+      color: var(--text-tertiary);
+      border: 1px solid var(--border-subtle);
+      border-radius: 3px;
+      padding: 1px 5px;
+    }
+
+    .service-telemetry-stats {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      font-size: var(--text-xs);
+    }
+
+    .telemetry-item {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+    }
+
+    .telemetry-label {
+      color: var(--text-tertiary);
+      font-size: var(--text-2xs);
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+    }
+
+    .telemetry-val {
+      font-family: var(--font-mono);
+      font-weight: 600;
+      color: var(--text-secondary);
+    }
+
+    /* 90-Day Interactive Day-by-Day Histogram Strip */
+    .uptime-bar-section {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .uptime-bar-container {
+      display: flex;
+      gap: 3px;
+      height: 32px;
+      align-items: stretch;
+      padding: 3px 0;
+      cursor: crosshair;
+      position: relative;
+    }
+
+    .day-bar {
+      flex: 1;
+      min-width: 3px;
+      border-radius: 2px;
+      transition: transform var(--duration-micro) var(--ease-standard), opacity var(--duration-micro) var(--ease-standard);
+      position: relative;
+    }
+
+    .day-bar.status-100 {
+      background-color: #10b981;
+      opacity: 0.85;
+    }
+
+    .day-bar.status-degraded {
+      background-color: #f59e0b;
+      opacity: 1;
+    }
+
+    .day-bar.status-outage {
+      background-color: #f43f5e;
+      opacity: 1;
+    }
+
+    .day-bar.status-maintenance {
+      background-color: #38bdf8;
+      opacity: 0.9;
+    }
+
+    .day-bar:hover, .day-bar:focus-visible {
+      transform: scaleY(1.25);
+      opacity: 1;
+      outline: none;
+      box-shadow: 0 0 6px currentColor;
+      z-index: 2;
+    }
+
+    .uptime-legend-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: var(--text-2xs);
+      color: var(--text-tertiary);
+      padding: 0 2px;
+    }
+
+    /* ==========================================================================
+       INTERACTIVE TELEMETRY GRAPH (24h Latency & Error Scrubber)
+       ========================================================================== */
+    .telemetry-chart-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: 8px;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .chart-header-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .chart-title-group {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .chart-title {
+      font-size: var(--text-base);
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    .chart-subtitle {
+      font-size: var(--text-xs);
+      color: var(--text-tertiary);
+    }
+
+    .chart-live-readout {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      background: var(--bg-base);
+      border: 1px solid var(--border-subtle);
+      border-radius: 6px;
+      padding: 6px 14px;
+      font-family: var(--font-mono);
+      font-size: var(--text-xs);
+    }
+
+    .readout-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .readout-legend-indicator {
+      width: 8px;
+      height: 8px;
+      border-radius: 2px;
+    }
+
+    .readout-legend-indicator.p95 {
+      background: #38bdf8;
+    }
+
+    .readout-legend-indicator.error-rate {
+      background: #f43f5e;
+    }
+
+    .svg-chart-container {
+      width: 100%;
+      height: 180px;
+      position: relative;
+      touch-action: none;
+      cursor: crosshair;
+    }
+
+    .svg-chart-container svg {
+      width: 100%;
+      height: 100%;
+      overflow: visible;
+    }
+
+    /* SVG Elements Styling */
+    .grid-line {
+      stroke: var(--border-subtle);
+      stroke-width: 1;
+      stroke-dasharray: 4 4;
+    }
+
+    .axis-text {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      fill: var(--text-tertiary);
+      user-select: none;
+    }
+
+    .latency-area {
+      fill: url(#latencyGradient);
+      opacity: 0.35;
+    }
+
+    .latency-line {
+      fill: none;
+      stroke: #38bdf8;
+      stroke-width: 2;
+      stroke-linejoin: round;
+      stroke-linecap: round;
+    }
+
+    .error-line {
+      fill: none;
+      stroke: #f43f5e;
+      stroke-width: 1.5;
+      stroke-dasharray: 3 3;
+    }
+
+    .crosshair-line {
+      stroke: var(--text-secondary);
+      stroke-width: 1;
+      stroke-dasharray: 2 2;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity var(--duration-micro);
+    }
+
+    .crosshair-point {
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity var(--duration-micro);
+    }
+
+    /* Floating Tooltip HUD (Shared for 90d Bars & 24h Chart) */
+    .floating-tooltip-hud {
+      position: fixed;
+      pointer-events: none;
+      z-index: 1000;
+      background: #0d1527;
+      border: 1px solid var(--border-bright);
+      border-radius: 6px;
+      padding: 8px 12px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      min-width: 180px;
+      opacity: 0;
+      transform: translate(-50%, -100%) translateY(-10px);
+      transition: opacity var(--duration-micro) var(--ease-standard), transform var(--duration-micro) var(--ease-standard);
+    }
+
+    .floating-tooltip-hud.active {
+      opacity: 1;
+      transform: translate(-50%, -100%) translateY(-14px);
+    }
+
+    .tooltip-date {
+      font-family: var(--font-mono);
+      font-size: var(--text-2xs);
+      color: var(--text-tertiary);
+      border-bottom: 1px solid var(--border-subtle);
+      padding-bottom: 4px;
+      margin-bottom: 2px;
+    }
+
+    .tooltip-status-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: var(--text-xs);
+      font-weight: 600;
+    }
+
+    .tooltip-detail {
+      font-size: var(--text-2xs);
+      color: var(--text-secondary);
+      line-height: 1.4;
+    }
+
+    /* ==========================================================================
+       HISTORICAL INCIDENT ARCHIVE
+       ========================================================================== */
+    .archive-header-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 12px;
+      margin-bottom: 8px;
+    }
+
+    .archive-month-title {
+      font-size: var(--text-sm);
+      font-weight: 700;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    /* ==========================================================================
+       SUBSCRIBE MODAL DIALOG
+       ========================================================================== */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(4, 7, 13, 0.75);
+      backdrop-filter: blur(4px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      z-index: 2000;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity var(--duration-standard) var(--ease-standard);
+    }
+
+    .modal-backdrop.open {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .modal-window {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-medium);
+      border-radius: 10px;
+      width: 100%;
+      max-width: 480px;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.6);
+      transform: scale(0.96) translateY(8px);
+      transition: transform var(--duration-panel) var(--ease-settle);
+    }
+
+    .modal-backdrop.open .modal-window {
+      transform: scale(1) translateY(0);
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+    }
+
+    .modal-title {
+      font-size: var(--text-lg);
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    .modal-close-btn {
+      color: var(--text-tertiary);
+      padding: 4px;
+      border-radius: 4px;
+      transition: color var(--duration-micro);
+    }
+
+    .modal-close-btn:hover {
+      color: var(--text-primary);
+    }
+
+    .modal-tabs {
+      display: flex;
+      border-bottom: 1px solid var(--border-subtle);
+      gap: 16px;
+    }
+
+    .modal-tab-btn {
+      padding: 8px 0;
+      font-size: var(--text-sm);
+      font-weight: 500;
+      color: var(--text-secondary);
+      border-bottom: 2px solid transparent;
+      margin-bottom: -1px;
+    }
+
+    .modal-tab-btn[aria-selected="true"] {
+      color: #38bdf8;
+      border-bottom-color: #38bdf8;
+      font-weight: 600;
+    }
+
+    .modal-form {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .form-label {
+      font-size: var(--text-xs);
+      font-weight: 600;
+      color: var(--text-secondary);
+    }
+
+    .form-input {
+      background: var(--bg-base);
+      border: 1px solid var(--border-medium);
+      border-radius: 6px;
+      padding: 8px 12px;
+      font-size: var(--text-sm);
+      color: var(--text-primary);
+    }
+
+    .form-input:focus {
+      border-color: var(--status-maintenance);
+      outline: none;
+    }
+
+    .form-hint {
+      font-size: var(--text-2xs);
+      color: var(--text-tertiary);
+    }
+
+    .modal-confirmation-banner {
+      display: none;
+      background: var(--status-operational-bg);
+      border: 1px solid var(--status-operational-border);
+      color: var(--status-operational);
+      padding: 12px;
+      border-radius: 6px;
+      font-size: var(--text-sm);
+      align-items: center;
+      gap: 8px;
+    }
+
+    .modal-confirmation-banner.active {
+      display: flex;
+    }
+
+    /* ==========================================================================
+       FOOTER & AUDIT STAMP
+       ========================================================================== */
+    .app-footer {
+      border-top: 1px solid var(--border-subtle);
+      padding-top: 24px;
+      margin-top: 32px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: var(--text-tertiary);
+      font-size: var(--text-xs);
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 16px;
+    }
+
+    .footer-link {
+      color: var(--text-secondary);
+      text-decoration: none;
+      transition: color var(--duration-micro);
+    }
+
+    .footer-link:hover {
+      color: var(--text-primary);
+    }
+
+    /* ==========================================================================
+       ANIMATIONS & REDUCED MOTION GATING
+       ========================================================================== */
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(4px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Staggered entrance reveals for first load */
+    .stagger-1 { animation: fadeIn 300ms var(--ease-settle) 40ms both; }
+    .stagger-2 { animation: fadeIn 300ms var(--ease-settle) 80ms both; }
+    .stagger-3 { animation: fadeIn 300ms var(--ease-settle) 120ms both; }
+    .stagger-4 { animation: fadeIn 300ms var(--ease-settle) 160ms both; }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+      .pulse-dot {
+        animation: none !important;
+      }
+      .incident-details-drawer {
+        transition: none !important;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="app-shell">
+
+    <!-- MASTHEAD HEADER -->
+    <header class="top-bar stagger-1" role="banner">
+      <div class="brand-group">
+        <div class="brand-logo" aria-hidden="true">
+          <svg viewBox="0 0 24 24">
+            <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+          </svg>
+        </div>
+        <div class="brand-title-wrap">
+          <h1 class="brand-name">
+            VORTEX CLOUD
+            <span class="brand-badge">SRE TELEMETRY</span>
+          </h1>
+          <span class="brand-sub">Real-time infrastructure health &amp; SLA compliance status</span>
+        </div>
+      </div>
+
+      <div class="header-actions">
+        <div class="heartbeat-badge" role="status" aria-live="polite">
+          <div class="pulse-dot" aria-hidden="true"></div>
+          <span id="heartbeatStatusText">Live Feed • Last Polled <span class="tabular-nums" id="liveTimestamp">14:52:10 UTC</span></span>
+        </div>
+        <button class="btn btn-secondary" id="themeToggleBtn" aria-label="Toggle color theme">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <circle cx="12" cy="12" r="5"></circle>
+            <line x1="12" y1="1" x2="12" y2="3"></line>
+            <line x1="12" y1="21" x2="12" y2="23"></line>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+            <line x1="1" y1="12" x2="3" y2="12"></line>
+            <line x1="21" y1="12" x2="23" y2="12"></line>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+          </svg>
+          <span>Theme</span>
+        </button>
+        <button class="btn btn-primary" id="openSubscribeModalBtn" aria-haspopup="dialog">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+            <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+          </svg>
+          <span>Subscribe to Alerts</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- DOMINANT SYSTEM STATUS HERO ALERT -->
+    <main style="display:flex; flex-direction:column; gap:24px;">
+
+      <section class="system-status-hero stagger-2" aria-labelledby="heroHeading">
+        <div class="hero-main-row">
+          <div class="hero-status-title-group">
+            <div class="status-icon-badge" aria-hidden="true">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+                <line x1="12" y1="9" x2="12" y2="13"></line>
+                <line x1="12" y1="17" x2="12.01" y2="17"></line>
+              </svg>
+            </div>
+            <div>
+              <h2 class="hero-status-heading" id="heroHeading">Partial Service Degradation Detected</h2>
+              <p class="hero-status-desc">
+                Elevated HTTP 504 gateway timeouts are impacting Edge Ingress in <span class="tabular-nums" style="color:var(--text-primary); font-weight:600;">us-east-1</span>, with cascading webhook retry congestion. Core database persistence and container workloads remain fully operational. On-call SRE incident response team is actively mitigating.
+              </p>
+            </div>
+          </div>
+          <div>
+            <span class="status-pill degraded" style="font-size: var(--text-xs); padding: 4px 10px;">Degraded Performance</span>
+          </div>
+        </div>
+
+        <div class="hero-meta-badges">
+          <span class="meta-tag">Active Incidents: <strong>2 Ongoing</strong></span>
+          <span>•</span>
+          <span class="meta-tag">MTTR Rolling Average: <strong class="tabular-nums">18.4 min</strong></span>
+          <span>•</span>
+          <span class="meta-tag">Incident Commander: <strong>SRE Escalation Pod Alpha</strong></span>
+          <span>•</span>
+          <span class="meta-tag">Next Status Update Expected: <strong class="tabular-nums">15:15 UTC (in 23m)</strong></span>
+        </div>
+      </section>
+
+      <!-- 4-COLUMN KPI TELEMETRY CARDS -->
+      <section class="metrics-grid stagger-3" aria-label="System Key Performance Indicators">
+        <div class="metric-card">
+          <div class="metric-card-header">
+            <span>90-Day SLA Uptime</span>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+              <polyline points="22 4 12 14.01 9 11.01"></polyline>
+            </svg>
+          </div>
+          <div class="metric-value-row">
+            <span class="metric-value tabular-nums" id="slaMetricDisplay">99.942%</span>
+            <span class="metric-delta positive" title="Exceeding committed 99.90% SLA floor">▲ +0.042%</span>
+          </div>
+          <div class="metric-footer">
+            <span>Committed SLA: 99.90%</span>
+            <span>Total Downtime: 38m</span>
+          </div>
+        </div>
+
+        <div class="metric-card">
+          <div class="metric-card-header">
+            <span>Global p95 Latency</span>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <circle cx="12" cy="12" r="10"></circle>
+              <polyline points="12 6 12 12 16 14"></polyline>
+            </svg>
+          </div>
+          <div class="metric-value-row">
+            <span class="metric-value tabular-nums" id="kpiLatencyValue">41.8 ms</span>
+            <span class="metric-delta negative" title="Baseline normal is 24.0ms">▲ +17.8 ms</span>
+          </div>
+          <div class="metric-footer">
+            <span>Baseline: 24.0 ms</span>
+            <span>p99 Peak: 142 ms</span>
+          </div>
+        </div>
+
+        <div class="metric-card">
+          <div class="metric-card-header">
+            <span>Active Degraded Nodes</span>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <rect x="2" y="2" width="20" height="8" rx="2" ry="2"></rect>
+              <rect x="2" y="14" width="20" height="8" rx="2" ry="2"></rect>
+              <line x1="6" y1="6" x2="6.01" y2="6"></line>
+              <line x1="6" y1="18" x2="6.01" y2="18"></line>
+            </svg>
+          </div>
+          <div class="metric-value-row">
+            <span class="metric-value tabular-nums" style="color:var(--status-degraded);" id="kpiDegradedCount">2 Services</span>
+            <span class="metric-delta negative">14% of Fleet</span>
+          </div>
+          <div class="metric-footer">
+            <span>10 Healthy Services</span>
+            <span>0 Total Outages</span>
+          </div>
+        </div>
+
+        <div class="metric-card">
+          <div class="metric-card-header">
+            <span>Scheduled Maintenance</span>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+              <line x1="16" y1="2" x2="16" y2="6"></line>
+              <line x1="8" y1="2" x2="8" y2="6"></line>
+              <line x1="3" y1="10" x2="21" y2="10"></line>
+            </svg>
+          </div>
+          <div class="metric-value-row">
+            <span class="metric-value tabular-nums" style="color:#38bdf8;">1 Pending</span>
+            <span class="metric-delta" style="color:var(--text-tertiary);">In 4 Days</span>
+          </div>
+          <div class="metric-footer">
+            <span>EU-West DB Failover Drill</span>
+            <span>Window: 02:00 UTC</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- ACTIVE INCIDENTS ACCORDION TIMELINE -->
+      <section class="section-box stagger-3" aria-labelledby="incidentsTitle">
+        <div class="section-header">
+          <div class="section-title-wrap">
+            <h2 class="section-title" id="incidentsTitle">Active Incident Timeline</h2>
+            <span class="section-count-badge" id="activeIncidentsCountBadge">2 Active</span>
+          </div>
+          <div style="font-size:var(--text-xs); color:var(--text-tertiary);">
+            Click any incident to inspect live chronological responder logs
+          </div>
+        </div>
+
+        <div class="incidents-container" id="activeIncidentsContainer">
+          <!-- Incident 1: High Severity Degraded -->
+          <article class="incident-card severity-high open" id="inc-8492">
+            <button class="incident-summary-btn" type="button" aria-expanded="true" aria-controls="inc-8492-drawer" id="inc-8492-btn">
+              <div class="incident-info-col">
+                <div class="incident-top-line">
+                  <span class="incident-id">INC-8492</span>
+                  <span class="status-pill degraded">Degraded Performance</span>
+                  <h3 class="incident-title">Elevated 504 Gateway Timeouts on Edge API Gateway (us-east-1)</h3>
+                </div>
+                <div class="incident-meta-line">
+                  <span>Started: <strong class="tabular-nums">Today, 14:02 UTC (50m ago)</strong></span>
+                  <span>•</span>
+                  <span>Impacted Components:</span>
+                  <span class="impacted-component-tag">Edge API Gateway</span>
+                  <span class="impacted-component-tag">Auth &amp; Session Store</span>
+                </div>
+              </div>
+              <div class="accordion-indicator">
+                <span>Details</span>
+                <svg class="chevron-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+                  <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+              </div>
+            </button>
+
+            <div class="incident-details-drawer" id="inc-8492-drawer" role="region" aria-labelledby="inc-8492-btn">
+              <div class="drawer-content">
+                <div class="timeline-spine">
+                  
+                  <!-- Step 1: Latest Update (Monitoring) -->
+                  <div class="timeline-step active">
+                    <div class="timeline-step-bullet" aria-hidden="true"></div>
+                    <div class="timeline-step-header">
+                      <span class="status-pill monitoring">Monitoring</span>
+                      <span class="timeline-step-stage">Ingress Traffic Shedding Active — Error Rates Subsided to 0.4%</span>
+                      <span class="timeline-step-time tabular-nums">14:50 UTC (2m ago)</span>
+                    </div>
+                    <div class="timeline-step-body">
+                      We have shifted 45% of transatlantic API traffic to the secondary <span class="tabular-nums">us-east-2</span> edge pop. Internal error rates on the primary cluster have stabilized back under 0.4% (normal baseline is 0.02%). Connection backpressure is draining steadily. We will continue monitoring for another 20 minutes before declaring complete resolution.
+                    </div>
+                    <div class="timeline-step-technical-note">
+                      Telemetry log: cluster_504_drop_ratio down from 8.6% to 0.38% | Active sockets: 14,210 (nominal cap: 28,000)
+                    </div>
+                  </div>
+
+                  <!-- Step 2: Identified -->
+                  <div class="timeline-step">
+                    <div class="timeline-step-bullet" aria-hidden="true"></div>
+                    <div class="timeline-step-header">
+                      <span class="status-pill degraded">Identified</span>
+                      <span class="timeline-step-stage">Root Cause: Redis Connection Pool Exhaustion on JWT Verification Shard</span>
+                      <span class="timeline-step-time tabular-nums">14:32 UTC (20m ago)</span>
+                    </div>
+                    <div class="timeline-step-body">
+                      The spike in upstream 504 errors was traced to lock contention in the primary JWT token validation Redis cluster following a sudden spike in automated API token refreshes. Edge gateway workers were timing out waiting for available socket handles. Memory limits were not breached, but maximum file descriptors had reached saturation.
+                    </div>
+                  </div>
+
+                  <!-- Step 3: Investigating -->
+                  <div class="timeline-step">
+                    <div class="timeline-step-bullet" aria-hidden="true"></div>
+                    <div class="timeline-step-header">
+                      <span class="status-pill investigating">Investigating</span>
+                      <span class="timeline-step-stage">Automated Anomaly Alert Triggered on US-East Edge Proxy Group</span>
+                      <span class="timeline-step-time tabular-nums">14:02 UTC (50m ago)</span>
+                    </div>
+                    <div class="timeline-step-body">
+                      Our automated telemetry systems alerted on a sudden surge in HTTP 504 gateway response codes originating from edge proxy nodes in N. Virginia (us-east-1). Primary ingress engineers were paged and began investigating edge proxy connection telemetry.
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+          </article>
+
+          <!-- Incident 2: Medium Severity Degraded -->
+          <article class="incident-card severity-high" id="inc-8491">
+            <button class="incident-summary-btn" type="button" aria-expanded="false" aria-controls="inc-8491-drawer" id="inc-8491-btn">
+              <div class="incident-info-col">
+                <div class="incident-top-line">
+                  <span class="incident-id">INC-8491</span>
+                  <span class="status-pill degraded">Degraded Performance</span>
+                  <h3 class="incident-title">Webhook Delivery Dispatcher Queue Latency &amp; Backlog</h3>
+                </div>
+                <div class="incident-meta-line">
+                  <span>Started: <strong class="tabular-nums">Today, 12:44 UTC (2h 08m ago)</strong></span>
+                  <span>•</span>
+                  <span>Impacted Components:</span>
+                  <span class="impacted-component-tag">Webhook Dispatcher</span>
+                </div>
+              </div>
+              <div class="accordion-indicator">
+                <span>Details</span>
+                <svg class="chevron-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+                  <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+              </div>
+            </button>
+
+            <div class="incident-details-drawer" id="inc-8491-drawer" role="region" aria-labelledby="inc-8491-btn">
+              <div class="drawer-content">
+                <div class="timeline-spine">
+                  
+                  <div class="timeline-step active">
+                    <div class="timeline-step-bullet" aria-hidden="true"></div>
+                    <div class="timeline-step-header">
+                      <span class="status-pill monitoring">Monitoring</span>
+                      <span class="timeline-step-stage">Additional Dispatch Worker Pods Scaled to 4x Capacity</span>
+                      <span class="timeline-step-time tabular-nums">14:10 UTC (42m ago)</span>
+                    </div>
+                    <div class="timeline-step-body">
+                      We auto-scaled the webhook dispatch worker cluster from 32 pods to 128 pods. The backlog queue depth has dropped from 480,000 pending webhooks to 82,000 and is projected to clear completely within 15 minutes. Webhooks are being delivered with ~4 minute latency. No webhook payloads have been dropped.
+                    </div>
+                  </div>
+
+                  <div class="timeline-step">
+                    <div class="timeline-step-bullet" aria-hidden="true"></div>
+                    <div class="timeline-step-header">
+                      <span class="status-pill degraded">Identified</span>
+                      <span class="timeline-step-stage">Consumer Rate Limiting from Third-Party Endpoint Congestion</span>
+                      <span class="timeline-step-time tabular-nums">13:18 UTC (1h 34m ago)</span>
+                    </div>
+                    <div class="timeline-step-body">
+                      A major external integration partner implemented an aggressive IP-based rate-limit, causing delivery retries to back up our primary dispatch FIFO queue. Exponential backoff logic has been updated to prevent deadlocks across non-impacted customer subscriptions.
+                    </div>
+                  </div>
+
+                  <div class="timeline-step">
+                    <div class="timeline-step-bullet" aria-hidden="true"></div>
+                    <div class="timeline-step-header">
+                      <span class="status-pill investigating">Investigating</span>
+                      <span class="timeline-step-stage">Queue Lag Exceeded 120s Threshold</span>
+                      <span class="timeline-step-time tabular-nums">12:44 UTC (2h 08m ago)</span>
+                    </div>
+                    <div class="timeline-step-body">
+                      Our message queue telemetry detected delivery dispatch lag surpassing the acceptable 10-second SLA limit. Queue consumer utilization spiked to 100%.
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <!-- 24-HOUR INTERACTIVE TELEMETRY GRAPH -->
+      <section class="section-box stagger-4" aria-labelledby="telemetryTitle">
+        <div class="telemetry-chart-card">
+          <div class="chart-header-row">
+            <div class="chart-title-group">
+              <h2 class="chart-title" id="telemetryTitle">System Response Latency &amp; Error Rate Telemetry</h2>
+              <p class="chart-subtitle">Continuous 24-hour telemetry aggregated across all edge points of presence</p>
+            </div>
+
+            <div class="filter-bar">
+              <div class="segmented-control" role="tablist" aria-label="Telemetry Time Window">
+                <button class="segment-btn" role="tab" aria-selected="true" data-window="24h" id="tab-24h">Last 24 Hours</button>
+                <button class="segment-btn" role="tab" aria-selected="false" data-window="7d" id="tab-7d">7 Days</button>
+                <button class="segment-btn" role="tab" aria-selected="false" data-window="30d" id="tab-30d">30 Days</button>
+              </div>
+
+              <div class="chart-live-readout" aria-live="polite">
+                <div class="readout-item">
+                  <span class="readout-legend-indicator p95" aria-hidden="true"></span>
+                  <span style="color:var(--text-tertiary);">p95 Latency:</span>
+                  <strong class="tabular-nums" id="hudLatencyReadout" style="color:#38bdf8;">41.8 ms</strong>
+                </div>
+                <div class="readout-item">
+                  <span class="readout-legend-indicator error-rate" aria-hidden="true"></span>
+                  <span style="color:var(--text-tertiary);">5xx Errors:</span>
+                  <strong class="tabular-nums" id="hudErrorReadout" style="color:#f43f5e;">0.42%</strong>
+                </div>
+                <div class="readout-item">
+                  <span style="color:var(--text-tertiary);">Time:</span>
+                  <strong class="tabular-nums" id="hudTimeReadout" style="color:var(--text-primary);">14:52 UTC</strong>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Interactive SVG Sparkline Canvas -->
+          <div class="svg-chart-container" id="svgChartWrapper" role="region" aria-label="Interactive 24-hour latency line chart with pointer scrubbing">
+            <svg id="telemetrySvg" viewBox="0 0 1000 180" preserveAspectRatio="none">
+              <defs>
+                <linearGradient id="latencyGradient" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stop-color="#38bdf8" stop-opacity="0.45"/>
+                  <stop offset="100%" stop-color="#38bdf8" stop-opacity="0.0"/>
+                </linearGradient>
+              </defs>
+
+              <!-- Grid Horizontal Lines -->
+              <line class="grid-line" x1="40" y1="20" x2="980" y2="20" />
+              <text class="axis-text" x="35" y="24" text-anchor="end">120ms</text>
+
+              <line class="grid-line" x1="40" y1="65" x2="980" y2="65" />
+              <text class="axis-text" x="35" y="69" text-anchor="end">80ms</text>
+
+              <line class="grid-line" x1="40" y1="110" x2="980" y2="110" />
+              <text class="axis-text" x="35" y="114" text-anchor="end">40ms</text>
+
+              <line class="grid-line" x1="40" y1="155" x2="980" y2="155" />
+              <text class="axis-text" x="35" y="159" text-anchor="end">0ms</text>
+
+              <!-- Time Axis Labels -->
+              <text class="axis-text" x="60" y="174" text-anchor="start">24 Hours Ago</text>
+              <text class="axis-text" x="290" y="174" text-anchor="middle">18h Ago</text>
+              <text class="axis-text" x="520" y="174" text-anchor="middle">12h Ago</text>
+              <text class="axis-text" x="750" y="174" text-anchor="middle">6h Ago</text>
+              <text class="axis-text" x="970" y="174" text-anchor="end">Now (Live)</text>
+
+              <!-- Latency Area & Path -->
+              <path id="latencyAreaPath" class="latency-area" d="" />
+              <path id="latencyLinePath" class="latency-line" d="" />
+
+              <!-- Error Rate Path -->
+              <path id="errorLinePath" class="error-line" d="" />
+
+              <!-- Interactive Crosshair -->
+              <line id="crosshairLine" class="crosshair-line" x1="0" y1="15" x2="0" y2="160" />
+              <circle id="crosshairPointLatency" class="crosshair-point" r="4.5" fill="#38bdf8" stroke="#080c14" stroke-width="2" />
+              <circle id="crosshairPointError" class="crosshair-point" r="4" fill="#f43f5e" stroke="#080c14" stroke-width="2" />
+            </svg>
+          </div>
+        </div>
+      </section>
+
+      <!-- SERVICES HEALTH BREAKDOWN & 90-DAY UPTIME BARS -->
+      <section class="section-box stagger-4" aria-labelledby="servicesTitle">
+        <div class="section-header">
+          <div class="section-title-wrap">
+            <h2 class="section-title" id="servicesTitle">System Component Uptime Breakdown</h2>
+            <span class="section-count-badge" id="visibleServicesCount">12 Services Monitored</span>
+          </div>
+
+          <!-- Controls: Region Filter & Search -->
+          <div class="filter-bar">
+            <div class="segmented-control" role="tablist" aria-label="Filter by Infrastructure Region" id="regionFilterControl">
+              <button class="segment-btn" role="tab" aria-selected="true" data-region="all">All Regions</button>
+              <button class="segment-btn" role="tab" aria-selected="false" data-region="us-east">US-East</button>
+              <button class="segment-btn" role="tab" aria-selected="false" data-region="us-west">US-West</button>
+              <button class="segment-btn" role="tab" aria-selected="false" data-region="eu-central">EU-Central</button>
+              <button class="segment-btn" role="tab" aria-selected="false" data-region="ap-southeast">AP-Southeast</button>
+            </div>
+
+            <div class="segmented-control" role="tablist" aria-label="Uptime History Window" id="uptimeWindowControl">
+              <button class="segment-btn" role="tab" aria-selected="true" data-days="90">90 Days</button>
+              <button class="segment-btn" role="tab" aria-selected="false" data-days="60">60 Days</button>
+              <button class="segment-btn" role="tab" aria-selected="false" data-days="30">30 Days</button>
+            </div>
+
+            <div class="search-input-wrap">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                <circle cx="11" cy="11" r="8"></circle>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+              </svg>
+              <input type="text" class="search-input" id="serviceSearchInput" placeholder="Filter services or tags..." aria-label="Filter services by name or tag">
+            </div>
+          </div>
+        </div>
+
+        <!-- Rendered Services Container -->
+        <div id="servicesTiersContainer">
+          <!-- Dynamically populated via JS for complete 90-day interactive scrubbing -->
+        </div>
+      </section>
+
+      <!-- HISTORICAL INCIDENT ARCHIVE -->
+      <section class="section-box" aria-labelledby="archiveTitle">
+        <div class="section-header">
+          <div class="section-title-wrap">
+            <h2 class="section-title" id="archiveTitle">Past Incident Archive</h2>
+            <span class="section-count-badge">Resolved (Past 90 Days)</span>
+          </div>
+          <div style="font-size:var(--text-xs); color:var(--text-tertiary);">
+            All incidents include public post-incident reviews (PIRs) and root cause analyses
+          </div>
+        </div>
+
+        <div class="incidents-container">
+          <!-- Resolved Incident 1 -->
+          <article class="incident-card">
+            <button class="incident-summary-btn" type="button" aria-expanded="false" aria-controls="inc-8480-drawer" id="inc-8480-btn">
+              <div class="incident-info-col">
+                <div class="incident-top-line">
+                  <span class="incident-id">INC-8480</span>
+                  <span class="status-pill resolved">Resolved</span>
+                  <h3 class="incident-title">BGP Anycast Routing Flap Affecting European Edge Ingress</h3>
+                </div>
+                <div class="incident-meta-line">
+                  <span>Occurred: <strong class="tabular-nums">Sep 12, 2026 • Duration: 18m</strong></span>
+                  <span>•</span>
+                  <span>Impacted:</span>
+                  <span class="impacted-component-tag">Edge DNS &amp; Anycast</span>
+                  <span class="impacted-component-tag">eu-central-1</span>
+                </div>
+              </div>
+              <div class="accordion-indicator">
+                <span>View RCA</span>
+                <svg class="chevron-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+                  <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+              </div>
+            </button>
+
+            <div class="incident-details-drawer" id="inc-8480-drawer" role="region" aria-labelledby="inc-8480-btn">
+              <div class="drawer-content">
+                <div class="timeline-spine">
+                  <div class="timeline-step resolved">
+                    <div class="timeline-step-bullet" aria-hidden="true"></div>
+                    <div class="timeline-step-header">
+                      <span class="status-pill resolved">Resolved</span>
+                      <span class="timeline-step-stage">Upstream Transit Provider Route Dampening Cleared</span>
+                      <span class="timeline-step-time tabular-nums">Sep 12, 11:42 UTC</span>
+                    </div>
+                    <div class="timeline-step-body">
+                      Our Tier-1 transit carrier withdrew a flapping route announcement over the Frankfurt internet exchange (DE-CIX). Traffic re-converged automatically through Amsterdam and London transit paths. Zero packet loss confirmed.
+                    </div>
+                  </div>
+                  <div class="timeline-step">
+                    <div class="timeline-step-bullet" aria-hidden="true"></div>
+                    <div class="timeline-step-header">
+                      <span class="status-pill degraded">Identified</span>
+                      <span class="timeline-step-stage">Route oscillation isolated to AS3356 transit interconnect</span>
+                      <span class="timeline-step-time tabular-nums">Sep 12, 11:28 UTC</span>
+                    </div>
+                    <div class="timeline-step-body">
+                      Network engineering deprioritized the flapping BGP session and shifted ingress route weighting to secondary carriers.
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </article>
+
+          <!-- Resolved Incident 2 -->
+          <article class="incident-card">
+            <button class="incident-summary-btn" type="button" aria-expanded="false" aria-controls="inc-8451-drawer" id="inc-8451-btn">
+              <div class="incident-info-col">
+                <div class="incident-top-line">
+                  <span class="incident-id">INC-8451</span>
+                  <span class="status-pill resolved">Resolved</span>
+                  <h3 class="incident-title">Container Registry Image Layer Pull Rate Limit Throttle</h3>
+                </div>
+                <div class="incident-meta-line">
+                  <span>Occurred: <strong class="tabular-nums">Aug 28, 2026 • Duration: 34m</strong></span>
+                  <span>•</span>
+                  <span>Impacted:</span>
+                  <span class="impacted-component-tag">Container Registry</span>
+                  <span class="impacted-component-tag">Global</span>
+                </div>
+              </div>
+              <div class="accordion-indicator">
+                <span>View RCA</span>
+                <svg class="chevron-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+                  <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+              </div>
+            </button>
+
+            <div class="incident-details-drawer" id="inc-8451-drawer" role="region" aria-labelledby="inc-8451-btn">
+              <div class="drawer-content">
+                <div class="timeline-spine">
+                  <div class="timeline-step resolved">
+                    <div class="timeline-step-bullet" aria-hidden="true"></div>
+                    <div class="timeline-step-header">
+                      <span class="status-pill resolved">Resolved</span>
+                      <span class="timeline-step-stage">Distributed Layer Cache Re-warmed</span>
+                      <span class="timeline-step-time tabular-nums">Aug 28, 16:34 UTC</span>
+                    </div>
+                    <div class="timeline-step-body">
+                      The upstream blob storage egress gateway quotas were permanently increased. Added local node layer caching proxy daemon to decouple CI/CD pulls from raw bucket reads.
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </article>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="app-footer" role="contentinfo">
+      <div>
+        <span>VORTEX INFRASTRUCTURE SLA TELEMETRY DASHBOARD</span> •
+        <span>System Version <strong class="tabular-nums">v4.8.2-sre</strong></span>
+      </div>
+      <div class="footer-links">
+        <a href="#privacy" class="footer-link" onclick="event.preventDefault();">Privacy Policy</a>
+        <a href="#sla" class="footer-link" onclick="event.preventDefault();">SLA Terms &amp; Conditions</a>
+        <a href="#api" class="footer-link" onclick="event.preventDefault();">Status API (/v1/status.json)</a>
+        <a href="#rss" class="footer-link" onclick="event.preventDefault();">RSS / Atom Feed</a>
+      </div>
+    </footer>
+
+  </div>
+
+  <!-- FLOATING INSPECTION TOOLTIP HUD (Shared by Day Bars and Latency Chart) -->
+  <div class="floating-tooltip-hud" id="sharedTooltip" role="tooltip" aria-hidden="true">
+    <div class="tooltip-date" id="tooltipDate">Aug 14, 2026</div>
+    <div class="tooltip-status-row" id="tooltipStatus">
+      <span id="tooltipStatusLabel">Operational</span>
+      <span class="tabular-nums" id="tooltipUptimePercent">100%</span>
+    </div>
+    <div class="tooltip-detail" id="tooltipDetail">No incidents or maintenance recorded.</div>
+  </div>
+
+  <!-- SUBSCRIBE TO ALERTS MODAL -->
+  <div class="modal-backdrop" id="subscribeModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <div class="modal-window">
+      <div class="modal-header">
+        <div>
+          <h3 class="modal-title" id="modalTitle">Subscribe to Incident Alerts</h3>
+          <p style="font-size:var(--text-xs); color:var(--text-tertiary); margin-top:2px;">Get real-time notification broadcasts when outages or maintenance occur.</p>
+        </div>
+        <button class="modal-close-btn" id="closeModalBtn" aria-label="Close dialog">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+
+      <div class="modal-tabs" role="tablist" aria-label="Subscription Channel">
+        <button class="modal-tab-btn" role="tab" aria-selected="true" data-tab="email">Email</button>
+        <button class="modal-tab-btn" role="tab" aria-selected="false" data-tab="sms">SMS</button>
+        <button class="modal-tab-btn" role="tab" aria-selected="false" data-tab="webhook">Webhook / Slack</button>
+      </div>
+
+      <div class="modal-confirmation-banner" id="modalSuccessBanner">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+          <polyline points="22 4 12 14.01 9 11.01"></polyline>
+        </svg>
+        <span id="modalSuccessText">Subscription confirmed! You will receive critical incident updates.</span>
+      </div>
+
+      <form class="modal-form" id="subscribeForm" onsubmit="event.preventDefault(); handleSubscribeSubmit();">
+        <div class="form-group" id="formGroupInput">
+          <label class="form-label" for="subInput" id="subInputLabel">Email Address</label>
+          <input type="email" class="form-input" id="subInput" placeholder="sre-oncall@yourcompany.com" required>
+          <span class="form-hint" id="subInputHint">We will send confirmation and severity P1/P2 alert broadcasts only.</span>
+        </div>
+
+        <div style="display:flex; justify-content:flex-end; gap:8px; margin-top:8px;">
+          <button type="button" class="btn btn-secondary" id="cancelModalBtn">Cancel</button>
+          <button type="submit" class="btn btn-primary" id="confirmSubscribeBtn">Confirm Subscription</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ==========================================================================
+       CLIENT APPLICATION LOGIC (Self-Contained Reactive Telemetry Engine)
+       ========================================================================== -->
+  <script>
+    (function() {
+      'use strict';
+
+      // --- 1. DATA REPOSITORY: SERVICES & 90-DAY UPTIME GENERATION ---
+      const SERVICES_DATA = [
+        // Core Edge & Routing
+        {
+          id: 'edge-api',
+          tier: 'Core Edge & Routing',
+          name: 'Edge API Gateway & Reverse Proxy',
+          region: 'us-east',
+          regionLabel: 'us-east-1',
+          status: 'degraded',
+          statusLabel: 'Degraded Performance',
+          latency: '84ms (elevated)',
+          uptimeRatio: 99.88,
+          // Specific incident days (indices from 0=90 days ago to 89=today)
+          incidents: {
+            89: { status: 'degraded', uptime: '97.2%', note: 'Active Incident INC-8492: 504 Gateway Timeouts' },
+            72: { status: 'degraded', uptime: '98.9%', note: 'Redis memory defragmentation pause (14m)' },
+            34: { status: 'outage', uptime: '94.8%', note: 'Cascading ingress socket exhaustion (42m downtime)' }
+          }
+        },
+        {
+          id: 'dns-anycast',
+          tier: 'Core Edge & Routing',
+          name: 'DNS Anycast & Geo-Steering',
+          region: 'eu-central',
+          regionLabel: 'Global / Multi-Region',
+          status: 'operational',
+          statusLabel: 'Operational',
+          latency: '4.2ms',
+          uptimeRatio: 99.99,
+          incidents: {
+            82: { status: 'degraded', uptime: '99.4%', note: 'BGP Anycast routing flap at DE-CIX (18m)' }
+          }
+        },
+        {
+          id: 'cdn-cache',
+          tier: 'Core Edge & Routing',
+          name: 'Global CDN Static Edge Cache',
+          region: 'us-west',
+          regionLabel: 'Global (340 PoPs)',
+          status: 'operational',
+          statusLabel: 'Operational',
+          latency: '9.8ms',
+          uptimeRatio: 100.0,
+          incidents: {}
+        },
+
+        // Compute & Execution
+        {
+          id: 'serverless-workers',
+          tier: 'Compute & Execution',
+          name: 'Serverless Worker V8 Isolated Runtimes',
+          region: 'us-east',
+          regionLabel: 'us-east-1 / us-west-2',
+          status: 'operational',
+          statusLabel: 'Operational',
+          latency: '14.1ms',
+          uptimeRatio: 99.98,
+          incidents: {
+            45: { status: 'maintenance', uptime: '99.9%', note: 'Scheduled V8 runtime kernel micro-patch' }
+          }
+        },
+        {
+          id: 'container-registry',
+          tier: 'Compute & Execution',
+          name: 'OCI Container Registry & Build Engine',
+          region: 'eu-central',
+          regionLabel: 'eu-central-1',
+          status: 'operational',
+          statusLabel: 'Operational',
+          latency: '38.0ms',
+          uptimeRatio: 99.93,
+          incidents: {
+            68: { status: 'degraded', uptime: '98.6%', note: 'INC-8451: Image Layer Pull Rate Limit Throttle (34m)' }
+          }
+        },
+        {
+          id: 'async-jobs',
+          tier: 'Compute & Execution',
+          name: 'Asynchronous Background Jobs & Chrono Workers',
+          region: 'us-west',
+          regionLabel: 'us-west-2',
+          status: 'operational',
+          statusLabel: 'Operational',
+          latency: '22.4ms',
+          uptimeRatio: 99.97,
+          incidents: {
+            12: { status: 'degraded', uptime: '99.1%', note: 'Job queue consumer backpressure (20m)' }
+          }
+        },
+
+        // Database & Storage
+        {
+          id: 'postgres-cluster',
+          tier: 'Database & Storage',
+          name: 'Primary PostgreSQL Sharded Cluster',
+          region: 'us-east',
+          regionLabel: 'us-east-1 (Multi-AZ)',
+          status: 'operational',
+          statusLabel: 'Operational',
+          latency: '2.1ms',
+          uptimeRatio: 99.99,
+          incidents: {}
+        },
+        {
+          id: 'redis-cache',
+          tier: 'Database & Storage',
+          name: 'Distributed Redis Cluster & Session Cache',
+          region: 'us-east',
+          regionLabel: 'us-east-1',
+          status: 'degraded',
+          statusLabel: 'Degraded Performance',
+          latency: '18.4ms (elevated)',
+          uptimeRatio: 99.85,
+          incidents: {
+            89: { status: 'degraded', uptime: '96.8%', note: 'Elevated connection pool socket starvation' },
+            55: { status: 'maintenance', uptime: '99.8%', note: 'Replica promotion switchover maintenance' }
+          }
+        },
+        {
+          id: 'object-storage',
+          tier: 'Database & Storage',
+          name: 'S3-Compatible Distributed Blob Object Storage',
+          region: 'ap-southeast',
+          regionLabel: 'ap-southeast-1',
+          status: 'operational',
+          statusLabel: 'Operational',
+          latency: '29.2ms',
+          uptimeRatio: 100.0,
+          incidents: {}
+        },
+
+        // Developer Platform & Integrations
+        {
+          id: 'webhook-engine',
+          tier: 'Developer Platform & Integrations',
+          name: 'Webhook Event Dispatcher & Delivery Engine',
+          region: 'us-east',
+          regionLabel: 'Global Egress',
+          status: 'degraded',
+          statusLabel: 'Degraded Performance',
+          latency: '4m 12s queue lag',
+          uptimeRatio: 99.76,
+          incidents: {
+            89: { status: 'degraded', uptime: '95.5%', note: 'Active Incident INC-8491: Dispatcher queue backlog' },
+            39: { status: 'degraded', uptime: '98.1%', note: 'Webhook egress NAT gateway buffer saturation' }
+          }
+        },
+        {
+          id: 'auth-identity',
+          tier: 'Developer Platform & Integrations',
+          name: 'OAuth2 / SAML Enterprise Identity Gateway',
+          region: 'us-west',
+          regionLabel: 'Global Anycast',
+          status: 'operational',
+          statusLabel: 'Operational',
+          latency: '19.8ms',
+          uptimeRatio: 99.99,
+          incidents: {}
+        },
+        {
+          id: 'billing-metering',
+          tier: 'Developer Platform & Integrations',
+          name: 'Usage Metering & Billing Event Pipeline',
+          region: 'ap-southeast',
+          regionLabel: 'ap-southeast-1',
+          status: 'operational',
+          statusLabel: 'Operational',
+          latency: '12.6ms',
+          uptimeRatio: 100.0,
+          incidents: {}
+        }
+      ];
+
+      // Generate continuous 24-Hour Telemetry Series for the SVG Sparkline
+      const TELEMETRY_24H_DATA = [];
+      const now = new Date();
+      for (let i = 0; i <= 48; i++) { // Every 30 mins over 24 hours
+        const timeOffsetMs = (48 - i) * 30 * 60 * 1000;
+        const pointTime = new Date(now.getTime() - timeOffsetMs);
+        const hours = pointTime.getUTCHours().toString().padStart(2, '0');
+        const minutes = pointTime.getUTCMinutes().toString().padStart(2, '0');
+        
+        // Base normal latency 22-26ms
+        let baseLatency = 22 + Math.sin(i / 4) * 3 + Math.random() * 2.5;
+        let errorRate = 0.02 + Math.random() * 0.03;
+
+        // Simulate incident spike in the last 2 hours (indices 44 to 48)
+        if (i >= 44) {
+          const spikeFactor = (i - 43) * 16;
+          baseLatency += spikeFactor;
+          errorRate += (i - 43) * 1.8;
+          if (i === 48) {
+            // Mitigating: slight recovery
+            baseLatency = 41.8;
+            errorRate = 0.42;
+          }
+        }
+
+        TELEMETRY_24H_DATA.push({
+          index: i,
+          timeString: `${hours}:${minutes} UTC`,
+          latency: parseFloat(baseLatency.toFixed(1)),
+          errorRate: parseFloat(errorRate.toFixed(2))
+        });
+      }
+
+      // State Management
+      let currentRegion = 'all';
+      let currentUptimeWindow = 90; // 90, 60, or 30 days
+      let currentSearchQuery = '';
+
+      // DOM References
+      const servicesContainer = document.getElementById('servicesTiersContainer');
+      const serviceSearchInput = document.getElementById('serviceSearchInput');
+      const regionFilterControl = document.getElementById('regionFilterControl');
+      const uptimeWindowControl = document.getElementById('uptimeWindowControl');
+      const visibleServicesCount = document.getElementById('visibleServicesCount');
+      const sharedTooltip = document.getElementById('sharedTooltip');
+      const tooltipDate = document.getElementById('tooltipDate');
+      const tooltipStatusLabel = document.getElementById('tooltipStatusLabel');
+      const tooltipUptimePercent = document.getElementById('tooltipUptimePercent');
+      const tooltipDetail = document.getElementById('tooltipDetail');
+
+      // --- 2. ACCORDION INCIDENT HANDLER ---
+      function initIncidentAccordions() {
+        const accordionButtons = document.querySelectorAll('.incident-summary-btn');
+        accordionButtons.forEach(btn => {
+          btn.addEventListener('click', () => {
+            const card = btn.closest('.incident-card');
+            const isOpen = card.classList.contains('open');
+            
+            // Toggle open state
+            if (isOpen) {
+              card.classList.remove('open');
+              btn.setAttribute('aria-expanded', 'false');
+            } else {
+              card.classList.add('open');
+              btn.setAttribute('aria-expanded', 'true');
+            }
+          });
+        });
+      }
+
+      // --- 3. 90-DAY UPTIME BAR GENERATOR & RENDERING ---
+      function renderServicesList() {
+        servicesContainer.innerHTML = '';
+
+        // Filter services based on active region and search string
+        const filteredServices = SERVICES_DATA.filter(service => {
+          const matchesRegion = (currentRegion === 'all') || (service.region === currentRegion);
+          const query = currentSearchQuery.toLowerCase();
+          const matchesSearch = !query || 
+            service.name.toLowerCase().includes(query) || 
+            service.tier.toLowerCase().includes(query) || 
+            service.regionLabel.toLowerCase().includes(query) ||
+            service.statusLabel.toLowerCase().includes(query);
+          return matchesRegion && matchesSearch;
+        });
+
+        visibleServicesCount.textContent = `${filteredServices.length} Services Monitored`;
+
+        if (filteredServices.length === 0) {
+          servicesContainer.innerHTML = `
+            <div style="background:var(--bg-surface); border:1px dashed var(--border-medium); border-radius:8px; padding:36px; text-align:center; color:var(--text-tertiary);">
+              <p style="font-size:var(--text-base); font-weight:600; color:var(--text-secondary);">No services match your active filter.</p>
+              <p style="font-size:var(--text-xs); margin-top:4px;">Try clearing search keywords or switching regions.</p>
+            </div>
+          `;
+          return;
+        }
+
+        // Group by Tier
+        const tiersMap = new Map();
+        filteredServices.forEach(service => {
+          if (!tiersMap.has(service.tier)) {
+            tiersMap.set(service.tier, []);
+          }
+          tiersMap.get(service.tier).push(service);
+        });
+
+        tiersMap.forEach((servicesInTier, tierName) => {
+          const tierGroupEl = document.createElement('div');
+          tierGroupEl.className = 'services-tier-group';
+
+          // Tier Section Heading
+          const tierHeader = document.createElement('div');
+          tierHeader.className = 'tier-header';
+          tierHeader.innerHTML = `
+            <span>${tierName}</span>
+            <div class="tier-header-line"></div>
+          `;
+          tierGroupEl.appendChild(tierHeader);
+
+          // Render each service in this tier
+          servicesInTier.forEach(service => {
+            const serviceRow = document.createElement('div');
+            serviceRow.className = 'service-row';
+            serviceRow.dataset.serviceId = service.id;
+
+            // Status Indicator Class
+            let statusDotClass = 'operational';
+            if (service.status === 'degraded') statusDotClass = 'degraded';
+            if (service.status === 'outage') statusDotClass = 'outage';
+
+            // Main info row
+            const mainLine = document.createElement('div');
+            mainLine.className = 'service-main-line';
+            mainLine.innerHTML = `
+              <div class="service-identity">
+                <div class="status-indicator-dot ${statusDotClass}" title="Status: ${service.statusLabel}"></div>
+                <div>
+                  <div class="service-name">${service.name}</div>
+                  <div class="service-tags" style="margin-top:2px;">
+                    <span class="service-region-tag">${service.regionLabel}</span>
+                    <span class="status-pill ${service.status}" style="font-size:10px; padding:1px 6px;">${service.statusLabel}</span>
+                  </div>
+                </div>
+              </div>
+              <div class="service-telemetry-stats">
+                <div class="telemetry-item">
+                  <span class="telemetry-label">p95 Latency</span>
+                  <span class="telemetry-val">${service.latency}</span>
+                </div>
+                <div class="telemetry-item">
+                  <span class="telemetry-label">${currentUptimeWindow}d Uptime</span>
+                  <span class="telemetry-val" style="color:${service.uptimeRatio >= 99.9 ? 'var(--status-operational)' : 'var(--status-degraded)'};">
+                    ${service.uptimeRatio.toFixed(2)}%
+                  </span>
+                </div>
+              </div>
+            `;
+            serviceRow.appendChild(mainLine);
+
+            // Uptime Histogram Strip
+            const uptimeSection = document.createElement('div');
+            uptimeSection.className = 'uptime-bar-section';
+
+            const barContainer = document.createElement('div');
+            barContainer.className = 'uptime-bar-container';
+            barContainer.setAttribute('role', 'group');
+            barContainer.setAttribute('aria-label', `Historical uptime for ${service.name} over ${currentUptimeWindow} days`);
+
+            // Generate Day Bars
+            // Window calculation: if 90 days, 0 to 89. If 30 days, 60 to 89.
+            const startDayIndex = 90 - currentUptimeWindow;
+            const today = new Date();
+
+            for (let dayIndex = startDayIndex; dayIndex < 90; dayIndex++) {
+              const dayBar = document.createElement('div');
+              dayBar.className = 'day-bar';
+              dayBar.tabIndex = 0;
+
+              // Calculate date for this bar
+              const daysAgo = 89 - dayIndex;
+              const barDate = new Date(today.getTime() - daysAgo * 24 * 60 * 60 * 1000);
+              const dateString = barDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+
+              // Check if incident occurred on this day
+              const incidentOnDay = service.incidents[dayIndex];
+              let barStatus = 'status-100';
+              let uptimePercent = '100%';
+              let note = '100% operational. Zero downtime or performance degradation.';
+              let label = 'Operational';
+
+              if (incidentOnDay) {
+                barStatus = `status-${incidentOnDay.status}`;
+                uptimePercent = incidentOnDay.uptime;
+                note = incidentOnDay.note;
+                label = incidentOnDay.status === 'degraded' ? 'Degraded Performance' : 
+                        incidentOnDay.status === 'outage' ? 'Service Outage' : 'Scheduled Maintenance';
+              }
+
+              dayBar.classList.add(barStatus);
+              dayBar.dataset.date = dateString;
+              dayBar.dataset.status = label;
+              dayBar.dataset.uptime = uptimePercent;
+              dayBar.dataset.note = note;
+              dayBar.dataset.statusCode = incidentOnDay ? incidentOnDay.status : 'operational';
+
+              dayBar.setAttribute('aria-label', `${dateString}: ${label}, ${uptimePercent} uptime`);
+
+              // Pointer & Focus Events for Floating Tooltip HUD
+              dayBar.addEventListener('mouseenter', handleDayBarHover);
+              dayBar.addEventListener('focus', handleDayBarHover);
+              dayBar.addEventListener('mouseleave', hideTooltip);
+              dayBar.addEventListener('blur', hideTooltip);
+
+              barContainer.appendChild(dayBar);
+            }
+
+            uptimeSection.appendChild(barContainer);
+
+            // Legend labels below bar
+            const legendRow = document.createElement('div');
+            legendRow.className = 'uptime-legend-row';
+            legendRow.innerHTML = `
+              <span>${currentUptimeWindow} days ago</span>
+              <span style="display:inline-flex; align-items:center; gap:4px;">
+                <span style="color:var(--status-operational); font-weight:600;">${service.uptimeRatio.toFixed(2)}% uptime</span>
+                <span>• Today</span>
+              </span>
+            `;
+            uptimeSection.appendChild(legendRow);
+
+            serviceRow.appendChild(uptimeSection);
+            tierGroupEl.appendChild(serviceRow);
+          });
+
+          servicesContainer.appendChild(tierGroupEl);
+        });
+      }
+
+      // Day Bar Tooltip Positioner
+      function handleDayBarHover(e) {
+        const bar = e.currentTarget;
+        const rect = bar.getBoundingClientRect();
+        
+        tooltipDate.textContent = bar.dataset.date;
+        tooltipStatusLabel.textContent = bar.dataset.status;
+        tooltipUptimePercent.textContent = bar.dataset.uptime;
+        tooltipDetail.textContent = bar.dataset.note;
+
+        // Color coding for status in tooltip
+        const code = bar.dataset.statusCode;
+        if (code === 'operational') {
+          tooltipStatusLabel.style.color = 'var(--status-operational)';
+        } else if (code === 'degraded') {
+          tooltipStatusLabel.style.color = 'var(--status-degraded)';
+        } else if (code === 'outage') {
+          tooltipStatusLabel.style.color = 'var(--status-outage)';
+        } else {
+          tooltipStatusLabel.style.color = '#38bdf8';
+        }
+
+        // Coordinate calculation with viewport boundary clamping
+        const tooltipWidth = 200;
+        let left = rect.left + rect.width / 2;
+        let top = rect.top;
+
+        // Clamp left edge
+        if (left < tooltipWidth / 2 + 10) {
+          left = tooltipWidth / 2 + 10;
+        } else if (left > window.innerWidth - tooltipWidth / 2 - 10) {
+          left = window.innerWidth - tooltipWidth / 2 - 10;
+        }
+
+        sharedTooltip.style.left = `${left}px`;
+        sharedTooltip.style.top = `${top}px`;
+        sharedTooltip.classList.add('active');
+        sharedTooltip.setAttribute('aria-hidden', 'false');
+      }
+
+      function hideTooltip() {
+        sharedTooltip.classList.remove('active');
+        sharedTooltip.setAttribute('aria-hidden', 'true');
+      }
+
+      // --- 4. 24-HOUR INTERACTIVE SVG CHART SCRUBBER ---
+      function initTelemetryChart() {
+        const svg = document.getElementById('telemetrySvg');
+        const wrapper = document.getElementById('svgChartWrapper');
+        const areaPath = document.getElementById('latencyAreaPath');
+        const linePath = document.getElementById('latencyLinePath');
+        const errorPath = document.getElementById('errorLinePath');
+        const crosshairLine = document.getElementById('crosshairLine');
+        const pointLatency = document.getElementById('crosshairPointLatency');
+        const pointError = document.getElementById('crosshairPointError');
+        
+        const readoutLatency = document.getElementById('hudLatencyReadout');
+        const readoutError = document.getElementById('hudErrorReadout');
+        const readoutTime = document.getElementById('hudTimeReadout');
+
+        // Coordinate scaling: X spans 50 to 970 (width 920). Y spans 155 (0ms) down to 20 (120ms)
+        const minX = 50;
+        const maxX = 970;
+        const minY = 20;   // 120ms
+        const maxY = 155;  // 0ms
+        const maxLatencyScale = 120;
+        const maxErrorScale = 10; // 0% to 10%
+
+        const pointsCount = TELEMETRY_24H_DATA.length;
+        const stepX = (maxX - minX) / (pointsCount - 1);
+
+        let latencyPathD = '';
+        let errorPathD = '';
+
+        TELEMETRY_24H_DATA.forEach((pt, index) => {
+          const x = minX + index * stepX;
+          // Scale latency: 0ms -> maxY (155), 120ms -> minY (20)
+          const clampedLat = Math.min(pt.latency, maxLatencyScale);
+          const yLat = maxY - (clampedLat / maxLatencyScale) * (maxY - minY);
+
+          // Scale error rate: 0% -> maxY (155), 10% -> minY (20)
+          const clampedErr = Math.min(pt.errorRate, maxErrorScale);
+          const yErr = maxY - (clampedErr / maxErrorScale) * (maxY - minY);
+
+          pt.svgX = x;
+          pt.svgYLat = yLat;
+          pt.svgYErr = yErr;
+
+          if (index === 0) {
+            latencyPathD += `M ${x} ${yLat}`;
+            errorPathD += `M ${x} ${yErr}`;
+          } else {
+            latencyPathD += ` L ${x} ${yLat}`;
+            errorPathD += ` L ${x} ${yErr}`;
+          }
+        });
+
+        // Set paths
+        linePath.setAttribute('d', latencyPathD);
+        errorPath.setAttribute('d', errorPathD);
+
+        // Fill area below latency
+        const areaD = `${latencyPathD} L ${maxX} ${maxY} L ${minX} ${maxY} Z`;
+        areaPath.setAttribute('d', areaD);
+
+        // Pointer Scrubbing interaction
+        function handlePointerMove(e) {
+          const rect = wrapper.getBoundingClientRect();
+          const clientX = e.clientX;
+          const relativeX = (clientX - rect.left) / rect.width;
+          const svgTargetX = relativeX * 1000;
+
+          // Find closest data point
+          let closestPoint = TELEMETRY_24H_DATA[0];
+          let minDistance = Infinity;
+
+          for (let i = 0; i < TELEMETRY_24H_DATA.length; i++) {
+            const dist = Math.abs(TELEMETRY_24H_DATA[i].svgX - svgTargetX);
+            if (dist < minDistance) {
+              minDistance = dist;
+              closestPoint = TELEMETRY_24H_DATA[i];
+            }
+          }
+
+          // Update HUD readouts
+          readoutLatency.textContent = `${closestPoint.latency} ms`;
+          readoutError.textContent = `${closestPoint.errorRate}%`;
+          readoutTime.textContent = closestPoint.timeString;
+
+          // Position crosshairs
+          crosshairLine.setAttribute('x1', closestPoint.svgX);
+          crosshairLine.setAttribute('x2', closestPoint.svgX);
+          crosshairLine.style.opacity = '1';
+
+          pointLatency.setAttribute('cx', closestPoint.svgX);
+          pointLatency.setAttribute('cy', closestPoint.svgYLat);
+          pointLatency.style.opacity = '1';
+
+          pointError.setAttribute('cx', closestPoint.svgX);
+          pointError.setAttribute('cy', closestPoint.svgYErr);
+          pointError.style.opacity = '1';
+        }
+
+        function handlePointerLeave() {
+          crosshairLine.style.opacity = '0';
+          pointLatency.style.opacity = '0';
+          pointError.style.opacity = '0';
+
+          // Reset to current latest
+          const latest = TELEMETRY_24H_DATA[TELEMETRY_24H_DATA.length - 1];
+          readoutLatency.textContent = `${latest.latency} ms`;
+          readoutError.textContent = `${latest.errorRate}%`;
+          readoutTime.textContent = latest.timeString;
+        }
+
+        wrapper.addEventListener('pointermove', handlePointerMove);
+        wrapper.addEventListener('pointerleave', handlePointerLeave);
+      }
+
+      // --- 5. REGION, SEARCH, AND UPTIME WINDOW CONTROLS ---
+      function initControls() {
+        // Region Segment Control
+        regionFilterControl.addEventListener('click', (e) => {
+          const btn = e.target.closest('.segment-btn');
+          if (!btn) return;
+
+          regionFilterControl.querySelectorAll('.segment-btn').forEach(b => {
+            b.setAttribute('aria-selected', 'false');
+          });
+          btn.setAttribute('aria-selected', 'true');
+          currentRegion = btn.dataset.region;
+          renderServicesList();
+        });
+
+        // Uptime Window Control (90d / 60d / 30d)
+        uptimeWindowControl.addEventListener('click', (e) => {
+          const btn = e.target.closest('.segment-btn');
+          if (!btn) return;
+
+          uptimeWindowControl.querySelectorAll('.segment-btn').forEach(b => {
+            b.setAttribute('aria-selected', 'false');
+          });
+          btn.setAttribute('aria-selected', 'true');
+          currentUptimeWindow = parseInt(btn.dataset.days, 10);
+          
+          // Recalculate SLA metric slightly for selected window
+          const slaMetric = document.getElementById('slaMetricDisplay');
+          if (currentUptimeWindow === 90) slaMetric.textContent = '99.942%';
+          if (currentUptimeWindow === 60) slaMetric.textContent = '99.958%';
+          if (currentUptimeWindow === 30) slaMetric.textContent = '99.914%';
+
+          renderServicesList();
+        });
+
+        // Live Search Input Filter
+        serviceSearchInput.addEventListener('input', (e) => {
+          currentSearchQuery = e.target.value.trim();
+          renderServicesList();
+        });
+
+        // Telemetry Range Tab Selection
+        const tabList = document.querySelector('[aria-label="Telemetry Time Window"]');
+        if (tabList) {
+          tabList.addEventListener('click', (e) => {
+            const btn = e.target.closest('.segment-btn');
+            if (!btn) return;
+            tabList.querySelectorAll('.segment-btn').forEach(b => b.setAttribute('aria-selected', 'false'));
+            btn.setAttribute('aria-selected', 'true');
+          });
+        }
+      }
+
+      // --- 6. LIVE TELEMETRY SIMULATION HEARTBEAT ---
+      function initLiveHeartbeat() {
+        const liveTimestamp = document.getElementById('liveTimestamp');
+        const kpiLatency = document.getElementById('kpiLatencyValue');
+
+        // Periodic simulated refresh every 15 seconds
+        setInterval(() => {
+          const now = new Date();
+          const hours = now.getUTCHours().toString().padStart(2, '0');
+          const minutes = now.getUTCMinutes().toString().padStart(2, '0');
+          const seconds = now.getUTCSeconds().toString().padStart(2, '0');
+          liveTimestamp.textContent = `${hours}:${minutes}:${seconds} UTC`;
+
+          // Subtle natural telemetry jitter (+/- 0.4ms)
+          const jitter = (Math.random() * 0.8 - 0.4);
+          const currentVal = 41.8 + jitter;
+          kpiLatency.textContent = `${currentVal.toFixed(1)} ms`;
+        }, 15000);
+      }
+
+      // --- 7. SUBSCRIBE MODAL MANAGEMENT ---
+      function initSubscribeModal() {
+        const openBtn = document.getElementById('openSubscribeModalBtn');
+        const modal = document.getElementById('subscribeModal');
+        const closeBtn = document.getElementById('closeModalBtn');
+        const cancelBtn = document.getElementById('cancelModalBtn');
+        const tabs = modal.querySelectorAll('.modal-tab-btn');
+        const inputLabel = document.getElementById('subInputLabel');
+        const subInput = document.getElementById('subInput');
+        const hint = document.getElementById('subInputHint');
+        const successBanner = document.getElementById('modalSuccessBanner');
+
+        function openModal() {
+          modal.classList.add('open');
+          subInput.focus();
+          document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal() {
+          modal.classList.remove('open');
+          document.body.style.overflow = '';
+          successBanner.classList.remove('active');
+        }
+
+        openBtn.addEventListener('click', openModal);
+        closeBtn.addEventListener('click', closeModal);
+        cancelBtn.addEventListener('click', closeModal);
+
+        modal.addEventListener('click', (e) => {
+          if (e.target === modal) closeModal();
+        });
+
+        document.addEventListener('keydown', (e) => {
+          if (e.key === 'Escape' && modal.classList.contains('open')) {
+            closeModal();
+          }
+        });
+
+        // Tabs in Modal
+        tabs.forEach(tab => {
+          tab.addEventListener('click', () => {
+            tabs.forEach(t => t.setAttribute('aria-selected', 'false'));
+            tab.setAttribute('aria-selected', 'true');
+            const mode = tab.dataset.tab;
+            if (mode === 'email') {
+              inputLabel.textContent = 'Email Address';
+              subInput.type = 'email';
+              subInput.placeholder = 'sre-oncall@yourcompany.com';
+              hint.textContent = 'We will send confirmation and severity P1/P2 alert broadcasts only.';
+            } else if (mode === 'sms') {
+              inputLabel.textContent = 'Mobile Phone Number';
+              subInput.type = 'tel';
+              subInput.placeholder = '+1 (555) 019-2834';
+              hint.textContent = 'Standard SMS carrier messaging rates may apply.';
+            } else if (mode === 'webhook') {
+              inputLabel.textContent = 'Slack Incoming Webhook URL';
+              subInput.type = 'url';
+              subInput.placeholder = 'https://hooks.slack.com/services/T00/B00/XXXXX';
+              hint.textContent = 'Automated JSON notifications dispatched via POST on state changes.';
+            }
+          });
+        });
+
+        window.handleSubscribeSubmit = function() {
+          successBanner.classList.add('active');
+          subInput.value = '';
+          setTimeout(() => {
+            closeModal();
+          }, 2400);
+        };
+      }
+
+      // --- 8. THEME TOGGLE (Dual Operational Dark / Slate Light) ---
+      function initThemeToggle() {
+        const themeBtn = document.getElementById('themeToggleBtn');
+        let currentTheme = 'dark';
+
+        themeBtn.addEventListener('click', () => {
+          if (currentTheme === 'dark') {
+            document.documentElement.setAttribute('data-theme', 'light');
+            currentTheme = 'light';
+          } else {
+            document.documentElement.removeAttribute('data-theme');
+            currentTheme = 'dark';
+          }
+        });
+      }
+
+      // --- INITIALIZE ALL SUBSYSTEMS ON DOM READY ---
+      document.addEventListener('DOMContentLoaded', () => {
+        initIncidentAccordions();
+        renderServicesList();
+        initTelemetryChart();
+        initControls();
+        initLiveHeartbeat();
+        initSubscribeModal();
+        initThemeToggle();
+      });
+
+    })();
+  </script>
+</body>
+</html>

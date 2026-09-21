@@ -1,0 +1,2239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Display &amp; Dark Mode Settings — 390×844 Mobile Frame</title>
+
+  <!--
+  =============================================================================
+  DESIGN_SKILL_V4 PLAN GATE REASONING NOTES:
+  1. Layout:
+     - 390x844px fixed mobile frame (iPhone 15 Pro / iOS 18 baseline standard).
+     - Inset Grouped Table layout (Apple Human Interface Guidelines):
+       * Top: iOS Status bar (9:41, 4-bar cellular, Wi-Fi, battery level) + Navigation header (< Settings).
+       * Hero: Compact Live Reading Sample preview card (reacts dynamically to dark mode,
+         OLED true black, color temperature warmth, and media dimming in real time).
+       * Group 1: Appearance Selector (Segmented visual phone cards: Light vs Dark) +
+         "Automatic" scheduling master toggle.
+       * Group 2: Schedule Automation (Accordion-expanded when Automatic is active.
+         Segmented control: "Sunset to Sunrise" vs "Custom Schedule").
+         Features real, fully functional interactive time pickers for "Turn On" and
+         "Turn Off" with iOS-style expandable drum/stepper wheel pickers, quick presets,
+         and live active-duration calculation.
+       * Group 3: Color Temperature / Night Shift (Master toggle + continuous draggable
+         slider from 2000K to 6500K with live numerical Kelvin readout and physical
+         Planckian locus blackbody spectrum color simulation).
+       * Group 4: Display Comfort & OLED (Pure Black #000000 toggle for OLED power saving,
+         Dim Media in Dark Mode toggle, High Contrast Text toggle).
+       * Group 5: Thumb-Reach Quick Presets (Bedtime, Reader, Daylight).
+       * Bottom: Dynamic safe-area footer with Home Indicator.
+
+  2. Signature Motif:
+     - "Luminous Tactile Dark": An authentic iOS 18 HIG dark environment where dark mode
+       isn't a flat gray wash, but a layered physical hierarchy (pitch black OLED #000000
+       base, elevated card #1c1c1e, tactile separators rgba(255,255,255,0.08)), illuminated
+       by warm amber photonic radiation (2000K-6500K) that physically shifts color
+       temperature across the interactive preview.
+
+  3. Palette & Typography:
+     - Typography: Apple System font stack (-apple-system, BlinkMacSystemFont, "SF Pro Text",
+       "SF Pro Display", system-ui). Monospace tabular digits (ui-monospace, "SF Mono", monospace)
+       for time and Kelvin readouts. Editorial serif ("New York", Georgia, serif) for the
+       reading preview card.
+     - Palette:
+       * Background: #121215 (Charcoal Dark) / #000000 (Pure OLED) / #f2f2f7 (Light)
+       * Card Surfaces: #1c1c1e (Dark) / #0a0a0c (OLED) / #ffffff (Light)
+       * Primary Accent: iOS System Blue (#0a84ff)
+       * Warmth Accent: Amber Radiance (#ff9d3b)
+       * Success: Mint Green (#30d158)
+       * Separators: rgba(255, 255, 255, 0.09)
+       * Text: Primary #ffffff / #000000, Secondary #8e8e93, Tertiary #636366
+
+  4. Distinctiveness ("Will the user say wow?"):
+     - Complete elimination of fake UI. The color-temperature slider is a continuous,
+       mathematically accurate Planckian Kelvin engine that smoothly shifts the color
+       cast of the live preview card.
+     - The scheduling time pickers are real, interactive drum wheels that expand inline,
+       allow single-step minute and hour adjustments, support keyboard arrow control,
+       and automatically compute live time durations (e.g., "Active for 9 hrs 00 mins").
+     - OLED mode visibly toggles the screen between charcoal gray and pure 0.0-nit black.
+
+  5. Anti-Slop Discipline:
+     - No card soup: Strict iOS inset-grouped table hierarchy with standardized 54px left-aligned
+       separator insets and 44px+ touch targets.
+     - No decorative gradients: The only gradient is the functional physical spectrum on the
+       Kelvin slider track.
+     - No gratuitous blur: Crisp, solid elevation surfaces with precise contrast tokens.
+     - Bounded motion: 150-250ms cubic-bezier springs strictly tied to user actions.
+     - Full accessibility: Semantic buttons, ARIA switch and radio roles, keyboard navigability,
+       and prefers-reduced-motion support.
+  =============================================================================
+  -->
+
+  <style>
+    /* -------------------------------------------------------------------------
+       DESIGN TOKENS & SYSTEM VARIABLES
+       ------------------------------------------------------------------------- */
+    :root {
+      --font-system: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", system-ui, sans-serif;
+      --font-mono: ui-monospace, "SF Mono", Menlo, Monaco, Consolas, monospace;
+      --font-serif: "New York", Georgia, Cambria, serif;
+
+      /* iOS System Colors */
+      --ios-blue: #0a84ff;
+      --ios-green: #30d158;
+      --ios-amber: #ff9d3b;
+      --ios-gray-light: #8e8e93;
+
+      /* Dynamic Theme Variables (Dark Mode Default) */
+      --phone-bg: #121215;
+      --card-bg: #1c1c1e;
+      --card-bg-subtle: #252528;
+      --row-active: #2c2c2e;
+      --separator: rgba(255, 255, 255, 0.09);
+      --text-primary: #ffffff;
+      --text-secondary: #8e8e93;
+      --text-tertiary: #636366;
+      --nav-bg: #121215;
+      --island-bg: #000000;
+      --status-text: #ffffff;
+      --phone-border: #28282d;
+      --control-bg: #2c2c2e;
+      --control-active: #0a84ff;
+      --preview-bg: #17171a;
+      --preview-text: #f0f0f4;
+      --preview-border: rgba(255, 255, 255, 0.08);
+
+      /* Color Temperature Planckian Engine Variables */
+      --kelvin: 3400;
+      --warmth-r: 255;
+      --warmth-g: 183;
+      --warmth-b: 123;
+      --warmth-alpha: 0.22;
+      --media-brightness: 0.75;
+      --text-contrast-boost: 1;
+
+      /* Motion timing */
+      --spring-fast: 180ms cubic-bezier(0.16, 1, 0.3, 1);
+      --spring-standard: 260ms cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    /* Light Mode Overrides */
+    .theme-light {
+      --phone-bg: #f2f2f7;
+      --card-bg: #ffffff;
+      --card-bg-subtle: #f2f2f7;
+      --row-active: #e5e5ea;
+      --separator: rgba(60, 60, 67, 0.12);
+      --text-primary: #000000;
+      --text-secondary: #6e6e73;
+      --text-tertiary: #8e8e93;
+      --nav-bg: #f2f2f7;
+      --status-text: #000000;
+      --phone-border: #d1d1d6;
+      --control-bg: #e5e5ea;
+      --control-active: #007aff;
+      --preview-bg: #ffffff;
+      --preview-text: #1d1d1f;
+      --preview-border: rgba(0, 0, 0, 0.08);
+      --ios-blue: #007aff;
+    }
+
+    /* Pure Black OLED Overrides */
+    .theme-oled {
+      --phone-bg: #000000 !important;
+      --card-bg: #0a0a0c !important;
+      --card-bg-subtle: #141416 !important;
+      --preview-bg: #000000 !important;
+      --nav-bg: #000000 !important;
+      --preview-border: rgba(255, 255, 255, 0.14) !important;
+      --separator: rgba(255, 255, 255, 0.14) !important;
+    }
+
+    /* -------------------------------------------------------------------------
+       GLOBAL & DESKTOP STAGE RESET
+       ------------------------------------------------------------------------- */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      background: #090a0c;
+      background-image:
+        radial-gradient(circle at 50% 0%, rgba(30, 40, 60, 0.35) 0%, transparent 60%),
+        radial-gradient(circle at 50% 100%, rgba(20, 20, 25, 0.4) 0%, transparent 70%);
+      color: #e5e5ea;
+      font-family: var(--font-system);
+      font-size: 16px;
+      line-height: 1.45;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 20px 16px;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    /* Stage Header & Metadata Outside Frame */
+    .stage-header {
+      text-align: center;
+      margin-bottom: 16px;
+      max-width: 520px;
+    }
+
+    .stage-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 12px;
+      border-radius: 20px;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #98989f;
+      margin-bottom: 6px;
+    }
+
+    .stage-badge .dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--ios-green);
+      box-shadow: 0 0 8px var(--ios-green);
+    }
+
+    .stage-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: #ffffff;
+      letter-spacing: -0.01em;
+    }
+
+    .stage-caption {
+      font-size: 13px;
+      color: #8e8e93;
+      margin-top: 3px;
+    }
+
+    /* -------------------------------------------------------------------------
+       390×844 DEVICE FRAME (iPhone 15 Pro Specification)
+       ------------------------------------------------------------------------- */
+    .device-shell {
+      width: 390px;
+      height: 844px;
+      background: var(--phone-bg);
+      color: var(--text-primary);
+      border-radius: 50px;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      box-shadow:
+        0 0 0 12px #1c1c20,
+        0 0 0 14px #2b2b32,
+        0 30px 80px -10px rgba(0, 0, 0, 0.8),
+        0 12px 30px rgba(0, 0, 0, 0.5);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      transition: background var(--spring-standard), color var(--spring-standard);
+      user-select: none;
+    }
+
+    /* Dynamic Island */
+    .dynamic-island {
+      position: absolute;
+      top: 11px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 124px;
+      height: 35px;
+      background: #000000;
+      border-radius: 20px;
+      z-index: 100;
+      pointer-events: none;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 14px;
+    }
+
+    .island-camera {
+      width: 11px;
+      height: 11px;
+      border-radius: 50%;
+      background: #111420;
+      border: 1px solid #1a1e2e;
+    }
+
+    .island-sensor {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: #0d0f15;
+    }
+
+    /* Status Bar */
+    .status-bar {
+      height: 48px;
+      padding: 12px 24px 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--status-text);
+      z-index: 90;
+      font-variant-numeric: tabular-nums;
+      flex-shrink: 0;
+      transition: color var(--spring-standard);
+    }
+
+    .status-icons {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    /* Sticky Navigation Header */
+    header.nav-header {
+      height: 44px;
+      padding: 0 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: var(--nav-bg);
+      border-bottom: 1px solid var(--separator);
+      z-index: 80;
+      flex-shrink: 0;
+      transition: background var(--spring-standard), border-color var(--spring-standard);
+    }
+
+    .btn-nav {
+      background: none;
+      border: none;
+      min-height: 44px;
+      padding: 0 4px;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      color: var(--ios-blue);
+      font-size: 17px;
+      font-weight: 400;
+      cursor: pointer;
+      font-family: inherit;
+    }
+
+    .btn-nav:active {
+      opacity: 0.6;
+    }
+
+    .nav-title {
+      font-size: 17px;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+      color: var(--text-primary);
+    }
+
+    .btn-reset {
+      font-size: 15px;
+      font-weight: 500;
+      color: var(--ios-blue);
+      background: none;
+      border: none;
+      cursor: pointer;
+      min-height: 44px;
+      padding: 0 4px;
+      display: flex;
+      align-items: center;
+      font-family: inherit;
+    }
+
+    .btn-reset:active {
+      opacity: 0.6;
+    }
+
+    /* -------------------------------------------------------------------------
+       SCROLLABLE VIEWPORT BODY
+       ------------------------------------------------------------------------- */
+    main.settings-viewport {
+      flex: 1;
+      overflow-y: auto;
+      overflow-x: hidden;
+      padding: 12px 16px 32px;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: thin;
+      scrollbar-color: rgba(255, 255, 255, 0.15) transparent;
+    }
+
+    main.settings-viewport::-webkit-scrollbar {
+      width: 4px;
+    }
+    main.settings-viewport::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.18);
+      border-radius: 4px;
+    }
+
+    /* Section Container & Labels */
+    .settings-section {
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+    }
+
+    .section-header {
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--text-secondary);
+      padding-left: 14px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .section-header-tag {
+      font-size: 11px;
+      font-weight: 500;
+      text-transform: none;
+      letter-spacing: 0;
+      color: var(--ios-blue);
+    }
+
+    /* Inset Grouped Table Card */
+    .inset-card {
+      background: var(--card-bg);
+      border-radius: 16px;
+      overflow: hidden;
+      border: 1px solid var(--separator);
+      transition: background var(--spring-standard), border-color var(--spring-standard);
+    }
+
+    /* -------------------------------------------------------------------------
+       HERO: COMPACT LIVE READING SAMPLE PREVIEW CARD
+       ------------------------------------------------------------------------- */
+    .preview-card {
+      background: var(--preview-bg);
+      border: 1px solid var(--preview-border);
+      border-radius: 16px;
+      padding: 12px 14px 12px;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.18);
+      transition: background var(--spring-standard), border-color var(--spring-standard);
+    }
+
+    /* Photonic Amber Warmth Overlay */
+    .preview-warmth-overlay {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background: rgba(var(--warmth-r), var(--warmth-g), var(--warmth-b), var(--warmth-alpha));
+      mix-blend-mode: screen;
+      transition: background 80ms ease-out;
+      z-index: 2;
+    }
+
+    .theme-light .preview-warmth-overlay {
+      mix-blend-mode: multiply;
+    }
+
+    .preview-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 8px;
+      position: relative;
+      z-index: 3;
+    }
+
+    .preview-app-info {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+    }
+
+    .preview-app-icon {
+      width: 20px;
+      height: 20px;
+      border-radius: 5px;
+      background: linear-gradient(135deg, #0a84ff, #0051ba);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #ffffff;
+    }
+
+    .preview-app-icon svg {
+      width: 12px;
+      height: 12px;
+    }
+
+    .preview-app-title {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--preview-text);
+      letter-spacing: -0.01em;
+    }
+
+    .preview-status-pill {
+      font-size: 10px;
+      font-weight: 600;
+      padding: 2px 7px;
+      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.08);
+      color: var(--text-secondary);
+      font-variant-numeric: tabular-nums;
+      border: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    .preview-content {
+      position: relative;
+      z-index: 3;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .preview-headline {
+      font-family: var(--font-serif);
+      font-size: 16px;
+      font-weight: 600;
+      line-height: 1.25;
+      color: var(--preview-text);
+      letter-spacing: -0.01em;
+      filter: contrast(var(--text-contrast-boost));
+      transition: color var(--spring-standard);
+    }
+
+    .preview-body {
+      font-family: var(--font-serif);
+      font-size: 12.5px;
+      line-height: 1.45;
+      color: var(--preview-text);
+      opacity: 0.85;
+      filter: contrast(var(--text-contrast-boost));
+      transition: color var(--spring-standard);
+    }
+
+    .preview-media-box {
+      margin-top: 3px;
+      height: 40px;
+      border-radius: 8px;
+      background: linear-gradient(135deg, #1f2733 0%, #151922 100%);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 12px;
+      filter: brightness(var(--media-brightness));
+      transition: filter var(--spring-standard);
+    }
+
+    .preview-media-title {
+      font-size: 11px;
+      font-weight: 600;
+      color: #9db2cc;
+    }
+
+    .preview-media-tag {
+      font-size: 10px;
+      color: #5d6e82;
+      font-family: var(--font-mono);
+    }
+
+    /* -------------------------------------------------------------------------
+       APPEARANCE: DUAL PHONE SELECTOR CARDS
+       ------------------------------------------------------------------------- */
+    .appearance-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      padding: 6px 4px 10px;
+    }
+
+    .appearance-card {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-family: inherit;
+    }
+
+    .appearance-card:focus-visible {
+      outline: 2px solid var(--ios-blue);
+      outline-offset: 4px;
+      border-radius: 12px;
+    }
+
+    .appearance-mockup {
+      width: 100%;
+      height: 118px;
+      border-radius: 14px;
+      padding: 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      position: relative;
+      border: 2px solid transparent;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+      transition: border-color var(--spring-fast), transform var(--spring-fast);
+    }
+
+    .appearance-card.active .appearance-mockup {
+      border-color: var(--ios-blue);
+      transform: scale(1.02);
+    }
+
+    /* Light Mockup Mini-UI */
+    .mockup-light {
+      background: #f2f2f7;
+      color: #000000;
+    }
+
+    .mockup-light .mini-header {
+      height: 14px;
+      background: #ffffff;
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      padding: 0 6px;
+      gap: 4px;
+    }
+
+    .mockup-light .mini-card {
+      flex: 1;
+      background: #ffffff;
+      border-radius: 6px;
+      padding: 8px 6px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .mockup-light .mini-line {
+      height: 4px;
+      border-radius: 2px;
+      background: #e5e5ea;
+    }
+
+    .mockup-light .mini-line.primary { background: #007aff; }
+
+    /* Dark Mockup Mini-UI */
+    .mockup-dark {
+      background: #121214;
+      color: #ffffff;
+    }
+
+    .mockup-dark .mini-header {
+      height: 14px;
+      background: #1c1c1e;
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      padding: 0 6px;
+      gap: 4px;
+    }
+
+    .mockup-dark .mini-card {
+      flex: 1;
+      background: #1c1c1e;
+      border-radius: 6px;
+      padding: 8px 6px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .mockup-dark .mini-line {
+      height: 4px;
+      border-radius: 2px;
+      background: #2c2c2e;
+    }
+
+    .mockup-dark .mini-line.primary { background: #0a84ff; }
+
+    .appearance-label {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text-primary);
+    }
+
+    .radio-pill {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      border: 2px solid var(--text-tertiary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all var(--spring-fast);
+    }
+
+    .appearance-card.active .radio-pill {
+      border-color: var(--ios-blue);
+      background: var(--ios-blue);
+    }
+
+    .radio-pill::after {
+      content: "";
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #ffffff;
+      opacity: 0;
+      transform: scale(0.6);
+      transition: all var(--spring-fast);
+    }
+
+    .appearance-card.active .radio-pill::after {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    /* -------------------------------------------------------------------------
+       ROW COMPONENTS (TOGGLES, INPUTS, SELECTORS)
+       ------------------------------------------------------------------------- */
+    .table-row {
+      min-height: 52px;
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: relative;
+      background: var(--card-bg);
+      border-bottom: 1px solid var(--separator);
+      transition: background var(--spring-fast);
+    }
+
+    .table-row:last-child {
+      border-bottom: none;
+    }
+
+    .row-lead {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+      padding-right: 12px;
+    }
+
+    .row-title {
+      font-size: 16px;
+      font-weight: 400;
+      color: var(--text-primary);
+      letter-spacing: -0.01em;
+    }
+
+    .row-subtitle {
+      font-size: 13px;
+      color: var(--text-secondary);
+      line-height: 1.35;
+    }
+
+    /* iOS Spring Toggle Switch */
+    .ios-switch-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 4px;
+      min-height: 44px;
+      min-width: 58px;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+    }
+
+    .ios-switch-btn:focus-visible .switch-track {
+      outline: 2px solid var(--ios-blue);
+      outline-offset: 3px;
+    }
+
+    .switch-track {
+      width: 51px;
+      height: 31px;
+      background: #39393d;
+      border-radius: 31px;
+      position: relative;
+      transition: background 220ms ease;
+      flex-shrink: 0;
+    }
+
+    .switch-thumb {
+      width: 27px;
+      height: 27px;
+      border-radius: 50%;
+      background: #ffffff;
+      position: absolute;
+      top: 2px;
+      left: 2px;
+      box-shadow: 0 3px 8px rgba(0, 0, 0, 0.25), 0 1px 1px rgba(0, 0, 0, 0.15);
+      transition: transform 220ms cubic-bezier(0.2, 0.9, 0.3, 1.25);
+    }
+
+    .ios-switch-btn[aria-checked="true"] .switch-track {
+      background: var(--ios-green);
+    }
+
+    .ios-switch-btn[aria-checked="true"] .switch-thumb {
+      transform: translateX(20px);
+    }
+
+    /* -------------------------------------------------------------------------
+       SCHEDULE SECTION & INTERACTIVE TIME PICKERS
+       ------------------------------------------------------------------------- */
+    .segmented-control {
+      margin: 12px 14px 14px;
+      padding: 3px;
+      background: var(--control-bg);
+      border-radius: 9px;
+      display: flex;
+      gap: 3px;
+    }
+
+    .segment-btn {
+      flex: 1;
+      padding: 7px 8px;
+      border-radius: 7px;
+      background: none;
+      border: none;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-secondary);
+      cursor: pointer;
+      font-family: inherit;
+      min-height: 34px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+      transition: all var(--spring-fast);
+      white-space: nowrap;
+    }
+
+    .segment-btn.active {
+      background: var(--card-bg);
+      color: var(--text-primary);
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.18);
+    }
+
+    .segment-btn:focus-visible {
+      outline: 2px solid var(--ios-blue);
+    }
+
+    /* Time Row Trigger Button */
+    .time-trigger-btn {
+      background: rgba(120, 120, 128, 0.18);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 8px;
+      padding: 7px 12px;
+      color: var(--ios-blue);
+      font-family: var(--font-system);
+      font-size: 16px;
+      font-weight: 500;
+      font-variant-numeric: tabular-nums;
+      cursor: pointer;
+      min-height: 44px;
+      min-width: 96px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      transition: all var(--spring-fast);
+    }
+
+    .time-trigger-btn.active {
+      background: var(--ios-blue);
+      color: #ffffff;
+    }
+
+    .time-trigger-btn:active {
+      transform: scale(0.97);
+    }
+
+    /* Expandable Inline Time Picker Drawer */
+    .time-picker-drawer {
+      display: grid;
+      grid-template-rows: 0fr;
+      overflow: hidden;
+      background: var(--card-bg-subtle);
+      transition: grid-template-rows var(--spring-standard);
+      border-bottom: 1px solid var(--separator);
+    }
+
+    .time-picker-drawer.open {
+      grid-template-rows: 1fr;
+    }
+
+    .time-picker-content {
+      min-height: 0;
+      padding: 16px 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    /* Tactile Drum Stepper Wheels */
+    .drum-stepper-container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      background: var(--card-bg);
+      border-radius: 12px;
+      padding: 10px 14px;
+      border: 1px solid var(--separator);
+    }
+
+    .stepper-column {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .stepper-nav-btn {
+      width: 44px;
+      height: 34px;
+      background: rgba(120, 120, 128, 0.14);
+      border: none;
+      border-radius: 7px;
+      color: var(--text-primary);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      font-weight: 600;
+      transition: background var(--spring-fast);
+    }
+
+    .stepper-nav-btn:hover {
+      background: rgba(120, 120, 128, 0.25);
+    }
+
+    .stepper-nav-btn:active {
+      background: var(--ios-blue);
+      color: #ffffff;
+    }
+
+    .stepper-display-value {
+      font-family: var(--font-mono);
+      font-size: 26px;
+      font-weight: 600;
+      color: var(--text-primary);
+      width: 44px;
+      text-align: center;
+      line-height: 1;
+      padding: 4px 0;
+      outline: none;
+      border-radius: 4px;
+    }
+
+    .stepper-display-value:focus-visible {
+      background: rgba(10, 132, 255, 0.2);
+    }
+
+    .stepper-colon {
+      font-size: 24px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      margin-top: -4px;
+    }
+
+    /* AM / PM Segmented Stepper */
+    .ampm-toggle-group {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      margin-left: 6px;
+    }
+
+    .ampm-btn {
+      padding: 6px 10px;
+      border-radius: 6px;
+      background: rgba(120, 120, 128, 0.14);
+      border: none;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      cursor: pointer;
+      transition: all var(--spring-fast);
+    }
+
+    .ampm-btn.active {
+      background: var(--ios-blue);
+      color: #ffffff;
+    }
+
+    /* Quick Preset Chips */
+    .quick-time-chips {
+      display: flex;
+      gap: 6px;
+      overflow-x: auto;
+      padding-bottom: 2px;
+    }
+
+    .chip-btn {
+      padding: 5px 10px;
+      border-radius: 14px;
+      background: rgba(120, 120, 128, 0.14);
+      border: 1px solid var(--separator);
+      font-size: 12px;
+      color: var(--text-secondary);
+      cursor: pointer;
+      white-space: nowrap;
+      font-family: inherit;
+      transition: all var(--spring-fast);
+    }
+
+    .chip-btn:active {
+      background: var(--ios-blue);
+      color: #ffffff;
+    }
+
+    /* Schedule Summary Banner */
+    .schedule-summary-row {
+      padding: 10px 16px;
+      background: var(--card-bg);
+      font-size: 12px;
+      color: var(--text-secondary);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .schedule-summary-row svg {
+      width: 14px;
+      height: 14px;
+      fill: var(--ios-blue);
+      flex-shrink: 0;
+    }
+
+    /* -------------------------------------------------------------------------
+       COLOR TEMPERATURE / NIGHT SHIFT CONTINUOUS SLIDER
+       ------------------------------------------------------------------------- */
+    .slider-container-row {
+      padding: 16px 16px 18px;
+      background: var(--card-bg);
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .slider-metrics {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+    }
+
+    .slider-metric-title {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text-primary);
+    }
+
+    .kelvin-badge-group {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .kelvin-value-readout {
+      font-family: var(--font-mono);
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--ios-amber);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .kelvin-tag-label {
+      font-size: 11px;
+      padding: 2px 7px;
+      border-radius: 6px;
+      background: rgba(255, 157, 59, 0.15);
+      color: var(--ios-amber);
+      font-weight: 500;
+    }
+
+    /* Continuous Slider Track & Thumb */
+    .range-slider-wrapper {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    input[type="range"].temp-slider {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 100%;
+      height: 28px;
+      border-radius: 14px;
+      background: linear-gradient(
+        to right,
+        #8cb5ff 0%,
+        #d8e5ff 28%,
+        #ffffff 48%,
+        #ffd28e 70%,
+        #ffa640 85%,
+        #ff781f 100%
+      );
+      outline: none;
+      cursor: pointer;
+      position: relative;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.35);
+    }
+
+    /* Webkit Thumb */
+    input[type="range"].temp-slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: #ffffff;
+      border: 2px solid rgba(0, 0, 0, 0.1);
+      box-shadow:
+        0 3px 10px rgba(0, 0, 0, 0.35),
+        0 1px 2px rgba(0, 0, 0, 0.2);
+      cursor: grab;
+      transition: transform var(--spring-fast), box-shadow var(--spring-fast);
+    }
+
+    input[type="range"].temp-slider:active::-webkit-slider-thumb {
+      cursor: grabbing;
+      transform: scale(1.18);
+      box-shadow:
+        0 6px 16px rgba(0, 0, 0, 0.45),
+        0 0 0 6px rgba(255, 157, 59, 0.25);
+    }
+
+    /* Firefox Thumb */
+    input[type="range"].temp-slider::-moz-range-thumb {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: #ffffff;
+      border: 2px solid rgba(0, 0, 0, 0.1);
+      box-shadow: 0 3px 10px rgba(0, 0, 0, 0.35);
+      cursor: grab;
+    }
+
+    .slider-endpoints {
+      display: flex;
+      justify-content: space-between;
+      font-size: 12px;
+      color: var(--text-secondary);
+      padding: 0 2px;
+    }
+
+    .endpoint-item {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .endpoint-item svg {
+      width: 14px;
+      height: 14px;
+      fill: currentColor;
+    }
+
+    /* Kelvin Preset Selector Pills */
+    .kelvin-presets-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 6px;
+      margin-top: 4px;
+    }
+
+    .preset-kelvin-btn {
+      padding: 7px 6px;
+      border-radius: 8px;
+      background: rgba(120, 120, 128, 0.12);
+      border: 1px solid var(--separator);
+      color: var(--text-primary);
+      font-size: 12px;
+      font-weight: 500;
+      cursor: pointer;
+      font-family: inherit;
+      text-align: center;
+      transition: all var(--spring-fast);
+    }
+
+    .preset-kelvin-btn:active {
+      background: var(--ios-blue);
+      color: #ffffff;
+    }
+
+    /* -------------------------------------------------------------------------
+       BOTTOM THUMB-REACH BAR & HOME INDICATOR
+       ------------------------------------------------------------------------- */
+    footer.device-footer {
+      padding: 8px 16px 14px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      flex-shrink: 0;
+      background: var(--phone-bg);
+      border-top: 1px solid var(--separator);
+      transition: background var(--spring-standard);
+    }
+
+    .footer-status-pill {
+      font-size: 11px;
+      color: var(--text-tertiary);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      text-align: center;
+    }
+
+    .home-indicator {
+      width: 138px;
+      height: 5px;
+      border-radius: 100px;
+      background: var(--text-primary);
+      opacity: 0.35;
+      margin-top: 4px;
+    }
+
+    /* -------------------------------------------------------------------------
+       ACCESSIBILITY & REDUCED MOTION PREFERENCES
+       ------------------------------------------------------------------------- */
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        animation-duration: 0.001ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.001ms !important;
+        scroll-behavior: auto !important;
+      }
+    }
+
+    /* Responsive Scaling for smaller desktop displays */
+    @media (max-height: 940px) {
+      body {
+        padding: 12px 8px;
+      }
+      .device-shell {
+        transform: scale(0.94);
+        transform-origin: center top;
+      }
+    }
+
+    @media (max-height: 820px) {
+      .device-shell {
+        transform: scale(0.85);
+        transform-origin: center top;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- External Meta Title & Context -->
+  <header class="stage-header">
+    <div class="stage-badge">
+      <span class="dot"></span>
+      <span>Benchmark #12 · Mobile UI · 390×844 Frame</span>
+    </div>
+    <h1 class="stage-title">iOS 18 Display &amp; Dark Mode Settings</h1>
+    <p class="stage-caption">Continuous Planckian Kelvin Engine · Tactile Inline Stepper Pickers · True OLED #000000</p>
+  </header>
+
+  <!-- 390×844 Physical Phone Frame -->
+  <div class="device-shell" id="phoneShell" role="region" aria-label="Dark Mode Settings Screen">
+
+    <!-- Dynamic Island -->
+    <div class="dynamic-island" aria-hidden="true">
+      <div class="island-camera"></div>
+      <div class="island-sensor"></div>
+    </div>
+
+    <!-- iOS Status Bar with Genuine Apple SVG Icons -->
+    <div class="status-bar" aria-hidden="true">
+      <span id="statusBarClock">9:41</span>
+      <div class="status-icons">
+        <!-- Cellular Signal: 4 iOS vertical bars -->
+        <svg width="17" height="11" viewBox="0 0 17 11" fill="currentColor">
+          <rect x="0" y="8" width="3" height="3" rx="1"/>
+          <rect x="4.5" y="5.5" width="3" height="5.5" rx="1"/>
+          <rect x="9" y="3" width="3" height="8" rx="1"/>
+          <rect x="13.5" y="0" width="3" height="11" rx="1"/>
+        </svg>
+        <!-- Wi-Fi: Clean 3-tier arc -->
+        <svg width="16" height="12" viewBox="0 0 16 12" fill="currentColor">
+          <circle cx="8" cy="10" r="1.5"/>
+          <path d="M4.5 7.5C5.5 6.5 6.7 6 8 6C9.3 6 10.5 6.5 11.5 7.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" fill="none"/>
+          <path d="M1.5 4.5C3.3 2.7 5.5 2 8 2C10.5 2 12.7 2.7 14.5 4.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" fill="none"/>
+        </svg>
+        <!-- Battery: iOS capsule with charge level -->
+        <svg width="25" height="12" viewBox="0 0 25 12" fill="currentColor">
+          <rect x="0.5" y="0.5" width="21" height="11" rx="3.5" fill="none" stroke="currentColor" stroke-width="1"/>
+          <rect x="2" y="2" width="16" height="8" rx="2" fill="currentColor"/>
+          <path d="M23 4.5V7.5C23.8 7.2 24.3 6.6 24.3 6C24.3 5.4 23.8 4.8 23 4.5Z" fill="currentColor"/>
+        </svg>
+      </div>
+    </div>
+
+    <!-- Navigation Header -->
+    <header class="nav-header">
+      <button type="button" class="btn-nav" id="btnBack" aria-label="Go back to settings root">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="15 18 9 12 15 6"/></svg>
+        <span>Settings</span>
+      </button>
+      <span class="nav-title">Display &amp; Brightness</span>
+      <button type="button" class="btn-reset" id="btnReset" aria-label="Reset all display parameters to factory defaults">
+        Reset
+      </button>
+    </header>
+
+    <!-- Scrollable Content Area -->
+    <main class="settings-viewport" id="settingsContent">
+
+      <!-- HERO: COMPACT LIVE INTERACTIVE PREVIEW CARD -->
+      <section class="settings-section" aria-labelledby="heading-preview">
+        <div class="section-header">
+          <span id="heading-preview">Live Reading Sample</span>
+          <span class="section-header-tag" id="liveToneTag">Night Mode · 3,400 K</span>
+        </div>
+
+        <div class="preview-card" id="heroPreviewCard">
+          <div class="preview-warmth-overlay" id="heroWarmthOverlay"></div>
+
+          <div class="preview-header">
+            <div class="preview-app-info">
+              <div class="preview-app-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+              </div>
+              <span class="preview-app-title">Lumos Editorial Reader</span>
+            </div>
+            <div class="preview-status-pill" id="previewOledBadge">OLED 0.0 nits</div>
+          </div>
+
+          <article class="preview-content">
+            <h2 class="preview-headline">The Architecture of Night Reading</h2>
+            <p class="preview-body">
+              True dark mode preserves human circadian rhythm while delivering optical contrast. In low ambient lighting, blackbody emission shifting eases pupil strain without sacrificing sharpness.
+            </p>
+
+            <div class="preview-media-box" id="previewMediaBox">
+              <span class="preview-media-title">Nocturnal Typography Vol. 4</span>
+              <span class="preview-media-tag">390×844 · 460 PPI</span>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <!-- SECTION 1: APPEARANCE DUAL CARDS & AUTOMATIC SWITCH -->
+      <section class="settings-section" aria-labelledby="heading-appearance">
+        <div class="section-header">
+          <span id="heading-appearance">Appearance</span>
+        </div>
+
+        <div class="inset-card">
+          <!-- Light vs Dark Selectors -->
+          <div class="appearance-grid" role="radiogroup" aria-label="Interface theme appearance">
+            <!-- Light Button -->
+            <button type="button" class="appearance-card" id="cardLight" role="radio" aria-checked="false">
+              <div class="appearance-mockup mockup-light" aria-hidden="true">
+                <div class="mini-header">
+                  <div class="mini-line primary" style="width: 28px;"></div>
+                </div>
+                <div class="mini-card">
+                  <div class="mini-line" style="width: 75%;"></div>
+                  <div class="mini-line" style="width: 90%;"></div>
+                  <div class="mini-line" style="width: 45%;"></div>
+                </div>
+              </div>
+              <span class="appearance-label">Light</span>
+              <div class="radio-pill" aria-hidden="true"></div>
+            </button>
+
+            <!-- Dark Button -->
+            <button type="button" class="appearance-card active" id="cardDark" role="radio" aria-checked="true">
+              <div class="appearance-mockup mockup-dark" aria-hidden="true">
+                <div class="mini-header">
+                  <div class="mini-line primary" style="width: 28px;"></div>
+                </div>
+                <div class="mini-card">
+                  <div class="mini-line" style="width: 75%;"></div>
+                  <div class="mini-line" style="width: 90%;"></div>
+                  <div class="mini-line" style="width: 45%;"></div>
+                </div>
+              </div>
+              <span class="appearance-label">Dark</span>
+              <div class="radio-pill" aria-hidden="true"></div>
+            </button>
+          </div>
+
+          <!-- Automatic Master Toggle -->
+          <div class="table-row">
+            <div class="row-lead">
+              <span class="row-title">Automatic</span>
+              <span class="row-subtitle">Switch between appearances on schedule</span>
+            </div>
+            <button type="button" class="ios-switch-btn" id="toggleAutomatic" role="switch" aria-checked="true" aria-label="Toggle automatic appearance scheduling">
+              <div class="switch-track">
+                <div class="switch-thumb"></div>
+              </div>
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- SECTION 2: SCHEDULE AUTOMATION & REAL TIME PICKERS -->
+      <section class="settings-section" id="scheduleSection" aria-labelledby="heading-schedule">
+        <div class="section-header">
+          <span id="heading-schedule">Schedule Automation</span>
+          <span class="section-header-tag" id="scheduleSpanTag">9 hrs active</span>
+        </div>
+
+        <div class="inset-card">
+          <!-- Segmented Schedule Type -->
+          <div class="segmented-control" role="tablist" aria-label="Schedule trigger modes">
+            <button type="button" class="segment-btn" id="segSunset" role="tab" aria-selected="false">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v2"/><path d="M4.93 4.93l1.41 1.41"/><path d="M20 12h2"/><path d="M19.07 4.93l-1.41 1.41"/><path d="M15.36 17H8.64a5 5 0 0 1 0-10h6.72a5 5 0 0 1 0 10z"/></svg>
+              <span>Sunset to Sunrise</span>
+            </button>
+            <button type="button" class="segment-btn active" id="segCustom" role="tab" aria-selected="true">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+              <span>Custom Schedule</span>
+            </button>
+          </div>
+
+          <!-- Sunset Info Box (visible when Sunset tab selected) -->
+          <div class="table-row" id="sunsetInfoRow" style="display: none;">
+            <div class="row-lead">
+              <span class="row-title">Astronomical Solar Cycle</span>
+              <span class="row-subtitle">Dusk (7:14 PM) → Dawn (6:48 AM) based on local ephemeris</span>
+            </div>
+            <span class="section-header-tag">Auto-Sync</span>
+          </div>
+
+          <!-- Custom Time Pickers Container -->
+          <div id="customTimeControls">
+            <!-- Row 1: Turn On Time -->
+            <div class="table-row">
+              <div class="row-lead">
+                <span class="row-title">Turn On (Dark)</span>
+                <span class="row-subtitle">Switches display to Dark Mode</span>
+              </div>
+              <button type="button" class="time-trigger-btn" id="btnTimeOn" aria-expanded="false" aria-controls="drawerTimeOn" aria-label="Set dark mode turn on time">
+                <span id="labelTimeOn">10:00 PM</span>
+              </button>
+            </div>
+
+            <!-- Drawer 1: Turn On Interactive Drum Stepper Picker -->
+            <div class="time-picker-drawer" id="drawerTimeOn" role="region" aria-label="Turn on time drum selector">
+              <div class="time-picker-content">
+                <div class="drum-stepper-container">
+                  <!-- Hour Column -->
+                  <div class="stepper-column">
+                    <button type="button" class="stepper-nav-btn" id="btnOnHourUp" aria-label="Increment hour">+</button>
+                    <div class="stepper-display-value" id="valOnHour" tabindex="0" role="spinbutton" aria-valuenow="10" aria-label="Turn on hour">10</div>
+                    <button type="button" class="stepper-nav-btn" id="btnOnHourDown" aria-label="Decrement hour">−</button>
+                  </div>
+
+                  <div class="stepper-colon">:</div>
+
+                  <!-- Minute Column -->
+                  <div class="stepper-column">
+                    <button type="button" class="stepper-nav-btn" id="btnOnMinUp" aria-label="Increment minutes by 5">+</button>
+                    <div class="stepper-display-value" id="valOnMin" tabindex="0" role="spinbutton" aria-valuenow="0" aria-label="Turn on minute">00</div>
+                    <button type="button" class="stepper-nav-btn" id="btnOnMinDown" aria-label="Decrement minutes by 5">−</button>
+                  </div>
+
+                  <!-- AM / PM Column -->
+                  <div class="ampm-toggle-group">
+                    <button type="button" class="ampm-btn" id="btnOnAm">AM</button>
+                    <button type="button" class="ampm-btn active" id="btnOnPm">PM</button>
+                  </div>
+                </div>
+
+                <!-- Quick Presets -->
+                <div class="quick-time-chips">
+                  <button type="button" class="chip-btn" data-time="8:00 PM">8:00 PM</button>
+                  <button type="button" class="chip-btn" data-time="9:00 PM">9:00 PM</button>
+                  <button type="button" class="chip-btn" data-time="10:00 PM">10:00 PM</button>
+                  <button type="button" class="chip-btn" data-time="11:30 PM">11:30 PM</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Row 2: Turn Off Time -->
+            <div class="table-row">
+              <div class="row-lead">
+                <span class="row-title">Turn Off (Light)</span>
+                <span class="row-subtitle">Switches display back to Light Mode</span>
+              </div>
+              <button type="button" class="time-trigger-btn" id="btnTimeOff" aria-expanded="false" aria-controls="drawerTimeOff" aria-label="Set dark mode turn off time">
+                <span id="labelTimeOff">07:00 AM</span>
+              </button>
+            </div>
+
+            <!-- Drawer 2: Turn Off Interactive Drum Stepper Picker -->
+            <div class="time-picker-drawer" id="drawerTimeOff" role="region" aria-label="Turn off time drum selector">
+              <div class="time-picker-content">
+                <div class="drum-stepper-container">
+                  <!-- Hour Column -->
+                  <div class="stepper-column">
+                    <button type="button" class="stepper-nav-btn" id="btnOffHourUp" aria-label="Increment hour">+</button>
+                    <div class="stepper-display-value" id="valOffHour" tabindex="0" role="spinbutton" aria-valuenow="7" aria-label="Turn off hour">07</div>
+                    <button type="button" class="stepper-nav-btn" id="btnOffHourDown" aria-label="Decrement hour">−</button>
+                  </div>
+
+                  <div class="stepper-colon">:</div>
+
+                  <!-- Minute Column -->
+                  <div class="stepper-column">
+                    <button type="button" class="stepper-nav-btn" id="btnOffMinUp" aria-label="Increment minutes by 5">+</button>
+                    <div class="stepper-display-value" id="valOffMin" tabindex="0" role="spinbutton" aria-valuenow="0" aria-label="Turn off minute">00</div>
+                    <button type="button" class="stepper-nav-btn" id="btnOffMinDown" aria-label="Decrement minutes by 5">−</button>
+                  </div>
+
+                  <!-- AM / PM Column -->
+                  <div class="ampm-toggle-group">
+                    <button type="button" class="ampm-btn active" id="btnOffAm">AM</button>
+                    <button type="button" class="ampm-btn" id="btnOffPm">PM</button>
+                  </div>
+                </div>
+
+                <!-- Quick Presets -->
+                <div class="quick-time-chips">
+                  <button type="button" class="chip-btn" data-time="6:00 AM">6:00 AM</button>
+                  <button type="button" class="chip-btn" data-time="6:30 AM">6:30 AM</button>
+                  <button type="button" class="chip-btn" data-time="7:00 AM">7:00 AM</button>
+                  <button type="button" class="chip-btn" data-time="8:00 AM">8:00 AM</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Schedule Dynamic Duration Banner -->
+          <div class="schedule-summary-row" id="scheduleDurationSummary">
+            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            <span id="scheduleSummaryText">Dark mode active for 9 hrs 00 mins (10:00 PM → 7:00 AM)</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- SECTION 3: COLOR TEMPERATURE (NIGHT SHIFT) CONTINUOUS SLIDER -->
+      <section class="settings-section" aria-labelledby="heading-temperature">
+        <div class="section-header">
+          <span id="heading-temperature">Color Temperature</span>
+          <span class="section-header-tag" id="kelvinHeaderTag">3,400 K</span>
+        </div>
+
+        <div class="inset-card">
+          <!-- Night Shift Master Switch -->
+          <div class="table-row">
+            <div class="row-lead">
+              <span class="row-title">Night Shift Warmth</span>
+              <span class="row-subtitle">Shifts spectral display colors toward warm amber</span>
+            </div>
+            <button type="button" class="ios-switch-btn" id="toggleNightShift" role="switch" aria-checked="true" aria-label="Toggle Night Shift color temperature filter">
+              <div class="switch-track">
+                <div class="switch-thumb"></div>
+              </div>
+            </button>
+          </div>
+
+          <!-- Continuous Range Slider Module -->
+          <div class="slider-container-row" id="sliderContainer">
+            <div class="slider-metrics">
+              <span class="slider-metric-title">Color Warmth Intensity</span>
+              <div class="kelvin-badge-group">
+                <span class="kelvin-value-readout" id="kelvinText">3,400 K</span>
+                <span class="kelvin-tag-label" id="kelvinDescriptor">Warm Amber</span>
+              </div>
+            </div>
+
+            <div class="range-slider-wrapper">
+              <input
+                type="range"
+                class="temp-slider"
+                id="tempSlider"
+                min="2000"
+                max="6500"
+                value="3400"
+                step="25"
+                aria-label="Color temperature slider"
+                aria-valuemin="2000"
+                aria-valuemax="6500"
+                aria-valuenow="3400"
+                aria-valuetext="3400 Kelvin, Warm Amber"
+              />
+              <div class="slider-endpoints" aria-hidden="true">
+                <div class="endpoint-item">
+                  <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>
+                  <span>Cool (6500K)</span>
+                </div>
+                <div class="endpoint-item">
+                  <span>Warm (2000K)</span>
+                  <svg viewBox="0 0 24 24"><path d="M12 2a6 6 0 0 0-6 6c0 4 6 11 6 11s6-7 6-11a6 6 0 0 0-6-6z"/></svg>
+                </div>
+              </div>
+            </div>
+
+            <!-- Quick Kelvin Preset Buttons -->
+            <div class="kelvin-presets-row" role="group" aria-label="Color temperature presets">
+              <button type="button" class="preset-kelvin-btn" data-kelvin="5500">Daylight · 5500K</button>
+              <button type="button" class="preset-kelvin-btn" data-kelvin="3800">Reading · 3800K</button>
+              <button type="button" class="preset-kelvin-btn" data-kelvin="2400">Candle · 2400K</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SECTION 4: DISPLAY COMFORT & OLED OPTIMIZATIONS -->
+      <section class="settings-section" aria-labelledby="heading-comfort">
+        <div class="section-header">
+          <span id="heading-comfort">OLED &amp; Vision Ergonomics</span>
+        </div>
+
+        <div class="inset-card">
+          <!-- Toggle 1: Pure Black OLED -->
+          <div class="table-row">
+            <div class="row-lead">
+              <span class="row-title">Pure Black (OLED)</span>
+              <span class="row-subtitle">Turns pixels off completely (#000000) for maximum battery savings</span>
+            </div>
+            <button type="button" class="ios-switch-btn" id="toggleOled" role="switch" aria-checked="false" aria-label="Toggle Pure Black OLED mode">
+              <div class="switch-track">
+                <div class="switch-thumb"></div>
+              </div>
+            </button>
+          </div>
+
+          <!-- Toggle 2: Dim Bright Media in Dark Mode -->
+          <div class="table-row">
+            <div class="row-lead">
+              <span class="row-title">Dim Media &amp; Wallpapers</span>
+              <span class="row-subtitle">Reduces glare from saturated illustrations in bed</span>
+            </div>
+            <button type="button" class="ios-switch-btn" id="toggleDimMedia" role="switch" aria-checked="true" aria-label="Toggle dimming bright media in dark mode">
+              <div class="switch-track">
+                <div class="switch-thumb"></div>
+              </div>
+            </button>
+          </div>
+
+          <!-- Toggle 3: High Contrast Text -->
+          <div class="table-row">
+            <div class="row-lead">
+              <span class="row-title">High Contrast Text</span>
+              <span class="row-subtitle">Increases typographic weight and border definition</span>
+            </div>
+            <button type="button" class="ios-switch-btn" id="toggleContrast" role="switch" aria-checked="false" aria-label="Toggle high contrast text">
+              <div class="switch-track">
+                <div class="switch-thumb"></div>
+              </div>
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- SECTION 5: THUMB-ZONE QUICK PRESET SCENES -->
+      <section class="settings-section" aria-labelledby="heading-scenes">
+        <div class="section-header">
+          <span id="heading-scenes">Quick Presets</span>
+        </div>
+
+        <div class="inset-card" style="padding: 10px 14px;">
+          <div class="segmented-control" style="margin: 0;" role="group" aria-label="Display mode presets">
+            <button type="button" class="segment-btn" id="presetBedtime">Bedtime</button>
+            <button type="button" class="segment-btn active" id="presetReader">Reader</button>
+            <button type="button" class="segment-btn" id="presetDaytime">Daylight</button>
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- Bottom Safe-Area Footer & Home Indicator -->
+    <footer class="device-footer">
+      <div class="footer-status-pill">
+        <span id="footerSummary">Dark Mode · 3,400K · Active 10 PM – 7 AM</span>
+      </div>
+      <div class="home-indicator" aria-hidden="true"></div>
+    </footer>
+
+  </div>
+
+  <!-- -------------------------------------------------------------------------
+       INTERACTION SCRIPT: COMPLETE LIVE REACTIVE ENGINE
+       ------------------------------------------------------------------------- -->
+  <script>
+    (function() {
+      'use strict';
+
+      // --- DOM REFERENCES ---
+      const shell = document.getElementById('phoneShell');
+      const cardLight = document.getElementById('cardLight');
+      const cardDark = document.getElementById('cardDark');
+      const toggleAutomatic = document.getElementById('toggleAutomatic');
+      const scheduleSection = document.getElementById('scheduleSection');
+      const segSunset = document.getElementById('segSunset');
+      const segCustom = document.getElementById('segCustom');
+      const sunsetInfoRow = document.getElementById('sunsetInfoRow');
+      const customTimeControls = document.getElementById('customTimeControls');
+
+      // Schedule Drawer References
+      const btnTimeOn = document.getElementById('btnTimeOn');
+      const btnTimeOff = document.getElementById('btnTimeOff');
+      const drawerTimeOn = document.getElementById('drawerTimeOn');
+      const drawerTimeOff = document.getElementById('drawerTimeOff');
+      const labelTimeOn = document.getElementById('labelTimeOn');
+      const labelTimeOff = document.getElementById('labelTimeOff');
+      const scheduleSpanTag = document.getElementById('scheduleSpanTag');
+      const scheduleSummaryText = document.getElementById('scheduleSummaryText');
+
+      // Turn On Steppers
+      const valOnHour = document.getElementById('valOnHour');
+      const valOnMin = document.getElementById('valOnMin');
+      const btnOnHourUp = document.getElementById('btnOnHourUp');
+      const btnOnHourDown = document.getElementById('btnOnHourDown');
+      const btnOnMinUp = document.getElementById('btnOnMinUp');
+      const btnOnMinDown = document.getElementById('btnOnMinDown');
+      const btnOnAm = document.getElementById('btnOnAm');
+      const btnOnPm = document.getElementById('btnOnPm');
+
+      // Turn Off Steppers
+      const valOffHour = document.getElementById('valOffHour');
+      const valOffMin = document.getElementById('valOffMin');
+      const btnOffHourUp = document.getElementById('btnOffHourUp');
+      const btnOffHourDown = document.getElementById('btnOffHourDown');
+      const btnOffMinUp = document.getElementById('btnOffMinUp');
+      const btnOffMinDown = document.getElementById('btnOffMinDown');
+      const btnOffAm = document.getElementById('btnOffAm');
+      const btnOffPm = document.getElementById('btnOffPm');
+
+      // Slider & Kelvin
+      const toggleNightShift = document.getElementById('toggleNightShift');
+      const tempSlider = document.getElementById('tempSlider');
+      const kelvinText = document.getElementById('kelvinText');
+      const kelvinDescriptor = document.getElementById('kelvinDescriptor');
+      const kelvinHeaderTag = document.getElementById('kelvinHeaderTag');
+      const heroWarmthOverlay = document.getElementById('heroWarmthOverlay');
+      const liveToneTag = document.getElementById('liveToneTag');
+
+      // Display Comfort Toggles
+      const toggleOled = document.getElementById('toggleOled');
+      const toggleDimMedia = document.getElementById('toggleDimMedia');
+      const toggleContrast = document.getElementById('toggleContrast');
+      const previewOledBadge = document.getElementById('previewOledBadge');
+      const previewMediaBox = document.getElementById('previewMediaBox');
+      const footerSummary = document.getElementById('footerSummary');
+      const btnReset = document.getElementById('btnReset');
+
+      // Scene Presets
+      const presetBedtime = document.getElementById('presetBedtime');
+      const presetReader = document.getElementById('presetReader');
+      const presetDaytime = document.getElementById('presetDaytime');
+
+      // --- APPLICATION STATE ---
+      const state = {
+        theme: 'dark', // 'light' | 'dark'
+        automatic: true,
+        scheduleMode: 'custom', // 'sunset' | 'custom'
+        timeOn: { hour: 10, minute: 0, ampm: 'PM' },
+        timeOff: { hour: 7, minute: 0, ampm: 'AM' },
+        nightShift: true,
+        kelvin: 3400,
+        oled: false,
+        dimMedia: true,
+        highContrast: false
+      };
+
+      // --- PLANCKIAN BLACKBODY LOCUS ENGINE ---
+      // Calculates accurate RGB chromaticity from color temperature in Kelvin (Tanner Helland algorithm)
+      function kelvinToRGB(kelvin) {
+        const temp = kelvin / 100;
+        let red, green, blue;
+
+        // Red
+        if (temp <= 66) {
+          red = 255;
+        } else {
+          red = temp - 60;
+          red = 329.698727446 * Math.pow(red, -0.1332047592);
+          if (red < 0) red = 0;
+          if (red > 255) red = 255;
+        }
+
+        // Green
+        if (temp <= 66) {
+          green = temp;
+          green = 99.4708025861 * Math.log(green) - 161.1195681661;
+        } else {
+          green = temp - 60;
+          green = 288.1221695283 * Math.pow(green, -0.0755148492);
+        }
+        if (green < 0) green = 0;
+        if (green > 255) green = 255;
+
+        // Blue
+        if (temp >= 66) {
+          blue = 255;
+        } else if (temp <= 19) {
+          blue = 0;
+        } else {
+          blue = temp - 10;
+          blue = 138.5177312231 * Math.log(blue) - 305.0447927307;
+          if (blue < 0) blue = 0;
+          if (blue > 255) blue = 255;
+        }
+
+        return { r: Math.round(red), g: Math.round(green), b: Math.round(blue) };
+      }
+
+      function getKelvinDescriptor(k) {
+        if (k >= 5800) return 'Crisp Daylight';
+        if (k >= 4800) return 'Neutral White';
+        if (k >= 3800) return 'Soft Sunlight';
+        if (k >= 3000) return 'Warm Amber';
+        if (k >= 2400) return 'Candlelight';
+        return 'Deep Amber';
+      }
+
+      // --- LIVE VIEW UPDATE FUNCTIONS ---
+      function updateTemperatureView() {
+        const k = state.kelvin;
+        const enabled = state.nightShift;
+        const rgb = kelvinToRGB(k);
+        const desc = getKelvinDescriptor(k);
+
+        // Calculate warmth intensity relative to neutral 6500K
+        const warmthRatio = enabled ? Math.max(0, (6500 - k) / 4500) : 0;
+        const alpha = warmthRatio * 0.32;
+
+        document.documentElement.style.setProperty('--kelvin', k);
+        document.documentElement.style.setProperty('--warmth-r', rgb.r);
+        document.documentElement.style.setProperty('--warmth-g', rgb.g);
+        document.documentElement.style.setProperty('--warmth-b', rgb.b);
+        document.documentElement.style.setProperty('--warmth-alpha', alpha.toFixed(3));
+
+        kelvinText.textContent = `${k.toLocaleString()} K`;
+        kelvinDescriptor.textContent = enabled ? desc : 'Off';
+        kelvinHeaderTag.textContent = enabled ? `${k.toLocaleString()} K` : 'Off';
+        liveToneTag.textContent = `${state.theme === 'dark' ? 'Night Mode' : 'Day Mode'} · ${enabled ? k.toLocaleString() + ' K' : 'D65 Neutral'}`;
+
+        tempSlider.value = k;
+        tempSlider.setAttribute('aria-valuenow', k);
+        tempSlider.setAttribute('aria-valuetext', `${k} Kelvin, ${desc}`);
+
+        updateFooterSummary();
+      }
+
+      function updateThemeView() {
+        if (state.theme === 'light') {
+          shell.classList.add('theme-light');
+          shell.classList.remove('theme-oled');
+          cardLight.classList.add('active');
+          cardLight.setAttribute('aria-checked', 'true');
+          cardDark.classList.remove('active');
+          cardDark.setAttribute('aria-checked', 'false');
+          previewOledBadge.textContent = 'Standard IPS';
+        } else {
+          shell.classList.remove('theme-light');
+          cardLight.classList.remove('active');
+          cardLight.setAttribute('aria-checked', 'false');
+          cardDark.classList.add('active');
+          cardDark.setAttribute('aria-checked', 'true');
+
+          if (state.oled) {
+            shell.classList.add('theme-oled');
+            previewOledBadge.textContent = 'OLED 0.0 nits';
+          } else {
+            shell.classList.remove('theme-oled');
+            previewOledBadge.textContent = 'Charcoal Dark';
+          }
+        }
+        updateTemperatureView();
+        updateFooterSummary();
+      }
+
+      function updateFooterSummary() {
+        const themeLabel = state.theme === 'light' ? 'Light' : (state.oled ? 'Pure OLED' : 'Dark Mode');
+        const kLabel = state.nightShift ? `${state.kelvin.toLocaleString()}K` : 'Neutral';
+        let schedLabel = 'Manual';
+        if (state.automatic) {
+          if (state.scheduleMode === 'sunset') {
+            schedLabel = 'Sunset – Sunrise';
+          } else {
+            schedLabel = `${formatTime(state.timeOn)} – ${formatTime(state.timeOff)}`;
+          }
+        }
+        footerSummary.textContent = `${themeLabel} · ${kLabel} · ${schedLabel}`;
+      }
+
+      // --- DURATION CALCULATION ---
+      function calculateScheduleDuration() {
+        let onHour24 = state.timeOn.hour % 12;
+        if (state.timeOn.ampm === 'PM') onHour24 += 12;
+        const onTotalMins = onHour24 * 60 + state.timeOn.minute;
+
+        let offHour24 = state.timeOff.hour % 12;
+        if (state.timeOff.ampm === 'PM') offHour24 += 12;
+        const offTotalMins = offHour24 * 60 + state.timeOff.minute;
+
+        let diffMins = offTotalMins - onTotalMins;
+        if (diffMins <= 0) diffMins += 24 * 60;
+
+        const h = Math.floor(diffMins / 60);
+        const m = diffMins % 60;
+        const durationStr = `${h} hrs ${m > 0 ? (m < 10 ? '0' + m : m) + ' mins' : '00 mins'}`;
+
+        scheduleSpanTag.textContent = `${durationStr} active`;
+        scheduleSummaryText.textContent = `Dark mode active for ${durationStr} (${formatTime(state.timeOn)} → ${formatTime(state.timeOff)})`;
+      }
+
+      function formatTime(t) {
+        const h = t.hour;
+        const m = t.minute < 10 ? '0' + t.minute : t.minute;
+        return `${h}:${m} ${t.ampm}`;
+      }
+
+      function updateTimeDisplays() {
+        labelTimeOn.textContent = formatTime(state.timeOn);
+        valOnHour.textContent = state.timeOn.hour < 10 ? '0' + state.timeOn.hour : state.timeOn.hour;
+        valOnMin.textContent = state.timeOn.minute < 10 ? '0' + state.timeOn.minute : state.timeOn.minute;
+        valOnHour.setAttribute('aria-valuenow', state.timeOn.hour);
+        valOnMin.setAttribute('aria-valuenow', state.timeOn.minute);
+        btnOnAm.classList.toggle('active', state.timeOn.ampm === 'AM');
+        btnOnPm.classList.toggle('active', state.timeOn.ampm === 'PM');
+
+        labelTimeOff.textContent = formatTime(state.timeOff);
+        valOffHour.textContent = state.timeOff.hour < 10 ? '0' + state.timeOff.hour : state.timeOff.hour;
+        valOffMin.textContent = state.timeOff.minute < 10 ? '0' + state.timeOff.minute : state.timeOff.minute;
+        valOffHour.setAttribute('aria-valuenow', state.timeOff.hour);
+        valOffMin.setAttribute('aria-valuenow', state.timeOff.minute);
+        btnOffAm.classList.toggle('active', state.timeOff.ampm === 'AM');
+        btnOffPm.classList.toggle('active', state.timeOff.ampm === 'PM');
+
+        calculateScheduleDuration();
+        updateFooterSummary();
+      }
+
+      // --- EVENT HANDLERS: APPEARANCE SELECTION ---
+      cardLight.addEventListener('click', () => {
+        state.theme = 'light';
+        updateThemeView();
+      });
+
+      cardDark.addEventListener('click', () => {
+        state.theme = 'dark';
+        updateThemeView();
+      });
+
+      // --- EVENT HANDLERS: TOGGLES ---
+      function setupToggle(button, onToggle) {
+        button.addEventListener('click', () => {
+          const current = button.getAttribute('aria-checked') === 'true';
+          const next = !current;
+          button.setAttribute('aria-checked', next ? 'true' : 'false');
+          onToggle(next);
+        });
+      }
+
+      setupToggle(toggleAutomatic, (isOn) => {
+        state.automatic = isOn;
+        scheduleSection.style.display = isOn ? 'flex' : 'none';
+        updateFooterSummary();
+      });
+
+      setupToggle(toggleNightShift, (isOn) => {
+        state.nightShift = isOn;
+        tempSlider.disabled = !isOn;
+        document.getElementById('sliderContainer').style.opacity = isOn ? '1' : '0.4';
+        updateTemperatureView();
+      });
+
+      setupToggle(toggleOled, (isOn) => {
+        state.oled = isOn;
+        if (state.theme === 'dark') {
+          shell.classList.toggle('theme-oled', isOn);
+          previewOledBadge.textContent = isOn ? 'OLED 0.0 nits' : 'Charcoal Dark';
+        }
+        updateFooterSummary();
+      });
+
+      setupToggle(toggleDimMedia, (isOn) => {
+        state.dimMedia = isOn;
+        document.documentElement.style.setProperty('--media-brightness', isOn ? '0.75' : '1');
+      });
+
+      setupToggle(toggleContrast, (isOn) => {
+        state.highContrast = isOn;
+        document.documentElement.style.setProperty('--text-contrast-boost', isOn ? '1.4' : '1');
+      });
+
+      // --- EVENT HANDLERS: SCHEDULE MODE SEGMENTED CONTROL ---
+      segSunset.addEventListener('click', () => {
+        state.scheduleMode = 'sunset';
+        segSunset.classList.add('active');
+        segSunset.setAttribute('aria-selected', 'true');
+        segCustom.classList.remove('active');
+        segCustom.setAttribute('aria-selected', 'false');
+        sunsetInfoRow.style.display = 'flex';
+        customTimeControls.style.display = 'none';
+        scheduleSpanTag.textContent = '11 hrs 34 mins';
+        scheduleSummaryText.textContent = 'Dark mode follows astronomical solar cycle (7:14 PM → 6:48 AM)';
+        drawerTimeOn.classList.remove('open');
+        drawerTimeOff.classList.remove('open');
+        btnTimeOn.classList.remove('active');
+        btnTimeOff.classList.remove('active');
+        updateFooterSummary();
+      });
+
+      segCustom.addEventListener('click', () => {
+        state.scheduleMode = 'custom';
+        segCustom.classList.add('active');
+        segCustom.setAttribute('aria-selected', 'true');
+        segSunset.classList.remove('active');
+        segSunset.setAttribute('aria-selected', 'false');
+        sunsetInfoRow.style.display = 'none';
+        customTimeControls.style.display = 'block';
+        calculateScheduleDuration();
+        updateFooterSummary();
+      });
+
+      // --- TIME PICKER INLINE DRAWERS ---
+      btnTimeOn.addEventListener('click', () => {
+        const isOpen = drawerTimeOn.classList.toggle('open');
+        btnTimeOn.classList.toggle('active', isOpen);
+        btnTimeOn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+        // Close Turn Off drawer to maintain clean layout rhythm
+        if (isOpen) {
+          drawerTimeOff.classList.remove('open');
+          btnTimeOff.classList.remove('active');
+          btnTimeOff.setAttribute('aria-expanded', 'false');
+        }
+      });
+
+      btnTimeOff.addEventListener('click', () => {
+        const isOpen = drawerTimeOff.classList.toggle('open');
+        btnTimeOff.classList.toggle('active', isOpen);
+        btnTimeOff.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+        // Close Turn On drawer
+        if (isOpen) {
+          drawerTimeOn.classList.remove('open');
+          btnTimeOn.classList.remove('active');
+          btnTimeOn.setAttribute('aria-expanded', 'false');
+        }
+      });
+
+      // Turn On Steppers
+      btnOnHourUp.addEventListener('click', () => {
+        state.timeOn.hour = state.timeOn.hour >= 12 ? 1 : state.timeOn.hour + 1;
+        updateTimeDisplays();
+      });
+      btnOnHourDown.addEventListener('click', () => {
+        state.timeOn.hour = state.timeOn.hour <= 1 ? 12 : state.timeOn.hour - 1;
+        updateTimeDisplays();
+      });
+      btnOnMinUp.addEventListener('click', () => {
+        state.timeOn.minute = (state.timeOn.minute + 5) % 60;
+        updateTimeDisplays();
+      });
+      btnOnMinDown.addEventListener('click', () => {
+        state.timeOn.minute = (state.timeOn.minute - 5 + 60) % 60;
+        updateTimeDisplays();
+      });
+      btnOnAm.addEventListener('click', () => {
+        state.timeOn.ampm = 'AM';
+        updateTimeDisplays();
+      });
+      btnOnPm.addEventListener('click', () => {
+        state.timeOn.ampm = 'PM';
+        updateTimeDisplays();
+      });
+
+      // Turn Off Steppers
+      btnOffHourUp.addEventListener('click', () => {
+        state.timeOff.hour = state.timeOff.hour >= 12 ? 1 : state.timeOff.hour + 1;
+        updateTimeDisplays();
+      });
+      btnOffHourDown.addEventListener('click', () => {
+        state.timeOff.hour = state.timeOff.hour <= 1 ? 12 : state.timeOff.hour - 1;
+        updateTimeDisplays();
+      });
+      btnOffMinUp.addEventListener('click', () => {
+        state.timeOff.minute = (state.timeOff.minute + 5) % 60;
+        updateTimeDisplays();
+      });
+      btnOffMinDown.addEventListener('click', () => {
+        state.timeOff.minute = (state.timeOff.minute - 5 + 60) % 60;
+        updateTimeDisplays();
+      });
+      btnOffAm.addEventListener('click', () => {
+        state.timeOff.ampm = 'AM';
+        updateTimeDisplays();
+      });
+      btnOffPm.addEventListener('click', () => {
+        state.timeOff.ampm = 'PM';
+        updateTimeDisplays();
+      });
+
+      // Keyboard arrow control on hour & min displays
+      function setupKeyboardStepper(element, onUp, onDown) {
+        element.addEventListener('keydown', (e) => {
+          if (e.key === 'ArrowUp') {
+            e.preventDefault();
+            onUp();
+          } else if (e.key === 'ArrowDown') {
+            e.preventDefault();
+            onDown();
+          }
+        });
+      }
+
+      setupKeyboardStepper(valOnHour, () => btnOnHourUp.click(), () => btnOnHourDown.click());
+      setupKeyboardStepper(valOnMin, () => btnOnMinUp.click(), () => btnOnMinDown.click());
+      setupKeyboardStepper(valOffHour, () => btnOffHourUp.click(), () => btnOffHourDown.click());
+      setupKeyboardStepper(valOffMin, () => btnOffMinUp.click(), () => btnOffMinDown.click());
+
+      // Quick Time Preset Chips
+      document.querySelectorAll('#drawerTimeOn .chip-btn').forEach(chip => {
+        chip.addEventListener('click', () => {
+          const parts = chip.dataset.time.split(/[: ]/);
+          state.timeOn.hour = parseInt(parts[0], 10);
+          state.timeOn.minute = parseInt(parts[1], 10);
+          state.timeOn.ampm = parts[2];
+          updateTimeDisplays();
+        });
+      });
+
+      document.querySelectorAll('#drawerTimeOff .chip-btn').forEach(chip => {
+        chip.addEventListener('click', () => {
+          const parts = chip.dataset.time.split(/[: ]/);
+          state.timeOff.hour = parseInt(parts[0], 10);
+          state.timeOff.minute = parseInt(parts[1], 10);
+          state.timeOff.ampm = parts[2];
+          updateTimeDisplays();
+        });
+      });
+
+      // --- CONTINUOUS SLIDER INPUT LISTENER ---
+      tempSlider.addEventListener('input', (e) => {
+        state.kelvin = parseInt(e.target.value, 10);
+        updateTemperatureView();
+      });
+
+      // Kelvin Presets
+      document.querySelectorAll('.preset-kelvin-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          state.kelvin = parseInt(btn.dataset.kelvin, 10);
+          updateTemperatureView();
+        });
+      });
+
+      // --- SCENE PRESET CONTROLS ---
+      function setActivePresetButton(activeBtn) {
+        [presetBedtime, presetReader, presetDaytime].forEach(b => b.classList.remove('active'));
+        activeBtn.classList.add('active');
+      }
+
+      presetBedtime.addEventListener('click', () => {
+        setActivePresetButton(presetBedtime);
+        state.theme = 'dark';
+        state.oled = true;
+        toggleOled.setAttribute('aria-checked', 'true');
+        state.nightShift = true;
+        toggleNightShift.setAttribute('aria-checked', 'true');
+        state.kelvin = 2400;
+        state.dimMedia = true;
+        toggleDimMedia.setAttribute('aria-checked', 'true');
+        document.documentElement.style.setProperty('--media-brightness', '0.75');
+        updateThemeView();
+      });
+
+      presetReader.addEventListener('click', () => {
+        setActivePresetButton(presetReader);
+        state.theme = 'dark';
+        state.oled = false;
+        toggleOled.setAttribute('aria-checked', 'false');
+        state.nightShift = true;
+        toggleNightShift.setAttribute('aria-checked', 'true');
+        state.kelvin = 3400;
+        state.dimMedia = true;
+        toggleDimMedia.setAttribute('aria-checked', 'true');
+        document.documentElement.style.setProperty('--media-brightness', '0.75');
+        updateThemeView();
+      });
+
+      presetDaytime.addEventListener('click', () => {
+        setActivePresetButton(presetDaytime);
+        state.theme = 'light';
+        state.oled = false;
+        toggleOled.setAttribute('aria-checked', 'false');
+        state.nightShift = false;
+        toggleNightShift.setAttribute('aria-checked', 'false');
+        state.kelvin = 5500;
+        state.dimMedia = false;
+        toggleDimMedia.setAttribute('aria-checked', 'false');
+        document.documentElement.style.setProperty('--media-brightness', '1');
+        updateThemeView();
+      });
+
+      // --- RESET TO DEFAULTS ---
+      btnReset.addEventListener('click', () => {
+        state.theme = 'dark';
+        state.automatic = true;
+        toggleAutomatic.setAttribute('aria-checked', 'true');
+        scheduleSection.style.display = 'flex';
+        state.scheduleMode = 'custom';
+        segCustom.click();
+        state.timeOn = { hour: 10, minute: 0, ampm: 'PM' };
+        state.timeOff = { hour: 7, minute: 0, ampm: 'AM' };
+        state.nightShift = true;
+        toggleNightShift.setAttribute('aria-checked', 'true');
+        state.kelvin = 3400;
+        state.oled = false;
+        toggleOled.setAttribute('aria-checked', 'false');
+        state.dimMedia = true;
+        toggleDimMedia.setAttribute('aria-checked', 'true');
+        state.highContrast = false;
+        toggleContrast.setAttribute('aria-checked', 'false');
+
+        document.documentElement.style.setProperty('--media-brightness', '0.75');
+        document.documentElement.style.setProperty('--text-contrast-boost', '1');
+
+        drawerTimeOn.classList.remove('open');
+        drawerTimeOff.classList.remove('open');
+        btnTimeOn.classList.remove('active');
+        btnTimeOff.classList.remove('active');
+
+        setActivePresetButton(presetReader);
+        updateThemeView();
+        updateTimeDisplays();
+      });
+
+      // --- INITIALIZE ON MOUNT ---
+      updateThemeView();
+      updateTimeDisplays();
+      document.documentElement.style.setProperty('--media-brightness', '0.75');
+
+    })();
+  </script>
+</body>
+</html>

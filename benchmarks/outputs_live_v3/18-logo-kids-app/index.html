@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>WONDERLING — Spatial STEM Learning &bull; Logo &amp; Identity System</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --ground-indigo: #151c2d;
+      --surface-navy: #1e273e;
+      --surface-subtle: #27334f;
+      --line-slate: #2e3c5c;
+      --text-chalk: #faf8f2;
+      --text-muted: #94a3b8;
+      --amber-solar: #ffb800;
+      --font-display: 'Outfit', sans-serif;
+      --font-body: 'Plus Jakarta Sans', sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body{background:#151c2d;color:#faf8f2;
+      font-family: var(--font-body);
+      font-size: 16px;
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    a:focus-visible, button:focus-visible {
+      outline: 2px solid #ffb800;
+      outline-offset: 4px;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      * {
+        animation: none !important;
+        transition: none !important;
+      }
+    }
+
+    .app-sheet-wrapper {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 32px 24px 64px;
+    }
+
+    header.brand-masthead {
+      border-bottom: 1px solid #2e3c5c;
+      padding-bottom: 24px;
+      margin-bottom: 40px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .app-meta-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+      border-bottom: 1px solid #2e3c5c;
+      padding-bottom: 16px;
+    }
+
+    .meta-tag {
+      font-size: 12px;
+      color: #94a3b8;
+      letter-spacing: 0.04em;
+    }
+
+    .meta-tag strong {
+      color: #ffb800;
+      font-family: var(--font-display);
+      font-weight: 700;
+    }
+
+    .brand-intro-wrap {
+      max-width: 800px;
+    }
+
+    h1.app-title {
+      font-family: var(--font-display);
+      font-size: 40px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      line-height: 1.1;
+      color: #faf8f2;
+      margin-bottom: 8px;
+    }
+
+    em{color:#ffb800;font-style:normal;}
+
+    .app-thesis {
+      font-size: 16px;
+      color: #94a3b8;
+      line-height: 1.5;
+    }
+
+    main.identity-board {
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 32px;
+    }
+
+    section.board-card {
+      background: #1e273e;
+      border: 1px solid #2e3c5c;
+      border-radius: 4px;
+      padding: 32px;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    .card-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid #2e3c5c;
+      padding-bottom: 12px;
+    }
+
+    h2.card-heading {
+      font-family: var(--font-display);
+      font-size: 20px;
+      font-weight: 700;
+      color: #faf8f2;
+    }
+
+    .card-label {
+      font-size: 12px;
+      color: #ffb800;
+      font-family: var(--font-display);
+      font-weight: 600;
+    }
+
+    /* Primary Mark Display */
+    .hero-mark-pod {
+      background: #151c2d;
+      border: 1px solid #2e3c5c;
+      border-radius: 2px;
+      padding: 48px 32px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 20px;
+      text-align: center;
+    }
+
+    .mark-svg-stage {
+      width: 120px;
+      height: 120px;
+    }
+
+    .app-wordmark {
+      font-family: var(--font-display);
+      font-size: 32px;
+      font-weight: 800;
+      letter-spacing: -0.01em;
+      color: #faf8f2;
+    }
+
+    .app-subtitle {
+      font-size: 12px;
+      letter-spacing: 0.16em;
+      color: #ffb800;
+      text-transform: uppercase;
+      margin-top: -12px;
+      font-weight: 600;
+    }
+
+    .pedagogy-notes {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .pedagogy-card {
+      background: #27334f;
+      padding: 16px;
+      border-radius: 2px;
+      border: 1px solid #2e3c5c;
+    }
+
+    h3.pedagogy-title {
+      font-family: var(--font-display);
+      font-size: 12px;
+      font-weight: 700;
+      color: #ffb800;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+
+    .pedagogy-text {
+      font-size: 14px;
+      color: #faf8f2;
+      line-height: 1.4;
+    }
+
+    /* Geometric Construction */
+    .geometry-pod {
+      background: #151c2d;
+      border: 1px solid #2e3c5c;
+      padding: 24px;
+      border-radius: 2px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    /* App Store Icon Mockup */
+    .app-icon-display-frame {
+      background: #151c2d;
+      border: 1px solid #2e3c5c;
+      border-radius: 2px;
+      padding: 32px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+    }
+
+    .ios-squircle {
+      width: 112px;
+      height: 112px;
+      background: #27334f;
+      border: 2px solid #ffb800;
+      border-radius: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+
+    .squircle-caption {
+      font-size: 12px;
+      color: #94a3b8;
+      font-family: var(--font-display);
+    }
+
+    /* Dynamic Expression States */
+    .states-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+    }
+
+    .state-item {
+      background: #27334f;
+      border: 1px solid #2e3c5c;
+      border-radius: 2px;
+      padding: 16px 8px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      text-align: center;
+    }
+
+    .state-name {
+      font-family: var(--font-display);
+      font-size: 12px;
+      font-weight: 700;
+      color: #ffb800;
+    }
+
+    .state-desc {
+      font-size: 12px;
+      color: #faf8f2;
+    }
+
+    /* Footer Navigation */
+    footer.sheet-footer {
+      margin-top: 48px;
+      padding-top: 24px;
+      border-top: 1px solid #2e3c5c;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .footer-stamp {
+      font-size: 12px;
+      color: #94a3b8;
+    }
+
+    .btn{background:#ffb800;color:#151c2d;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 44px;
+      padding: 0 24px;
+      font-family: var(--font-display);
+      font-size: 14px;
+      font-weight: 700;
+      border-radius: 4px;
+      cursor: pointer;
+      text-decoration: none;
+      border: 1px solid transparent;
+    }
+
+    .btn-secondary {
+      background-color: transparent;
+      color: #faf8f2;
+      border: 1px solid #2e3c5c;
+    }
+
+    .btn-secondary:hover {
+      background-color: #27334f;
+    }
+
+    @media (max-width: 1024px) {
+      main.identity-board {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .app-sheet-wrapper {
+        padding: 20px 16px 40px;
+      }
+      h1.app-title {
+        font-size: 32px;
+      }
+      .pedagogy-notes {
+        grid-template-columns: 1fr;
+      }
+      .states-row {
+        grid-template-columns: 1fr;
+      }
+      footer.sheet-footer {
+        flex-direction: column;
+        align-items: stretch;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app-sheet-wrapper">
+    <header class="brand-masthead">
+      <div class="app-meta-row">
+        <div class="meta-tag">Product: <strong>Wonderling Learning Engine</strong></div>
+        <div class="meta-tag">Pedagogy: <strong>Spatial Geometry &amp; Natural Science</strong></div>
+        <div class="meta-tag">Target Audience: <strong>Children Ages 6–10 &amp; Parents</strong></div>
+        <div class="meta-tag">Identity Document: <strong>Core Vector Spec v2.1</strong></div>
+      </div>
+
+      <div class="brand-intro-wrap">
+        <h1 class="app-title">WONDERLING: <em>Curiosity Engine</em></h1>
+        <p class="app-thesis">
+          Children's software should honor young minds with sophisticated geometric wonder rather than condescending primary-color noise. Wonderling's mark pairs a luminous celestial dome with an unfolding exploration prism.
+        </p>
+      </div>
+    </header>
+
+    <main class="identity-board">
+      <!-- Left Column: Primary Character Mark & Tangents -->
+      <div style="display: flex; flex-direction: column; gap: 32px;">
+        <section class="board-card" aria-labelledby="mark-spec-head">
+          <div class="card-top">
+            <h2 id="mark-spec-head" class="card-heading">01. Prismatic Scout Emblem</h2>
+            <span class="card-label">Modular Kinetic Character</span>
+          </div>
+
+          <div class="hero-mark-pod">
+            <div class="mark-svg-stage">
+              <svg width="120" height="120" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Wonderling geometric scout character emblem">
+                <circle cx="60" cy="60" r="54" stroke="#2e3c5c" stroke-width="1.5" stroke-dasharray="3 3" />
+                <!-- Inquisitive Dome / Telescope Head -->
+                <path d="M36 56 C36 34 50 20 60 20 C70 20 84 34 84 56 Z" fill="#ffb800" />
+                <!-- Geometric Iris Lens -->
+                <circle cx="60" cy="42" r="8" fill="#151c2d" />
+                <circle cx="63" cy="39" r="3" fill="#faf8f2" />
+                <!-- Unfolding Prismatic Book / Body Wings -->
+                <path d="M30 64 L60 88 L90 64 L60 52 Z" fill="#27334f" stroke="#faf8f2" stroke-width="2" stroke-linejoin="round" />
+                <path d="M60 52 L60 88" stroke="#ffb800" stroke-width="2" stroke-linecap="round" />
+                <!-- Playful Base Coordinate Spheres -->
+                <circle cx="36" cy="94" r="5" fill="#ffb800" />
+                <circle cx="84" cy="94" r="5" fill="#ffb800" />
+              </svg>
+            </div>
+
+            <div class="app-wordmark">Wonderling</div>
+            <div class="app-subtitle">Spatial Learning &bull; Ages 6–10</div>
+          </div>
+
+          <div class="pedagogy-notes">
+            <div class="pedagogy-card">
+              <h3 class="pedagogy-title">Design Dignity</h3>
+              <p class="pedagogy-text">Inspired by Bruno Munari's tactile learning shapes. Balances playful curiosity with crisp mathematical proportion to cultivate cognitive pride.</p>
+            </div>
+            <div class="pedagogy-card">
+              <h3 class="pedagogy-title">Cross-Generational Appeal</h3>
+              <p class="pedagogy-text">Beloved by children for its friendly expressive eye, and trusted by parents and educators for its clean Scandinavian design restraint.</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- Construction Geometry -->
+        <section class="board-card" aria-labelledby="geometry-head">
+          <div class="card-top">
+            <h2 id="geometry-head" class="card-heading">02. Geometric Proportions</h2>
+            <span class="card-label">Modular Arc &amp; Prism Grid</span>
+          </div>
+
+          <div class="geometry-pod">
+            <svg width="280" height="140" viewBox="0 0 280 140" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Geometric proportion diagram">
+              <rect x="10" y="10" width="260" height="120" stroke="#2e3c5c" stroke-width="1" />
+              <circle cx="140" cy="70" r="44" stroke="#ffb800" stroke-width="1" stroke-dasharray="3 3" />
+              <line x1="140" y1="10" x2="140" y2="130" stroke="#ffb800" stroke-width="1" />
+              <polygon points="140,26 100,105 180,105" stroke="#94a3b8" stroke-width="1.5" />
+              <text x="145" y="40" fill="#ffb800" font-family="'Outfit', sans-serif" font-size="10">RADIUS 44PX</text>
+              <text x="145" y="85" fill="#94a3b8" font-family="'Plus Jakarta Sans', sans-serif" font-size="10">PRISM 60°</text>
+            </svg>
+          </div>
+        </section>
+      </div>
+
+      <!-- Right Column: App Store Icon & Dynamic Expressions -->
+      <div style="display: flex; flex-direction: column; gap: 32px;">
+        <section class="board-card" aria-labelledby="app-icon-head">
+          <div class="card-top">
+            <h2 id="app-icon-head" class="card-heading">03. App Store Presence</h2>
+            <span class="card-label">1024px Production Squircle</span>
+          </div>
+
+          <div class="app-icon-display-frame">
+            <div class="ios-squircle" aria-label="Wonderling App Icon Squircle">
+              <svg width="64" height="64" viewBox="0 0 120 120" fill="none">
+                <path d="M36 56 C36 34 50 20 60 20 C70 20 84 34 84 56 Z" fill="#ffb800" />
+                <circle cx="60" cy="42" r="8" fill="#151c2d" />
+                <circle cx="63" cy="39" r="3" fill="#faf8f2" />
+                <path d="M30 64 L60 88 L90 64 L60 52 Z" fill="#27334f" stroke="#faf8f2" stroke-width="3" />
+              </svg>
+            </div>
+            <span class="squircle-caption">iOS &bull; iPadOS &bull; macOS Retina Master</span>
+          </div>
+        </section>
+
+        <!-- Expression States Panel -->
+        <section class="board-card" aria-labelledby="states-head">
+          <div class="card-top">
+            <h2 id="states-head" class="card-heading">04. Interactive States</h2>
+            <span class="card-label">In-Game Pedagogical Moods</span>
+          </div>
+
+          <div class="states-row">
+            <div class="state-item">
+              <svg width="36" height="36" viewBox="0 0 120 120" fill="none">
+                <path d="M36 56 C36 34 50 20 60 20 C70 20 84 34 84 56 Z" fill="#ffb800" />
+                <circle cx="60" cy="42" r="8" fill="#151c2d" />
+              </svg>
+              <div class="state-name">Inquisitive</div>
+              <div class="state-desc">Default Home</div>
+            </div>
+
+            <div class="state-item">
+              <svg width="36" height="36" viewBox="0 0 120 120" fill="none">
+                <path d="M36 56 C36 34 50 20 60 20 C70 20 84 34 84 56 Z" fill="#ffb800" />
+                <line x1="52" y1="42" x2="68" y2="42" stroke="#151c2d" stroke-width="4" stroke-linecap="round" />
+              </svg>
+              <div class="state-name">Focus</div>
+              <div class="state-desc">Solving Puzzle</div>
+            </div>
+
+            <div class="state-item">
+              <svg width="36" height="36" viewBox="0 0 120 120" fill="none">
+                <path d="M36 56 C36 34 50 20 60 20 C70 20 84 34 84 56 Z" fill="#ffb800" />
+                <circle cx="60" cy="38" r="10" fill="#faf8f2" />
+                <circle cx="60" cy="38" r="5" fill="#151c2d" />
+              </svg>
+              <div class="state-name">Eureka!</div>
+              <div class="state-desc">Level Clear</div>
+            </div>
+          </div>
+        </section>
+      </div>
+    </main>
+
+    <footer class="sheet-footer">
+      <div class="footer-stamp">
+        Pedagogical Standards Validated // Meets Apple Kids Category Guidelines &bull; COPPA Certified
+      </div>
+      <nav style="display: flex; gap: 12px;" aria-label="Identity downloads">
+        <button class="btn btn-secondary" type="button">App Icon Package</button>
+        <button class="btn" type="button">Export Vector Kit</button>
+      </nav>
+    </footer>
+  </div>
+</body>
+</html>

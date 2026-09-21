@@ -1,0 +1,611 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Aura Reader — Dark Mode Settings</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,500;1,7..72,400&family=Sora:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --canvas: #e8e7e4;
+      --phone-bg: #121413;
+      --phone-surface: #1b1e1d;
+      --phone-raised: #242826;
+      --phone-line: #2e3331;
+      --ink-dark: #e6e8e5;
+      --muted-dark: #8c948f;
+      --accent: #48a375;
+      --sans: 'Sora', -apple-system, BlinkMacSystemFont, sans-serif;
+      --serif: 'Literata', Georgia, serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body{background:#e8e7e4;color:#121413;
+      font-family: var(--sans);
+      font-size: 16px;
+      line-height: 1.5;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 32px 16px;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .meta-tag {
+      font-size: 12px;
+      color: #6a716d;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      font-weight: 600;
+      margin-bottom: 16px;
+    }
+
+    /* 390x844 Device Frame */
+    .device-shell {
+      width: 390px;
+      height: 844px;
+      background: var(--phone-bg);
+      color: var(--ink-dark);
+      border-radius: 48px;
+      box-shadow: 0 24px 64px rgba(0, 0, 0, 0.16);
+      border: 12px solid #0a0b0a;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* iOS Status Bar */
+    .status-bar {
+      height: 48px;
+      padding: 12px 24px 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 14px;
+      font-weight: 600;
+      z-index: 10;
+      color: #ffffff;
+    }
+
+    .island-cutout {
+      position: absolute;
+      top: 8px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 120px;
+      height: 32px;
+      background: #000000;
+      border-radius: 16px;
+      z-index: 10;
+    }
+
+    .status-icons {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .status-icons svg {
+      width: 16px;
+      height: 16px;
+      fill: currentColor;
+    }
+
+    /* Navigation Bar */
+    header.settings-header {
+      padding: 8px 16px 12px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--phone-line);
+    }
+
+    .btn-nav-back {
+      background: none;
+      border: none;
+      min-height: 44px;
+      padding: 0 8px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      color: var(--accent);
+      font-size: 16px;
+      font-weight: 500;
+      cursor: pointer;
+      border-radius: 6px;
+    }
+
+    .btn-nav-back:focus-visible, .theme-card:focus-visible, .toggle-row:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 2px;
+    }
+
+    .header-action-text {
+      font-size: 14px;
+      color: var(--muted-dark);
+      cursor: pointer;
+      min-height: 44px;
+      display: flex;
+      align-items: center;
+      background: none;
+      border: none;
+      padding: 0 8px;
+    }
+
+    /* Scrollable Settings Body */
+    main.settings-body {
+      flex: 1;
+      padding: 16px 20px 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+      overflow-y: auto;
+    }
+
+    h1.screen-title {
+      font-size: 24px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      color: var(--ink-dark);
+    }
+
+    /* Live Article Typographic Preview */
+    .preview-box {
+      background: var(--phone-surface);
+      border: 1px solid var(--phone-line);
+      border-radius: 16px;
+      padding: 16px;
+      transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+    }
+
+    .preview-meta {
+      display: flex;
+      justify-content: space-between;
+      font-size: 12px;
+      color: var(--muted-dark);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+
+    .preview-article {
+      border-radius: 12px;
+      padding: 16px;
+      border: 1px solid var(--phone-line);
+      background: #141716;
+      color: #e6e8e5;
+      transition: background 0.2s ease, color 0.2s ease;
+    }
+
+    .preview-article h2 {
+      font-family: var(--serif);
+      font-size: 18px;
+      font-weight: 500;
+      line-height: 1.25;
+      margin-bottom: 8px;
+      letter-spacing: -0.01em;
+    }
+
+    .preview-article p {
+      font-family: var(--serif);
+      font-size: 14px;
+      line-height: 1.5;
+      color: inherit;
+      opacity: 0.9;
+    }
+
+    /* Theme Grid */
+    .settings-group {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    h2.group-label {
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      font-weight: 700;
+      color: var(--muted-dark);
+      padding-left: 4px;
+    }
+
+    .theme-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+    }
+
+    .theme-card {
+      background: var(--phone-surface);
+      border: 2px solid var(--phone-line);
+      border-radius: 14px;
+      padding: 12px 8px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      min-height: 108px;
+      color: var(--ink-dark);
+    }
+
+    .theme-card.active {
+      border-color: var(--accent);
+      background: var(--phone-raised);
+    }
+
+    .theme-sample {
+      width: 52px;
+      height: 44px;
+      border-radius: 8px;
+      border: 1px solid rgba(255,255,255,0.1);
+      display: flex;
+      flex-direction: column;
+      padding: 4px 8px;
+      gap: 4px;
+    }
+
+    .sample-line {
+      height: 3px;
+      border-radius: 2px;
+    }
+
+    /* Charcoal Theme Preview */
+    .theme-sample.charcoal {
+      background: #1c1f1e;
+    }
+    .theme-sample.charcoal .sample-line { background: #8c948f; }
+
+    /* OLED Midnight Theme Preview */
+    .theme-sample.oled {
+      background: #000000;
+    }
+    .theme-sample.oled .sample-line { background: #646b67; }
+
+    /* Warm Sepia Theme Preview */
+    .theme-sample.sepia {
+      background: #2b251f;
+    }
+    .theme-sample.sepia .sample-line { background: #b8a694; }
+
+    .theme-name {
+      font-size: 12px;
+      font-weight: 600;
+      text-align: center;
+    }
+
+    .theme-radio-dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 8px;
+      border: 2px solid var(--phone-line);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .theme-card.active .theme-radio-dot {
+      border-color: var(--accent);
+      background: var(--accent);
+    }
+
+    .theme-radio-dot::after {
+      content: "";
+      width: 6px;
+      height: 6px;
+      border-radius: 3px;
+      background: #ffffff;
+      opacity: 0;
+    }
+
+    .theme-card.active .theme-radio-dot::after {
+      opacity: 1;
+    }
+
+    /* Control Rows (Toggles & Sliders) */
+    .controls-card {
+      background: var(--phone-surface);
+      border: 1px solid var(--phone-line);
+      border-radius: 14px;
+      overflow: hidden;
+    }
+
+    .toggle-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 16px;
+      min-height: 56px;
+      background: none;
+      border: none;
+      width: 100%;
+      text-align: left;
+      cursor: pointer;
+      color: var(--ink-dark);
+      border-bottom: 1px solid var(--phone-line);
+    }
+
+    .toggle-row:last-child {
+      border-bottom: none;
+    }
+
+    .toggle-info strong {
+      display: block;
+      font-size: 14px;
+      margin-bottom: 4px;
+    }
+
+    .toggle-info p {
+      font-size: 12px;
+      color: var(--muted-dark);
+    }
+
+    /* iOS Switch Toggle */
+    .ios-switch {
+      width: 48px;
+      height: 28px;
+      background: #393f3c;
+      border-radius: 14px;
+      position: relative;
+      transition: background 0.2s ease;
+      flex-shrink: 0;
+    }
+
+    .ios-switch.on {
+      background: var(--accent);
+    }
+
+    .switch-knob {
+      width: 24px;
+      height: 24px;
+      border-radius: 12px;
+      background: #ffffff;
+      position: absolute;
+      top: 2px;
+      left: 2px;
+      transition: transform 0.2s cubic-bezier(0.25, 1, 0.5, 1);
+      box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    }
+
+    .ios-switch.on .switch-knob {
+      transform: translateX(20px);
+    }
+
+    /* Footer & Home Indicator */
+    footer.screen-footer {
+      padding: 12px 20px 28px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .hint-text {
+      font-size: 12px;
+      color: var(--muted-dark);
+      text-align: center;
+    }
+
+    .home-bar {
+      width: 136px;
+      height: 4px;
+      background: #ffffff;
+      border-radius: 4px;
+      margin-top: 4px;
+      opacity: 0.6;
+    }
+
+    @media (max-width: 820px) {
+      body {
+        padding: 20px 12px;
+      }
+    }
+
+    @media (max-width: 420px) {
+      .device-shell {
+        transform: scale(0.92);
+        transform-origin: top center;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      * {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="meta-tag">Device Viewport · iPhone 15 Pro (390×844)</div>
+
+  <div class="device-shell" id="phoneShell" role="region" aria-label="Aura Reader Dark Mode Settings">
+    <div class="island-cutout" aria-hidden="true"></div>
+
+    <div class="status-bar" aria-hidden="true">
+      <span>9:41</span>
+      <div class="status-icons">
+        <svg viewBox="0 0 24 24"><path d="M12 3c-4.97 0-9 4.03-9 9 0 2.12.74 4.07 1.97 5.61L4.35 19.4a1 1 0 0 0 .7 1.6h13.9a1 1 0 0 0 .7-1.6l-.62-1.79A8.96 8.96 0 0 0 21 12c0-4.97-4.03-9-9-9z"/></svg>
+        <svg viewBox="0 0 24 24"><path d="M2 17h20v2H2zm1.15-4.05L4.57 14H19.4l1.45-1.05C19.04 11.23 15.77 10 12 10s-7.04 1.23-8.85 2.95zM7.5 9.87L8.9 11h6.2l1.4-1.13C15.22 9.32 13.67 9 12 9s-3.22.32-4.5.87z"/></svg>
+        <svg viewBox="0 0 24 24"><rect x="2" y="7" width="18" height="10" rx="2" ry="2"/><path d="M22 11v2"/></svg>
+      </div>
+    </div>
+
+    <header class="settings-header">
+      <button type="button" class="btn-nav-back" aria-label="Navigate back to main settings menu">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="15 18 9 12 15 6"/></svg>
+        <span>Reader</span>
+      </button>
+      <button type="button" class="header-action-text" id="resetBtn" aria-label="Reset appearance to system defaults">
+        Reset
+      </button>
+    </header>
+
+    <main class="settings-body">
+      <h1 class="screen-title">Dark Mode &amp; Palette</h1>
+
+      <!-- Live Interactive Article Typographic Preview -->
+      <section class="preview-box" aria-labelledby="preview-label">
+        <div class="preview-meta">
+          <span id="preview-label">Live Reading Sample</span>
+          <span id="activeThemeLabel">Charcoal Slate</span>
+        </div>
+        <article class="preview-article" id="sampleArticle">
+          <h2>The Architecture of Solitude</h2>
+          <p>
+            In silence, the printed page ceases to be an instrument of noise and becomes a room of pure light.
+          </p>
+        </article>
+      </section>
+
+      <!-- Theme Presets Group -->
+      <section class="settings-group" aria-labelledby="presets-title">
+        <h2 class="group-label" id="presets-title">Night Themes</h2>
+        <div class="theme-grid" role="radiogroup" aria-label="Select dark mode color scheme">
+          <!-- Charcoal Slate -->
+          <button type="button" class="theme-card active" role="radio" aria-checked="true" data-theme="charcoal" id="themeCharcoal">
+            <div class="theme-sample charcoal" aria-hidden="true">
+              <div class="sample-line" style="width: 70%;"></div>
+              <div class="sample-line" style="width: 90%;"></div>
+              <div class="sample-line" style="width: 50%;"></div>
+            </div>
+            <span class="theme-name">Charcoal</span>
+            <div class="theme-radio-dot" aria-hidden="true"></div>
+          </button>
+
+          <!-- OLED Midnight -->
+          <button type="button" class="theme-card" role="radio" aria-checked="false" data-theme="oled" id="themeOled">
+            <div class="theme-sample oled" aria-hidden="true">
+              <div class="sample-line" style="width: 70%;"></div>
+              <div class="sample-line" style="width: 90%;"></div>
+              <div class="sample-line" style="width: 50%;"></div>
+            </div>
+            <span class="theme-name">OLED Black</span>
+            <div class="theme-radio-dot" aria-hidden="true"></div>
+          </button>
+
+          <!-- Warm Sepia Night -->
+          <button type="button" class="theme-card" role="radio" aria-checked="false" data-theme="sepia" id="themeSepia">
+            <div class="theme-sample sepia" aria-hidden="true">
+              <div class="sample-line" style="width: 70%;"></div>
+              <div class="sample-line" style="width: 90%;"></div>
+              <div class="sample-line" style="width: 50%;"></div>
+            </div>
+            <span class="theme-name">Sepia Dusk</span>
+            <div class="theme-radio-dot" aria-hidden="true"></div>
+          </button>
+        </div>
+      </section>
+
+      <!-- Display & Automation Controls -->
+      <section class="settings-group" aria-labelledby="controls-title">
+        <h2 class="group-label" id="controls-title">Automation &amp; Surface</h2>
+        <div class="controls-card">
+          <!-- Toggle 1: Auto Schedule -->
+          <button type="button" class="toggle-row" id="toggleSchedule" aria-pressed="true" aria-label="Toggle Sunset to Sunrise schedule">
+            <div class="toggle-info">
+              <strong>Match System Schedule</strong>
+              <p>Activates automatically at local dusk (7:14 PM)</p>
+            </div>
+            <div class="ios-switch on" id="switchSchedule" aria-hidden="true">
+              <div class="switch-knob"></div>
+            </div>
+          </button>
+
+          <!-- Toggle 2: Dim Cover Art -->
+          <button type="button" class="toggle-row" id="toggleDim" aria-pressed="true" aria-label="Toggle dim cover art in dark mode">
+            <div class="toggle-info">
+              <strong>Dim Bright Illustrations</strong>
+              <p>Reduces image glare by 25% in bed</p>
+            </div>
+            <div class="ios-switch on" id="switchDim" aria-hidden="true">
+              <div class="switch-knob"></div>
+            </div>
+          </button>
+
+          <!-- Toggle 3: True Tone Harmonization -->
+          <button type="button" class="toggle-row" id="toggleTrueTone" aria-pressed="false" aria-label="Toggle warm ambient compensation">
+            <div class="toggle-info">
+              <strong>Warm Paper Tint</strong>
+              <p>Subtle amber shift to reduce eye strain</p>
+            </div>
+            <div class="ios-switch" id="switchTrueTone" aria-hidden="true">
+              <div class="switch-knob"></div>
+            </div>
+          </button>
+        </div>
+      </section>
+    </main>
+
+    <footer class="screen-footer">
+      <p class="hint-text">OLED Black turns pixels off completely on Super Retina XDR.</p>
+      <div class="home-bar" aria-hidden="true"></div>
+    </footer>
+  </div>
+
+  <script>
+    const themeCards = document.querySelectorAll('.theme-card');
+    const sampleArticle = document.getElementById('sampleArticle');
+    const activeLabel = document.getElementById('activeThemeLabel');
+    const shell = document.getElementById('phoneShell');
+
+    themeCards.forEach(card => {
+      card.addEventListener('click', function() {
+        themeCards.forEach(c => {
+          c.classList.remove('active');
+          c.setAttribute('aria-checked', 'false');
+        });
+        this.classList.add('active');
+        this.setAttribute('aria-checked', 'true');
+
+        const theme = this.dataset.theme;
+        if (theme === 'charcoal') {
+          sampleArticle.style.background = '#141716';
+          sampleArticle.style.color = '#e6e8e5';
+          activeLabel.textContent = 'Charcoal Slate';
+          shell.style.background = '#121413';
+        } else if (theme === 'oled') {
+          sampleArticle.style.background = '#000000';
+          sampleArticle.style.color = '#d0d2cf';
+          activeLabel.textContent = 'OLED Midnight';
+          shell.style.background = '#000000';
+        } else if (theme === 'sepia') {
+          sampleArticle.style.background = '#27221c';
+          sampleArticle.style.color = '#dfd3c5';
+          activeLabel.textContent = 'Sepia Dusk';
+          shell.style.background = '#181512';
+        }
+      });
+    });
+
+    function setupToggle(btnId, switchId) {
+      const btn = document.getElementById(btnId);
+      const sw = document.getElementById(switchId);
+      btn.addEventListener('click', function() {
+        const isOn = sw.classList.toggle('on');
+        btn.setAttribute('aria-pressed', isOn ? 'true' : 'false');
+      });
+    }
+
+    setupToggle('toggleSchedule', 'switchSchedule');
+    setupToggle('toggleDim', 'switchDim');
+    setupToggle('toggleTrueTone', 'switchTrueTone');
+
+    document.getElementById('resetBtn').addEventListener('click', function() {
+      document.getElementById('themeCharcoal').click();
+    });
+  </script>
+</body>
+</html>

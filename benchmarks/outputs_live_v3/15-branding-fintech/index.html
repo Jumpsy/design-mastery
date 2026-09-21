@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>VALENCE — Brand Identity Guidelines for Freelance Financial Infrastructure</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Newsreader:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-canvas: #0f141c;
+      --surface-card: #18202c;
+      --surface-subtle: #202b3b;
+      --border-line: #243042;
+      --text-main: #f4f7fb;
+      --text-muted: #8b99ad;
+      --accent-blue: #0052ff;
+      --accent-hover: #0041cc;
+      --font-ui: 'Plus Jakarta Sans', sans-serif;
+      --font-serif: 'Newsreader', serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body{background:#0f141c;color:#f4f7fb;
+      font-family: var(--font-ui);
+      font-size: 16px;
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    a:focus-visible, button:focus-visible {
+      outline: 2px solid #0052ff;
+      outline-offset: 4px;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      * {
+        animation: none !important;
+        transition: none !important;
+      }
+    }
+
+    .container {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 32px 24px 64px;
+    }
+
+    header.identity-header {
+      border-bottom: 1px solid #243042;
+      padding-bottom: 32px;
+      margin-bottom: 40px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .top-meta-strip {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+      border-bottom: 1px solid #243042;
+      padding-bottom: 16px;
+    }
+
+    .meta-point {
+      font-size: 12px;
+      color: #8b99ad;
+      letter-spacing: 0.04em;
+    }
+
+    .meta-point strong {
+      color: #f4f7fb;
+      font-weight: 600;
+    }
+
+    .headline-block {
+      max-width: 840px;
+    }
+
+    h1.brand-title {
+      font-size: 44px;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      line-height: 1.1;
+      color: #f4f7fb;
+      margin-bottom: 12px;
+    }
+
+    em{color:#0052ff;font-family:var(--font-serif);font-style:italic;}
+
+    .brand-manifesto {
+      font-size: 16px;
+      color: #8b99ad;
+      line-height: 1.6;
+    }
+
+    main.system-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 32px;
+    }
+
+    section.system-panel {
+      background: #18202c;
+      border: 1px solid #243042;
+      border-radius: 4px;
+      padding: 32px;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    .panel-mast {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      border-bottom: 1px solid #243042;
+      padding-bottom: 12px;
+    }
+
+    h2.panel-heading {
+      font-size: 20px;
+      font-weight: 700;
+      color: #ffffff;
+      letter-spacing: -0.01em;
+    }
+
+    .panel-caption {
+      font-size: 12px;
+      color: #8b99ad;
+      letter-spacing: 0.04em;
+    }
+
+    /* Logo Mark & Presentation */
+    .logo-hero-stage {
+      background: #0f141c;
+      border: 1px solid #243042;
+      border-radius: 2px;
+      padding: 40px 24px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      position: relative;
+    }
+
+    .vector-mark-wrap {
+      width: 96px;
+      height: 96px;
+    }
+
+    .logotype-lockup {
+      font-size: 28px;
+      font-weight: 800;
+      letter-spacing: 0.12em;
+      color: #ffffff;
+      text-transform: uppercase;
+    }
+
+    .logotype-tagline {
+      font-size: 12px;
+      letter-spacing: 0.16em;
+      color: #8b99ad;
+      text-transform: uppercase;
+    }
+
+    .logo-rules-columns {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .rule-box {
+      background: #202b3b;
+      padding: 16px;
+      border-radius: 2px;
+      border: 1px solid #243042;
+    }
+
+    h3.rule-title {
+      font-size: 12px;
+      font-weight: 700;
+      color: #ffffff;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+      letter-spacing: 0.04em;
+    }
+
+    .rule-desc {
+      font-size: 14px;
+      color: #8b99ad;
+      line-height: 1.4;
+    }
+
+    /* Color Palette */
+    .palette-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+      gap: 12px;
+    }
+
+    .swatch-card {
+      background: #202b3b;
+      border: 1px solid #243042;
+      border-radius: 2px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .swatch-color {
+      height: 64px;
+      width: 100%;
+    }
+
+    .swatch-meta {
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .color-label {
+      font-size: 14px;
+      font-weight: 700;
+      color: #ffffff;
+    }
+
+    .color-semantic {
+      font-size: 12px;
+      color: #8b99ad;
+    }
+
+    .color-hex {
+      font-size: 12px;
+      font-weight: 600;
+      color: #0052ff;
+      margin-top: 4px;
+    }
+
+    /* Typography System */
+    .typography-specimens {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .specimen-block {
+      border-bottom: 1px solid #243042;
+      padding-bottom: 16px;
+    }
+
+    .specimen-header {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 8px;
+    }
+
+    .specimen-header span {
+      font-size: 12px;
+      color: #8b99ad;
+    }
+
+    .sample-display {
+      font-size: 28px;
+      font-weight: 700;
+      color: #ffffff;
+      line-height: 1.2;
+    }
+
+    .sample-body {
+      font-size: 16px;
+      color: #f4f7fb;
+      line-height: 1.5;
+    }
+
+    .sample-editorial {
+      font-family: var(--font-serif);
+      font-size: 20px;
+      font-style: italic;
+      color: #f4f7fb;
+      line-height: 1.4;
+    }
+
+    /* Tone of Voice Matrix */
+    .voice-table-wrap {
+      overflow-x: auto;
+    }
+
+    table.voice-matrix {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+    }
+
+    table.voice-matrix th {
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: #8b99ad;
+      padding: 12px 16px;
+      border-bottom: 1px solid #243042;
+      background: #0f141c;
+    }
+
+    table.voice-matrix td {
+      padding: 16px;
+      border-bottom: 1px solid #243042;
+      font-size: 14px;
+      vertical-align: top;
+      line-height: 1.4;
+    }
+
+    .col-touchpoint {
+      font-weight: 600;
+      color: #ffffff;
+      width: 25%;
+    }
+
+    .col-rival {
+      color: #8b99ad;
+      width: 35%;
+      text-decoration: line-through;
+      opacity: 0.7;
+    }
+
+    .col-valence {
+      color: #f4f7fb;
+      background: #202b3b;
+      border-radius: 2px;
+      font-weight: 500;
+      width: 40%;
+    }
+
+    .col-valence strong {
+      color: #0052ff;
+      display: block;
+      margin-bottom: 4px;
+      font-size: 12px;
+      text-transform: uppercase;
+    }
+
+    /* Footer Toolbar */
+    footer.identity-footer {
+      margin-top: 48px;
+      padding-top: 24px;
+      border-top: 1px solid #243042;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .status-stamp {
+      font-size: 12px;
+      color: #8b99ad;
+    }
+
+    .actions-group {
+      display: flex;
+      gap: 12px;
+    }
+
+    .btn{background:#0052ff;color:#f4f7fb;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 44px;
+      padding: 0 24px;
+      font-family: var(--font-ui);
+      font-size: 14px;
+      font-weight: 600;
+      border-radius: 4px;
+      cursor: pointer;
+      text-decoration: none;
+      border: 1px solid transparent;
+    }
+
+    .btn-primary {
+      background-color: #0052ff;
+      color: #ffffff;
+    }
+
+    .btn-primary:hover {
+      background-color: #0041cc;
+    }
+
+    .btn-secondary {
+      background-color: transparent;
+      color: #f4f7fb;
+      border: 1px solid #243042;
+    }
+
+    .btn-secondary:hover {
+      background-color: #202b3b;
+    }
+
+    @media (max-width: 1024px) {
+      main.system-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .container {
+        padding: 20px 16px 40px;
+      }
+      h1.brand-title {
+        font-size: 32px;
+      }
+      .logo-rules-columns {
+        grid-template-columns: 1fr;
+      }
+      .palette-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      footer.identity-footer {
+        flex-direction: column;
+        align-items: stretch;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header class="identity-header">
+      <div class="top-meta-strip">
+        <div class="meta-point">Organization: <strong>Valence Financial Inc.</strong></div>
+        <div class="meta-point">Document: <strong>Global Brand Architecture v2.4</strong></div>
+        <div class="meta-point">Audience: <strong>Independent Contractors &amp; Creative Ops</strong></div>
+        <div class="meta-point">Classification: <strong>Public System Spec</strong></div>
+      </div>
+
+      <div class="headline-block">
+        <h1 class="brand-title">VALENCE: <em>Financial Sovereignty</em></h1>
+        <p class="brand-manifesto">
+          Freelancers don't want childish emojis or patronizing gamification. They want calm, transparent liquidity, automated tax escrows that never fail, and banking tools that treat them like real corporate entities.
+        </p>
+      </div>
+    </header>
+
+    <main class="system-grid">
+      <!-- Panel 1: Geometric Logotype -->
+      <section class="system-panel" aria-labelledby="mark-heading">
+        <div class="panel-mast">
+          <h2 id="mark-heading" class="panel-heading">01. Dynamic Vector Mark</h2>
+          <span class="panel-caption">Equilibrium Kinetic System</span>
+        </div>
+
+        <div class="logo-hero-stage">
+          <div class="vector-mark-wrap">
+            <svg width="96" height="96" viewBox="0 0 96 96" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Valence logo: interlocking equilibrium balance prism">
+              <rect x="8" y="8" width="80" height="80" rx="2" stroke="#243042" stroke-width="1.5" />
+              <!-- Diagonal Equilibrium Balance -->
+              <path d="M20 76 L76 20" stroke="#0052ff" stroke-width="3" stroke-linecap="round" />
+              <!-- Retaining Prisms -->
+              <path d="M20 76 L20 44 L52 76 Z" fill="#202b3b" stroke="#f4f7fb" stroke-width="1.5" />
+              <path d="M76 20 L76 52 L44 20 Z" fill="#0052ff" stroke="#0052ff" stroke-width="1.5" />
+              <!-- Calibrated Origin Pivot -->
+              <circle cx="48" cy="48" r="4" fill="#ffffff" />
+            </svg>
+          </div>
+
+          <div class="logotype-lockup">VALENCE</div>
+          <div class="logotype-tagline">Autonomous Freelance Escrow</div>
+        </div>
+
+        <div class="logo-rules-columns">
+          <div class="rule-box">
+            <h3 class="rule-title">Geometric Concept</h3>
+            <p class="rule-desc">Constructed from two inverse right-triangular balance weights anchored along a 45-degree axis, representing instantaneous settlement between receivables and tax obligations.</p>
+          </div>
+          <div class="rule-box">
+            <h3 class="rule-title">Clearspace &amp; Favicon</h3>
+            <p class="rule-desc">Maintains optical clarity down to 16px hardware tokens. Minimum protective clearance corresponds to 50% of total mark width on all four sides.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Panel 2: Color Palette Architecture -->
+      <section class="system-panel" aria-labelledby="color-heading">
+        <div class="panel-mast">
+          <h2 id="color-heading" class="panel-heading">02. Color Architecture</h2>
+          <span class="panel-caption">Semantic Functional Roles</span>
+        </div>
+
+        <div class="palette-grid">
+          <div class="swatch-card">
+            <div class="swatch-color" style="background-color: #0f141c;"></div>
+            <div class="swatch-meta">
+              <span class="color-label">Slate Void</span>
+              <span class="color-semantic">Canvas Ground</span>
+              <span class="color-hex">#0F141C</span>
+            </div>
+          </div>
+
+          <div class="swatch-card">
+            <div class="swatch-color" style="background-color: #18202c;"></div>
+            <div class="swatch-meta">
+              <span class="color-label">Deep Surface</span>
+              <span class="color-semantic">Card Containers</span>
+              <span class="color-hex">#18202C</span>
+            </div>
+          </div>
+
+          <div class="swatch-card">
+            <div class="swatch-color" style="background-color: #0052ff;"></div>
+            <div class="swatch-meta">
+              <span class="color-label">Ultramarine</span>
+              <span class="color-semantic">Primary Action</span>
+              <span class="color-hex">#0052FF</span>
+            </div>
+          </div>
+
+          <div class="swatch-card">
+            <div class="swatch-color" style="background-color: #243042;"></div>
+            <div class="swatch-meta">
+              <span class="color-label">Datum Line</span>
+              <span class="color-semantic">Structural Rules</span>
+              <span class="color-hex">#243042</span>
+            </div>
+          </div>
+
+          <div class="swatch-card">
+            <div class="swatch-color" style="background-color: #f4f7fb;"></div>
+            <div class="swatch-meta">
+              <span class="color-label">Chalk White</span>
+              <span class="color-semantic">Primary High-Read</span>
+              <span class="color-hex">#F4F7FB</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Panel 3: Typographic Hierarchy -->
+      <section class="system-panel" aria-labelledby="type-heading">
+        <div class="panel-mast">
+          <h2 id="type-heading" class="panel-heading">03. Typographic System</h2>
+          <span class="panel-caption">Instrumental &bull; Editorial</span>
+        </div>
+
+        <div class="typography-specimens">
+          <div class="specimen-block">
+            <div class="specimen-header">
+              <span>Display &bull; Plus Jakarta Sans 800</span>
+              <span>Headlines &amp; Ledger Totals</span>
+            </div>
+            <div class="sample-display">$142,850.00 Settled Instantly</div>
+          </div>
+
+          <div class="specimen-block">
+            <div class="specimen-header">
+              <span>Body &bull; Plus Jakarta Sans Regular / 400</span>
+              <span>Interface &amp; Statements</span>
+            </div>
+            <p class="sample-body">
+              Every client invoice triggers an automated escrow split: 28% to federal tax reserves, 6% to state liability, and 66% into immediate operational liquidity.
+            </p>
+          </div>
+
+          <div class="specimen-block">
+            <div class="specimen-header">
+              <span>Editorial Emphasis &bull; Newsreader Italic</span>
+              <span>Brand Voice &amp; Customer Trust</span>
+            </div>
+            <div class="sample-editorial">
+              "You are not a freelancer playing with pocket money. You are a sovereign business."
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Panel 4: Tone of Voice & Copywriting Matrix -->
+      <section class="system-panel" aria-labelledby="voice-heading">
+        <div class="panel-mast">
+          <h2 id="voice-heading" class="panel-heading">04. Tone of Voice Matrix</h2>
+          <span class="panel-caption">Calm Directness vs Industry Fluff</span>
+        </div>
+
+        <div class="voice-table-wrap">
+          <table class="voice-matrix">
+            <thead>
+              <tr>
+                <th scope="col">Moment</th>
+                <th scope="col">Generic B2C FinTech</th>
+                <th scope="col">Valence Standards</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="col-touchpoint">Invoice Advance Received</td>
+                <td class="col-rival">"Hooray! Cha-ching! You got paid, superstar! 🎉💸"</td>
+                <td class="col-valence">
+                  <strong>Settlement Notice</strong>
+                  $8,400.00 wired from Acme Corp. 28% automatically set aside for Q3 estimated tax. Remaining $6,048.00 available in checking.
+                </td>
+              </tr>
+              <tr>
+                <td class="col-touchpoint">Tax Payment Reminder</td>
+                <td class="col-rival">"Tax time is scary! Don't let Uncle Sam catch you snoozing!"</td>
+                <td class="col-valence">
+                  <strong>Treasury Scheduled</strong>
+                  Q3 federal payment of $4,812.00 is locked in escrow. Valence will remit to the IRS on September 15 with zero penalties.
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+
+    <footer class="identity-footer">
+      <div class="status-stamp">
+        System Verification: Complete // Palette WCAG AA Compliant // Zero Gradient Chrome
+      </div>
+      <div class="actions-group">
+        <button class="btn btn-secondary" type="button">Copy Token Variables</button>
+        <button class="btn btn-primary" type="button">Export Vector Kit</button>
+      </div>
+    </footer>
+  </div>
+</body>
+</html>

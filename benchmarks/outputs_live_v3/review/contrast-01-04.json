@@ -1,0 +1,106 @@
+[
+  {
+    "pair": "Relay body",
+    "foreground": "#142b49",
+    "background": "#edf3f9",
+    "ratio": 12.77,
+    "minimum": 4.5,
+    "pass": true
+  },
+  {
+    "pair": "Relay muted",
+    "foreground": "#53667c",
+    "background": "#edf3f9",
+    "ratio": 5.28,
+    "minimum": 4.5,
+    "pass": true
+  },
+  {
+    "pair": "Relay CTA",
+    "foreground": "#ffffff",
+    "background": "#224fd2",
+    "ratio": 6.74,
+    "minimum": 4.5,
+    "pass": true
+  },
+  {
+    "pair": "Folio muted",
+    "foreground": "#5d665e",
+    "background": "#fafbf7",
+    "ratio": 5.73,
+    "minimum": 4.5,
+    "pass": true
+  },
+  {
+    "pair": "Folio featured muted",
+    "foreground": "#5d665e",
+    "background": "#e2ef94",
+    "ratio": 4.82,
+    "minimum": 4.5,
+    "pass": true
+  },
+  {
+    "pair": "Murmur body",
+    "foreground": "#401e20",
+    "background": "#ff795f",
+    "ratio": 5.72,
+    "minimum": 4.5,
+    "pass": true
+  },
+  {
+    "pair": "Murmur muted",
+    "foreground": "#552729",
+    "background": "#ff795f",
+    "ratio": 4.77,
+    "minimum": 4.5,
+    "pass": true
+  },
+  {
+    "pair": "Murmur output metadata",
+    "foreground": "#f4b9aa",
+    "background": "#401e20",
+    "ratio": 8.68,
+    "minimum": 4.5,
+    "pass": true
+  },
+  {
+    "pair": "Margin body",
+    "foreground": "#27342f",
+    "background": "#ffffff",
+    "ratio": 12.97,
+    "minimum": 4.5,
+    "pass": true
+  },
+  {
+    "pair": "Margin muted",
+    "foreground": "#616a65",
+    "background": "#ffffff",
+    "ratio": 5.59,
+    "minimum": 4.5,
+    "pass": true
+  },
+  {
+    "pair": "Margin CTA",
+    "foreground": "#ffffff",
+    "background": "#28644b",
+    "ratio": 6.97,
+    "minimum": 4.5,
+    "pass": true
+  },
+  {
+    "pair": "Margin danger",
+    "foreground": "#a52d35",
+    "background": "#ffffff",
+    "ratio": 6.94,
+    "minimum": 4.5,
+    "pass": true
+  },
+  {
+    "pair": "Margin off-toggle boundary",
+    "foreground": "#7b8981",
+    "background": "#ffffff",
+    "ratio": 3.66,
+    "minimum": 3,
+    "pass": true
+  }
+]

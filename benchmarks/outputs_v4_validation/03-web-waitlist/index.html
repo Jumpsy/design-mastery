@@ -1,0 +1,1486 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sotto — Thinking out loud, finally understood</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,16..72,400;0,16..72,600;1,16..72,400;1,16..72,600&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* CSS Foundation & Semantic Box Model */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0px;
+  padding: 0px;
+}
+
+body{background:#f9f8f5;color:#131619;font-family: 'Plus Jakarta Sans', sans-serif;font-size: 16px;line-height: 1.6;-webkit-font-smoothing: antialiased;}
+
+/* Typography Discipline: Strict 8-size modular scale (12, 14, 16, 20, 24, 32, 48, 60) */
+h1, h2, h3 {
+  font-family: 'Newsreader', serif;
+  font-weight: 600;
+  line-height: 1.15;
+  color: #131619;
+}
+
+h1 {
+  font-size: 60px;
+  letter-spacing: -0.02em;
+}
+
+h2 {
+  font-size: 32px;
+  letter-spacing: -0.01em;
+}
+
+h3 {
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+p {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 16px;
+  color: #5e656d;
+  line-height: 1.65;
+}
+
+em {
+  font-family: 'Newsreader', serif;
+  font-style: italic;
+  font-weight: 400;
+  color: #b8481a;
+}
+
+/* Layout Landmarks & Containers */
+header {
+  position: sticky;
+  top: 0px;
+  z-index: 50;
+  background: #f9f8f5;
+  border-bottom: 1px solid #e5e2db;
+  padding: 16px 32px;
+}
+
+.nav-wrapper {
+  max-width: 1200px;
+  margin: 0px auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.brand-mark {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  text-decoration: none;
+  color: #131619;
+}
+
+.brand-mark span {
+  font-family: 'Newsreader', serif;
+  font-size: 24px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+nav ul {
+  display: flex;
+  align-items: center;
+  list-style: none;
+  gap: 32px;
+}
+
+nav a {
+  text-decoration: none;
+  color: #5e656d;
+  font-size: 14px;
+  font-weight: 500;
+  transition: color 200ms ease-out;
+}
+
+nav a:hover, nav a:focus-visible {
+  color: #131619;
+}
+
+.nav-aside {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.cohort-tag {
+  font-size: 12px;
+  font-weight: 600;
+  color: #b8481a;
+  background: #ffffff;
+  border: 1px solid #e5e2db;
+  padding: 4px 12px;
+  border-radius: 6px;
+}
+
+main {
+  max-width: 1200px;
+  margin: 0px auto;
+  padding: 64px 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 80px;
+}
+
+/* Hero Section & Form */
+.hero-section {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  text-align: center;
+  max-width: 880px;
+  margin: 0px auto;
+}
+
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #b8481a;
+  margin: 0px auto;
+}
+
+.hero-subhead {
+  font-size: 20px;
+  max-width: 720px;
+  margin: 0px auto;
+}
+
+.hero-waitlist-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-width: 520px;
+  margin: 0px auto;
+  width: 100%;
+}
+
+.form-row {
+  display: flex;
+  gap: 8px;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0px;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0px;
+}
+
+input[type="email"], select, input[type="text"] {
+  flex: 1;
+  min-height: 48px;
+  padding: 12px 16px;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 16px;
+  color: #131619;
+  background: #ffffff;
+  border: 1px solid #8a8a8a;
+  border-radius: 8px;
+  outline: none;
+  transition: border-color 200ms ease-out;
+}
+
+input[type="email"]:focus-visible, select:focus-visible, input[type="text"]:focus-visible {
+  border-color: #131619;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 48px;
+  padding: 12px 24px;
+  background: #b8481a;
+  color: #ffffff;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  text-decoration: none;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: opacity 200ms ease-out, transform 150ms ease-out;
+}
+
+.btn:hover {
+  opacity: 0.92;
+}
+
+.btn:active {
+  transform: translateY(1px);
+}
+
+.btn:focus-visible {
+  outline: 2px solid #131619;
+  outline-offset: 2px;
+}
+
+.form-privacy-note {
+  font-size: 12px;
+  color: #5e656d;
+}
+
+/* Proof Element Metrics */
+.proof-metrics-strip {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  padding: 24px;
+  background: #ffffff;
+  border: 1px solid #e5e2db;
+  border-radius: 12px;
+}
+
+.metric-item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.metric-val {
+  font-family: 'Newsreader', serif;
+  font-size: 32px;
+  font-weight: 600;
+  color: #131619;
+}
+
+.metric-label {
+  font-size: 14px;
+  color: #5e656d;
+}
+
+/* Interactive Hero Interface: Cadence Audio Simulator */
+.interactive-console {
+  background: #ffffff;
+  border: 1px solid #e5e2db;
+  border-radius: 12px;
+  padding: 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.console-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid #e5e2db;
+  padding-bottom: 16px;
+}
+
+.console-title-group {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.persona-selector {
+  display: flex;
+  gap: 8px;
+}
+
+.persona-btn {
+  min-height: 48px;
+  padding: 8px 16px;
+  background: #f9f8f5;
+  border: 1px solid #8a8a8a;
+  border-radius: 6px;
+  color: #5e656d;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 200ms ease-out;
+}
+
+.persona-btn[aria-checked="true"] {
+  background: #131619;
+  color: #ffffff;
+  border-color: #131619;
+}
+
+.persona-btn:focus-visible {
+  outline: 2px solid #b8481a;
+  outline-offset: 2px;
+}
+
+.waveform-view {
+  background: #f9f8f5;
+  border: 1px solid #e5e2db;
+  border-radius: 8px;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.waveform-telemetry {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.status-badge {
+  font-size: 12px;
+  font-weight: 600;
+  color: #b8481a;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.status-dot {
+  width: 8px;
+  height: 8px;
+  background: #b8481a;
+  border-radius: 6px;
+  animation: pulse-dot 1.8s infinite ease-in-out;
+}
+
+.status-dot.paused {
+  animation-play-state: paused;
+}
+
+@keyframes pulse-dot {
+  0%, 100% { opacity: 0.4; }
+  50% { opacity: 1; }
+}
+
+.pulse-toggle-btn {
+  font-size: 12px;
+  font-weight: 600;
+  color: #5e656d;
+  background: transparent;
+  border: 1px solid #8a8a8a;
+  border-radius: 6px;
+  padding: 2px 8px;
+  cursor: pointer;
+}
+
+.pulse-toggle-btn:focus-visible {
+  outline: 2px solid #b8481a;
+  outline-offset: 2px;
+}
+
+.waveform-bars {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  height: 64px;
+  padding: 0px 8px;
+}
+
+.wave-bar {
+  flex: 1;
+  background: #8a8a8a;
+  border-radius: 6px;
+  height: 24px;
+  transition: height 150ms ease-out, background-color 150ms ease-out;
+}
+
+.wave-bar.active {
+  background: #b8481a;
+  height: 48px;
+}
+
+.wave-bar.held {
+  background: #131619;
+  height: 16px;
+}
+
+.transcript-display {
+  font-family: 'Newsreader', serif;
+  font-size: 24px;
+  line-height: 1.4;
+  color: #131619;
+  min-height: 64px;
+}
+
+.transcript-display .highlight {
+  color: #b8481a;
+  text-decoration: underline;
+}
+
+.scrubber-control {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.scrubber-labels {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  color: #5e656d;
+}
+
+input[type="range"] {
+  -webkit-appearance: none;
+  width: 100%;
+  height: 8px;
+  background: #8a8a8a;
+  border-radius: 6px;
+  outline: none;
+  cursor: pointer;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 24px;
+  height: 24px;
+  border-radius: 6px;
+  background: #131619;
+  border: 2px solid #ffffff;
+  cursor: pointer;
+  transition: background 150ms ease-out;
+}
+
+input[type="range"]:focus-visible::-webkit-slider-thumb {
+  background: #b8481a;
+}
+
+.controls-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+}
+
+.control-card {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  background: #f9f8f5;
+  padding: 16px;
+  border: 1px solid #e5e2db;
+  border-radius: 8px;
+}
+
+.control-label-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 14px;
+  font-weight: 600;
+  color: #131619;
+}
+
+/* Section 1: Architecture (Text-Left / Figure-Right) */
+.narrative-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 48px;
+  align-items: center;
+}
+
+.narrative-content {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.feature-pill-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.feature-point {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  background: #ffffff;
+  padding: 12px 16px;
+  border: 1px solid #e5e2db;
+  border-radius: 8px;
+}
+
+.feature-point strong {
+  font-size: 14px;
+  color: #131619;
+}
+
+.spectrogram-figure {
+  background: #ffffff;
+  border: 1px solid #e5e2db;
+  border-radius: 12px;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.spectrogram-figure img {
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+  border: 1px solid #e5e2db;
+  display: block;
+}
+
+figcaption {
+  font-size: 12px;
+  color: #5e656d;
+  text-align: center;
+}
+
+/* Section 2: Personas (UI-Left / Text-Right) */
+.persona-roster {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.persona-profile {
+  background: #ffffff;
+  border: 1px solid #e5e2db;
+  border-radius: 8px;
+  padding: 16px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.persona-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.persona-tag {
+  font-size: 12px;
+  font-weight: 600;
+  color: #b8481a;
+}
+
+/* Section 3: Stream to Structure (Tabbed Showcase) */
+.synthesis-section {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.tab-nav {
+  display: flex;
+  gap: 8px;
+  border-bottom: 1px solid #e5e2db;
+  padding-bottom: 8px;
+}
+
+.tab-btn {
+  min-height: 48px;
+  padding: 8px 16px;
+  background: transparent;
+  border: none;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  color: #5e656d;
+  cursor: pointer;
+  border-radius: 6px;
+  transition: all 150ms ease-out;
+}
+
+.tab-btn[aria-selected="true"] {
+  background: #ffffff;
+  color: #131619;
+  border: 1px solid #8a8a8a;
+}
+
+.tab-btn:focus-visible {
+  outline: 2px solid #b8481a;
+}
+
+.tab-panel {
+  background: #ffffff;
+  border: 1px solid #e5e2db;
+  border-radius: 12px;
+  padding: 32px;
+  min-height: 180px;
+}
+
+.tab-panel[hidden] {
+  display: none;
+}
+
+/* Section 4: Benchmark Table */
+.benchmark-section {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.table-wrapper {
+  overflow-x: auto;
+  background: #ffffff;
+  border: 1px solid #e5e2db;
+  border-radius: 12px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+th, td {
+  padding: 16px 24px;
+  border-bottom: 1px solid #e5e2db;
+  font-size: 14px;
+}
+
+th {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #5e656d;
+  background: #f9f8f5;
+}
+
+td {
+  color: #131619;
+}
+
+tr:last-child td {
+  border-bottom: none;
+}
+
+td.feature-name {
+  font-weight: 600;
+}
+
+td.highlight-col {
+  color: #b8481a;
+  font-weight: 600;
+}
+
+/* Section 5: Cohort Invitation / Pass */
+.invitation-section {
+  background: #ffffff;
+  border: 1px solid #e5e2db;
+  border-radius: 12px;
+  padding: 48px;
+  text-align: center;
+  max-width: 768px;
+  margin: 0px auto;
+  width: 100%;
+}
+
+.pass-card {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.ticket-container {
+  background: #f9f8f5;
+  border: 1px solid #e5e2db;
+  border-radius: 8px;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  text-align: left;
+}
+
+.ticket-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #e5e2db;
+  padding-bottom: 12px;
+}
+
+.ticket-num {
+  font-family: 'Newsreader', serif;
+  font-size: 24px;
+  font-weight: 600;
+  color: #b8481a;
+}
+
+.referral-box {
+  display: flex;
+  gap: 8px;
+}
+
+/* Footer */
+footer {
+  border-top: 1px solid #e5e2db;
+  background: #f9f8f5;
+  padding: 48px 32px;
+}
+
+.footer-inner {
+  max-width: 1200px;
+  margin: 0px auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 32px;
+}
+
+.footer-manifesto {
+  max-width: 420px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.footer-links {
+  display: flex;
+  gap: 48px;
+}
+
+.footer-column {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.footer-column span {
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: #131619;
+}
+
+.footer-column a {
+  text-decoration: none;
+  font-size: 14px;
+  color: #5e656d;
+  transition: color 150ms ease-out;
+}
+
+.footer-column a:hover {
+  color: #131619;
+}
+
+/* Responsive Adaptation (2 Distinct Breakpoints: 960px & 640px) */
+@media (max-width: 960px) {
+  .narrative-grid {
+    grid-template-columns: 1fr;
+  }
+  .controls-grid {
+    grid-template-columns: 1fr;
+  }
+  .proof-metrics-strip {
+    grid-template-columns: 1fr;
+  }
+  h1 {
+    font-size: 48px;
+  }
+}
+
+@media (max-width: 640px) {
+  header {
+    padding: 16px;
+  }
+  main {
+    padding: 32px 16px;
+    gap: 48px;
+  }
+  nav ul {
+    display: none;
+  }
+  .form-row {
+    flex-direction: column;
+  }
+  .footer-inner {
+    flex-direction: column;
+  }
+  .footer-links {
+    flex-direction: column;
+    gap: 24px;
+  }
+  .invitation-section {
+    padding: 24px 16px;
+  }
+}
+
+/* Reduced Motion Accessible Path */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="nav-wrapper">
+    <a href="#top" class="brand-mark" aria-label="Sotto Audio Home">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <path d="M4 12V12.01M8 8V16M12 4V20M16 7V17M20 11V13" stroke="#b8481a" stroke-width="2.5" stroke-linecap="round"/>
+      </svg>
+      <span>Sotto</span>
+    </a>
+    <nav aria-label="Primary site navigation">
+      <ul>
+        <li><a href="#cadence">Cadence Engine</a></li>
+        <li><a href="#personas">Acoustic Personas</a></li>
+        <li><a href="#synthesis">Structure Extraction</a></li>
+        <li><a href="#benchmarks">Telemetry Benchmarks</a></li>
+      </ul>
+    </nav>
+    <aside class="nav-aside" aria-label="Waitlist quick action">
+      <span class="cohort-tag">Cohort 04 Open</span>
+      <a href="#waitlist" class="btn" style="min-height: 48px; padding: 8px 16px; font-size: 14px;">Join Waitlist</a>
+    </aside>
+  </div>
+</header>
+
+<main id="top">
+  <!-- Hero Section -->
+  <section class="hero-section" aria-labelledby="hero-heading">
+    <div class="eyebrow">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <circle cx="12" cy="12" r="9" stroke="#b8481a" stroke-width="2"/>
+        <path d="M12 7V12L15 15" stroke="#b8481a" stroke-width="2" stroke-linecap="round"/>
+      </svg>
+      Acoustic Neural Interface
+    </div>
+
+    <h1 id="hero-heading">Thinking out loud, finally <em>understood</em>.</h1>
+
+    <p class="hero-subhead">
+      Most conversational voice models interrupt your train of thought the instant you pause to think. Sotto listens to your entire cadence—stumbles, hesitations, and quiet parentheticals—then responds with the natural pacing and acoustic depth of an attentive peer.
+    </p>
+
+    <form class="hero-waitlist-form" id="hero-form">
+      <div class="form-row">
+        <label for="hero-email-input" class="visually-hidden">Email address for early access waitlist</label>
+        <input type="email" id="hero-email-input" placeholder="Enter your email for Cohort 04 access..." required autocomplete="email">
+        <button type="submit" class="btn">Request Access</button>
+      </div>
+      <div id="hero-feedback" style="display: none; font-size: 14px; font-weight: 600; color: #b8481a; text-align: center;">✓ Reservation logged for Cohort 04. Your priority pass has been generated below.</div>
+      <p class="form-privacy-note">
+        Zero raw voice retention. Ephemeral neural inference. Audio streams are never used to train generalized foundation models.
+      </p>
+    </form>
+
+    <div class="proof-metrics-strip" aria-label="Key acoustic performance metrics">
+      <article class="metric-item">
+        <span class="metric-val">142ms</span>
+        <span class="metric-label">Full-duplex turnaround time</span>
+      </article>
+      <article class="metric-item">
+        <span class="metric-val">1.8s</span>
+        <span class="metric-label">Dynamic hesitation tolerance</span>
+      </article>
+      <article class="metric-item">
+        <span class="metric-val">48kHz</span>
+        <span class="metric-label">Lossless neural vocal synthesis</span>
+      </article>
+    </div>
+  </section>
+
+  <!-- Interactive Hero Console: Live Cadence Demonstrator -->
+  <section class="interactive-console" id="cadence" aria-labelledby="console-heading">
+    <div class="console-header">
+      <div class="console-title-group">
+        <h2 id="console-heading" style="font-size: 24px;">The Sotto Cadence Simulator</h2>
+        <p style="font-size: 14px;">Audition how cadence-aware turn detection preserves your pauses without cutting you off.</p>
+      </div>
+      <div class="persona-selector" role="radiogroup" aria-label="Select voice companion persona">
+        <button type="button" class="persona-btn" role="radio" aria-checked="true" data-persona="astrid">Astrid (138 WPM)</button>
+        <button type="button" class="persona-btn" role="radio" aria-checked="false" data-persona="julian">Julian (155 WPM)</button>
+        <button type="button" class="persona-btn" role="radio" aria-checked="false" data-persona="rowan">Rowan (175 WPM)</button>
+      </div>
+    </div>
+
+    <div class="waveform-view">
+      <div class="waveform-telemetry">
+        <span class="status-badge">
+          <span class="status-dot" id="status-dot"></span>
+          <span id="telemetry-state">Prosodic Comma Detected — Sotto Holding Turn</span>
+        </span>
+        <button type="button" class="pulse-toggle-btn" id="pulse-toggle-btn" aria-pressed="false">Pause status pulse</button>
+        <span style="font-size: 12px; color: #5e656d;" id="telemetry-latency">Latency: 138ms</span>
+      </div>
+
+      <div class="waveform-bars" id="waveform-container" aria-hidden="true">
+        <!-- Dynamic Waveform Bars Generated via JS -->
+      </div>
+
+      <blockquote class="transcript-display" id="transcript-box">
+        "I was reconsidering the client-side audio pipeline... <span class="highlight">(pause: 1.4s — Sotto remains listening)</span> ...and whether we should compute pitch prosody locally before streaming."
+      </blockquote>
+
+      <div class="scrubber-control">
+        <div class="scrubber-labels">
+          <span>0.0s (Speech Initiation)</span>
+          <span id="scrubber-timestamp">Current: 2.5s</span>
+          <span>5.2s (Duplex Synthesis)</span>
+        </div>
+        <label for="timeline-slider" class="visually-hidden">Scrub through conversational timeline</label>
+        <input type="range" id="timeline-slider" min="0" max="100" value="48" step="1">
+      </div>
+    </div>
+
+    <div class="controls-grid">
+      <div class="control-card">
+        <div class="control-label-row">
+          <label for="cadence-slider">Conversational Tempo</label>
+          <span id="cadence-val">138 WPM</span>
+        </div>
+        <input type="range" id="cadence-slider" min="110" max="210" step="5" value="138">
+        <p style="font-size: 12px;">Continuous quantity adjustment governing synthetic speech velocity and syllabic cadence.</p>
+      </div>
+
+      <div class="control-card">
+        <div class="control-label-row">
+          <label for="pause-slider">Hesitation Threshold</label>
+          <span id="pause-val">1.8s Window</span>
+        </div>
+        <input type="range" id="pause-slider" min="0.8" max="3.0" step="0.2" value="1.8">
+        <p style="font-size: 12px;">Dynamic acoustic buffer distinguishing contemplative pauses from intended conversational turns.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Narrative Deep Dive 1: Architecture -->
+  <section class="narrative-grid" aria-labelledby="architecture-heading">
+    <article class="narrative-content">
+      <div class="eyebrow">Acoustic Architecture</div>
+      <h2 id="architecture-heading">The science of unhurried conversation.</h2>
+      <p>
+        Standard voice assistants rely on rudimentary energy-based Voice Activity Detection (VAD). The moment you pause for four hundred milliseconds to formulate a word, the algorithm assumes you are done, sends your fragmented sentence to a cloud server, and interrupts you with a robotic hallucination.
+      </p>
+      <p>
+        Sotto replaces brittle silence counters with continuous prosodic evaluation. By analyzing intonation contours, pitch shifts, and respiratory intake patterns, Sotto distinguishes between a mid-sentence comma pause and a true terminal period. You can pace your room, mutter, backtrack, and formulate complex thoughts without feeling pressured by an impatient machine.
+      </p>
+      <div class="feature-pill-list">
+        <div class="feature-point">
+          <strong>Full-Duplex Prosody Classifier</strong>
+          <span style="font-size: 14px; color: #5e656d;">Monitors continuous vocal energy, formant frequency, and pitch inflection across 10ms micro-slices.</span>
+        </div>
+        <div class="feature-point">
+          <strong>Dynamic Silence Masking</strong>
+          <span style="font-size: 14px; color: #5e656d;">Adapts conversational turn thresholds from 300ms to 3,000ms based on syntactic completeness.</span>
+        </div>
+        <div class="feature-point">
+          <strong>Sub-Turn Acoustic Backchanneling</strong>
+          <span style="font-size: 14px; color: #5e656d;">Subtle micro-affirmations acknowledge your train of thought without breaking vocal rhythm.</span>
+        </div>
+      </div>
+    </article>
+
+    <figure class="spectrogram-figure">
+      <img alt="High-resolution acoustic spectrogram illustrating real-time pause discrimination and pitch cadence tracking during continuous speech"
+           width="640"
+           height="360"
+           src="data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%27640%27%20height%3D%27360%27%20viewBox%3D%270%200%20640%20360%27%3E%3Crect%20width%3D%27640%27%20height%3D%27360%27%20fill%3D%27%23f9f8f5%27%2F%3E%3Cline%20x1%3D%2760%27%20y1%3D%2740%27%20x2%3D%2760%27%20y2%3D%27300%27%20stroke%3D%27%23e5e2db%27%20stroke-width%3D%271%27%2F%3E%3Cline%20x1%3D%2760%27%20y1%3D%27300%27%20x2%3D%27580%27%20y2%3D%27300%27%20stroke%3D%27%23e5e2db%27%20stroke-width%3D%271%27%2F%3E%3Cpath%20d%3D%27M60%20220%20C120%20180%2C%20160%20260%2C%20220%20200%20C250%20160%2C%20270%20230%2C%20310%20210%27%20fill%3D%27none%27%20stroke%3D%27%235e656d%27%20stroke-width%3D%273%27%2F%3E%3Crect%20x%3D%27310%27%20y%3D%2760%27%20width%3D%27140%27%20height%3D%27240%27%20fill%3D%27%23e5e2db%27%20opacity%3D%270.3%27%2F%3E%3Ctext%20x%3D%27320%27%20y%3D%2790%27%20font-family%3D%27sans-serif%27%20font-size%3D%2712%27%20fill%3D%27%23b8481a%27%20font-weight%3D%27bold%27%3EPAUSE%20BUFFER%20(1.8s)%3C%2Ftext%3E%3Ctext%20x%3D%27320%27%20y%3D%27110%27%20font-family%3D%27sans-serif%27%20font-size%3D%2711%27%20fill%3D%27%235e656d%27%3EPitch%20sustained%3A%20no%20cut-off%3C%2Ftext%3E%3Cpath%20d%3D%27M450%20210%20C480%20190%2C%20520%20240%2C%20580%20180%27%20fill%3D%27none%27%20stroke%3D%27%23b8481a%27%20stroke-width%3D%273%27%2F%3E%3Ctext%20x%3D%2760%27%20y%3D%27325%27%20font-family%3D%27sans-serif%27%20font-size%3D%2712%27%20fill%3D%27%235e656d%27%3E0.0s%20Speech%20start%3C%2Ftext%3E%3Ctext%20x%3D%27310%27%20y%3D%27325%27%20font-family%3D%27sans-serif%27%20font-size%3D%2712%27%20fill%3D%27%235e656d%27%3E2.4s%20Thinking%20pause%3C%2Ftext%3E%3Ctext%20x%3D%27530%27%20y%3D%27325%27%20font-family%3D%27sans-serif%27%20font-size%3D%2712%27%20fill%3D%27%235e656d%27%3E4.6s%20Completion%3C%2Ftext%3E%3C%2Fsvg%3E">
+      <figcaption>Figure 1.0: Real-time spectrogram comparing Sotto pitch tracking during contemplative pauses versus legacy VAD cut-offs.</figcaption>
+    </figure>
+  </section>
+
+  <!-- Narrative Deep Dive 2: Personas -->
+  <section class="narrative-grid" id="personas" aria-labelledby="personas-heading">
+    <div class="persona-roster">
+      <article class="persona-profile">
+        <div class="persona-meta">
+          <h3>Astrid</h3>
+          <span class="persona-tag">138 WPM · Thoughtful & Measured</span>
+        </div>
+        <p>A calm, Scandinavian cadence engineered for philosophical inquiry, long-form reflection, and walking meditations. Gives you generous silence to find the right phrasing.</p>
+      </article>
+
+      <article class="persona-profile">
+        <div class="persona-meta">
+          <h3>Julian</h3>
+          <span class="persona-tag">155 WPM · Warm & Analytical</span>
+        </div>
+        <p>A balanced conversational partner adept at systems thinking, strategic planning, and structural critique. Balances supportive tone with probing analytical questions.</p>
+      </article>
+
+      <article class="persona-profile">
+        <div class="persona-meta">
+          <h3>Rowan</h3>
+          <span class="persona-tag">175 WPM · Crisp & Candid</span>
+        </div>
+        <p>A high-velocity sparring partner for rapid brainstorms, debate preparation, and direct intellectual challenge. Quick to point out logical fallacies and edge cases.</p>
+      </article>
+    </div>
+
+    <article class="narrative-content">
+      <div class="eyebrow">Acoustic Presence</div>
+      <h2 id="personas-heading">Voices tuned for intimate presence, not broadcast megaphones.</h2>
+      <p>
+        Commercial synthetic speech sounds like automated GPS directions or upbeat airport announcements. It projects outward at maximum projection rather than settling comfortably beside you.
+      </p>
+      <p>
+        Sotto is voiced using high-resolution spatial acoustic synthesis. Each persona models subtle vocal cord micro-vibrations, natural breath intakes between clauses, and room-aware binaural acoustics. In your headphones, it feels like walking alongside a quiet collaborator who genuinely understands the weight of your words.
+      </p>
+      <div class="feature-pill-list">
+        <div class="feature-point">
+          <strong>Anatomical Glottal Modeling</strong>
+          <span style="font-size: 14px; color: #5e656d;">Simulates real pulmonary airflow, vocal tract resonance, and subtle respiratory pauses between sentences.</span>
+        </div>
+        <div class="feature-point">
+          <strong>Spatial HRTF Binaural Positioning</strong>
+          <span style="font-size: 14px; color: #5e656d;">Places the speaker 40 centimeters to your right, mimicking the acoustic sensation of strolling side by side.</span>
+        </div>
+      </div>
+    </article>
+  </section>
+
+  <!-- Narrative Deep Dive 3: Stream to Structure -->
+  <section class="synthesis-section" id="synthesis" aria-labelledby="synthesis-heading">
+    <div style="text-align: center; max-width: 720px; margin: 0px auto;">
+      <div class="eyebrow">Cognitive Synthesis</div>
+      <h2 id="synthesis-heading">From stream of consciousness to crystalline structure.</h2>
+      <p>Talk for twenty minutes while walking through your neighborhood. When you arrive home, Sotto delivers your rambling thoughts distilled into three actionable artifacts.</p>
+    </div>
+
+    <nav class="tab-nav" role="tablist" aria-label="Synthesis output representations">
+      <button type="button" class="tab-btn" role="tab" aria-selected="true" id="tab-1" aria-controls="panel-1">Raw Audio Monologue</button>
+      <button type="button" class="tab-btn" role="tab" aria-selected="false" id="tab-2" aria-controls="panel-2">Executive Decision Brief</button>
+      <button type="button" class="tab-btn" role="tab" aria-selected="false" id="tab-3" aria-controls="panel-3">Probing Follow-Ups</button>
+    </nav>
+
+    <article class="tab-panel" id="panel-1" role="tabpanel" aria-labelledby="tab-1">
+      <h3 style="margin-bottom: 8px;">Transcribed Stream-of-Consciousness</h3>
+      <p style="font-family: 'Newsreader', serif; font-size: 20px; color: #131619; line-height: 1.5;">
+        "So... looking at the Q3 hiring pipeline, I keep going back and forth on whether we need an infrastructure lead or another product engineer first. If we hire product first, we can ship the collaborative canvas three weeks faster, but... wait, if the WebSocket gateway collapses under load, none of that matters anyway. Let me rethink the sequencing here. What if we contract the caching layer out for six weeks instead?"
+      </p>
+    </article>
+
+    <article class="tab-panel" id="panel-2" role="tabpanel" aria-labelledby="tab-2" hidden>
+      <h3 style="margin-bottom: 8px;">Synthesized Executive Action Plan</h3>
+      <ul style="padding-left: 24px; color: #5e656d; font-size: 16px; display: flex; flex-direction: column; gap: 8px;">
+        <li><strong>Primary Bottleneck:</strong> WebSocket gateway stability represents an existential technical dependency before shipping collaborative canvas features.</li>
+        <li><strong>Sequencing Decision:</strong> Hire infrastructure lead immediately; bridge feature acceleration via specialized six-week caching contractor.</li>
+        <li><strong>Risk Threshold:</strong> Do not open canvas beta testing until stress-test telemetry validates 20,000 concurrent socket connections.</li>
+      </ul>
+    </article>
+
+    <article class="tab-panel" id="panel-3" role="tabpanel" aria-labelledby="tab-3" hidden>
+      <h3 style="margin-bottom: 8px;">Sotto Probing Inquiries</h3>
+      <ul style="padding-left: 24px; color: #5e656d; font-size: 16px; display: flex; flex-direction: column; gap: 8px;">
+        <li>"You hesitated when considering the contracting option—have previous contractor handoffs created maintenance debt in your core networking stack?"</li>
+        <li>"If collaborative canvas is delayed by three weeks, does that compromise the enterprise pilot committed for late November?"</li>
+      </ul>
+    </article>
+  </section>
+
+  <!-- Technical Telemetry Table -->
+  <section class="benchmark-section" id="benchmarks" aria-labelledby="benchmarks-heading">
+    <div style="text-align: center; max-width: 720px; margin: 0px auto;">
+      <div class="eyebrow">Acoustic Telemetry</div>
+      <h2 id="benchmarks-heading">Measured conversational benchmarks.</h2>
+      <p>How Sotto compares against traditional cloud transcription pipelines and native device voice assistants.</p>
+    </div>
+
+    <div class="table-wrapper">
+      <table aria-label="Comparative performance telemetry">
+        <thead>
+          <tr>
+            <th scope="col">Evaluation Metric</th>
+            <th scope="col">Sotto Duplex Engine</th>
+            <th scope="col">Legacy Cloud Stack (Whisper + GPT)</th>
+            <th scope="col">Native Device Assistant</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="feature-name">Turn Turnaround Latency</td>
+            <td class="highlight-col">142ms (Imperceptible)</td>
+            <td>1,240ms (Jarring Pause)</td>
+            <td>890ms (Command-Bound)</td>
+          </tr>
+          <tr>
+            <td class="feature-name">Pause Discrimination</td>
+            <td class="highlight-col">Continuous Prosodic Contours</td>
+            <td>Rigid 400ms Energy VAD</td>
+            <td>Single Phrase Silence Trigger</td>
+          </tr>
+          <tr>
+            <td class="feature-name">Acoustic Audio Timbre</td>
+            <td class="highlight-col">48kHz Lossless Binaural</td>
+            <td>24kHz Monophonic Resample</td>
+            <td>16kHz Canned Phonemes</td>
+          </tr>
+          <tr>
+            <td class="feature-name">Mid-Turn Interruption</td>
+            <td class="highlight-col">Dynamic Acoustic Ducking</td>
+            <td>Total Request Cancellation</td>
+            <td>Lockout Until Command Completes</td>
+          </tr>
+          <tr>
+            <td class="feature-name">Audio Telemetry Privacy</td>
+            <td class="highlight-col">Zero Cloud Voice Retention</td>
+            <td>Stored for Model Training</td>
+            <td>Account History Logged</td>
+          </tr>
+          <tr>
+            <td class="feature-name">Local Audio Buffering</td>
+            <td class="highlight-col">Ephemeral RAM Only (Zero Disk)</td>
+            <td>Transcoded to MP3 in Cloud</td>
+            <td>Aggregated with Siri Queries</td>
+          </tr>
+          <tr>
+            <td class="feature-name">Syllabic Cadence Matching</td>
+            <td class="highlight-col">Real-Time Prosody Sync</td>
+            <td>Fixed WPM Generation</td>
+            <td>Monotone Staccato Synthesis</td>
+          </tr>
+          <tr>
+            <td class="feature-name">Neural Formant Tracking</td>
+            <td class="highlight-col">Continuous Glottal Waveform</td>
+            <td>Static Acoustic MFCC</td>
+            <td>Fixed LPC Filter Array</td>
+          </tr>
+          <tr>
+            <td class="feature-name">Spatial Acoustic Stage</td>
+            <td class="highlight-col">Binaural HRTF 3D Stage</td>
+            <td>Monophonic 1-Channel</td>
+            <td>Monophonic Stereo Spread</td>
+          </tr>
+          <tr>
+            <td class="feature-name">Offline Neural Fallback</td>
+            <td class="highlight-col">On-Device 1.8B Compressed Model</td>
+            <td>Complete Network Failure</td>
+            <td>Basic Keyword Clock / Alarms</td>
+          </tr>
+          <tr>
+            <td class="feature-name">Conversational Ducking</td>
+            <td class="highlight-col">Instantaneous 35ms Attenuation</td>
+            <td>Buffer Overflow / Audio Clipping</td>
+            <td>Sudden Audio Hard Stop</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- Final Waitlist Conversion Card -->
+  <section class="invitation-section" id="waitlist" aria-labelledby="waitlist-heading">
+    <div class="pass-card" id="waitlist-container">
+      <div class="eyebrow" style="margin: 0px auto;">Exclusive Early Access</div>
+      <h2 id="waitlist-heading">Reserve your seat in Cohort 04.</h2>
+      <p style="max-width: 540px; margin: 0px auto;">
+        We onboard two hundred thinkers per week to maintain personalized acoustic latency and uncompromised server bandwidth.
+      </p>
+
+      <form id="cohort-form" style="display: flex; flex-direction: column; gap: 16px; max-width: 480px; margin: 0px auto; width: 100%;">
+        <div style="display: flex; flex-direction: column; gap: 4px; text-align: left;">
+          <label for="cohort-email-input" style="font-size: 14px; font-weight: 600; color: #131619;">Direct Notification Email</label>
+          <input type="email" id="cohort-email-input" placeholder="name@domain.com" required autocomplete="email">
+        </div>
+
+        <div style="display: flex; flex-direction: column; gap: 4px; text-align: left;">
+          <label for="hardware-select" style="font-size: 14px; font-weight: 600; color: #131619;">Primary Listening Hardware</label>
+          <select id="hardware-select" aria-label="Select your primary listening hardware">
+            <option value="airpods">Apple AirPods Pro / Max (Spatial Audio Enabled)</option>
+            <option value="studio">Studio Over-Ear Headphones (Wired / Lossless)</option>
+            <option value="speaker">iPhone / Mac On-Device Microphone Array</option>
+          </select>
+        </div>
+
+        <button type="submit" class="btn" style="width: 100%; margin-top: 8px;">Claim Alpha Invitation</button>
+      </form>
+    </div>
+
+    <!-- Success Pass Confirmation (Shown upon submission) -->
+    <div class="ticket-container" id="ticket-success" style="display: none;" aria-live="polite">
+      <div class="ticket-header">
+        <div>
+          <span style="font-size: 12px; font-weight: 700; color: #5e656d; text-transform: uppercase;">Invitation Confirmed</span>
+          <h3 style="font-size: 24px; color: #131619;">Welcome to Cohort 04</h3>
+        </div>
+        <span class="ticket-num" id="ticket-num">#&mdash;</span>
+      </div>
+      <p style="font-size: 14px;">
+        Your reservation has been logged. We will issue your private iOS TestFlight onboarding package directly to <strong id="confirmed-email" style="color: #131619;">you</strong> as soon as the next allocation wave clears.
+      </p>
+      <div class="referral-box">
+        <label for="referral-input" class="visually-hidden">Your personal priority invitation link</label>
+        <input type="text" id="referral-input" value="" readonly>
+        <button type="button" class="btn" id="copy-btn" style="min-height: 48px; padding: 12px 20px;">Copy Link</button>
+      </div>
+      <span style="font-size: 12px; color: #5e656d;">Sharing your private invitation link advances your cohort placement by 50 positions per verified peer sign-up.</span>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-manifesto">
+      <div class="brand-mark">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M4 12V12.01M8 8V16M12 4V20M16 7V17M20 11V13" stroke="#b8481a" stroke-width="2.5" stroke-linecap="round"/>
+        </svg>
+        <span>Sotto</span>
+      </div>
+      <p style="font-size: 14px;">
+        Dedicated to creating intimate conversational technology that honors the natural rhythm of human contemplation. Built with unyielding standards for acoustic fidelity and personal privacy.
+      </p>
+      <span style="font-size: 12px; color: #5e656d;">© 2026 Sotto Technologies, Inc. All rights reserved.</span>
+    </div>
+
+    <div class="footer-links">
+      <div class="footer-column">
+        <span>Acoustics</span>
+        <a href="#cadence">Cadence VAD</a>
+        <a href="#personas">Spatial Prosody</a>
+        <a href="#benchmarks">Duplex Latency</a>
+      </div>
+      <div class="footer-column">
+        <span>Ethics & Tech</span>
+        <a href="#hero-form">Zero Retention</a>
+        <a href="#synthesis">Thought Privacy</a>
+        <a href="#waitlist">Cohort Criteria</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+// Interactive Waveform Simulation & Audio State
+(function() {
+  const container = document.getElementById('waveform-container');
+  const barCount = 42;
+  const bars = [];
+
+  for (let i = 0; i < barCount; i++) {
+    const bar = document.createElement('div');
+    bar.className = 'wave-bar';
+    container.appendChild(bar);
+    bars.push(bar);
+  }
+
+  const personaData = {
+    astrid: {
+      wpm: 138,
+      latency: "138ms",
+      transcript: '"I was reconsidering the client-side audio pipeline... <span class=\"highlight\">(pause: 1.4s — Sotto remains listening)</span> ...and whether we should compute pitch prosody locally before streaming."',
+      profile: [16, 24, 32, 28, 16, 12, 12, 12, 16, 32, 44, 48, 36, 20]
+    },
+    julian: {
+      wpm: 155,
+      latency: "144ms",
+      transcript: '"Examining the architectural trade-off... <span class=\"highlight\">(pause: 1.1s — turn held)</span> ...suggests the caching tier will reduce backend contention by forty percent."',
+      profile: [20, 36, 48, 40, 24, 16, 12, 12, 24, 40, 52, 44, 28, 16]
+    },
+    rowan: {
+      wpm: 175,
+      latency: "126ms",
+      transcript: '"If we deploy the WebSocket edge router... <span class=\"highlight\">(pause: 0.9s — turn held)</span> ...we eliminate connection drops across mobile handoffs entirely."',
+      profile: [24, 48, 60, 48, 32, 16, 12, 16, 32, 48, 64, 48, 32, 20]
+    }
+  };
+
+  let activePersona = 'astrid';
+
+  function updateWaveform(scrubPercent) {
+    const data = personaData[activePersona];
+    const activeIdx = Math.floor((scrubPercent / 100) * barCount);
+    
+    bars.forEach((bar, idx) => {
+      if (idx <= activeIdx) {
+        const isPauseZone = (idx >= 14 && idx <= 26);
+        if (isPauseZone) {
+          bar.className = 'wave-bar held';
+          bar.style.height = '12px';
+        } else {
+          bar.className = 'wave-bar active';
+          const waveHeight = 20 + Math.sin((idx + scrubPercent * 0.2) * 0.6) * 24;
+          bar.style.height = Math.max(12, Math.min(56, waveHeight)) + 'px';
+        }
+      } else {
+        bar.className = 'wave-bar';
+        bar.style.height = '16px';
+      }
+    });
+
+    const telemetryState = document.getElementById('telemetry-state');
+    if (scrubPercent < 30) {
+      telemetryState.textContent = "Speaker Inflow — Stream of Consciousness Active";
+    } else if (scrubPercent <= 65) {
+      telemetryState.textContent = "Prosodic Comma Detected — Sotto Holding Turn";
+    } else {
+      telemetryState.textContent = "Utterance Intonation Fall — Sotto Duplex Response";
+    }
+
+    const seconds = ((scrubPercent / 100) * 5.2).toFixed(1);
+    document.getElementById('scrubber-timestamp').textContent = 'Current: ' + seconds + 's';
+  }
+
+  // Persona Selection Buttons
+  const personaBtns = document.querySelectorAll('.persona-btn');
+  personaBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      personaBtns.forEach(b => b.setAttribute('aria-checked', 'false'));
+      btn.setAttribute('aria-checked', 'true');
+      activePersona = btn.getAttribute('data-persona');
+      const data = personaData[activePersona];
+      document.getElementById('transcript-box').innerHTML = data.transcript;
+      document.getElementById('telemetry-latency').textContent = 'Latency: ' + data.latency;
+      document.getElementById('cadence-slider').value = data.wpm;
+      document.getElementById('cadence-val').textContent = data.wpm + ' WPM';
+      updateWaveform(parseInt(document.getElementById('timeline-slider').value, 10));
+    });
+  });
+
+
+  // Arrow key navigation for persona radio buttons
+  personaBtns.forEach((btn, idx) => {
+    btn.addEventListener('keydown', (e) => {
+      let nextIdx = idx;
+      if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
+        nextIdx = (idx + 1) % personaBtns.length;
+      } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+        nextIdx = (idx - 1 + personaBtns.length) % personaBtns.length;
+      } else {
+        return;
+      }
+      e.preventDefault();
+      personaBtns[nextIdx].focus();
+      personaBtns[nextIdx].click();
+    });
+  });
+
+  // Tabs for Synthesis Showcase
+  const tabBtns = document.querySelectorAll('.tab-btn');
+  const tabPanels = document.querySelectorAll('.tab-panel');
+
+  // Arrow key navigation for tabs
+  tabBtns.forEach((btn, idx) => {
+    btn.addEventListener('keydown', (e) => {
+      let nextIdx = idx;
+      if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
+        nextIdx = (idx + 1) % tabBtns.length;
+      } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+        nextIdx = (idx - 1 + tabBtns.length) % tabBtns.length;
+      } else {
+        return;
+      }
+      e.preventDefault();
+      tabBtns[nextIdx].focus();
+      tabBtns[nextIdx].click();
+    });
+  });
+
+  // Status Pulse Pause Control (WCAG 2.2.2)
+  const pulseToggleBtn = document.getElementById('pulse-toggle-btn');
+  const statusDot = document.getElementById('status-dot');
+  pulseToggleBtn.addEventListener('click', () => {
+    const isPaused = statusDot.classList.toggle('paused');
+    pulseToggleBtn.setAttribute('aria-pressed', String(isPaused));
+    pulseToggleBtn.textContent = isPaused ? 'Resume status pulse' : 'Pause status pulse';
+  });
+
+  // Timeline Scrubber
+  const timelineSlider = document.getElementById('timeline-slider');
+  timelineSlider.addEventListener('input', (e) => {
+    updateWaveform(parseInt(e.target.value, 10));
+  });
+
+  // Cadence Slider Continuous Quantity
+  const cadenceSlider = document.getElementById('cadence-slider');
+  cadenceSlider.addEventListener('input', (e) => {
+    document.getElementById('cadence-val').textContent = e.target.value + ' WPM';
+  });
+
+  // Pause Sensitivity Continuous Quantity
+  const pauseSlider = document.getElementById('pause-slider');
+  pauseSlider.addEventListener('input', (e) => {
+    document.getElementById('pause-val').textContent = parseFloat(e.target.value).toFixed(1) + 's Window';
+  });
+
+  // Initial wave render
+  updateWaveform(48);
+
+  tabBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      tabBtns.forEach(b => b.setAttribute('aria-selected', 'false'));
+      tabPanels.forEach(p => p.hidden = true);
+      btn.setAttribute('aria-selected', 'true');
+      const targetPanel = document.getElementById(btn.getAttribute('aria-controls'));
+      if (targetPanel) {
+        targetPanel.hidden = false;
+      }
+    });
+  });
+
+  // Form Submissions (Hero & Final Cohort)
+  function handleFormSubmit(email, isHero) {
+    if (isHero) {
+      const fb = document.getElementById('hero-feedback');
+      if (fb) fb.style.display = 'block';
+    }
+    document.getElementById('waitlist-container').style.display = 'none';
+    const successCard = document.getElementById('ticket-success');
+    successCard.style.display = 'flex';
+    document.getElementById('confirmed-email').textContent = email;
+
+    // Derive a per-submission ticket number and referral link from the
+    // submitted email + timestamp, instead of showing a fixed value to everyone.
+    let hash = 0;
+    const seed = email + Date.now();
+    for (let i = 0; i < seed.length; i++) {
+      hash = (hash * 31 + seed.charCodeAt(i)) >>> 0;
+    }
+    const ticketNumber = 1000 + (hash % 9000);
+    document.getElementById('ticket-num').textContent = '#' + ticketNumber.toLocaleString('en-US');
+    const referralSlug = hash.toString(36).slice(0, 8);
+    document.getElementById('referral-input').value = 'https://sotto.audio/join?ref=sotto-' + referralSlug;
+
+    successCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }
+
+  const heroForm = document.getElementById('hero-form');
+  heroForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const email = document.getElementById('hero-email-input').value;
+    handleFormSubmit(email, true);
+  });
+
+  const cohortForm = document.getElementById('cohort-form');
+  cohortForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const email = document.getElementById('cohort-email-input').value;
+    handleFormSubmit(email, false);
+  });
+
+  // Copy Referral Link
+  const copyBtn = document.getElementById('copy-btn');
+  copyBtn.addEventListener('click', () => {
+    const input = document.getElementById('referral-input');
+    input.select();
+    navigator.clipboard.writeText(input.value).then(() => {
+      copyBtn.textContent = 'Copied to Clipboard!';
+      setTimeout(() => {
+        copyBtn.textContent = 'Copy Link';
+      }, 2000);
+    });
+  });
+})();
+</script>
+
+</body>
+</html>

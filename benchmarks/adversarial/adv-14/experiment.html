@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Benchmark adv-14: info-preservation</title>
+<style>
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:'Söhne',ui-sans-serif,system-ui;background:#faf8f4;color:#1c1c1c}
+    .hero{background:#faf8f4;color:#1c1c1c;padding:64px 32px;border-bottom:1px solid #e8e3d8}
+    .hero h1{font-size:48px;line-height:1.1;margin-bottom:16px;letter-spacing:-0.01em}
+    .hero h1 em{font-style:italic;color:#1b6b4e}
+    .btn{display:inline-block;background:#1b6b4e;color:#fff;border:none;border-radius:6px;padding:12px 24px;font:inherit;font-weight:600;min-height:44px;cursor:pointer}
+    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:24px;padding:32px}
+    .card{border-radius:8px;background:#fff;padding:24px;border:1px solid #e8e3d8}
+    @media (max-width:480px){
+      .hero{padding:32px 16px}
+      .hero h1{font-size:32px}
+      .grid{grid-template-columns:1fr;padding:16px;gap:16px}
+    }
+    
+    </style></head>
+<body>
+
+    <header class="hero">
+      <h1>Benchmark adv-14: <em>info preservation</em></h1>
+      <p>One clear signature idea, executed with restraint.</p>
+      <button class="btn">Primary action</button>
+    </header>
+    <main class="grid">
+      <div class="card"><h2>Detail one</h2><p>Concrete, specific copy grounded in the task.</p></div>
+      <div class="card"><h2>Detail two</h2><p>Concrete, specific copy grounded in the task.</p></div>
+    </main>
+    <footer><img src="diagram.svg" alt="Illustrative diagram supporting the primary claim"></footer>
+    
+</body></html>

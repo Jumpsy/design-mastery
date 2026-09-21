@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebhookFlow - Ship Webhooks in Minutes</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Inter', sans-serif;
+            background-color: #0f0f0f;
+            color: #f5f5f5;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Faint dot grid background */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image:
+                radial-gradient(circle, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+            background-size: 40px 40px;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .hero {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 120px 40px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .hero-content {
+            display: flex;
+            flex-direction: column;
+            gap: 32px;
+            animation: fadeInContent 0.8s ease-out;
+        }
+
+        @keyframes fadeInContent {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        h1 {
+            font-size: 56px;
+            font-weight: 700;
+            line-height: 1.2;
+            letter-spacing: -0.02em;
+        }
+
+        .accent-word {
+            font-style: italic;
+            font-weight: 600;
+            color: #00d9ff;
+        }
+
+        .subheading {
+            font-size: 20px;
+            font-weight: 400;
+            color: #b3b3b3;
+            line-height: 1.5;
+            max-width: 500px;
+        }
+
+        .cta-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background-color: #00d9ff;
+            color: #0f0f0f;
+            padding: 14px 32px;
+            border-radius: 6px;
+            border: none;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 150ms ease-out;
+            width: fit-content;
+            text-decoration: none;
+            font-family: inherit;
+        }
+
+        .cta-button:hover {
+            background-color: #00f0ff;
+            transform: translateY(-2px);
+            box-shadow: 0 12px 24px rgba(0, 217, 255, 0.2);
+        }
+
+        .cta-button:active {
+            transform: translateY(0);
+        }
+
+        .code-container {
+            position: relative;
+            perspective: 1000px;
+        }
+
+        .code-block {
+            background-color: #1a1a1a;
+            border: 1px solid #2a2a2a;
+            border-radius: 8px;
+            padding: 24px;
+            overflow-x: auto;
+            font-family: 'Fira Code', 'Courier New', monospace;
+            font-size: 14px;
+            line-height: 1.6;
+            color: #e0e0e0;
+            animation: codeBlockFadeIn 1s ease-out;
+            position: relative;
+            z-index: 1;
+            transform: rotateY(-2deg) rotateX(1deg);
+            transform-style: preserve-3d;
+        }
+
+        @keyframes codeBlockFadeIn {
+            from {
+                opacity: 0;
+                transform: rotateY(-2deg) rotateX(1deg) translateZ(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: rotateY(-2deg) rotateX(1deg) translateZ(0);
+            }
+        }
+
+        /* Glow effect */
+        .code-block::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(0, 217, 255, 0.1) 0%, transparent 50%, rgba(0, 217, 255, 0.05) 100%);
+            border-radius: 8px;
+            pointer-events: none;
+            animation: glowPulse 3s ease-in-out infinite;
+            z-index: -1;
+        }
+
+        .code-block.glow-paused::before {
+            animation-play-state: paused;
+        }
+
+        @keyframes glowPulse {
+            0%, 100% {
+                opacity: 0.3;
+            }
+            50% {
+                opacity: 0.6;
+            }
+        }
+
+        .glow-toggle {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            z-index: 2;
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid #2a2a2a;
+            border-radius: 4px;
+            color: #8a8a8a;
+            font-family: 'Fira Code', 'Courier New', monospace;
+            font-size: 11px;
+            line-height: 1;
+            padding: 4px 8px;
+            cursor: pointer;
+        }
+
+        .glow-toggle:hover {
+            color: #e0e0e0;
+            border-color: #3a3a3a;
+        }
+
+        .code-line {
+            display: flex;
+            align-items: baseline;
+        }
+
+        .code-number {
+            color: #8a8a8a;
+            margin-right: 20px;
+            user-select: none;
+            min-width: 30px;
+            text-align: right;
+        }
+
+        .code-keyword {
+            color: #ff6b35;
+        }
+
+        .code-string {
+            color: #4ecdc4;
+        }
+
+        .code-function {
+            color: #00d9ff;
+        }
+
+        .code-method {
+            color: #b8e986;
+        }
+
+        .code-comment {
+            color: #969696;
+            font-style: italic;
+        }
+
+        @media (max-width: 768px) {
+            .hero {
+                grid-template-columns: 1fr;
+                padding: 80px 24px;
+                gap: 48px;
+                min-height: auto;
+            }
+
+            h1 {
+                font-size: 36px;
+            }
+
+            .subheading {
+                font-size: 16px;
+            }
+
+            .code-block {
+                font-size: 12px;
+                padding: 16px;
+                transform: none;
+            }
+
+            .code-block::before {
+                display: none;
+            }
+        }
+
+        /* Prefers reduced motion */
+        @media (prefers-reduced-motion: reduce) {
+            .hero-content,
+            .code-block {
+                animation: none;
+            }
+
+            .cta-button:hover {
+                transform: none;
+            }
+
+            .code-block::before {
+                animation: none;
+                opacity: 0.3;
+            }
+        }
+    </style>
+</head>
+<body>
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Ship <span class="accent-word">webhooks</span> in minutes</h1>
+            <p class="subheading">
+                Built for developers. No configuration, no waiting. Send real-time events to your servers with a single API call.
+            </p>
+            <button class="cta-button">Get Started Free →</button>
+        </div>
+
+        <div class="code-container">
+            <button type="button" class="glow-toggle" id="glowToggle" aria-pressed="false" aria-label="Pause glow animation">Pause</button>
+            <pre class="code-block" id="codeBlock"><span class="code-line"><span class="code-number">1</span><span class="code-keyword">const</span> webhook = <span class="code-keyword">new</span> <span class="code-function">WebhookFlow</span>();</span>
+<span class="code-line"><span class="code-number">2</span></span>
+<span class="code-line"><span class="code-number">3</span>webhook.<span class="code-method">register</span>({</span>
+<span class="code-line"><span class="code-number">4</span>  event: <span class="code-string">'payment.completed'</span>,</span>
+<span class="code-line"><span class="code-number">5</span>  url: <span class="code-string">'https://your-api.com/webhooks'</span>,</span>
+<span class="code-line"><span class="code-number">6</span>  retries: 3</span>
+<span class="code-line"><span class="code-number">7</span>});</span>
+<span class="code-line"><span class="code-number">8</span></span>
+<span class="code-line"><span class="code-number">9</span><span class="code-comment">// Ready. Events fire instantly.</span></span></pre>
+        </div>
+    </section>
+
+    <script>
+        (function () {
+            var toggle = document.getElementById('glowToggle');
+            var codeBlock = document.getElementById('codeBlock');
+            if (!toggle || !codeBlock) return;
+
+            toggle.addEventListener('click', function () {
+                var isPaused = codeBlock.classList.toggle('glow-paused');
+                toggle.setAttribute('aria-pressed', String(isPaused));
+                toggle.textContent = isPaused ? 'Resume' : 'Pause';
+            });
+        })();
+    </script>
+</body>
+</html>

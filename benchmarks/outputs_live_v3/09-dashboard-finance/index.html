@@ -1,0 +1,892 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Folio — Personal Finance & Cashflow</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400;1,6..72,500&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #fbfaf8;
+      --surface: #ffffff;
+      --line: #e3e2dc;
+      --ink: #191c1b;
+      --muted: #606662;
+      --pine: #1b5336;
+      --terracotta: #a83c27;
+      --sans: 'Plus Jakarta Sans', system-ui, sans-serif;
+      --serif: 'Newsreader', Georgia, serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body{background:#fbfaf8;color:#191c1b;
+      font-family: var(--sans);
+      font-size: 16px;
+      line-height: 1.5;
+      font-variant-numeric: tabular-nums;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    button, select {
+      font: inherit;
+      color: inherit;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      cursor: pointer;
+      min-height: 44px;
+      padding: 12px 16px;
+      background: var(--surface);
+    }
+
+    button:hover, select:hover {
+      background: #f4f3ef;
+    }
+
+    button:focus-visible, select:focus-visible {
+      outline: 2px solid var(--pine);
+      outline-offset: 2px;
+    }
+
+    .shell {
+      display: grid;
+      grid-template-columns: 240px minmax(0, 1fr);
+      min-height: 100vh;
+    }
+
+    aside {
+      background: #f4f3ef;
+      border-right: 1px solid var(--line);
+      padding: 32px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 20px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+
+    .brand-mark {
+      width: 28px;
+      height: 28px;
+      background: var(--ink);
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--bg);
+      font-family: var(--serif);
+      font-style: italic;
+      font-size: 16px;
+    }
+
+    .account-card {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      padding: 12px 16px;
+    }
+
+    .account-label {
+      font-size: 12px;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      font-weight: 600;
+    }
+
+    .account-title {
+      font-weight: 600;
+      font-size: 14px;
+      margin-top: 4px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .badge-sync {
+      font-size: 12px;
+      color: var(--pine);
+      font-weight: 600;
+    }
+
+    nav {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .nav-link {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px;
+      min-height: 44px;
+      border-radius: 6px;
+      color: var(--muted);
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 14px;
+    }
+
+    .nav-link.active {
+      background: var(--surface);
+      color: var(--ink);
+      font-weight: 600;
+      border: 1px solid var(--line);
+    }
+
+    .nav-link:hover:not(.active) {
+      background: #eeede8;
+      color: var(--ink);
+    }
+
+    .nav-icon {
+      width: 16px;
+      height: 16px;
+      stroke-width: 1.75;
+      stroke: currentColor;
+      fill: none;
+    }
+
+    .sidebar-footer {
+      margin-top: auto;
+      font-size: 12px;
+      color: var(--muted);
+      border-top: 1px solid var(--line);
+      padding-top: 20px;
+    }
+
+    main {
+      padding: 36px 40px 48px;
+      max-width: 1280px;
+    }
+
+    header.topline {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 24px;
+      margin-bottom: 32px;
+    }
+
+    .heading-group h1 {
+      font-size: 28px;
+      font-weight: 700;
+      letter-spacing: -0.03em;
+    }
+
+    .heading-group p {
+      color: var(--muted);
+      font-size: 14px;
+      margin-top: 4px;
+    }
+
+    .heading-group em {
+      font-family: var(--serif);
+      font-style: italic;
+      color: var(--ink);
+    }
+
+    .actions {
+      display: flex;
+      gap: 12px;
+    }
+
+    .btn-dark {
+      background: var(--ink);
+      color: var(--bg);
+      border-color: var(--ink);
+      font-weight: 600;
+    }
+
+    .btn-dark:hover {
+      background: #282d2a;
+    }
+
+    .kpi-row {
+      display: grid;
+      grid-template-columns: 1.4fr 1fr 1fr;
+      gap: 20px;
+      margin-bottom: 32px;
+    }
+
+    .kpi-item {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      padding: 24px;
+    }
+
+    .kpi-label {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .kpi-val {
+      font-size: 36px;
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      line-height: 1.2;
+      margin: 8px 0;
+    }
+
+    .kpi-foot {
+      font-size: 14px;
+      color: var(--muted);
+    }
+
+    .positive {
+      color: var(--pine);
+      font-weight: 600;
+    }
+
+    .middle-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.55fr) minmax(360px, 1fr);
+      gap: 24px;
+      margin-bottom: 32px;
+    }
+
+    .chart-box, .budget-box {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      padding: 28px;
+    }
+
+    .box-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 20px;
+    }
+
+    .box-header h2 {
+      font-size: 20px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+
+    .box-header p {
+      font-size: 14px;
+      color: var(--muted);
+    }
+
+    .chart-svg-wrap {
+      width: 100%;
+      height: 240px;
+      margin-bottom: 16px;
+    }
+
+    svg.chart {
+      width: 100%;
+      height: 100%;
+    }
+
+    .grid-stroke {
+      stroke: #eeede8;
+      stroke-width: 1;
+      stroke-dasharray: 4 4;
+    }
+
+    .axis-txt {
+      font-size: 12px;
+      fill: var(--muted);
+    }
+
+    .pace-line {
+      stroke: #b6bcbe;
+      stroke-width: 1.5;
+      stroke-dasharray: 4 4;
+    }
+
+    .actual-line {
+      fill: none;
+      stroke: #2b3d4f;
+      stroke-width: 2.5;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .actual-area {
+      fill: #2b3d4f;
+      opacity: 0.08;
+    }
+
+    .chart-legend {
+      display: flex;
+      gap: 24px;
+      font-size: 12px;
+      color: var(--muted);
+      border-top: 1px solid var(--line);
+      padding-top: 12px;
+    }
+
+    .legend-key {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .key-line {
+      width: 16px;
+      height: 4px;
+      background: #2b3d4f;
+      border-radius: 2px;
+    }
+
+    .key-dash {
+      width: 16px;
+      height: 2px;
+      background: #b6bcbe;
+    }
+
+    /* Budget Progress Bars */
+    .envelope-list {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .envelope {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .env-top {
+      display: flex;
+      justify-content: space-between;
+      font-size: 14px;
+    }
+
+    .env-title {
+      font-weight: 600;
+    }
+
+    .env-vals {
+      font-size: 14px;
+    }
+
+    .env-track {
+      position: relative;
+      height: 12px;
+      background: #f4f3ef;
+      border-radius: 4px;
+    }
+
+    .env-fill {
+      height: 100%;
+      border-radius: 4px;
+      background: var(--pine);
+    }
+
+    .env-fill.caution {
+      background: var(--terracotta);
+    }
+
+    .cal-marker {
+      position: absolute;
+      top: -4px;
+      bottom: -4px;
+      width: 2px;
+      background: var(--ink);
+    }
+
+    .cal-marker::after {
+      content: "DAY 19";
+      position: absolute;
+      top: -16px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 12px;
+      color: var(--muted);
+      font-weight: 600;
+    }
+
+    .env-sub {
+      display: flex;
+      justify-content: space-between;
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .bottom-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+    }
+
+    .table-box {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      padding: 24px;
+    }
+
+    table.styled-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+
+    table.styled-table th {
+      color: var(--muted);
+      font-weight: 600;
+      padding: 12px;
+      border-bottom: 1px solid var(--line);
+      font-size: 12px;
+      text-transform: uppercase;
+      text-align: left;
+    }
+
+    table.styled-table td {
+      padding: 12px;
+      border-bottom: 1px solid #eeede8;
+    }
+
+    table.styled-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    .text-right {
+      text-align: right;
+    }
+
+    .pill-tag {
+      font-size: 12px;
+      padding: 4px 8px;
+      border-radius: 4px;
+      background: #f4f3ef;
+      color: var(--muted);
+      font-weight: 500;
+    }
+
+    #downloadBanner {
+      display: none;
+      background: #e9f2ec;
+      color: var(--pine);
+      padding: 12px 16px;
+      border-radius: 6px;
+      margin-top: 24px;
+      font-size: 14px;
+      font-weight: 500;
+    }
+
+    @media (max-width: 1080px) {
+      .shell {
+        grid-template-columns: 1fr;
+      }
+      aside {
+        display: none;
+      }
+      main {
+        padding: 24px 20px;
+      }
+      .middle-grid {
+        grid-template-columns: 1fr;
+      }
+      .bottom-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .kpi-row {
+        grid-template-columns: 1fr;
+      }
+      header.topline {
+        flex-direction: column;
+      }
+      .actions {
+        width: 100%;
+        justify-content: space-between;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      * {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <aside aria-label="Sidebar Menu">
+      <div class="brand">
+        <span class="brand-mark" aria-hidden="true">f</span>
+        <span>Folio Ledger</span>
+      </div>
+
+      <div class="account-card">
+        <div class="account-label">Operating Ledger</div>
+        <div class="account-title">
+          <span>Main Checking ••4902</span>
+          <span class="badge-sync">Live</span>
+        </div>
+      </div>
+
+      <nav aria-label="Primary Nav">
+        <a href="#horizon" class="nav-link active" aria-current="page">
+          <svg class="nav-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/></svg>
+          Cashflow Horizon
+        </a>
+        <a href="#budgets" class="nav-link">
+          <svg class="nav-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+          Budget Envelopes
+        </a>
+        <a href="#categories" class="nav-link">
+          <svg class="nav-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 2v10l6 6"/></svg>
+          Category Audit
+        </a>
+      </nav>
+
+      <div class="sidebar-footer">
+        <strong>September 2026 Cycle</strong>
+        <p>11 days remaining · Target $1,850</p>
+      </div>
+    </aside>
+
+    <main id="main">
+      <header class="topline">
+        <div class="heading-group">
+          <h1>Personal Finance &amp; Cashflow</h1>
+          <p>September 1–19, 2026 · <em>Burn pacing is currently 8.4% below your planned safety ceiling.</em></p>
+        </div>
+        <div class="actions">
+          <button type="button" id="periodBtn" aria-label="Selected period: September 2026">
+            September 2026
+          </button>
+          <button type="button" class="btn-dark" id="exportBtn" aria-label="Export September Financial Report CSV">
+            Export Report CSV
+          </button>
+        </div>
+      </header>
+
+      <section class="kpi-row" aria-label="Key Performance Indicators">
+        <article class="kpi-item">
+          <div class="kpi-label">Liquid Operating Cash</div>
+          <div class="kpi-val">$14,820.40</div>
+          <div class="kpi-foot">
+            <span class="positive">+$2,410.00</span> vs August baseline
+          </div>
+        </article>
+
+        <article class="kpi-item">
+          <div class="kpi-label">Daily Burn Pacing</div>
+          <div class="kpi-val">$138.40</div>
+          <div class="kpi-foot">
+            <span class="positive">-$26.60/day</span> under target limit ($165.00)
+          </div>
+        </article>
+
+        <article class="kpi-item">
+          <div class="kpi-label">Monthly Savings Ratio</div>
+          <div class="kpi-val">29.2%</div>
+          <div class="kpi-foot">
+            <span class="positive">+4.2%</span> ahead of target (25.0%)
+          </div>
+        </article>
+      </section>
+
+      <div class="middle-grid">
+        <section class="chart-box" aria-labelledby="trend-title">
+          <div class="box-header">
+            <div>
+              <h2 id="trend-title">Monthly Spending Trajectory</h2>
+              <p>Cumulative outflow vs. expected linear pacing</p>
+            </div>
+            <strong>$2,629.60 Total</strong>
+          </div>
+
+          <div class="chart-svg-wrap">
+            <svg class="chart" viewBox="0 0 600 240" role="img" aria-label="Cumulative daily spending chart for September. Pacing guide in dashed gray, actual spend line in slate blue, staying below projected budget envelope.">
+              <!-- Grid lines -->
+              <line x1="40" y1="30" x2="580" y2="30" class="grid-stroke" />
+              <text x="32" y="34" class="axis-txt" text-anchor="end">$4,500</text>
+              <line x1="40" y1="80" x2="580" y2="80" class="grid-stroke" />
+              <text x="32" y="84" class="axis-txt" text-anchor="end">$3,000</text>
+              <line x1="40" y1="130" x2="580" y2="130" class="grid-stroke" />
+              <text x="32" y="134" class="axis-txt" text-anchor="end">$1,500</text>
+              <line x1="40" y1="180" x2="580" y2="180" class="grid-stroke" />
+              <text x="32" y="184" class="axis-txt" text-anchor="end">$0</text>
+
+              <!-- Linear pacing line -->
+              <line x1="40" y1="175" x2="580" y2="50" class="pace-line" />
+
+              <!-- Shaded cumulative area -->
+              <polygon points="40,180 40,165 58,160 76,155 94,150 112,148 130,146 148,140 166,138 184,130 202,125 220,120 238,118 256,112 274,106 292,102 310,98 328,95 346,92 382,88 382,180" class="actual-area"/>
+
+              <!-- Actual spend line -->
+              <path d="M 40,165 L 58,160 L 76,155 L 94,150 L 112,148 L 130,146 L 148,140 L 166,138 L 184,130 L 202,125 L 220,120 L 238,118 L 256,112 L 274,106 L 292,102 L 310,98 L 328,95 L 346,92 L 382,88" class="actual-line" />
+
+              <!-- Day 19 Indicator -->
+              <line x1="382" y1="20" x2="382" y2="190" stroke="#191c1b" stroke-width="1" stroke-dasharray="3 3"/>
+              <text x="382" y="15" class="axis-txt" text-anchor="middle" font-weight="600" fill="#191c1b">Today (Sep 19)</text>
+
+              <circle cx="382" cy="88" r="4" fill="#ffffff" stroke="#2b3d4f" stroke-width="2"/>
+
+              <text x="40" y="200" class="axis-txt" text-anchor="middle">Sep 1</text>
+              <text x="130" y="200" class="axis-txt" text-anchor="middle">Sep 6</text>
+              <text x="220" y="200" class="axis-txt" text-anchor="middle">Sep 11</text>
+              <text x="310" y="200" class="axis-txt" text-anchor="middle">Sep 16</text>
+              <text x="400" y="200" class="axis-txt" text-anchor="middle">Sep 21</text>
+              <text x="490" y="200" class="axis-txt" text-anchor="middle">Sep 26</text>
+              <text x="580" y="200" class="axis-txt" text-anchor="middle">Sep 30</text>
+            </svg>
+          </div>
+
+          <div class="chart-legend">
+            <div class="legend-key">
+              <span class="key-line"></span>
+              <span>Cumulative Outflow ($2,629.60)</span>
+            </div>
+            <div class="legend-key">
+              <span class="key-dash"></span>
+              <span>Linear Pacing Ceiling ($3,135 expected by Day 19)</span>
+            </div>
+          </div>
+        </section>
+
+        <section class="budget-box" aria-labelledby="budgets-title">
+          <div class="box-header">
+            <div>
+              <h2 id="budgets-title">Budget Envelopes</h2>
+              <p>Black tick marks Day 19 (63.3% of month elapsed)</p>
+            </div>
+            <span class="positive">5 Active</span>
+          </div>
+
+          <div class="envelope-list">
+            <div class="envelope">
+              <div class="env-top">
+                <span class="env-title">Housing &amp; Utilities</span>
+                <span class="env-vals"><strong>$1,420.00</strong> / $1,500</span>
+              </div>
+              <div class="env-track">
+                <div class="env-fill" style="width: 94.6%;"></div>
+                <div class="cal-marker" style="left: 63.3%;"></div>
+              </div>
+              <div class="env-sub">
+                <span class="positive">Paid upfront · Month complete</span>
+                <span>$80.00 left</span>
+              </div>
+            </div>
+
+            <div class="envelope">
+              <div class="env-top">
+                <span class="env-title">Groceries &amp; Provisions</span>
+                <span class="env-vals"><strong>$482.40</strong> / $850</span>
+              </div>
+              <div class="env-track">
+                <div class="env-fill" style="width: 56.7%;"></div>
+                <div class="cal-marker" style="left: 63.3%;"></div>
+              </div>
+              <div class="env-sub">
+                <span class="positive">Pacing 6.6% below envelope</span>
+                <span>$367.60 left</span>
+              </div>
+            </div>
+
+            <div class="envelope">
+              <div class="env-top">
+                <span class="env-title">Dining &amp; Social</span>
+                <span class="env-vals"><strong>$398.20</strong> / $450</span>
+              </div>
+              <div class="env-track">
+                <div class="env-fill caution" style="width: 88.5%;"></div>
+                <div class="cal-marker" style="left: 63.3%;"></div>
+              </div>
+              <div class="env-sub">
+                <span style="color: var(--terracotta);">Elevated pacing · 11 days left</span>
+                <span>$51.80 left</span>
+              </div>
+            </div>
+
+            <div class="envelope">
+              <div class="env-top">
+                <span class="env-title">Transit &amp; Mobility</span>
+                <span class="env-vals"><strong>$148.00</strong> / $280</span>
+              </div>
+              <div class="env-track">
+                <div class="env-fill" style="width: 52.8%;"></div>
+                <div class="cal-marker" style="left: 63.3%;"></div>
+              </div>
+              <div class="env-sub">
+                <span class="positive">Healthy runway</span>
+                <span>$132.00 left</span>
+              </div>
+            </div>
+
+            <div class="envelope">
+              <div class="env-top">
+                <span class="env-title">Culture &amp; Subscriptions</span>
+                <span class="env-vals"><strong>$181.00</strong> / $200</span>
+              </div>
+              <div class="env-track">
+                <div class="env-fill caution" style="width: 90.5%;"></div>
+                <div class="cal-marker" style="left: 63.3%;"></div>
+              </div>
+              <div class="env-sub">
+                <span style="color: var(--terracotta);">Near limit · Annual pass</span>
+                <span>$19.00 left</span>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <div class="bottom-grid">
+        <section class="table-box" aria-labelledby="cats-title">
+          <div class="box-header">
+            <div>
+              <h2 id="cats-title">Spending by Category</h2>
+              <p>Distribution of total $2,629.60 outflow</p>
+            </div>
+          </div>
+
+          <table class="styled-table" aria-label="Category spending breakdown">
+            <thead>
+              <tr>
+                <th scope="col">Category</th>
+                <th scope="col">Share</th>
+                <th scope="col" class="text-right">Amount</th>
+                <th scope="col" class="text-right">vs Aug</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Housing &amp; Utilities</strong></td>
+                <td>54.0%</td>
+                <td class="text-right">$1,420.00</td>
+                <td class="text-right">0.0%</td>
+              </tr>
+              <tr>
+                <td><strong>Groceries &amp; Provisions</strong></td>
+                <td>18.3%</td>
+                <td class="text-right">$482.40</td>
+                <td class="text-right" style="color: var(--pine);">-4.2%</td>
+              </tr>
+              <tr>
+                <td><strong>Dining &amp; Social</strong></td>
+                <td>15.1%</td>
+                <td class="text-right">$398.20</td>
+                <td class="text-right" style="color: var(--terracotta);">+12.8%</td>
+              </tr>
+              <tr>
+                <td><strong>Culture &amp; Subscriptions</strong></td>
+                <td>6.9%</td>
+                <td class="text-right">$181.00</td>
+                <td class="text-right" style="color: var(--pine);">-2.0%</td>
+              </tr>
+              <tr>
+                <td><strong>Transit &amp; Mobility</strong></td>
+                <td>5.6%</td>
+                <td class="text-right">$148.00</td>
+                <td class="text-right" style="color: var(--pine);">-9.5%</td>
+              </tr>
+            </tbody>
+          </table>
+        </section>
+
+        <section class="table-box" aria-labelledby="tx-title">
+          <div class="box-header">
+            <div>
+              <h2 id="tx-title">Recent Transactions</h2>
+              <p>Cleared postings this week</p>
+            </div>
+            <span class="pill-tag">Checking ••4902</span>
+          </div>
+
+          <table class="styled-table" aria-label="Recent transactions ledger">
+            <thead>
+              <tr>
+                <th scope="col">Merchant</th>
+                <th scope="col">Category</th>
+                <th scope="col" class="text-right">Date</th>
+                <th scope="col" class="text-right">Amount</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Greenmarket Orchard</strong></td>
+                <td><span class="pill-tag">Groceries</span></td>
+                <td class="text-right">Sep 19</td>
+                <td class="text-right">-$46.20</td>
+              </tr>
+              <tr>
+                <td><strong>OMNY Subway Transit</strong></td>
+                <td><span class="pill-tag">Transit</span></td>
+                <td class="text-right">Sep 18</td>
+                <td class="text-right">-$5.80</td>
+              </tr>
+              <tr>
+                <td><strong>Blue Bottle Coffee</strong></td>
+                <td><span class="pill-tag">Dining</span></td>
+                <td class="text-right">Sep 18</td>
+                <td class="text-right">-$14.50</td>
+              </tr>
+              <tr>
+                <td><strong>Direct Deposit · Payroll</strong></td>
+                <td><span class="pill-tag" style="color: var(--pine);">Income</span></td>
+                <td class="text-right">Sep 15</td>
+                <td class="text-right" style="color: var(--pine);">+$3,450.00</td>
+              </tr>
+              <tr>
+                <td><strong>Criterion Channel</strong></td>
+                <td><span class="pill-tag">Culture</span></td>
+                <td class="text-right">Sep 12</td>
+                <td class="text-right">-$99.99</td>
+              </tr>
+            </tbody>
+          </table>
+        </section>
+      </div>
+
+      <div id="downloadBanner" role="status" aria-live="polite">
+        Report downloaded successfully as folio-finance-report.csv
+      </div>
+    </main>
+  </div>
+
+  <script>
+    document.getElementById('exportBtn').addEventListener('click', function() {
+      const rows = [
+        ['Category', 'Budget Allocated', 'Actual Outflow', 'Status'],
+        ['Housing & Utilities', '$1500.00', '$1420.00', 'Paid upfront'],
+        ['Groceries & Provisions', '$850.00', '$482.40', 'On track'],
+        ['Dining & Social', '$450.00', '$398.20', 'Elevated pacing'],
+        ['Transit & Mobility', '$280.00', '$148.00', 'Healthy runway'],
+        ['Culture & Subscriptions', '$200.00', '$181.00', 'Near limit']
+      ];
+      const csv = rows.map(r => r.join(',')).join('\n');
+      const blob = new Blob([csv], { type: 'text/csv' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = 'folio-finance-report.csv';
+      a.click();
+      const banner = document.getElementById('downloadBanner');
+      banner.style.display = 'block';
+      setTimeout(() => { banner.style.display = 'none'; }, 4000);
+    });
+  </script>
+</body>
+</html>

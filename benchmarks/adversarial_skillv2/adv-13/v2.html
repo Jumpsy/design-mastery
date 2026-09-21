@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Web Landing</title>
+<style>
+:root { --accent:#c9622d; --ink:#1c1c1c; --bg:#faf8f4; }
+* { box-sizing:border-box; }
+body{ margin:0; font-family:-apple-system,'Segoe UI',sans-serif; background:#faf8f4; color:#1c1c1c; }
+.btn { display:inline-flex; align-items:center; justify-content:center; min-height:44px; padding:0 20px;
+  border-radius:6px; background:var(--ink); color:#fff; border:none; font-size:16px; cursor:pointer; }
+em { font-style:italic; color:var(--accent); }
+@media (max-width:480px) { .grid { grid-template-columns:1fr; } }
+
+</style>
+</head>
+<body>
+<header class="hero" style="padding:96px 48px 64px;max-width:760px;">
+  <h1 style="font-size:52px;line-height:1.1;margin:0 0 20px;">Ship <em>webhooks</em> in minutes</h1>
+  <p style="font-size:19px;max-width:560px;color:#444;">Design a hero section for an AI startup (this category historically defaults hardest to purple-blue gradients).</p>
+  <button class="btn" style="margin-top:28px;">Get started</button>
+</header>
+<main class="grid" style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:24px;padding:0 48px 64px;">
+  <section style="padding:20px;background:#fff;border-radius:8px;"><h3>Reliable delivery</h3><p>Retries and signing built in.</p></section>
+  <section style="padding:20px;background:#fff;border-radius:8px;"><h3>Live logs</h3><p>Inspect every event in real time.</p></section>
+  <section style="padding:20px;background:#fff;border-radius:8px;"><h3>SDKs</h3><p>Typed clients for 6 languages.</p></section>
+</main>
+<footer style="padding:24px 48px;border-top:1px solid #eee;"><nav aria-label="footer">© Company</nav></footer>
+</body>
+</html>

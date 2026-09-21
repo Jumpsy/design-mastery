@@ -1,0 +1,1794 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="HookRail - Programmable webhook outbox and delivery engine. Zero-loss signed dispatch for engineering teams who don't want to build an event bus.">
+  <title>HookRail — Programmable Webhook Outbox &amp; Delivery Engine</title>
+  <style>
+    /* Reset & Base */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body{
+      background: #090c10;
+      color: #f8fafc;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      font-size: 16px;
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Typography Scale */
+    h1, h2, h3 {
+      color: #f8fafc;
+      font-weight: 600;
+      line-height: 1.15;
+      letter-spacing: -0.025em;
+    }
+
+    h1 {
+      font-size: 44px;
+      letter-spacing: -0.035em;
+    }
+
+    h2 {
+      font-size: 28px;
+    }
+
+    h3 {
+      font-size: 20px;
+    }
+
+    p {
+      color: #94a3b8;
+      font-size: 16px;
+      line-height: 1.6;
+    }
+
+    code, pre, .mono {
+      font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+      font-size: 14px;
+    }
+
+    .micro-label {
+      font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+      font-size: 12px;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      color: #94a3b8;
+    }
+
+    /* Layout Containers */
+    .shell {
+      width: 100%;
+      max-width: 1240px;
+      margin-left: auto;
+      margin-right: auto;
+      padding-left: 24px;
+      padding-right: 24px;
+    }
+
+    /* Navigation */
+    header {
+      border-bottom: 1px solid #5a6a90;
+      background: #090c10;
+      position: sticky;
+      top: 0;
+      z-index: 50;
+    }
+
+    .nav-shell {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 64px;
+    }
+
+    .brand-group {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+    }
+
+    .brand-mark {
+      width: 32px;
+      height: 32px;
+      background: #12161f;
+      border: 1px solid #5a6a90;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #10b981;
+    }
+
+    .brand-name {
+      font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+      font-size: 16px;
+      font-weight: 700;
+      color: #f8fafc;
+      letter-spacing: 0.02em;
+    }
+
+    .brand-version {
+      font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+      font-size: 12px;
+      padding-left: 8px;
+      padding-right: 8px;
+      padding-top: 4px;
+      padding-bottom: 4px;
+      background: #12161f;
+      border: 1px solid #5a6a90;
+      border-radius: 4px;
+      color: #94a3b8;
+    }
+
+    nav {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      list-style: none;
+    }
+
+    .nav-link {
+      color: #94a3b8;
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 500;
+      transition: color 150ms cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .nav-link:hover {
+      color: #f8fafc;
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+      font-size: 12px;
+      color: #10b981;
+      background: #12161f;
+      border: 1px solid #5a6a90;
+      border-radius: 4px;
+      padding-left: 8px;
+      padding-right: 8px;
+      padding-top: 4px;
+      padding-bottom: 4px;
+    }
+
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 4px;
+      background: #10b981;
+      display: inline-block;
+    }
+
+    /* Buttons */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      min-height: 44px;
+      padding-left: 16px;
+      padding-right: 16px;
+      padding-top: 8px;
+      padding-bottom: 8px;
+      border-radius: 6px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+      border: 1px solid transparent;
+      transition: background-color 150ms cubic-bezier(0.16, 1, 0.3, 1), transform 100ms cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .btn:active {
+      transform: translateY(1px);
+    }
+
+    .btn-primary {
+      background: #10b981;
+      color: #090c10;
+      border-color: #10b981;
+    }
+
+    .btn-primary:hover {
+      opacity: 0.92;
+    }
+
+    .btn-sm {
+      min-height: 36px;
+      font-size: 12px;
+      padding-left: 12px;
+      padding-right: 12px;
+      padding-top: 4px;
+      padding-bottom: 4px;
+    }
+
+    /* Hero Section */
+    main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .hero-section {
+      padding-top: 48px;
+      padding-bottom: 48px;
+      border-bottom: 1px solid #5a6a90;
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.05fr 1fr;
+      gap: 32px;
+      align-items: start;
+    }
+
+    .hero-copy {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .eyebrow-container {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .eyebrow-chip {
+      font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+      font-size: 12px;
+      color: #10b981;
+      background: #12161f;
+      border: 1px solid #5a6a90;
+      border-radius: 4px;
+      padding-left: 8px;
+      padding-right: 8px;
+      padding-top: 4px;
+      padding-bottom: 4px;
+    }
+
+    .hero-title {
+      font-size: 44px;
+      letter-spacing: -0.035em;
+      color: #f8fafc;
+    }
+
+    .hero-lead {
+      font-size: 16px;
+      color: #94a3b8;
+      line-height: 1.6;
+    }
+
+    /* SDK Code Switcher */
+    .code-switcher {
+      background: #12161f;
+      border: 1px solid #5a6a90;
+      border-radius: 8px;
+      overflow: hidden;
+      margin-top: 4px;
+    }
+
+    .code-switcher-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid #5a6a90;
+      background: #090c10;
+      padding-left: 12px;
+      padding-right: 12px;
+      padding-top: 8px;
+      padding-bottom: 8px;
+    }
+
+    .sdk-tab-group {
+      display: flex;
+      gap: 4px;
+      background: #12161f;
+      padding: 4px;
+      border-radius: 6px;
+      border: 1px solid #5a6a90;
+    }
+
+    .sdk-tab {
+      background: transparent;
+      border: none;
+      color: #94a3b8;
+      font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+      font-size: 12px;
+      padding-left: 12px;
+      padding-right: 12px;
+      padding-top: 4px;
+      padding-bottom: 4px;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: all 150ms cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .sdk-tab:hover {
+      color: #f8fafc;
+    }
+
+    .sdk-tab[aria-selected="true"] {
+      background: #090c10;
+      color: #10b981;
+      font-weight: 600;
+    }
+
+    .code-view {
+      padding: 16px;
+      overflow-x: auto;
+      background: #12161f;
+    }
+
+    .code-content {
+      font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+      font-size: 14px;
+      line-height: 1.5;
+      color: #f8fafc;
+      white-space: pre;
+    }
+
+    /* Actions Deck */
+    .action-deck {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-top: 8px;
+    }
+
+    .action-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .cli-command-box {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: #12161f;
+      border: 1px solid #5a6a90;
+      border-radius: 6px;
+      padding-left: 12px;
+      padding-right: 8px;
+      padding-top: 8px;
+      padding-bottom: 8px;
+      font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+      font-size: 14px;
+      color: #f8fafc;
+      min-height: 44px;
+    }
+
+    .cli-prompt {
+      color: #10b981;
+      user-select: none;
+    }
+
+    .cli-copy-btn {
+      background: #090c10;
+      border: 1px solid #5a6a90;
+      border-radius: 4px;
+      color: #94a3b8;
+      padding-left: 8px;
+      padding-right: 8px;
+      padding-top: 4px;
+      padding-bottom: 4px;
+      font-size: 12px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      transition: color 150ms cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .cli-copy-btn:hover {
+      color: #f8fafc;
+    }
+
+    .toast-feedback {
+      font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+      font-size: 12px;
+      color: #10b981;
+      opacity: 0;
+      transition: opacity 150ms cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .toast-feedback.visible {
+      opacity: 1;
+    }
+
+    /* Proof Guarantees */
+    .proof-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      border-top: 1px solid #5a6a90;
+      padding-top: 20px;
+      margin-top: 4px;
+    }
+
+    .proof-metric {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .metric-value {
+      font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+      font-size: 16px;
+      font-weight: 700;
+      color: #f8fafc;
+    }
+
+    .metric-label {
+      font-size: 12px;
+      color: #94a3b8;
+      line-height: 1.3;
+    }
+
+    /* Console Simulator */
+    .hero-console {
+      background: #12161f;
+      border: 1px solid #5a6a90;
+      border-radius: 8px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .console-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #090c10;
+      border-bottom: 1px solid #5a6a90;
+      padding-left: 16px;
+      padding-right: 16px;
+      padding-top: 12px;
+      padding-bottom: 12px;
+    }
+
+    .console-title-group {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .terminal-dots {
+      display: flex;
+      gap: 8px;
+    }
+
+    .terminal-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 4px;
+      background: #1e2638;
+    }
+
+    .console-title {
+      font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+      font-size: 12px;
+      font-weight: 600;
+      color: #94a3b8;
+    }
+
+    .console-status-live {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+      font-size: 12px;
+      color: #10b981;
+    }
+
+    /* Controls Deck */
+    .simulator-deck {
+      padding: 16px;
+      border-bottom: 1px solid #5a6a90;
+      background: #090c10;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .control-row-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .control-field {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .field-label {
+      font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+      font-size: 12px;
+      color: #94a3b8;
+    }
+
+    .select-input {
+      background: #12161f;
+      border: 1px solid #5a6a90;
+      color: #f8fafc;
+      font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+      font-size: 12px;
+      padding-left: 12px;
+      padding-right: 12px;
+      padding-top: 8px;
+      padding-bottom: 8px;
+      border-radius: 6px;
+      outline: none;
+      cursor: pointer;
+    }
+
+    .select-input:focus-visible,
+    .range-input:focus-visible {
+      outline: 2px solid #10b981;
+      outline-offset: 2px;
+    }
+
+    .endpoint-segment {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      background: #12161f;
+      padding: 4px;
+      border: 1px solid #5a6a90;
+      border-radius: 6px;
+    }
+
+    .endpoint-btn {
+      background: transparent;
+      border: none;
+      color: #94a3b8;
+      font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+      font-size: 12px;
+      padding-left: 8px;
+      padding-right: 8px;
+      padding-top: 4px;
+      padding-bottom: 4px;
+      border-radius: 4px;
+      cursor: pointer;
+      text-align: center;
+      transition: all 150ms cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .endpoint-btn[aria-pressed="true"] {
+      background: #090c10;
+      color: #f8fafc;
+      font-weight: 600;
+      border: 1px solid #5a6a90;
+    }
+
+    /* Continuous Slider */
+    .slider-field {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .slider-label-row {
+      display: flex;
+      justify-content: space-between;
+      font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+      font-size: 12px;
+    }
+
+    .slider-current-val {
+      color: #10b981;
+      font-weight: 600;
+    }
+
+    .range-input {
+      -webkit-appearance: none;
+      width: 100%;
+      height: 4px;
+      border-radius: 4px;
+      background: #5a6a90;
+      outline: none;
+      cursor: pointer;
+    }
+
+    .range-input::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 16px;
+      height: 16px;
+      border-radius: 4px;
+      background: #10b981;
+      cursor: pointer;
+      border: 1px solid #090c10;
+    }
+
+    .dispatch-btn-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .dispatch-btn {
+      background: #10b981;
+      color: #090c10;
+      border: none;
+      font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+      font-size: 12px;
+      font-weight: 700;
+      padding-left: 16px;
+      padding-right: 16px;
+      padding-top: 8px;
+      padding-bottom: 8px;
+      border-radius: 6px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      min-height: 44px;
+      transition: opacity 150ms cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .dispatch-btn:hover {
+      opacity: 0.92;
+    }
+
+    .dispatch-feedback-msg {
+      font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+      font-size: 12px;
+      color: #94a3b8;
+    }
+
+    /* Pipeline Stage Visualizer */
+    .pipeline-stage-bar {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr auto 1fr;
+      align-items: center;
+      gap: 8px;
+      padding-left: 16px;
+      padding-right: 16px;
+      padding-top: 12px;
+      padding-bottom: 12px;
+      background: #090c10;
+      border-bottom: 1px solid #5a6a90;
+      font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+      font-size: 12px;
+    }
+
+    .pipeline-node {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      padding-left: 8px;
+      padding-right: 8px;
+      padding-top: 4px;
+      padding-bottom: 4px;
+      background: #12161f;
+      border: 1px solid #5a6a90;
+      border-radius: 4px;
+      transition: border-color 150ms cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .pipeline-node.active {
+      border-color: #10b981;
+    }
+
+    .node-label {
+      color: #94a3b8;
+      font-size: 12px;
+    }
+
+    .node-val {
+      color: #f8fafc;
+      font-weight: 600;
+    }
+
+    .pipeline-connector {
+      color: #94a3b8;
+      user-select: none;
+    }
+
+    /* Event Ledger Table */
+    .ledger-container {
+      max-height: 192px;
+      overflow-y: auto;
+      border-bottom: 1px solid #5a6a90;
+    }
+
+    .ledger-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+      font-size: 12px;
+      text-align: left;
+    }
+
+    .ledger-table th {
+      background: #090c10;
+      color: #94a3b8;
+      font-weight: 500;
+      padding-left: 12px;
+      padding-right: 12px;
+      padding-top: 8px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid #5a6a90;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+
+    .ledger-table td {
+      padding-left: 12px;
+      padding-right: 12px;
+      padding-top: 8px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid #5a6a90;
+      color: #94a3b8;
+    }
+
+    .ledger-row {
+      cursor: pointer;
+      transition: background-color 100ms cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .ledger-row:hover {
+      background: #232b3f;
+    }
+
+    .ledger-row.selected {
+      background: #506197;
+    }
+
+    .ledger-row.selected td {
+      color: #f8fafc;
+    }
+
+    .status-code-pill {
+      display: inline-block;
+      padding-left: 8px;
+      padding-right: 8px;
+      padding-top: 4px;
+      padding-bottom: 4px;
+      border-radius: 4px;
+      font-weight: 700;
+      font-size: 12px;
+      background: #12161f;
+      color: #10b981;
+      border: 1px solid #5a6a90;
+    }
+
+    /* Inspector Panel */
+    .inspector-panel {
+      padding-left: 16px;
+      padding-right: 16px;
+      padding-top: 12px;
+      padding-bottom: 12px;
+      background: #090c10;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .inspector-tabs {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      border-bottom: 1px solid #5a6a90;
+      padding-bottom: 8px;
+    }
+
+    .inspector-tab {
+      background: transparent;
+      border: none;
+      color: #94a3b8;
+      font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+      font-size: 12px;
+      cursor: pointer;
+      padding-bottom: 4px;
+    }
+
+    .inspector-tab[aria-selected="true"] {
+      color: #10b981;
+      font-weight: 600;
+    }
+
+    .inspector-content {
+      font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+      font-size: 12px;
+      line-height: 1.45;
+      color: #94a3b8;
+      max-height: 96px;
+      overflow-y: auto;
+      white-space: pre-wrap;
+      word-break: break-all;
+    }
+
+    /* Observability & Histogram Section */
+    .telemetry-section {
+      padding-top: 48px;
+      padding-bottom: 48px;
+      border-bottom: 1px solid #5a6a90;
+      background: #090c10;
+    }
+
+    .section-header-block {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-bottom: 32px;
+    }
+
+    .viz-card {
+      background: #12161f;
+      border: 1px solid #5a6a90;
+      border-radius: 8px;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      margin-bottom: 32px;
+    }
+
+    .viz-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .percentile-chips {
+      display: flex;
+      gap: 12px;
+    }
+
+    .p-chip {
+      font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+      font-size: 12px;
+      padding-left: 8px;
+      padding-right: 8px;
+      padding-top: 4px;
+      padding-bottom: 4px;
+      border-radius: 4px;
+      background: #090c10;
+      border: 1px solid #5a6a90;
+      color: #94a3b8;
+    }
+
+    .p-chip strong {
+      color: #f8fafc;
+    }
+
+    .chart-container {
+      position: relative;
+      width: 100%;
+      height: 160px;
+    }
+
+    .latency-svg {
+      width: 100%;
+      height: 100%;
+      overflow: visible;
+      cursor: crosshair;
+    }
+
+    .chart-hud-tooltip {
+      position: absolute;
+      top: 12px;
+      right: 16px;
+      background: #090c10;
+      border: 1px solid #5a6a90;
+      border-radius: 4px;
+      padding-left: 8px;
+      padding-right: 8px;
+      padding-top: 4px;
+      padding-bottom: 4px;
+      font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+      font-size: 12px;
+      color: #f8fafc;
+      pointer-events: none;
+    }
+
+    /* Architectural Pillars */
+    .pillars-grid {
+      display: grid;
+      grid-template-columns: 1.2fr 1fr;
+      gap: 24px;
+    }
+
+    .pillar-narrative {
+      background: #12161f;
+      border: 1px solid #5a6a90;
+      border-radius: 8px;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .architecture-flow-box {
+      background: #090c10;
+      border: 1px solid #5a6a90;
+      border-radius: 6px;
+      padding: 16px;
+      font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+      font-size: 12px;
+      line-height: 1.6;
+      color: #94a3b8;
+    }
+
+    .flow-step-line {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+
+    .flow-step-line:last-child {
+      margin-bottom: 0;
+    }
+
+    .step-badge {
+      color: #10b981;
+      font-weight: 700;
+    }
+
+    .pillar-terminal {
+      background: #12161f;
+      border: 1px solid #5a6a90;
+      border-radius: 8px;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .cli-mockup-frame {
+      background: #090c10;
+      border: 1px solid #5a6a90;
+      border-radius: 6px;
+      padding: 16px;
+      font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+      font-size: 12px;
+      line-height: 1.6;
+      color: #94a3b8;
+    }
+
+    /* Footer */
+    footer {
+      border-top: 1px solid #5a6a90;
+      background: #090c10;
+      padding-top: 32px;
+      padding-bottom: 32px;
+      margin-top: auto;
+    }
+
+    .footer-shell {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .footer-note {
+      font-size: 14px;
+      color: #94a3b8;
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 24px;
+      list-style: none;
+    }
+
+    .footer-link {
+      color: #94a3b8;
+      text-decoration: none;
+      font-size: 14px;
+      transition: color 150ms cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .footer-link:hover {
+      color: #f8fafc;
+    }
+
+    /* Motion */
+    @keyframes heroEntrance {
+      0% {
+        opacity: 0;
+        transform: translateY(8px);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .animate-hero-copy {
+      animation: heroEntrance 240ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    .animate-hero-console {
+      animation: heroEntrance 280ms 60ms cubic-bezier(0.16, 1, 0.3, 1) both;
+    }
+
+    /* Reduced Motion */
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+      .animate-hero-copy, .animate-hero-console {
+        animation: none !important;
+        opacity: 1 !important;
+        transform: none !important;
+      }
+    }
+
+    /* Breakpoints */
+    @media (max-width: 1024px) {
+      .hero-grid {
+        grid-template-columns: 1fr;
+        gap: 40px;
+      }
+      .pillars-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .hero-title {
+        font-size: 28px;
+      }
+      .proof-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      .nav-links {
+        display: none;
+      }
+      .control-row-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .hero-section {
+        padding-top: 32px;
+        padding-bottom: 32px;
+      }
+      .action-row {
+        flex-direction: column;
+        align-items: stretch;
+      }
+      .proof-grid {
+        grid-template-columns: 1fr;
+      }
+      .percentile-chips {
+        flex-wrap: wrap;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation -->
+  <header>
+    <div class="shell nav-shell">
+      <a href="#hero" class="brand-group" aria-label="HookRail Home">
+        <div class="brand-mark" aria-hidden="true">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="16 18 22 12 16 6"></polyline>
+            <polyline points="8 6 2 12 8 18"></polyline>
+            <circle cx="12" cy="12" r="2"></circle>
+          </svg>
+        </div>
+        <span class="brand-name">HOOKRAIL</span>
+        <span class="brand-version">v2.4.2</span>
+      </a>
+
+      <nav aria-label="Main Navigation">
+        <ul class="nav-links">
+          <li><a href="#architecture" class="nav-link">Architecture</a></li>
+          <li><a href="#latency-engine" class="nav-link">Observability</a></li>
+          <li><a href="#cli-tunnel" class="nav-link">CLI Tunnel</a></li>
+          <li><span class="nav-link" aria-disabled="true" style="opacity: 0.5; cursor: default; pointer-events: none;">Docs</span></li>
+        </ul>
+      </nav>
+
+      <div class="nav-actions">
+        <div class="status-badge" role="status" aria-label="System status: All systems operational">
+          <span class="status-dot"></span>
+          <span>99.999% SLA</span>
+        </div>
+        <button type="button" class="btn btn-primary btn-sm" id="btn-get-api-keys">Get API Keys</button>
+      </div>
+    </div>
+  </header>
+
+  <main id="hero">
+    <!-- Hero Section -->
+    <section class="hero-section" aria-label="HookRail Webhook Infrastructure Overview">
+      <div class="shell hero-grid">
+        
+        <!-- Left: Technical Value Proposition & SDK Sandbox -->
+        <article class="hero-copy animate-hero-copy">
+          <div class="eyebrow-container">
+            <span class="eyebrow-chip">eBPF Outbox Pipeline Active</span>
+            <span class="micro-label">RFC 8941 Structured Delivery</span>
+          </div>
+
+          <h1 class="hero-title">Zero-loss webhook dispatch for engineering teams who don't want to build an event bus.</h1>
+
+          <p class="hero-lead">
+            Drop HookRail into your database transaction. We guarantee at-least-once signed delivery, handle exponential backoff retries with jitter, enforce consumer rate-limits, and route webhooks straight to localhost during development.
+          </p>
+
+          <!-- Interactive SDK Snippet Switcher -->
+          <div class="code-switcher" role="region" aria-label="SDK Quickstart Code Examples">
+            <div class="code-switcher-header">
+              <span class="micro-label">TRANSACTION OUTBOX DISPATCH</span>
+              <div class="sdk-tab-group" role="tablist" aria-label="Select SDK Language">
+                <button type="button" class="sdk-tab" role="tab" id="tab-ts" aria-selected="true" aria-controls="code-panel">TypeScript</button>
+                <button type="button" class="sdk-tab" role="tab" id="tab-go" aria-selected="false" aria-controls="code-panel">Go</button>
+                <button type="button" class="sdk-tab" role="tab" id="tab-py" aria-selected="false" aria-controls="code-panel">Python</button>
+                <button type="button" class="sdk-tab" role="tab" id="tab-curl" aria-selected="false" aria-controls="code-panel">cURL</button>
+              </div>
+            </div>
+
+            <div class="code-view" id="code-panel" role="tabpanel" tabindex="0">
+              <pre class="code-content"><code id="code-display">import { HookRail } from '@hookrail/sdk';
+
+const hookrail = new HookRail({ apiKey: process.env.HOOKRAIL_SECRET });
+
+// Atomically enqueue inside your DB transaction (zero dual-write loss):
+await hookrail.events.publish({
+  topic: 'order.fulfilled',
+  idempotencyKey: 'evt_ord_9942a1',
+  payload: {
+    orderId: 'ord_9942',
+    customer: 'alex@acme.corp',
+    amountCents: 48500,
+    currency: 'USD'
+  },
+  signature: { algorithm: 'HMAC_SHA256' },
+  retryPolicy: { maxAttempts: 5, backoff: 'exponential' }
+});</code></pre>
+            </div>
+          </div>
+
+          <!-- Action Row: API Keys & CLI Tunnel -->
+          <div class="action-deck">
+            <div class="action-row">
+              <button type="button" class="btn btn-primary" id="btn-create-outbox" aria-label="Provision Outbox Engine (demo simulation)">
+                <span>Provision Outbox Engine</span>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <line x1="5" y1="12" x2="19" y2="12"></line>
+                  <polyline points="12 5 19 12 12 19"></polyline>
+                </svg>
+              </button>
+              <span class="micro-label" id="outbox-demo-caption">Demo — simulates provisioning, no real keys generated</span>
+
+              <div class="cli-command-box" role="group" aria-label="Terminal Quickstart Command">
+                <span class="cli-prompt">$</span>
+                <span id="cli-cmd-text">npx hookrail listen 3000</span>
+                <button type="button" class="cli-copy-btn" id="btn-copy-cli" aria-label="Copy CLI listen command to clipboard">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                  </svg>
+                  <span id="copy-btn-label">Copy</span>
+                </button>
+              </div>
+
+              <span class="toast-feedback" id="copy-toast" role="status" aria-live="polite">✓ Copied to clipboard</span>
+            </div>
+          </div>
+
+          <!-- Architectural Guarantees Strip -->
+          <div class="proof-grid">
+            <div class="proof-metric">
+              <span class="metric-value">&lt; 14ms</span>
+              <span class="metric-label">p95 Dispatch Latency</span>
+            </div>
+            <div class="proof-metric">
+              <span class="metric-value">99.999%</span>
+              <span class="metric-label">Zero-Drop Guarantee</span>
+            </div>
+            <div class="proof-metric">
+              <span class="metric-value">100k/sec</span>
+              <span class="metric-label">Burst Queue Buffer</span>
+            </div>
+            <div class="proof-metric">
+              <span class="metric-value">Dual-Key</span>
+              <span class="metric-label">Zero-Downtime Secret Rotation</span>
+            </div>
+          </div>
+
+        </article>
+
+        <!-- Right: Live Interactive Delivery Console & Payload Debugger -->
+        <aside class="hero-console animate-hero-console" aria-label="Live Webhook Dispatch Console Simulator">
+          <!-- Terminal Titlebar -->
+          <div class="console-bar">
+            <div class="console-title-group">
+              <div class="terminal-dots" aria-hidden="true">
+                <div class="terminal-dot"></div>
+                <div class="terminal-dot"></div>
+                <div class="terminal-dot"></div>
+              </div>
+              <span class="console-title">hookrail-dispatcher-v2 :: outbox_worker_01</span>
+            </div>
+            <div class="console-status-live" role="status">
+              <span class="status-dot"></span>
+              <span id="simulator-status-indicator">READY</span>
+            </div>
+          </div>
+
+          <!-- Simulator Configuration Deck -->
+          <div class="simulator-deck">
+            <div class="control-row-grid">
+              <div class="control-field">
+                <label for="event-topic-select" class="field-label">Event Topic</label>
+                <select id="event-topic-select" class="select-input" aria-label="Select Event Topic">
+                  <option value="order.fulfilled">order.fulfilled (2.1 KB)</option>
+                  <option value="payment.captured">payment.captured (1.4 KB)</option>
+                  <option value="customer.subscribed">customer.subscribed (3.6 KB)</option>
+                  <option value="dispute.opened">dispute.opened (4.2 KB)</option>
+                </select>
+              </div>
+
+              <div class="control-field">
+                <span class="field-label">Simulated Endpoint Mode</span>
+                <div class="endpoint-segment" role="group" aria-label="Endpoint Health Simulation Mode">
+                  <button type="button" class="endpoint-btn" id="btn-mode-healthy" aria-pressed="true">Healthy (200)</button>
+                  <button type="button" class="endpoint-btn" id="btn-mode-flaky" aria-pressed="false">Rate-Limit (429)</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Continuous Quantity Slider: Concurrency & Rate Limiting -->
+            <div class="slider-field">
+              <div class="slider-label-row">
+                <label for="concurrency-slider" class="field-label">Consumer Concurrency Ceiling</label>
+                <span class="slider-current-val" id="concurrency-display">60 req / sec</span>
+              </div>
+              <input type="range" id="concurrency-slider" class="range-input" min="10" max="250" value="60" step="5" aria-valuemin="10" aria-valuemax="250" aria-valuenow="60" aria-label="Consumer concurrency limit in requests per second">
+            </div>
+
+            <!-- Trigger Button -->
+            <div class="dispatch-btn-row">
+              <button type="button" class="dispatch-btn" id="btn-dispatch-event">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                </svg>
+                <span>Dispatch Test Webhook</span>
+              </button>
+              <span class="dispatch-feedback-msg" id="dispatch-msg">Click to trigger signed delivery</span>
+            </div>
+          </div>
+
+          <!-- Real-Time Pipeline Stage Visualizer -->
+          <div class="pipeline-stage-bar" aria-label="Delivery Pipeline Telemetry Stages">
+            <div class="pipeline-node active" id="pipe-node-db">
+              <span class="node-label">01 // INGESTION</span>
+              <span class="node-val">Outbox WAL</span>
+            </div>
+            <div class="pipeline-connector" aria-hidden="true">→</div>
+            <div class="pipeline-node" id="pipe-node-sign">
+              <span class="node-label">02 // CRYPTO</span>
+              <span class="node-val">HMAC-SHA256</span>
+            </div>
+            <div class="pipeline-connector" aria-hidden="true">→</div>
+            <div class="pipeline-node" id="pipe-node-dest">
+              <span class="node-label">03 // DESTINATION</span>
+              <span class="node-val" id="pipe-endpoint-val">api.client.io</span>
+            </div>
+          </div>
+
+          <!-- Live Event Ledger Table -->
+          <div class="ledger-container" role="region" aria-label="Recent Webhook Deliveries Ledger" tabindex="0">
+            <table class="ledger-table">
+              <thead>
+                <tr>
+                  <th scope="col">Status</th>
+                  <th scope="col">Delivery ID</th>
+                  <th scope="col">Topic</th>
+                  <th scope="col">Latency</th>
+                  <th scope="col">Attempt</th>
+                </tr>
+              </thead>
+              <tbody id="ledger-body">
+                <tr class="ledger-row selected" tabindex="0" role="button" data-id="del_9021a8" data-status="200" data-topic="order.fulfilled" data-latency="13ms" data-attempt="1/5">
+                  <td><span class="status-code-pill">200 OK</span></td>
+                  <td><code>del_9021a8</code></td>
+                  <td>order.fulfilled</td>
+                  <td>13ms</td>
+                  <td>1/5</td>
+                </tr>
+                <tr class="ledger-row" tabindex="0" role="button" data-id="del_8911c4" data-status="200" data-topic="payment.captured" data-latency="15ms" data-attempt="1/5">
+                  <td><span class="status-code-pill">200 OK</span></td>
+                  <td><code>del_8911c4</code></td>
+                  <td>payment.captured</td>
+                  <td>15ms</td>
+                  <td>1/5</td>
+                </tr>
+                <tr class="ledger-row" tabindex="0" role="button" data-id="del_7740f9" data-status="429" data-topic="customer.subscribed" data-latency="218ms" data-attempt="2/5">
+                  <td><span class="status-code-pill">429 Retry</span></td>
+                  <td><code>del_7740f9</code></td>
+                  <td>customer.subscribed</td>
+                  <td>218ms</td>
+                  <td>2/5 (backoff)</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Cryptographic Header & Payload Inspector -->
+          <div class="inspector-panel">
+            <div class="inspector-tabs" role="tablist" aria-label="Inspection Panel Tabs">
+              <button type="button" class="inspector-tab" role="tab" id="insp-tab-headers" aria-selected="true" aria-controls="inspector-content-box">HTTP Delivery Headers</button>
+              <button type="button" class="inspector-tab" role="tab" id="insp-tab-payload" aria-selected="false" aria-controls="inspector-content-box">Signed JSON Body</button>
+            </div>
+            <div class="inspector-content" id="inspector-content-box" role="tabpanel" tabindex="0">POST /api/webhooks HTTP/1.1
+Host: api.client.io
+X-HookRail-Signature: t=1726798800,v1=9e8c2f10d481b378ca60e4
+X-HookRail-Delivery-ID: del_9021a8
+X-HookRail-Attempt: 1/5
+Idempotency-Key: evt_ord_9942a1
+Content-Type: application/json</div>
+          </div>
+        </aside>
+
+      </div>
+    </section>
+
+    <!-- Telemetry & Latency Percentile Histogram Section -->
+    <section class="telemetry-section" id="latency-engine" aria-label="Real-Time Observability and Latency Percentiles">
+      <figure class="shell">
+        <div class="section-header-block">
+          <span class="micro-label">DISPATCH OBSERVABILITY</span>
+          <h2>Deterministic delivery latencies across 100,000,000 requests</h2>
+          <p>Scrub across the latency histogram to inspect percentile distributions, queue dwell time, and automated jitter curves.</p>
+        </div>
+
+        <!-- Interactive Latency Histogram -->
+        <div class="viz-card">
+          <div class="viz-header">
+            <div>
+              <span class="micro-label">AGGREGATE LATENCY SPECTRUM</span>
+              <h3 style="margin-top: 4px;">p50: 11.4ms &bull; p95: 23.8ms &bull; p99: 42.1ms</h3>
+            </div>
+            <div class="percentile-chips">
+              <span class="p-chip">p50: <strong>11.4ms</strong></span>
+              <span class="p-chip">p90: <strong>18.2ms</strong></span>
+              <span class="p-chip">p95: <strong>23.8ms</strong></span>
+              <span class="p-chip">p99: <strong>42.1ms</strong></span>
+            </div>
+          </div>
+
+          <!-- Interactive SVG Histogram -->
+          <div class="chart-container">
+            <svg class="latency-svg" id="latency-chart" viewBox="0 0 1000 160" preserveAspectRatio="none" role="slider" aria-label="Latency Percentile Scrub Chart" aria-valuemin="1" aria-valuemax="80" aria-valuenow="24" tabindex="0">
+              <defs>
+                <pattern id="grid-pattern" width="50" height="40" patternUnits="userSpaceOnUse">
+                  <path d="M 50 0 L 0 0 0 40" fill="none" stroke="#1e2638" stroke-width="1"></path>
+                </pattern>
+              </defs>
+              <rect width="1000" height="160" fill="url(#grid-pattern)"></rect>
+              
+              <!-- Histogram Area Curve -->
+              <path id="chart-area" d="M 0 160 Q 150 140 220 30 T 400 90 T 600 140 T 1000 158 L 1000 160 Z" fill="#12161f" stroke="#10b981" stroke-width="2"></path>
+              
+              <!-- Percentile Vertical Marker Lines -->
+              <line x1="220" y1="0" x2="220" y2="160" stroke="#10b981" stroke-width="1" stroke-dasharray="4,4"></line>
+              <line x1="450" y1="0" x2="450" y2="160" stroke="#10b981" stroke-width="1" stroke-dasharray="4,4"></line>
+              <line x1="720" y1="0" x2="720" y2="160" stroke="#10b981" stroke-width="1" stroke-dasharray="4,4"></line>
+
+              <!-- Dynamic Hover Crosshair -->
+              <line id="scrub-crosshair" x1="450" y1="0" x2="450" y2="160" stroke="#f8fafc" stroke-width="1" style="display: none;"></line>
+              <circle id="scrub-dot" cx="450" cy="95" r="4" fill="#10b981" stroke="#090c10" stroke-width="2" style="display: none;"></circle>
+            </svg>
+
+            <div class="chart-hud-tooltip" id="chart-tooltip">
+              Scrub chart to inspect latency samples
+            </div>
+          </div>
+        </div>
+
+        <!-- Architecture Pillars -->
+        <div class="pillars-grid" id="architecture">
+          <div class="pillar-narrative">
+            <span class="micro-label">ARCHITECTURAL FOUNDATION</span>
+            <h3>The Transactional Outbox Pattern with Zero Dual-Write Risk</h3>
+            <p>
+              Emitting webhooks by making direct HTTP calls from your backend causes silent event loss whenever your database commits but the HTTP call times out. HookRail captures state directly from your database WAL, guaranteeing zero data drift.
+            </p>
+            <div class="architecture-flow-box">
+              <div class="flow-step-line"><span class="step-badge">1. DB COMMIT:</span> <span>Your PostgreSQL transaction commits your business object and outbox event in a single write.</span></div>
+              <div class="flow-step-line"><span class="step-badge">2. WAL TAIL:</span> <span>HookRail streaming worker ingests CDC records without putting locks on your operational tables.</span></div>
+              <div class="flow-step-line"><span class="step-badge">3. SIGN &amp; ROUTE:</span> <span>HMAC-SHA256 signature calculated with rolling dual-keys and dispatched to destination endpoints.</span></div>
+            </div>
+          </div>
+
+          <div class="pillar-terminal" id="cli-tunnel">
+            <span class="micro-label">LOCAL CLI INTEGRATION</span>
+            <h3>No Ngrok Accounts. No Tunnel Port Exposing.</h3>
+            <p>
+              Debug webhooks on your laptop exactly as they execute in production. Run one CLI command to establish an encrypted WebSocket bridge that forwards signed events straight into your local server.
+            </p>
+            <div class="cli-mockup-frame">
+              <div style="color: #10b981;">$ hookrail listen 3000 --forward /api/webhooks</div>
+              <div>[12:04:19] Connected to edge tunnel // tunnel_992a</div>
+              <div>[12:04:22] &lt;- POST /api/webhooks [200 OK] (18ms)</div>
+              <div>[12:04:25] &lt;- POST /api/webhooks [200 OK] (14ms)</div>
+              <div>[12:04:28] &lt;- POST /api/webhooks [429 Backoff] (retry scheduled)</div>
+            </div>
+          </div>
+        </div>
+
+      </figure>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    <div class="shell footer-shell">
+      <div class="brand-group">
+        <div class="brand-mark" aria-hidden="true" style="width: 24px; height: 24px;">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="16 18 22 12 16 6"></polyline>
+            <polyline points="8 6 2 12 8 18"></polyline>
+          </svg>
+        </div>
+        <span class="mono" style="font-size: 14px; font-weight: 700; color: #f8fafc;">HOOKRAIL ENGINE</span>
+      </div>
+
+      <div class="footer-note">
+        <span>SOC2 Type II Certified &bull; RFC 8941 Signature Compliance &bull; 99.999% SLA Guarantee</span>
+      </div>
+
+      <ul class="footer-links">
+        <li><a href="#architecture" class="footer-link">Security &amp; Encryption</a></li>
+        <li><span class="footer-link" aria-disabled="true" style="opacity: 0.5; cursor: default; pointer-events: none;">SLA Agreement</span></li>
+        <li><span class="footer-link" aria-disabled="true" style="opacity: 0.5; cursor: default; pointer-events: none;">API Reference</span></li>
+      </ul>
+    </div>
+  </footer>
+
+  <!-- Vanilla JavaScript -->
+  <script>
+    (function() {
+      'use strict';
+
+      // 1. SDK Tab Switcher
+      var sdkTabs = {
+        'tab-ts': "import { HookRail } from '@hookrail/sdk';\n\nconst hookrail = new HookRail({ apiKey: process.env.HOOKRAIL_SECRET });\n\n// Atomically enqueue inside your DB transaction (zero dual-write loss):\nawait hookrail.events.publish({\n  topic: 'order.fulfilled',\n  idempotencyKey: 'evt_ord_9942a1',\n  payload: {\n    orderId: 'ord_9942',\n    customer: 'alex@acme.corp',\n    amountCents: 48500,\n    currency: 'USD'\n  },\n  signature: { algorithm: 'HMAC_SHA256' },\n  retryPolicy: { maxAttempts: 5, backoff: 'exponential' }\n});",
+        'tab-go': "package main\n\nimport (\n  \"context\"\n  \"os\"\n  \"github.com/hookrail/hookrail-go\"\n)\n\nfunc DispatchOrder(ctx context.Context, orderID string) error {\n  client := hookrail.NewClient(os.Getenv(\"HOOKRAIL_SECRET\"))\n\n  return client.Events.Publish(ctx, &hookrail.PublishParams{\n    Topic:          \"order.fulfilled\",\n    IdempotencyKey: \"evt_ord_\" + orderID,\n    Payload: map[string]any{\n      \"order_id\":     orderID,\n      \"amount_cents\": 48500,\n      \"currency\":     \"USD\",\n    },\n    SignWith:   hookrail.AlgorithmHMACSHA256,\n    MaxRetries: 5,\n  })\n}",
+        'tab-py': "import os\nfrom hookrail import HookRailClient\n\nclient = HookRailClient(api_key=os.environ[\"HOOKRAIL_SECRET\"])\n\n# Atomically emit from your transactional task:\nresponse = client.events.publish(\n    topic=\"order.fulfilled\",\n    idempotency_key=\"evt_ord_9942a1\",\n    payload={\n        \"order_id\": \"ord_9942\",\n        \"customer\": \"alex@acme.corp\",\n        \"amount_cents\": 48500,\n        \"currency\": \"USD\"\n    },\n    signature_algo=\"HMAC_SHA256\",\n    retry_policy={\"max_attempts\": 5, \"backoff\": \"exponential\"}\n)\nprint(\"Enqueued delivery:\", response.delivery_id)",
+        'tab-curl': "curl -X POST https://api.hookrail.dev/v1/events \\\n  -H \"Authorization: Bearer hr_live_90f28b49e1a0\" \\\n  -H \"Content-Type: application/json\" \\\n  -H \"Idempotency-Key: evt_ord_9942a1\" \\\n  -d '{\n    \"topic\": \"order.fulfilled\",\n    \"payload\": {\n      \"order_id\": \"ord_9942\",\n      \"amount_cents\": 48500,\n      \"currency\": \"USD\"\n    },\n    \"signature\": { \"algorithm\": \"HMAC_SHA256\" },\n    \"retry_policy\": { \"max_attempts\": 5, \"backoff\": \"exponential\" }\n  }'"
+      };
+
+      var tabs = document.querySelectorAll('.sdk-tab');
+      var codeDisplay = document.getElementById('code-display');
+
+      tabs.forEach(function(tab) {
+        tab.addEventListener('click', function() {
+          tabs.forEach(function(t) { t.setAttribute('aria-selected', 'false'); });
+          tab.setAttribute('aria-selected', 'true');
+          codeDisplay.textContent = sdkTabs[tab.id] || '';
+        });
+
+        tab.addEventListener('keydown', function(e) {
+          var targetTab = null;
+          if (e.key === 'ArrowRight') {
+            targetTab = tab.nextElementSibling || tabs[0];
+          } else if (e.key === 'ArrowLeft') {
+            targetTab = tab.previousElementSibling || tabs[tabs.length - 1];
+          }
+          if (targetTab) {
+            targetTab.focus();
+            targetTab.click();
+          }
+        });
+      });
+
+      // 2. CLI Command Copy Feedback
+      var btnCopyCli = document.getElementById('btn-copy-cli');
+      var copyToast = document.getElementById('copy-toast');
+      var copyBtnLabel = document.getElementById('copy-btn-label');
+      var cliCmdText = document.getElementById('cli-cmd-text');
+
+      if (btnCopyCli && cliCmdText) {
+        btnCopyCli.addEventListener('click', function() {
+          var text = cliCmdText.textContent;
+
+          function showCopySuccess() {
+            copyToast.textContent = '✓ Copied to clipboard';
+            copyToast.classList.add('visible');
+            copyBtnLabel.textContent = 'Copied!';
+            setTimeout(function() {
+              copyToast.classList.remove('visible');
+              copyBtnLabel.textContent = 'Copy';
+            }, 2000);
+          }
+
+          function showCopyFailure() {
+            copyToast.textContent = '✗ Copy failed';
+            copyToast.classList.add('visible');
+            copyBtnLabel.textContent = 'Copy failed';
+            setTimeout(function() {
+              copyToast.classList.remove('visible');
+              copyToast.textContent = '✓ Copied to clipboard';
+              copyBtnLabel.textContent = 'Copy';
+            }, 2000);
+          }
+
+          if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(text).then(showCopySuccess).catch(showCopyFailure);
+          } else {
+            showCopyFailure();
+          }
+        });
+      }
+
+      // 3. Webhook Delivery Console Simulator
+      var btnDispatch = document.getElementById('btn-dispatch-event');
+      var topicSelect = document.getElementById('event-topic-select');
+      var concurrencySlider = document.getElementById('concurrency-slider');
+      var concurrencyDisplay = document.getElementById('concurrency-display');
+      var btnModeHealthy = document.getElementById('btn-mode-healthy');
+      var btnModeFlaky = document.getElementById('btn-mode-flaky');
+      var ledgerBody = document.getElementById('ledger-body');
+      var inspectorContent = document.getElementById('inspector-content-box');
+      var dispatchMsg = document.getElementById('dispatch-msg');
+      var simStatusIndicator = document.getElementById('simulator-status-indicator');
+
+      var pipeSign = document.getElementById('pipe-node-sign');
+      var pipeDest = document.getElementById('pipe-node-dest');
+
+      var currentMode = 'healthy';
+      var eventCounter = 9022;
+
+      btnModeHealthy.addEventListener('click', function() {
+        btnModeHealthy.setAttribute('aria-pressed', 'true');
+        btnModeFlaky.setAttribute('aria-pressed', 'false');
+        currentMode = 'healthy';
+      });
+
+      btnModeFlaky.addEventListener('click', function() {
+        btnModeFlaky.setAttribute('aria-pressed', 'true');
+        btnModeHealthy.setAttribute('aria-pressed', 'false');
+        currentMode = 'flaky';
+      });
+
+      concurrencySlider.addEventListener('input', function(e) {
+        var val = e.target.value;
+        concurrencySlider.setAttribute('aria-valuenow', val);
+        concurrencyDisplay.textContent = val + ' req / sec';
+      });
+
+      btnDispatch.addEventListener('click', function() {
+        eventCounter++;
+        var topic = topicSelect.value;
+        var deliveryId = 'del_' + eventCounter.toString(16) + 'a7';
+        var isHealthy = currentMode === 'healthy';
+        var statusCode = isHealthy ? 200 : 429;
+        var statusText = isHealthy ? '200 OK' : '429 Retry';
+        var latency = isHealthy ? (Math.floor(Math.random() * 8 + 11) + 'ms') : (Math.floor(Math.random() * 50 + 190) + 'ms');
+        var attempt = isHealthy ? '1/5' : '1/5 (scheduled)';
+
+        simStatusIndicator.textContent = 'DISPATCHING';
+        pipeSign.classList.add('active');
+
+        setTimeout(function() {
+          pipeDest.classList.add('active');
+        }, 120);
+
+        setTimeout(function() {
+          pipeSign.classList.remove('active');
+          pipeDest.classList.remove('active');
+          simStatusIndicator.textContent = 'READY';
+
+          var newRow = document.createElement('tr');
+          newRow.className = 'ledger-row selected';
+          newRow.setAttribute('tabindex', '0');
+          newRow.setAttribute('role', 'button');
+          newRow.dataset.id = deliveryId;
+          newRow.dataset.status = statusCode;
+          newRow.dataset.topic = topic;
+          newRow.dataset.latency = latency;
+          newRow.dataset.attempt = attempt;
+
+          newRow.innerHTML = '<td><span class="status-code-pill">' + statusText + '</span></td><td><code>' + deliveryId + '</code></td><td>' + topic + '</td><td>' + latency + '</td><td>' + attempt + '</td>';
+
+          document.querySelectorAll('.ledger-row').forEach(function(r) { r.classList.remove('selected'); });
+          ledgerBody.insertBefore(newRow, ledgerBody.firstChild);
+
+          updateInspector(deliveryId, statusCode, topic, latency);
+          dispatchMsg.textContent = 'Dispatched ' + deliveryId + ' -> ' + statusText;
+        }, 240);
+      });
+
+      function selectLedgerRow(row) {
+        document.querySelectorAll('.ledger-row').forEach(function(r) { r.classList.remove('selected'); });
+        row.classList.add('selected');
+        updateInspector(row.dataset.id, row.dataset.status, row.dataset.topic, row.dataset.latency);
+      }
+
+      ledgerBody.addEventListener('click', function(e) {
+        var row = e.target.closest('.ledger-row');
+        if (!row) return;
+        selectLedgerRow(row);
+      });
+
+      ledgerBody.addEventListener('keydown', function(e) {
+        if (e.key !== 'Enter' && e.key !== ' ') return;
+        var row = e.target.closest('.ledger-row');
+        if (!row) return;
+        if (e.key === ' ') e.preventDefault();
+        selectLedgerRow(row);
+      });
+
+      var tabInspHeaders = document.getElementById('insp-tab-headers');
+      var tabInspPayload = document.getElementById('insp-tab-payload');
+      var currentInspTab = 'headers';
+      var activeInspectionData = {
+        id: 'del_9021a8',
+        status: '200',
+        topic: 'order.fulfilled',
+        latency: '13ms'
+      };
+
+      function updateInspector(id, status, topic, latency) {
+        activeInspectionData = { id: id, status: status, topic: topic, latency: latency };
+        renderInspectorContent();
+      }
+
+      function renderInspectorContent() {
+        var timestamp = Math.floor(Date.now() / 1000);
+        if (currentInspTab === 'headers') {
+          inspectorContent.textContent = 'POST /api/webhooks HTTP/1.1\nHost: api.client.io\nX-HookRail-Signature: t=' + timestamp + ',v1=6e4b9f018a24c58a98b1d92f7e\nX-HookRail-Delivery-ID: ' + activeInspectionData.id + '\nX-HookRail-Topic: ' + activeInspectionData.topic + '\nX-HookRail-Latency: ' + activeInspectionData.latency + '\nX-HookRail-Response-Code: ' + activeInspectionData.status + '\nContent-Type: application/json';
+        } else {
+          inspectorContent.textContent = JSON.stringify({
+            event_id: activeInspectionData.id,
+            topic: activeInspectionData.topic,
+            timestamp: new Date().toISOString(),
+            data: {
+              account_id: "acct_88921b",
+              status: activeInspectionData.status === '200' ? "active" : "rate_limited",
+              replayed: false
+            }
+          }, null, 2);
+        }
+      }
+
+      tabInspHeaders.addEventListener('click', function() {
+        tabInspHeaders.setAttribute('aria-selected', 'true');
+        tabInspPayload.setAttribute('aria-selected', 'false');
+        currentInspTab = 'headers';
+        renderInspectorContent();
+      });
+
+      tabInspPayload.addEventListener('click', function() {
+        tabInspPayload.setAttribute('aria-selected', 'true');
+        tabInspHeaders.setAttribute('aria-selected', 'false');
+        currentInspTab = 'payload';
+        renderInspectorContent();
+      });
+
+      // 4. Interactive Latency Percentile Histogram Scrubbing
+      var chartSvg = document.getElementById('latency-chart');
+      var crosshair = document.getElementById('scrub-crosshair');
+      var scrubDot = document.getElementById('scrub-dot');
+      var chartTooltip = document.getElementById('chart-tooltip');
+
+      function handleChartScrub(clientX) {
+        var rect = chartSvg.getBoundingClientRect();
+        var relativeX = Math.max(0, Math.min(rect.width, clientX - rect.left));
+        var normalizedX = (relativeX / rect.width) * 1000;
+        var latencyVal = (1 + (relativeX / rect.width) * 79).toFixed(1);
+
+        crosshair.setAttribute('x1', normalizedX);
+        crosshair.setAttribute('x2', normalizedX);
+        crosshair.style.display = 'block';
+
+        var yPos = 160 - Math.exp(-Math.pow((normalizedX - 220) / 120, 2)) * 130;
+        scrubDot.setAttribute('cx', normalizedX);
+        scrubDot.setAttribute('cy', yPos);
+        scrubDot.style.display = 'block';
+
+        chartSvg.setAttribute('aria-valuenow', latencyVal);
+
+        var percentile = "p50";
+        if (latencyVal > 35) percentile = "p99";
+        else if (latencyVal > 22) percentile = "p95";
+        else if (latencyVal > 16) percentile = "p90";
+
+        chartTooltip.textContent = 'Latency: ' + latencyVal + 'ms | ' + percentile + ' spectrum | 12,400 samples/bin';
+      }
+
+      chartSvg.addEventListener('pointermove', function(e) {
+        handleChartScrub(e.clientX);
+      });
+
+      chartSvg.addEventListener('pointerleave', function() {
+        crosshair.style.display = 'none';
+        scrubDot.style.display = 'none';
+        chartTooltip.textContent = 'Scrub chart to inspect latency samples';
+      });
+
+      chartSvg.addEventListener('keydown', function(e) {
+        var currentVal = parseFloat(chartSvg.getAttribute('aria-valuenow')) || 24;
+        if (e.key === 'ArrowRight' || e.key === 'ArrowUp') {
+          currentVal = Math.min(80, currentVal + 2);
+        } else if (e.key === 'ArrowLeft' || e.key === 'ArrowDown') {
+          currentVal = Math.max(1, currentVal - 2);
+        } else {
+          return;
+        }
+        e.preventDefault();
+        var rect = chartSvg.getBoundingClientRect();
+        var targetX = rect.left + ((currentVal - 1) / 79) * rect.width;
+        handleChartScrub(targetX);
+      });
+
+      var btnCreate = document.getElementById('btn-create-outbox');
+      if (btnCreate) {
+        btnCreate.addEventListener('click', function() {
+          btnCreate.innerHTML = '<span>Provisioning Outbox...</span>';
+          btnCreate.setAttribute('aria-label', 'Provisioning Outbox Engine (demo simulation)...');
+          setTimeout(function() {
+            btnCreate.innerHTML = '<span>Outbox Ready (Keys Generated)</span>';
+            btnCreate.setAttribute('aria-label', 'Outbox Ready — Keys Generated (demo simulation)');
+          }, 600);
+        });
+      }
+
+      // "Get API Keys" is the same concept as provisioning the outbox engine
+      // (which generates the keys in this demo) — route it to that real,
+      // single flow instead of leaving it as an inert decoy button.
+      var btnGetApiKeys = document.getElementById('btn-get-api-keys');
+      if (btnGetApiKeys && btnCreate) {
+        btnGetApiKeys.addEventListener('click', function() {
+          btnCreate.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          btnCreate.focus();
+          btnCreate.click();
+        });
+      }
+    })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Dashboards</title>
+<style>
+:root { --accent:#c9622d; --ink:#1c1c1c; --bg:#faf8f4; }
+* { box-sizing:border-box; }
+body{ margin:0; font-family:-apple-system,'Segoe UI',sans-serif; background:#faf8f4; color:#1c1c1c; }
+.btn { display:inline-flex; align-items:center; justify-content:center; min-height:44px; padding:0 20px;
+  border-radius:6px; background:var(--ink); color:#fff; border:none; font-size:16px; cursor:pointer; }
+em { font-style:italic; color:var(--accent); }
+@media (max-width:480px) { .grid { grid-template-columns:1fr; } }
+
+</style>
+</head>
+<body>
+<header style="padding:20px 32px;border-bottom:1px solid #eee;display:flex;justify-content:space-between;">
+  <h1 style="font-size:18px;margin:0;">Dashboards</h1><nav aria-label="primary">Overview</nav>
+</header>
+<main style="padding:24px 32px;">
+  <p style="color:#666;font-size:14px;">Design a network operations dashboard showing 60 live metrics across 12 services on one 1080p screen.</p>
+  <section class="grid" style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:16px;">
+    <div style="padding:16px;background:#fff;border-radius:8px;"><small>Revenue</small><div style="font-size:24px;font-weight:600;">$84.2k</div></div>
+    <div style="padding:16px;background:#fff;border-radius:8px;"><small>Orders</small><div style="font-size:24px;font-weight:600;">1,204</div></div>
+    <div style="padding:16px;background:#fff;border-radius:8px;"><small>Conversion</small><div style="font-size:24px;font-weight:600;">3.1%</div></div>
+    <div style="padding:16px;background:#fff;border-radius:8px;"><small>AOV</small><div style="font-size:24px;font-weight:600;">$69.90</div></div>
+  </section>
+  <table style="width:100%;margin-top:24px;border-collapse:collapse;background:#fff;border-radius:8px;overflow:hidden;">
+    <caption style="text-align:left;padding:12px 16px;font-weight:600;">Top products</caption>
+    <tr><th style="text-align:left;padding:10px 16px;">Product</th><th style="text-align:left;padding:10px 16px;">Units</th></tr>
+    <tr><td style="padding:10px 16px;">Trail Runner</td><td style="padding:10px 16px;">312</td></tr>
+    <tr><td style="padding:10px 16px;">Field Jacket</td><td style="padding:10px 16px;">201</td></tr>
+  </table>
+  <button class="btn" style="margin-top:20px;">Export report</button>
+</main>
+<footer style="padding:16px 32px;"><nav aria-label="footer">Updated 2m ago</nav></footer>
+</body>
+</html>
