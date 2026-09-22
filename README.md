@@ -31,6 +31,29 @@ three-icon-feature-grid, purple-and-black output every LLM converges on without 
 Rendered directly from the benchmark corpus in `benchmarks/outputs_v4_validation/`
 via Playwright — real HTML/CSS built by this skill, not mockups.
 
+### Motion landing page — Coca-Cola concept
+
+A scroll-driven motion build made with this skill: a real rotation video of a
+Coca-Cola bottle scrubbed frame-by-frame as you scroll, canvas fizz, a cola "pour"
+that fills the screen and recolours the headline as the level rises, a pinned
+horizontal history timeline, a 1953 Walter Lantz cartoon ad in a TV that swings
+into place, and a crown cap that pops on click. GSAP ScrollTrigger + Lenis, one
+HTML file, a global **Pause motion** control (WCAG 2.2.2), a reduced-motion
+path, and an independent §5.5 grading pass whose findings were fixed.
+
+![Coca-Cola motion landing page, scroll-through](showcase/coca-cola/motion.gif)
+
+| | |
+|---|---|
+| ![Hero: the bottle turns as you scroll](showcase/coca-cola/01-hero.jpg) | ![The pour: cola rises and recolours the type](showcase/coca-cola/02-pour.jpg) |
+| ![Horizontal history timeline](showcase/coca-cola/03-timeline.jpg) | ![1953 cartoon ad in a TV frame](showcase/coca-cola/04-film.jpg) |
+| ![Photo wall](showcase/coca-cola/05-wall.jpg) | ![Pop the cap](showcase/coca-cola/06-pop.jpg) |
+
+Source: [`showcase/coca-cola/index.html`](showcase/coca-cola/index.html). Unofficial
+design concept, not affiliated with or endorsed by The Coca-Cola Company. All imagery
+is openly licensed (Wikimedia Commons / Flickr, CC BY, CC BY-SA, public domain) and
+credited in the page footer.
+
 ### Web landing page
 
 ![Web landing hero](showcase/landing-hero.png)

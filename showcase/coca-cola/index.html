@@ -1,0 +1,908 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Coca-Cola — Concept</title>
+<meta name="description" content="Unofficial, motion-heavy landing page concept for Coca-Cola.">
+<meta name="theme-color" content="#e4002b">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:ital,wdth,wght@0,62..125,100..900;1,62..125,100..900&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --red: #e4002b;
+    --red-deep: #a8001f;
+    --black: #0d0a09;
+    --cola: #3a1208;
+    --cola-deep: #1c0703;
+    --white: #fff8f0;
+    --dim: #b8aaa3;
+
+    --display: "Archivo", "Arial Narrow", sans-serif;
+    --mono: "DM Mono", ui-monospace, monospace;
+
+    --gutter: clamp(16px, 3.5vw, 48px);
+    --ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { -webkit-text-size-adjust: 100%; }
+  html.lenis, html.lenis body { height: auto; }
+  .lenis.lenis-smooth { scroll-behavior: auto !important; }
+  body {
+    background: var(--black);
+    color: var(--white);
+    font-family: var(--display);
+    font-variation-settings: "wdth" 100;
+    line-height: 1.45;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+  }
+  body.is-loading { overflow: hidden; }
+  a { color: inherit; text-decoration: none; }
+  img, video, canvas { display: block; }
+  button { font: inherit; color: inherit; background: none; border: 0; cursor: pointer; }
+  :focus-visible { outline: 3px solid var(--white); outline-offset: 2px; box-shadow: 0 0 0 5px var(--black); } /* two-tone ring: visible on red, black and cream */
+  .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+  /* Condensed heavy display: the one typographic voice of the page */
+  .mega {
+    font-weight: 900;
+    font-variation-settings: "wdth" 62;
+    text-transform: uppercase;
+    line-height: 0.82;
+    letter-spacing: -0.01em;
+    word-spacing: 0.12em;
+  }
+  .tag {
+    font-family: var(--mono);
+    font-size: 0.75rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  /* ---------- Loader ---------- */
+  .loader {
+    position: fixed; inset: 0; z-index: 100;
+    background: var(--red);
+    display: grid; place-items: end start;
+    padding: var(--gutter);
+    clip-path: inset(0 0 0 0);
+  }
+  .loader-count { font-size: clamp(8rem, 34vw, 30rem); font-variant-numeric: tabular-nums; }
+  .loader-count sup { font-size: 0.25em; vertical-align: top; margin-left: 0.05em; }
+  .loader .tag { position: absolute; top: var(--gutter); left: var(--gutter); }
+
+  /* ---------- Cursor ---------- */
+  .cursor {
+    position: fixed; top: 0; left: 0; z-index: 90;
+    width: 16px; height: 16px; margin: -8px 0 0 -8px;
+    border-radius: 50%;
+    background: var(--white);
+    border: 1.5px solid var(--black);
+    pointer-events: none;
+    display: grid; place-items: center;
+    transition: width 220ms var(--ease), height 220ms var(--ease), margin 220ms var(--ease);
+    opacity: 0;
+  }
+  .cursor span { font: 500 0.6875rem/1 var(--mono); color: var(--black); opacity: 0; transition: opacity 150ms linear; letter-spacing: 0.08em; }
+  .cursor.is-big { width: 88px; height: 88px; margin: -44px 0 0 -44px; }
+  .cursor.is-big span { opacity: 1; }
+  @media (hover: none), (prefers-reduced-motion: reduce) { .cursor { display: none; } }
+
+  /* ---------- Chrome: nav, motion toggle, fill meter ---------- */
+  .nav {
+    position: fixed; inset: 0 0 auto 0; z-index: 50;
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 20px var(--gutter);
+    color: var(--white);
+    transition: color 200ms linear;
+  }
+  .nav.on-light { color: var(--black); }
+  .wordmark { font-weight: 800; font-style: italic; font-size: 1.375rem; letter-spacing: -0.02em; }
+  .nav-links { display: flex; gap: 28px; align-items: center; }
+  .nav-links a { font-family: var(--mono); font-size: 0.8125rem; letter-spacing: 0.08em; text-transform: uppercase; }
+  .nav-links a:hover { text-decoration: underline; text-underline-offset: 4px; }
+  .motion-toggle {
+    position: fixed; left: var(--gutter); bottom: 20px; z-index: 50;
+    display: inline-flex; align-items: center; gap: 10px;
+    padding: 10px 16px;
+    border-radius: 999px;
+    background: var(--black); color: var(--white);
+    border: 1px solid var(--dim);
+    font: 500 0.75rem/1 var(--mono); letter-spacing: 0.08em; text-transform: uppercase;
+  }
+  .motion-toggle:hover { border-color: var(--white); }
+  .motion-toggle .bars { display: inline-flex; gap: 3px; }
+  .motion-toggle .bars i { width: 3px; height: 10px; background: currentColor; }
+  .motion-toggle[aria-pressed="true"] .bars i:last-child { display: none; }
+  .motion-toggle[aria-pressed="true"] .bars i:first-child { width: 0; height: 0; background: none; border-left: 9px solid currentColor; border-top: 5px solid transparent; border-bottom: 5px solid transparent; }
+  .meter {
+    position: fixed; right: 10px; top: 50%; z-index: 50;
+    width: 6px; height: 40vh; transform: translateY(-50%);
+    border-radius: 6px;
+    border: 1px solid var(--dim);
+    overflow: hidden;
+    mix-blend-mode: difference;
+  }
+  .meter i { position: absolute; inset: auto 0 0 0; height: 100%; background: var(--white); transform-origin: bottom; transform: scaleY(0); }
+
+  /* ---------- 1. Hero: scroll turns the bottle ---------- */
+  .hero {
+    position: relative;
+    height: 100vh; height: 100svh;
+    background: var(--red);
+    overflow: hidden;
+  }
+  .fizz { position: absolute; inset: 0; width: 100%; height: 100%; }
+  .hero-row {
+    position: absolute; left: 0; right: 0;
+    font-size: clamp(5rem, min(25vw, 38vh), 26rem);
+    white-space: nowrap;
+    text-align: center;
+    will-change: transform;
+  }
+  .hero-row.top { top: 9vh; }
+  .hero-row.bot { bottom: 4vh; }
+  .hero-row .outline { color: transparent; -webkit-text-stroke: 2px var(--white); }
+  .portal {
+    position: absolute; left: 50%; top: 50%;
+    width: min(34vw, 46vh); aspect-ratio: 3 / 4.6;
+    transform: translate(-50%, -50%);
+    border-radius: 999px 999px 32px 32px;
+    overflow: hidden;
+    background: var(--red-deep);
+    box-shadow: 0 40px 80px -30px rgba(0,0,0,0.6);
+    will-change: transform;
+  }
+  .portal img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+  .portal canvas { position: relative; width: 100%; height: 100%; }
+  .hero-note { position: absolute; left: 50%; bottom: 24px; transform: translateX(-50%); white-space: nowrap; }
+  @media (max-width: 899px) { .hero-note { display: none; } }
+  .hero-hint {
+    position: absolute; right: var(--gutter); bottom: 24px;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .hero-hint .line { width: 48px; height: 1px; background: var(--white); transform-origin: left; animation: hint 1.6s var(--ease) infinite; }
+  @keyframes hint { 0% { transform: scaleX(0); } 60% { transform: scaleX(1); } 100% { transform: scaleX(1); opacity: 0; } }
+  .is-paused .hero-hint .line { animation-play-state: paused; }
+
+  /* ---------- 2. Marquee ---------- */
+  .marquee { background: var(--black); padding: 8vh 0; overflow: hidden; }
+  .marquee-row { display: flex; white-space: nowrap; font-size: clamp(4rem, 13vw, 13rem); will-change: transform; }
+  .marquee-row span { padding-right: 0.25em; }
+  .marquee-row .o { color: transparent; -webkit-text-stroke: 2px var(--red); }
+  .marquee-row .r { color: var(--red); }
+
+  /* ---------- 3. The pour ---------- */
+  .pour { position: relative; height: 100vh; height: 100svh; overflow: hidden; background: var(--black); }
+  .pour svg, .pour canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
+  .pour-copy {
+    position: absolute; inset: 0;
+    display: flex; flex-direction: column; justify-content: center;
+    padding: 0 var(--gutter);
+    pointer-events: none;
+  }
+  .pour-copy h2 { font-size: clamp(4rem, min(16vw, 30vh), 17rem); }
+  .pour-copy p { margin-top: 32px; max-width: 30rem; font-size: clamp(1.125rem, 1.6vw, 1.375rem); font-variation-settings: "wdth" 100; }
+  .pour-copy.wet { color: var(--red); clip-path: inset(100% 0 0 0); }
+  .pour-copy.wet p { color: var(--white); }
+
+  /* ---------- 4. Timeline (horizontal on wide screens) ---------- */
+  .timeline { position: relative; background: var(--white); color: var(--black); overflow: hidden; }
+  .tl-head { position: absolute; top: 88px; left: var(--gutter); z-index: 2; }
+  .tl-track { display: flex; height: 100vh; height: 100svh; will-change: transform; }
+  .tl-panel {
+    flex: none;
+    width: 78vw;
+    height: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+    gap: 4vw;
+    padding: 120px 4vw 64px;
+    border-right: 1px solid color-mix(in srgb, var(--black) 25%, transparent);
+  }
+  .tl-panel:first-child { padding-left: var(--gutter); }
+  .tl-year { font-size: clamp(6rem, 17vw, 20rem); color: var(--red); }
+  .tl-text { margin-top: 24px; font-size: 1.125rem; max-width: 26rem; font-variation-settings: "wdth" 100; }
+  .tl-text strong { font-weight: 800; }
+  .tl-photo { position: relative; height: 62vh; border-radius: 20px; overflow: hidden; background: #ddd2c9; }
+  .tl-photo img { position: absolute; top: -10%; left: -15%; width: 130%; height: 120%; object-fit: cover; will-change: transform; }
+  .tl-photo figcaption { position: absolute; left: 12px; bottom: 12px; background: var(--black); color: var(--white); padding: 4px 8px; border-radius: 6px; }
+
+  /* ---------- 5. Film ---------- */
+  .film { position: relative; height: 100vh; height: 100svh; background: var(--red); overflow: hidden; display: grid; place-items: center; }
+  .film-bg { position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: center; align-items: center; color: var(--red-deep); font-size: clamp(6rem, 22vw, 24rem); text-align: center; }
+  .tv {
+    position: relative; z-index: 1;
+    width: min(52vw, 88vh); aspect-ratio: 4 / 3;
+    border-radius: 28px;
+    overflow: hidden;
+    background: var(--black);
+    border: 10px solid var(--black);
+    box-shadow: 0 50px 100px -30px rgba(0,0,0,0.55);
+    will-change: transform;
+  }
+  /* the 1953 film is 4:3 pillarboxed inside a 16:9 file: widen the frame past the bars (with a small safety margin for soft edges) */
+  .tv video { position: absolute; top: 0; left: -19%; width: 138%; height: 100%; object-fit: fill; }
+  .tv-ui {
+    position: absolute; left: 12px; right: 12px; bottom: 12px;
+    display: flex; gap: 8px; align-items: center;
+  }
+  .tv-ui button {
+    background: var(--black); color: var(--white);
+    border: 1px solid var(--dim);
+    border-radius: 999px; padding: 8px 14px;
+    font: 500 0.75rem/1 var(--mono); letter-spacing: 0.08em; text-transform: uppercase;
+  }
+  .tv-ui button:hover { border-color: var(--white); }
+  .tv-ui .tag { margin-left: auto; background: var(--black); color: var(--white); padding: 8px 10px; border-radius: 8px; }
+  .film-caption { position: absolute; z-index: 2; right: var(--gutter); bottom: 24px; max-width: 20rem; text-align: right; font-size: 0.9375rem; font-variation-settings: "wdth" 100; }
+  .film-caption .tag { display: block; margin-bottom: 8px; }
+
+  /* ---------- 6. Photo wall ---------- */
+  .wall { position: relative; background: var(--black); padding: 20vh 0; overflow: hidden; perspective: 1400px; }
+  .wall-rows { display: grid; gap: 2vw; transform-style: preserve-3d; will-change: transform; }
+  .wall-row { display: flex; gap: 2vw; will-change: transform; }
+  .wall-row img { flex: none; width: 30vw; height: 22vw; object-fit: cover; border-radius: 16px; filter: saturate(1.1) brightness(0.5); }
+  .wall-title {
+    position: absolute; inset: 0; z-index: 2;
+    display: grid; place-items: center; text-align: center;
+    font-size: clamp(4rem, 14vw, 15rem);
+    color: var(--white);
+    text-shadow: 0 10px 60px rgba(0,0,0,0.5);
+    pointer-events: none;
+  }
+
+  /* ---------- 7. End: pop the cap ---------- */
+  .end { position: relative; min-height: 100vh; min-height: 100svh; background: var(--red); overflow: hidden; display: grid; place-items: center; text-align: center; padding: 120px var(--gutter) 96px; }
+  .end canvas { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+  .end-inner { position: relative; z-index: 1; display: grid; justify-items: center; gap: 32px; }
+  .end h2 { font-size: clamp(4rem, min(18vw, 28vh), 19rem); }
+  .cap {
+    width: clamp(120px, 16vw, 200px); aspect-ratio: 1;
+    filter: drop-shadow(0 20px 30px rgba(0,0,0,0.35));
+    will-change: transform;
+  }
+  .cap svg { width: 100%; height: 100%; }
+  .cap-note { max-width: 24rem; font-size: 1rem; font-variation-settings: "wdth" 100; }
+  .btn {
+    display: inline-flex; align-items: center; gap: 12px;
+    height: 64px; padding: 0 32px;
+    border-radius: 999px;
+    background: var(--black); color: var(--white);
+    font-weight: 800; font-variation-settings: "wdth" 80; text-transform: uppercase; font-size: 1.125rem; letter-spacing: 0.02em;
+    will-change: transform;
+  }
+  .btn:hover { background: #000; }
+
+  footer { background: var(--black); padding: 48px var(--gutter) 96px; display: grid; grid-template-columns: 1fr 2fr; gap: 32px; font-size: 0.8125rem; color: var(--dim); font-variation-settings: "wdth" 100; }
+  footer a { text-decoration: underline; text-underline-offset: 3px; }
+  footer a:hover { color: var(--white); }
+  footer .wordmark { color: var(--white); }
+
+  /* ---------- Narrow screens ---------- */
+  @media (max-width: 899px) {
+    .nav-links a:not(.nav-cta) { display: none; }
+    .portal { width: 58vw; }
+    .hero-row.top { top: 14vh; }
+    .hero-row.bot { bottom: 12vh; }
+    .tl-track { flex-direction: column; height: auto; }
+    .tl-panel { width: 100%; height: auto; grid-template-columns: 1fr; padding: 64px var(--gutter); border-right: 0; border-bottom: 1px solid color-mix(in srgb, var(--black) 25%, transparent); }
+    .tl-panel:first-child { padding-top: 140px; }
+    .tl-photo { height: 56vw; }
+    .tv { width: 86vw; border-width: 6px; border-radius: 18px; }
+    .film-caption { left: var(--gutter); right: var(--gutter); bottom: 72px; max-width: none; text-align: left; }
+    .wall-row img { width: 60vw; height: 44vw; }
+    .meter { display: none; }
+    footer { grid-template-columns: 1fr; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation: none !important; transition-duration: 0ms !important; }
+    .pour-copy.wet { display: none; }
+  }
+</style>
+<noscript><style>.loader { display: none; } body.is-loading { overflow: auto; }</style></noscript>
+</head>
+<body class="is-loading">
+
+<div class="loader" id="loader" aria-hidden="true">
+  <span class="tag">Chilling the bottle</span>
+  <div class="loader-count mega"><span id="count">0</span><sup>%</sup></div>
+</div>
+
+<div class="cursor" id="cursor" aria-hidden="true"><span id="cursorLabel"></span></div>
+
+<header class="nav">
+  <a href="#top" class="wordmark">Coca-Cola</a>
+  <nav class="nav-links" aria-label="Main">
+    <a href="#story">Story</a>
+    <a href="#film">Film</a>
+    <a href="https://www.coca-cola.com" class="nav-cta">coca-cola.com ↗</a>
+  </nav>
+</header>
+
+<button class="motion-toggle" id="motionToggle" type="button" aria-pressed="false">
+  <span class="bars" aria-hidden="true"><i></i><i></i></span><span id="motionLabel">Pause motion</span>
+</button>
+
+<div class="meter" aria-hidden="true"><i id="meter"></i></div>
+
+<main id="top" tabindex="-1">
+  <!-- 1. Hero -->
+  <section class="hero" id="hero" aria-label="Ice cold since 1886">
+    <canvas class="fizz" id="fizz" aria-hidden="true"></canvas>
+    <h1 class="sr-only">Coca-Cola. Ice cold since 1886.</h1>
+    <div class="hero-row top mega" aria-hidden="true">Ice <span class="outline">cold</span></div>
+    <div class="hero-row bot mega" aria-hidden="true"><span class="outline">Since</span> 1886</div>
+    <div class="portal" id="portal" data-cursor="TURN">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/73/Rotation_einer_Coca-Cola-Flasche_mit_weihnachtlicher_Botschaft_20250129_C1114FIX.webm/960px--Rotation_einer_Coca-Cola-Flasche_mit_weihnachtlicher_Botschaft_20250129_C1114FIX.webm.jpg" alt="" fetchpriority="high">
+      <canvas id="bottle" role="img" aria-label="A Coca-Cola glass bottle that turns as you scroll"></canvas>
+    </div>
+    <p class="hero-note tag">Filmed bottle: a German holiday edition (“Frohe Weihnachten”)</p>
+    <div class="hero-hint tag" aria-hidden="true"><span class="line"></span>Scroll to turn the bottle</div>
+  </section>
+
+  <!-- 2. Marquee -->
+  <section class="marquee" aria-label="Open, pour, fizz, sip">
+    <div class="marquee-row mega" data-dir="-1" aria-hidden="true"></div>
+    <div class="marquee-row mega" data-dir="1" aria-hidden="true"></div>
+  </section>
+
+  <!-- 3. The pour -->
+  <section class="pour" id="pour" aria-label="Secret since 1886">
+    <svg viewBox="0 0 1000 1000" preserveAspectRatio="none" aria-hidden="true">
+      <defs>
+        <linearGradient id="cola" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" style="stop-color: var(--cola)"/>
+          <stop offset="1" style="stop-color: var(--cola-deep)"/>
+        </linearGradient>
+      </defs>
+      <path id="liquid" fill="url(#cola)" d="M0 1000 L1000 1000 L1000 1000 L0 1000 Z"/>
+      <path id="foam" fill="none" style="stroke: var(--white)" stroke-opacity="0.5" stroke-width="3" vector-effect="non-scaling-stroke" d=""/>
+    </svg>
+    <canvas id="pourFizz" aria-hidden="true"></canvas>
+    <div class="pour-copy">
+      <h2 class="mega">Secret<br>since 1886.</h2>
+      <p>The formula sits in a vault in Atlanta. The fizz is all yours.</p>
+    </div>
+    <div class="pour-copy wet" id="wet" aria-hidden="true">
+      <h2 class="mega">Secret<br>since 1886.</h2>
+      <p>The formula sits in a vault in Atlanta. The fizz is all yours.</p>
+    </div>
+  </section>
+
+  <!-- 4. Timeline -->
+  <section class="timeline" id="story" tabindex="-1" aria-label="A short history">
+    <span class="tl-head tag">A short history · scroll →</span>
+    <div class="tl-track" id="track">
+      <article class="tl-panel">
+        <div>
+          <div class="tl-year mega">1886</div>
+          <p class="tl-text"><strong>Atlanta.</strong> Pharmacist John Stith Pemberton mixes the syrup. It’s first sold at Jacobs’ Pharmacy, five cents a glass.</p>
+        </div>
+        <figure class="tl-photo"><img src="https://live.staticflickr.com/4147/4975298471_9344ec0cf6_b.jpg" alt="A wooden Coca-Cola crate filled with empty vintage glass bottles" loading="lazy"><figcaption class="tag">Vintage crate</figcaption></figure>
+      </article>
+      <article class="tl-panel">
+        <div>
+          <div class="tl-year mega">1915</div>
+          <p class="tl-text"><strong>The contour bottle.</strong> The Root Glass Company of Terre Haute, Indiana designs a bottle you could recognise by touch in the dark.</p>
+        </div>
+        <figure class="tl-photo"><img src="https://live.staticflickr.com/3780/9130954330_d2378fc0c7_b.jpg" alt="Close-up of green contour glass bottles embossed with Coke" loading="lazy"><figcaption class="tag">Contour glass</figcaption></figure>
+      </article>
+      <article class="tl-panel">
+        <div>
+          <div class="tl-year mega">1954</div>
+          <p class="tl-text"><strong>Everywhere.</strong> A print ad boasts that “in over 80 countries the Coca-Cola bottle is familiar.”</p>
+        </div>
+        <figure class="tl-photo"><img src="https://live.staticflickr.com/65535/48979059301_ff72273b46_b.jpg" alt="A black and white 1954 Coca-Cola print advertisement showing a bottle over a globe" loading="lazy"><figcaption class="tag">1954 print ad</figcaption></figure>
+      </article>
+      <article class="tl-panel">
+        <div>
+          <div class="tl-year mega">1985</div>
+          <p class="tl-text"><strong>New Coke.</strong> The formula changes on April 23. Fans revolt, and the original is back 79 days later as Coca-Cola Classic.</p>
+        </div>
+        <figure class="tl-photo"><img src="https://live.staticflickr.com/2467/3692552520_1c7eb61f06_b.jpg" alt="A wall stacked with red Coca-Cola cans" loading="lazy"><figcaption class="tag">A wall of cans</figcaption></figure>
+      </article>
+      <article class="tl-panel">
+        <div>
+          <div class="tl-year mega">Today</div>
+          <p class="tl-text"><strong>200+ countries and territories.</strong> Same red, same contour, same cold click of the cap.</p>
+        </div>
+        <figure class="tl-photo"><img src="https://live.staticflickr.com/7441/26205237584_d353424723_b.jpg" alt="Red Coca-Cola bottle crates stacked on a Hong Kong street" loading="lazy"><figcaption class="tag">Hong Kong</figcaption></figure>
+      </article>
+    </div>
+  </section>
+
+  <!-- 5. Film -->
+  <section class="film" id="film" tabindex="-1" aria-label="1953 film">
+    <div class="film-bg mega" aria-hidden="true"><span>Now</span><span>showing</span></div>
+    <p class="film-caption"><span class="tag">1953 · Walter Lantz for Coca-Cola</span>“The Lion and the Mouse”, a cartoon ad from the golden age of television. Public domain.</p>
+    <div class="tv" id="tv">
+      <video id="cartoon" muted loop playsinline preload="metadata"
+        poster=""
+        aria-label="1953 Coca-Cola cartoon advertisement, The Lion and the Mouse">
+        <source src="https://upload.wikimedia.org/wikipedia/commons/transcoded/f/f5/1953_CC-1_%22The_Lion_And_The_Mouse%22_%28Walter_Lantz%29_Coca-Cola_advertising_cartoon_-_1m_58m.webm/1953_CC-1_%22The_Lion_And_The_Mouse%22_%28Walter_Lantz%29_Coca-Cola_advertising_cartoon_-_1m_58m.webm.480p.vp9.webm" type="video/webm">
+        <source src="https://upload.wikimedia.org/wikipedia/commons/transcoded/f/f5/1953_CC-1_%22The_Lion_And_The_Mouse%22_%28Walter_Lantz%29_Coca-Cola_advertising_cartoon_-_1m_58m.webm/1953_CC-1_%22The_Lion_And_The_Mouse%22_%28Walter_Lantz%29_Coca-Cola_advertising_cartoon_-_1m_58m.webm.360p.mpeg4.mov" type="video/mp4">
+      </video>
+      <div class="tv-ui">
+        <button type="button" id="tvPlay" aria-pressed="false">Play</button>
+        <button type="button" id="tvSound" aria-pressed="false">Sound on</button>
+        <span class="tag">1m 58s</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- 6. Photo wall -->
+  <section class="wall" id="wall" aria-label="Seen on every corner">
+    <div class="wall-rows" id="wallRows">
+      <div class="wall-row" data-speed="-12">
+        <img src="https://live.staticflickr.com/2651/3829660613_f705a55168_b.jpg" alt="A red Drink Coca-Cola sign" loading="lazy">
+        <img src="https://live.staticflickr.com/5710/22430593195_b2a3dfd7dc_b.jpg" alt="A fridge shelf lined with Coca-Cola bottles" loading="lazy">
+        <img src="https://live.staticflickr.com/3846/15146892481_e6b9846384_b.jpg" alt="A Miami corner grocery with Coca-Cola signs above the door" loading="lazy">
+        <img src="https://live.staticflickr.com/3674/14295226384_186ee92361_b.jpg" alt="A Coca-Cola bottle on a wall under a blue sky" loading="lazy">
+      </div>
+      <div class="wall-row" data-speed="10">
+        <img src="https://live.staticflickr.com/3039/5710412913_8f7b416714_b.jpg" alt="The pull tab of an opened can, in black and white" loading="lazy">
+        <img src="https://live.staticflickr.com/562/18616915923_22a9ee590a_b.jpg" alt="An antique green Coca-Cola bottle at sunset" loading="lazy">
+        <img src="https://live.staticflickr.com/7361/10285719715_f1e6368f31_b.jpg" alt="A red Coca-Cola bottle cap on stone in front of the Royal Liver Building" loading="lazy">
+        <img src="https://live.staticflickr.com/4147/4975298471_9344ec0cf6_b.jpg" alt="A vintage Coca-Cola crate of glass bottles" loading="lazy">
+      </div>
+    </div>
+    <div class="wall-title mega" aria-hidden="true">On every<br>corner</div>
+  </section>
+
+  <!-- 7. End -->
+  <section class="end" id="end" aria-label="Pop one open">
+    <canvas id="burst" aria-hidden="true"></canvas>
+    <div class="end-inner">
+      <button class="cap" id="cap" type="button" aria-label="Pop the bottle cap" data-cursor="POP">
+        <svg viewBox="-110 -110 220 220" aria-hidden="true">
+          <polygon id="crimps" style="fill: var(--red-deep)"/>
+          <circle r="84" style="fill: var(--red)"/>
+          <circle r="84" fill="none" style="stroke: var(--white)" stroke-opacity="0.35" stroke-width="2"/>
+          <circle r="64" fill="none" style="stroke: var(--white)" stroke-width="3"/>
+          <text y="12" text-anchor="middle" style="fill: var(--white)" font-family="Archivo, sans-serif" font-weight="900" font-style="italic" font-size="34">Coke</text>
+        </svg>
+      </button>
+      <h2 class="mega">Pop one<br>open.</h2>
+      <p class="cap-note" id="capNote" aria-live="polite">A classic crown cap has 21 crimps. Count them, or just press the cap.</p>
+      <a class="btn" id="cta" href="https://www.coca-cola.com" data-cursor="GO">Find an ice-cold one ↗</a>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <span class="wordmark">Coca-Cola</span>
+  <div>
+    <p>Unofficial design concept. Not affiliated with or endorsed by The Coca-Cola Company. Links go to coca-cola.com.</p>
+    <p style="margin-top:12px">Video: “Rotation einer Coca-Cola-Flasche” by PantheraLeo1359531, <a href="https://commons.wikimedia.org/wiki/File:Rotation_einer_Coca-Cola-Flasche_mit_weihnachtlicher_Botschaft_20250129_C1114FIX.webm">Wikimedia Commons</a>, <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>. “The Lion and the Mouse” (1953), Walter Lantz for Coca-Cola, <a href="https://commons.wikimedia.org/wiki/File:1953_CC-1_%22The_Lion_And_The_Mouse%22_(Walter_Lantz)_Coca-Cola_advertising_cartoon_-_1m_58m.webm">public domain</a> (no captions available).</p>
+    <p style="margin-top:12px">Photos, all via Flickr under <a href="https://creativecommons.org/licenses/by/2.0/">CC BY 2.0</a> unless noted: vintage crate, cielodlp · contour glass, nick.amoscato · wall of cans, Hsiung · Drink Coca-Cola sign, Steve Snodgrass · fridge, Julien.Belli · Miami grocery, Phillip Pessar · bottle under blue sky, Dustin Iskandar · pull tab, Brett Levin · green bottle at sunset, NancyFry · cap by the Liver Building, Bev Goodwin · Hong Kong crates, dcmaster (<a href="https://creativecommons.org/licenses/by-sa/2.0/">CC BY-SA 2.0</a>) · 1954 ad, Matthew Paul Argall (public domain).</p>
+  </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/lenis@1.1.13/dist/lenis.min.js"></script>
+<script>
+(() => {
+  const BOTTLE_SRC = 'https://upload.wikimedia.org/wikipedia/commons/transcoded/7/73/Rotation_einer_Coca-Cola-Flasche_mit_weihnachtlicher_Botschaft_20250129_C1114FIX.webm/Rotation_einer_Coca-Cola-Flasche_mit_weihnachtlicher_Botschaft_20250129_C1114FIX.webm.1080p.vp9.webm';
+  const FRAME_COUNT = 72;
+
+  const css = getComputedStyle(document.documentElement);
+  const token = (n) => css.getPropertyValue(n).trim();
+  const alpha = (n, a) => `color-mix(in srgb, ${token(n)} ${Math.round(a * 100)}%, transparent)`;
+  const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const finePointer = matchMedia('(hover: hover) and (pointer: fine)').matches;
+  const hasGsap = typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined';
+  if (hasGsap) gsap.registerPlugin(ScrollTrigger);
+
+  // ---------- Global motion switch (WCAG 2.2.2) ----------
+  let paused = reduced;
+  const toggle = document.getElementById('motionToggle');
+  const toggleLabel = document.getElementById('motionLabel');
+  const pauseListeners = [];
+  const setPaused = (p) => {
+    paused = p;
+    document.documentElement.classList.toggle('is-paused', p);
+    toggle.setAttribute('aria-pressed', String(p));
+    toggleLabel.textContent = p ? 'Play motion' : 'Pause motion';
+    pauseListeners.forEach(fn => fn(p));
+  };
+  toggle.addEventListener('click', () => setPaused(!paused));
+
+  // ---------- Smooth scroll ----------
+  let lenis = null, velocity = 0;
+  if (!reduced && typeof Lenis !== 'undefined') {
+    lenis = new Lenis({ lerp: 0.09 });
+    lenis.on('scroll', (e) => { velocity = e.velocity || 0; if (hasGsap) ScrollTrigger.update(); });
+    if (hasGsap) { gsap.ticker.add(t => lenis.raf(t * 1000)); gsap.ticker.lagSmoothing(0); }
+    else { const loop = (t) => { lenis.raf(t); requestAnimationFrame(loop); }; requestAnimationFrame(loop); }
+    lenis.stop();
+    // Anchor links go through Lenis so pinned sections land correctly.
+    document.querySelectorAll('a[href^="#"]').forEach(a => a.addEventListener('click', (e) => {
+      const target = document.querySelector(a.getAttribute('href'));
+      if (!target) return;
+      e.preventDefault();
+      lenis.scrollTo(target.id === 'top' ? 0 : target);
+      target.focus({ preventScroll: true });
+    }));
+  } else {
+    addEventListener('scroll', () => { velocity = 0; }, { passive: true });
+  }
+
+  // ---------- Bottle: scroll scrubs a real rotation video ----------
+  const bottleCanvas = document.getElementById('bottle');
+  const bctx = bottleCanvas.getContext('2d');
+  const video = document.createElement('video');
+  video.crossOrigin = 'anonymous';
+  video.muted = true; video.playsInline = true; video.preload = 'auto';
+  video.src = BOTTLE_SRC;
+  const frames = new Array(FRAME_COUNT).fill(null);
+  let framesReady = 0, bottleProgress = 0, videoOk = false;
+
+  const sizeCanvas = (c) => {
+    const r = c.getBoundingClientRect(), dpr = Math.min(devicePixelRatio || 1, 2);
+    c.width = Math.max(1, Math.round(r.width * dpr)); c.height = Math.max(1, Math.round(r.height * dpr));
+  };
+  const drawCover = (ctx, src, sw, sh) => {
+    const cw = ctx.canvas.width, ch = ctx.canvas.height;
+    const s = Math.max(cw / sw, ch / sh), w = sw * s, h = sh * s;
+    ctx.drawImage(src, (cw - w) / 2, (ch - h) / 2, w, h);
+  };
+  const drawBottle = () => {
+    const idx = Math.round(bottleProgress * (FRAME_COUNT - 1));
+    // Use the closest frame already extracted, so scrubbing works while frames still load.
+    let f = frames[idx];
+    if (!f) for (let d = 1; d < FRAME_COUNT && !f; d++) f = frames[idx - d] || frames[idx + d];
+    if (f) drawCover(bctx, f, f.width, f.height);
+    else if (videoOk && video.readyState >= 2) drawCover(bctx, video, video.videoWidth, video.videoHeight);
+  };
+  const once = (el, ev) => new Promise((res, rej) => {
+    const ok = () => { el.removeEventListener('error', bad); res(); };
+    const bad = () => { el.removeEventListener(ev, ok); rej(new Error(ev + ' failed')); };
+    el.addEventListener(ev, ok, { once: true }); el.addEventListener('error', bad, { once: true });
+  });
+  const extractFrames = async () => {
+    await once(video, 'loadeddata');
+    videoOk = true;
+    const dur = video.duration;
+    const targetW = Math.min(900, video.videoWidth);
+    // Fill every 8th frame first so the whole turn is scrubbable early, then fill the gaps.
+    const order = [];
+    for (let step of [8, 4, 2, 1]) for (let i = 0; i < FRAME_COUNT; i += step) if (!order.includes(i)) order.push(i);
+    for (const i of order) {
+      video.currentTime = Math.min(dur - 0.05, (dur * i) / (FRAME_COUNT - 1));
+      await once(video, 'seeked');
+      try { frames[i] = await createImageBitmap(video, { resizeWidth: targetW, resizeHeight: Math.round(targetW * video.videoHeight / video.videoWidth) }); }
+      catch { frames[i] = await createImageBitmap(video); }
+      framesReady++;
+      if (framesReady === 1) drawBottle();
+    }
+  };
+  const extraction = extractFrames().catch(() => { videoOk = false; });
+
+  // ---------- Loader: counts real loading work ----------
+  const countEl = document.getElementById('count');
+  const loaderEl = document.getElementById('loader');
+  let shown = 0, loaderDone = false;
+  const target = () => {
+    const fonts = document.fonts && document.fonts.status === 'loaded' ? 20 : 0;
+    const first = framesReady > 0 ? 30 : 0;
+    const early = Math.min(framesReady, 9) / 9 * 50; // the first pass of 9 frames spans nearly the whole turn
+    return Math.round(fonts + first + early);
+  };
+  const started = performance.now();
+  const finishLoader = () => {
+    if (loaderDone) return; loaderDone = true;
+    // Show the real figure: on the 6s timeout this can be under 100, and the poster covers the gap.
+    countEl.textContent = String(Math.min(100, target()));
+    document.body.classList.remove('is-loading');
+    lenis && lenis.start();
+    if (hasGsap && !reduced) {
+      gsap.to(loaderEl, { clipPath: 'inset(0 0 100% 0)', duration: 0.9, ease: 'expo.inOut', onComplete: () => loaderEl.remove() });
+      gsap.from('.hero-row.top', { yPercent: 110, duration: 1.1, ease: 'expo.out', delay: 0.35 });
+      gsap.from('.hero-row.bot', { yPercent: -110, duration: 1.1, ease: 'expo.out', delay: 0.42 });
+      gsap.from('#portal', { scale: 0.6, opacity: 0, rotate: -12, duration: 1.2, ease: 'expo.out', delay: 0.3 });
+    } else loaderEl.remove();
+    if (hasGsap) ScrollTrigger.refresh();
+  };
+  const tickLoader = () => {
+    if (loaderDone) return;
+    const t = target();
+    shown += (t - shown) * 0.12;
+    countEl.textContent = String(Math.min(99, Math.round(shown)));
+    // Never hold the page hostage: 6s cap, or finish if the video failed.
+    if (t >= 100 || performance.now() - started > 6000 || (!videoOk && framesReady === 0 && performance.now() - started > 2500 && video.error)) finishLoader();
+    else requestAnimationFrame(tickLoader);
+  };
+  requestAnimationFrame(tickLoader);
+
+  // ---------- Fizz particles (hero) ----------
+  const makeFizz = (canvas, opts) => {
+    const ctx = canvas.getContext('2d');
+    let bubbles = [], visible = false, raf = 0;
+    const spawn = (anywhere) => {
+      const w = canvas.width, h = canvas.height;
+      return { x: Math.random() * w, y: anywhere ? Math.random() * h : h + 10, r: (1 + Math.random() * opts.maxR) * (devicePixelRatio || 1), v: 0.4 + Math.random() * 1.6, p: Math.random() * 6.28 };
+    };
+    const resize = () => { sizeCanvas(canvas); bubbles = Array.from({ length: opts.count }, () => spawn(true)); };
+    const frame = () => {
+      const w = canvas.width, h = canvas.height, ceiling = opts.ceiling ? opts.ceiling() * h : 0;
+      ctx.clearRect(0, 0, w, h);
+      const boost = 1 + Math.min(Math.abs(velocity), 60) * 0.08;
+      ctx.lineWidth = 1.2 * (devicePixelRatio || 1);
+      for (const b of bubbles) {
+        b.y -= b.v * boost * (devicePixelRatio || 1);
+        b.p += 0.04;
+        const x = b.x + Math.sin(b.p) * 3;
+        if (b.y < ceiling - b.r) Object.assign(b, spawn(false));
+        if (b.y > h + 20) continue;
+        ctx.strokeStyle = opts.stroke; ctx.beginPath(); ctx.arc(x, b.y, b.r, 0, 6.283); ctx.stroke();
+        ctx.fillStyle = opts.shine; ctx.beginPath(); ctx.arc(x - b.r * 0.35, b.y - b.r * 0.35, b.r * 0.25, 0, 6.283); ctx.fill();
+      }
+      raf = requestAnimationFrame(frame);
+    };
+    const run = () => { cancelAnimationFrame(raf); if (visible && !paused) raf = requestAnimationFrame(frame); };
+    new IntersectionObserver(([e]) => { visible = e.isIntersecting; run(); }).observe(canvas);
+    pauseListeners.push(run);
+    addEventListener('resize', resize);
+    resize();
+    return { resize };
+  };
+  makeFizz(document.getElementById('fizz'), { count: 70, maxR: 7, stroke: alpha('--white', 0.55), shine: alpha('--white', 0.8) });
+
+  // ---------- Marquee rows ----------
+  const words = ['Open', 'Pour', 'Fizz', 'Sip', 'Repeat'];
+  document.querySelectorAll('.marquee-row').forEach((row, r) => {
+    const html = words.map((w, i) => `<span class="${(i + r) % 2 ? 'o' : 'r'}">${w}</span>`).join('');
+    row.innerHTML = html + html + html;
+  });
+
+  // ---------- Pour: liquid level follows scroll ----------
+  const liquid = document.getElementById('liquid');
+  const foam = document.getElementById('foam');
+  const wet = document.getElementById('wet');
+  let level = 1; // 1 = empty, 0 = full (fraction of height)
+  let wobbleT = 0, pourVisible = false, pourRaf = 0;
+  const drawLiquid = () => {
+    const y0 = level * 1060 - 30;
+    let d = `M0 1000 L0 ${y0}`, f = `M0 ${y0}`;
+    for (let x = 0; x <= 1000; x += 25) {
+      const y = y0 + Math.sin(x / 90 + wobbleT) * 12 + Math.sin(x / 37 - wobbleT * 1.7) * 5;
+      d += ` L${x} ${y.toFixed(1)}`; f += ` L${x} ${(y - 6).toFixed(1)}`;
+    }
+    liquid.setAttribute('d', d + ' L1000 1000 Z');
+    foam.setAttribute('d', f);
+    wet.style.clipPath = `inset(${Math.max(0, Math.min(100, y0 / 10)).toFixed(2)}% 0 0 0)`;
+  };
+  const pourLoop = () => { wobbleT += 0.035; drawLiquid(); pourRaf = requestAnimationFrame(pourLoop); };
+  const runPour = () => { cancelAnimationFrame(pourRaf); if (pourVisible && !paused) pourRaf = requestAnimationFrame(pourLoop); else drawLiquid(); };
+  new IntersectionObserver(([e]) => { pourVisible = e.isIntersecting; runPour(); }).observe(document.getElementById('pour'));
+  pauseListeners.push(runPour);
+  makeFizz(document.getElementById('pourFizz'), { count: 90, maxR: 4, stroke: alpha('--white', 0.4), shine: alpha('--white', 0.65), ceiling: () => level * 1.06 - 0.03 });
+
+  // ---------- Film controls ----------
+  const cartoon = document.getElementById('cartoon');
+  const tvPlay = document.getElementById('tvPlay');
+  const tvSound = document.getElementById('tvSound');
+  let filmVisible = false, userStopped = false;
+  const syncTv = () => {
+    const playing = !cartoon.paused;
+    tvPlay.textContent = playing ? 'Pause' : 'Play';
+    tvPlay.setAttribute('aria-pressed', String(playing));
+    tvSound.textContent = cartoon.muted ? 'Sound on' : 'Sound off';
+    tvSound.setAttribute('aria-pressed', String(!cartoon.muted));
+  };
+  const autoFilm = () => {
+    if (filmVisible && !paused && !userStopped) cartoon.play().catch(() => {}).finally(syncTv);
+    else if (!cartoon.paused && (!filmVisible || paused)) { cartoon.pause(); }
+  };
+  cartoon.addEventListener('loadedmetadata', () => { if (cartoon.currentTime < 4) cartoon.currentTime = 4; }, { once: true });
+  cartoon.addEventListener('play', syncTv); cartoon.addEventListener('pause', syncTv); cartoon.addEventListener('volumechange', syncTv);
+  tvPlay.addEventListener('click', () => {
+    if (cartoon.paused) { userStopped = false; cartoon.play().catch(() => {}); }
+    else { userStopped = true; cartoon.pause(); }
+  });
+  tvSound.addEventListener('click', () => { cartoon.muted = !cartoon.muted; if (!cartoon.muted && cartoon.paused) { userStopped = false; cartoon.play().catch(() => {}); } });
+  new IntersectionObserver(([e]) => { filmVisible = e.isIntersecting; autoFilm(); }, { threshold: 0.35 }).observe(document.getElementById('tv'));
+  pauseListeners.push(autoFilm);
+
+  // ---------- Bottle cap: 21 crimps, press to pop ----------
+  const crimps = [];
+  for (let i = 0; i < 42; i++) {
+    const a = (i / 42) * Math.PI * 2, r = i % 2 ? 92 : 104;
+    crimps.push(`${(Math.cos(a) * r).toFixed(2)},${(Math.sin(a) * r).toFixed(2)}`);
+  }
+  document.getElementById('crimps').setAttribute('points', crimps.join(' '));
+
+  const burstCanvas = document.getElementById('burst');
+  const burstCtx = burstCanvas.getContext('2d');
+  let particles = [], burstRaf = 0;
+  const burstFrame = () => {
+    const ctx = burstCtx; ctx.clearRect(0, 0, burstCanvas.width, burstCanvas.height);
+    const dpr = burstCanvas.width / burstCanvas.getBoundingClientRect().width;
+    particles = particles.filter(p => p.life > 0);
+    for (const p of particles) {
+      p.vy -= 0.04; p.x += p.vx; p.y += p.vy; p.vx *= 0.985; p.life -= 0.012;
+      ctx.globalAlpha = Math.max(0, p.life);
+      ctx.strokeStyle = token('--white'); ctx.lineWidth = 1.5 * dpr;
+      ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, 6.283); ctx.stroke();
+    }
+    ctx.globalAlpha = 1;
+    burstRaf = particles.length ? requestAnimationFrame(burstFrame) : 0;
+  };
+  const cap = document.getElementById('cap');
+  const capNote = document.getElementById('capNote');
+  let popping = false;
+  cap.addEventListener('click', () => {
+    if (popping) return;
+    sizeCanvas(burstCanvas);
+    const cr = cap.getBoundingClientRect(), br = burstCanvas.getBoundingClientRect(), dpr = burstCanvas.width / br.width;
+    const cx = (cr.left + cr.width / 2 - br.left) * dpr, cy = (cr.top + cr.height / 2 - br.top) * dpr;
+    const n = reduced ? 0 : 120;
+    for (let i = 0; i < n; i++) {
+      const a = Math.random() * Math.PI * 2, s = (2 + Math.random() * 9) * dpr;
+      particles.push({ x: cx, y: cy, vx: Math.cos(a) * s, vy: Math.sin(a) * s - 4 * dpr, r: (2 + Math.random() * 8) * dpr, life: 1 });
+    }
+    if (n && !burstRaf) burstRaf = requestAnimationFrame(burstFrame);
+    capNote.textContent = 'Pop. That’s the sound of an ice-cold one. Press again for another.';
+    if (hasGsap && !reduced) {
+      popping = true;
+      gsap.timeline({ onComplete: () => { popping = false; } })
+        .to(cap, { y: -innerHeight * 0.55, rotate: 540 + Math.random() * 360, duration: 0.7, ease: 'power3.out' })
+        .to(cap, { y: 0, rotate: 1080, duration: 0.9, ease: 'bounce.out' });
+    }
+  });
+
+  // ---------- Custom cursor ----------
+  if (finePointer && !reduced) {
+    const cur = document.getElementById('cursor'), label = document.getElementById('cursorLabel');
+    let mx = -100, my = -100, cx = -100, cy = -100;
+    addEventListener('pointermove', (e) => { mx = e.clientX; my = e.clientY; cur.style.opacity = 1; }, { passive: true });
+    document.documentElement.addEventListener('mouseleave', () => { cur.style.opacity = 0; });
+    const follow = () => {
+      // Paused motion snaps the cursor to the pointer instead of easing after it.
+      const k = paused ? 1 : 0.2;
+      cx += (mx - cx) * k; cy += (my - cy) * k;
+      cur.style.transform = `translate(${cx}px, ${cy}px)`;
+      requestAnimationFrame(follow);
+    };
+    requestAnimationFrame(follow);
+    document.querySelectorAll('[data-cursor], a, button').forEach(el => {
+      el.addEventListener('pointerenter', () => { label.textContent = el.dataset.cursor || ''; cur.classList.toggle('is-big', !!el.dataset.cursor); if (!el.dataset.cursor) { cur.style.width = cur.style.height = '40px'; cur.style.margin = '-20px 0 0 -20px'; } });
+      el.addEventListener('pointerleave', () => { cur.classList.remove('is-big'); cur.style.width = cur.style.height = cur.style.margin = ''; });
+    });
+
+    // Magnetic CTA
+    const cta = document.getElementById('cta');
+    cta.addEventListener('pointermove', (e) => {
+      const r = cta.getBoundingClientRect();
+      const dx = e.clientX - (r.left + r.width / 2), dy = e.clientY - (r.top + r.height / 2);
+      cta.style.transform = `translate(${dx * 0.25}px, ${dy * 0.35}px)`;
+    });
+    cta.addEventListener('pointerleave', () => { cta.style.transform = ''; });
+
+    // Wall tilts toward the pointer
+    const wall = document.getElementById('wall'), rows = document.getElementById('wallRows');
+    wall.addEventListener('pointermove', (e) => {
+      const r = wall.getBoundingClientRect();
+      const px = (e.clientX - r.left) / r.width - 0.5, py = (e.clientY - r.top) / r.height - 0.5;
+      rows.style.transform = `rotateY(${px * 10}deg) rotateX(${-py * 8}deg)`;
+    });
+    wall.addEventListener('pointerleave', () => { rows.style.transform = ''; });
+  }
+
+  // ---------- Scroll choreography ----------
+  const meter = document.getElementById('meter');
+  const nav = document.querySelector('.nav'), story = document.getElementById('story');
+  const setMeter = () => {
+    const sr = story.getBoundingClientRect();
+    nav.classList.toggle('on-light', sr.top <= 40 && sr.bottom >= 40);
+    const max = document.documentElement.scrollHeight - innerHeight;
+    meter.style.transform = `scaleY(${max > 0 ? (scrollY / max).toFixed(4) : 0})`;
+  };
+  addEventListener('scroll', setMeter, { passive: true });
+
+  addEventListener('resize', () => { sizeCanvas(bottleCanvas); drawBottle(); });
+  sizeCanvas(bottleCanvas);
+  if (reduced) setPaused(true);
+  setMeter();
+
+  if (!hasGsap) { level = 0; drawLiquid(); return; }
+
+  const mm = gsap.matchMedia();
+  mm.add({ motion: '(prefers-reduced-motion: no-preference)', wide: '(min-width: 900px)' }, (ctx) => {
+    const { motion, wide } = ctx.conditions;
+    if (!motion) {
+      // Reduced motion: static, complete states, no pinning.
+      bottleProgress = 0.15; extraction.then(drawBottle); drawBottle();
+      level = 0.02; drawLiquid();
+      return;
+    }
+
+    // 1. Hero — pin, turn the bottle, split the type, flush red to black
+    gsap.timeline({
+      scrollTrigger: {
+        trigger: '#hero', start: 'top top', end: '+=240%', pin: true, scrub: 0.5,
+        onUpdate: (self) => { bottleProgress = self.progress; drawBottle(); }
+      }
+    })
+      .to('.hero-row.top', { xPercent: -40, ease: 'none' }, 0)
+      .to('.hero-row.bot', { xPercent: 40, ease: 'none' }, 0)
+      .to('#portal', { scale: wide ? 1.35 : 1.15, rotate: -6, ease: 'none' }, 0)
+      .to('#portal', { rotate: 4, ease: 'none' }, 0.5)
+      .to('#hero', { backgroundColor: token('--black'), ease: 'none', duration: 0.25 }, 0.75)
+      .to('#portal', { yPercent: -8, opacity: 0.0, scale: 0.9, duration: 0.2, ease: 'power2.in' }, 0.8);
+
+    // 2. Marquee — endless drift, pushed and skewed by scroll velocity
+    // Measure after the web font lands so the loop width is right.
+    (document.fonts ? document.fonts.ready : Promise.resolve()).then(() => { document.querySelectorAll('.marquee-row').forEach(row => {
+      const dir = Number(row.dataset.dir);
+      const w = row.scrollWidth / 3;
+      const loop = gsap.fromTo(row, { x: dir < 0 ? 0 : -w }, { x: dir < 0 ? -w : 0, duration: 22, ease: 'none', repeat: -1 });
+      pauseListeners.push(p => p ? loop.pause() : (loop.timeScale(1), loop.resume()));
+      if (paused) loop.pause();
+      const skew = gsap.quickTo(row, 'skewX', { duration: 0.4, ease: 'power3' });
+      ScrollTrigger.create({
+        trigger: row, start: 'top bottom', end: 'bottom top',
+        onUpdate: (self) => {
+          const v = self.getVelocity();
+          loop.timeScale(paused ? 0 : 1 + Math.min(Math.abs(v) / 400, 6));
+          skew(gsap.utils.clamp(-14, 14, v / -120));
+          gsap.delayedCall(0.15, () => { if (!paused) loop.timeScale(1); skew(0); });
+        }
+      });
+    });
+    ScrollTrigger.refresh(); });
+
+    // 3. Pour — pin while the screen fills with cola
+    ScrollTrigger.create({
+      trigger: '#pour', start: 'top top', end: '+=180%', pin: true, scrub: true,
+      onUpdate: (self) => { level = 1 - gsap.utils.clamp(0, 1, self.progress * 1.15); if (paused || !pourVisible) drawLiquid(); }
+    });
+
+    // 4. Timeline — horizontal travel with parallax photos
+    if (wide) {
+      const track = document.getElementById('track');
+      const travel = () => track.scrollWidth - innerWidth;
+      const hz = gsap.to(track, {
+        x: () => -travel(), ease: 'none',
+        scrollTrigger: { trigger: '#story', start: 'top top', end: () => '+=' + travel(), pin: true, scrub: 0.6, invalidateOnRefresh: true }
+      });
+      gsap.utils.toArray('.tl-photo img').forEach(img => {
+        gsap.fromTo(img, { xPercent: 8 }, { xPercent: -8, ease: 'none', scrollTrigger: { trigger: img.parentElement, containerAnimation: hz, start: 'left right', end: 'right left', scrub: true } });
+      });
+      gsap.utils.toArray('.tl-year').forEach(y => {
+        gsap.from(y, { yPercent: 60, opacity: 0, ease: 'expo.out', scrollTrigger: { trigger: y, containerAnimation: hz, start: 'left 85%', end: 'left 45%', scrub: true } });
+      });
+    } else {
+      gsap.utils.toArray('.tl-year').forEach(y => gsap.from(y, { yPercent: 40, opacity: 0, duration: 0.8, ease: 'expo.out', scrollTrigger: { trigger: y, start: 'top 85%' } }));
+    }
+
+    // 5. Film — the TV swings in and straightens as you scroll
+    gsap.timeline({ scrollTrigger: { trigger: '#film', start: 'top top', end: '+=120%', pin: true, scrub: 0.6 } })
+      .fromTo('#tv', { rotate: -14, scale: 0.55, yPercent: 30 }, { rotate: 0, scale: 1, yPercent: -4, ease: 'power2.out' }, 0)
+      .fromTo('.film-bg span:first-child', { xPercent: -30 }, { xPercent: 20, ease: 'none' }, 0)
+      .fromTo('.film-bg span:last-child', { xPercent: 30 }, { xPercent: -20, ease: 'none' }, 0);
+
+    // 6. Wall — rows slide opposite ways, whole wall leans back as it passes
+    gsap.utils.toArray('.wall-row').forEach(row => {
+      gsap.fromTo(row, { xPercent: 0 }, { xPercent: Number(row.dataset.speed), ease: 'none', scrollTrigger: { trigger: '#wall', start: 'top bottom', end: 'bottom top', scrub: true } });
+    });
+    gsap.fromTo('.wall-title', { scale: 0.7 }, { scale: 1.1, ease: 'none', scrollTrigger: { trigger: '#wall', start: 'top bottom', end: 'bottom top', scrub: true } });
+
+    // 7. End — headline rises in
+    gsap.from('.end h2', { yPercent: 40, opacity: 0, duration: 1, ease: 'expo.out', scrollTrigger: { trigger: '#end', start: 'top 70%' } });
+    gsap.from('#cap', { y: -200, rotate: -360, duration: 1.2, ease: 'bounce.out', scrollTrigger: { trigger: '#end', start: 'top 70%' } });
+
+    extraction.then(() => drawBottle());
+  });
+
+})();
+</script>
+</body>
+</html>
