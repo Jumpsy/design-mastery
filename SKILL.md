@@ -58,6 +58,7 @@ when information is missing.
 `scripts/install.sh` exposes each bundled skill as a standalone skill (`dm-<name>`), so the
 user can invoke any of them directly, and you should route to the best fit:
 
+- **Any visual to a 3D model and 4K photoreal render/animation (browser only):** `dm-visual-to-3d`.
 - **Creating the subject (car/product/scene) and animating it:** `dm-create-visuals` (photoreal via generators, procedural 3D template, precise SVG/canvas).
 - **Motion graphics:** `dm-motion-graphics` (own; easing, choreography, scroll, SVG, Remotion,
   reduced-motion) plus `vendored/gsap-skills/*` (official GSAP).

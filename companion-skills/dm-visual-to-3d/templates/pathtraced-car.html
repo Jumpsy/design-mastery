@@ -1,0 +1,212 @@
+<!doctype html>
+<meta charset="utf-8"><title>Path-traced generic supercar (original model, no marks)</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<style>
+  html,body{margin:0;background:#050506;color:#9a9aa2;font:12px/1.4 ui-monospace,monospace}
+  #wrap{position:fixed;inset:0;display:grid;place-items:center}
+  canvas{max-width:100vw;max-height:100vh;display:block}
+  #ui{position:fixed;left:12px;bottom:10px;display:flex;gap:10px;align-items:center;letter-spacing:.08em;text-transform:uppercase}
+  button{font:inherit;color:#eee;background:#1a1a1e;border:1px solid #333;padding:6px 10px;cursor:pointer}
+</style>
+<div id="wrap"></div>
+<div id="ui"><span id="st">loading…</span><button id="png">Save 4K PNG</button><button id="vid">Render 4K turntable (WebM)</button></div>
+<script type="importmap">{"imports":{
+ "three":"https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js",
+ "three/addons/":"https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/",
+ "three/examples/jsm/":"https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/",
+ "three-mesh-bvh":"https://cdn.jsdelivr.net/npm/three-mesh-bvh@0.8.3/build/index.module.js",
+ "three-gpu-pathtracer":"https://cdn.jsdelivr.net/npm/three-gpu-pathtracer@0.0.23/build/index.module.js",
+ "webm-muxer":"https://cdn.jsdelivr.net/npm/webm-muxer@5.0.2/build/webm-muxer.mjs",
+ "three-bvh-csg":"https://cdn.jsdelivr.net/npm/three-bvh-csg@0.0.17/build/index.module.js",
+ "xatlas-web":"https://cdn.jsdelivr.net/npm/xatlas-web@0.1.0/dist/xatlas_web.js"}}</script>
+<script type="module">
+import * as THREE from 'three';
+import {WebGLPathTracer,PhysicalCamera} from 'three-gpu-pathtracer';
+import {Brush,Evaluator,SUBTRACTION} from 'three-bvh-csg';
+import {Muxer,ArrayBufferTarget} from 'webm-muxer';
+import {GLTFLoader} from 'three/addons/loaders/GLTFLoader.js';
+
+const Q=new URLSearchParams(location.search);
+const OPT={w:+(Q.get('w')||1280),h:+(Q.get('h')||720),samples:+(Q.get('samples')||96),
+  az:parseFloat(Q.get('az')??'0.75'),el:parseFloat(Q.get('el')??'0.14'),dist:parseFloat(Q.get('dist')??'8.6'),
+  color:'#'+(Q.get('color')||'b0100e'),auto:Q.get('auto')!=='0'};
+const st=document.getElementById('st');
+
+/* ---------- procedural HDR studio (float equirect: dark room, bright softboxes) ---------- */
+function hdrStudio(){
+  const W=1024,H=512,d=new Float32Array(W*H*4);
+  const box=(x0,y0,x1,y1,v,tint)=>{for(let y=y0;y<y1;y++)for(let x=x0;x<x1;x++){const i=(y*W+x)*4;d[i]+=v*tint[0];d[i+1]+=v*tint[1];d[i+2]+=v*tint[2];}};
+  for(let y=0;y<H;y++)for(let x=0;x<W;x++){const i=(y*W+x)*4,t=y/H;const g=.30*Math.pow(1-t,1.5)+.10*Math.exp(-Math.pow((t-.5)/.12,2))+.015;d[i]=g*.85;d[i+1]=g*.88;d[i+2]=g;d[i+3]=1;}
+  box(100,40,520,130,6,[1,.96,.9]);       // big overhead softbox (front-left)
+  box(560,40,980,120,5,[.92,.96,1]);      // big overhead softbox (back-right)
+  box(230,170,470,380,3.2,[1,.97,.94]);   // large left panel
+  box(640,170,880,380,3.2,[.94,.97,1]);   // large right panel
+  box(0,386,1024,396,2.4,[1,1,1]);        // horizon strip
+  box(480,200,560,330,6,[1,.58,.38]);     // warm kicker
+  const t=new THREE.DataTexture(d,W,H,THREE.RGBAFormat,THREE.FloatType);
+  t.mapping=THREE.EquirectangularReflectionMapping;t.minFilter=t.magFilter=THREE.LinearFilter;t.needsUpdate=true;return t;
+}
+
+/* ---------- geometry: lofted hull from cross-sections ---------- */
+const cr=(a,t)=>{const n=a.length-1,x=Math.min(Math.max(t,0),1)*n,i=Math.min(Math.floor(x),n-1),f=x-i;
+  const p0=a[Math.max(i-1,0)],p1=a[i],p2=a[i+1],p3=a[Math.min(i+2,n)];
+  return .5*((2*p1)+(-p0+p2)*f+(2*p0-5*p1+4*p2-p3)*f*f+(-p0+3*p1-3*p2+p3)*f*f*f);};
+/* ---- mesh QA gates: closed (every edge shared by exactly 2 faces) and outward-facing (positive signed volume) ---- */
+function volume(g){const p=g.attributes.position,ix=g.index.array;let v=0;for(let i=0;i<ix.length;i+=3){const a=ix[i]*3,b=ix[i+1]*3,c=ix[i+2]*3;
+  v+=(p.array[a]*(p.array[b+1]*p.array[c+2]-p.array[b+2]*p.array[c+1])-p.array[a+1]*(p.array[b]*p.array[c+2]-p.array[b+2]*p.array[c])+p.array[a+2]*(p.array[b]*p.array[c+1]-p.array[b+1]*p.array[c]))/6;}return v;}
+function orient(g){if(volume(g)<0){const ix=g.index.array;for(let i=0;i<ix.length;i+=3){const t=ix[i+1];ix[i+1]=ix[i+2];ix[i+2]=t;}}}
+function watertight(g){const m=new Map(),ix=g.index.array;const k=(a,b)=>a<b?a+'_'+b:b+'_'+a;
+  for(let i=0;i<ix.length;i+=3)for(let e=0;e<3;e++){const q=k(ix[i+e],ix[i+(e+1)%3]);m.set(q,(m.get(q)||0)+1);}
+  let bad=0;for(const v of m.values())if(v!==2)bad++;return bad;}
+window.__qa={};
+function loft(len,keys,{nu=96,na=64,expo=2.6,x0=-.5,x1=.5}={}){
+  const pos=[],idx=[];
+  for(let i=0;i<=nu;i++){const u=i/nu,x=(x0+(x1-x0)*u)*len;
+    const w=cr(keys.w,u),zb=cr(keys.zb,u),zt=cr(keys.zt,u),e=keys.e?cr(keys.e,u):expo;
+    const zc=(zb+zt)/2,hh=Math.max((zt-zb)/2,.002);
+    for(let j=0;j<na;j++){const a=Math.PI*2*j/na,c=Math.cos(a),s=Math.sin(a);
+      pos.push(x,w*Math.sign(c)*Math.pow(Math.abs(c),2/e),zc+hh*Math.sign(s)*Math.pow(Math.abs(s),2/e));}}
+  for(let i=0;i<nu;i++)for(let j=0;j<na;j++){const a=i*na+j,b=i*na+(j+1)%na,c=(i+1)*na+(j+1)%na,d=(i+1)*na+j;idx.push(a,d,c,a,c,b);}
+  // end caps
+  for(const [row,flip] of [[0,true],[nu,false]]){const ci=pos.length/3;let cx=0,cy=0,cz=0;
+    for(let j=0;j<na;j++){cx+=pos[(row*na+j)*3];cy+=pos[(row*na+j)*3+1];cz+=pos[(row*na+j)*3+2];}
+    pos.push(cx/na,cy/na,cz/na);
+    for(let j=0;j<na;j++){const a=row*na+j,b=row*na+(j+1)%na;flip?idx.push(ci,b,a):idx.push(ci,a,b);}}
+  const g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.Float32BufferAttribute(pos,3));g.setIndex(idx);orient(g);g.setAttribute('uv',new THREE.Float32BufferAttribute(new Float32Array((pos.length/3)*2),2));g.computeVertexNormals();return g;}
+
+function buildCar(color){
+  const L=4.6,car=new THREE.Group();
+  const MODE=Q.get('mat')||'std';
+  const paint=MODE==='std'?new THREE.MeshStandardMaterial({color,metalness:.62,roughness:.2}):MODE==='nocoat'?new THREE.MeshPhysicalMaterial({color,metalness:.5,roughness:.3}):MODE==='diffuse'?new THREE.MeshStandardMaterial({color,metalness:0,roughness:.5}):Q.get('dbg')?new THREE.MeshStandardMaterial({color:0xdddddd,roughness:.9}):new THREE.MeshPhysicalMaterial({color,metalness:.55,roughness:.34,clearcoat:1,clearcoatRoughness:.025,envMapIntensity:1});
+  const glass=new THREE.MeshStandardMaterial({color:0x05070b,metalness:.1,roughness:.04});
+  const black=new THREE.MeshStandardMaterial({color:0x080809,roughness:.6,metalness:.2});
+  const alloy=new THREE.MeshStandardMaterial({color:0xb9bcc4,metalness:1,roughness:.22});
+  const tyre=new THREE.MeshStandardMaterial({color:0x0b0b0c,roughness:.82});
+  const carbon=new THREE.MeshStandardMaterial({color:0x101012,roughness:.35,metalness:.4});
+  // body hull (tail -> nose)
+  const hull=window.__qa.hull=loft(L,{
+    w :[.60,.80,.90,.95,.97,.98,.98,.97,.96,.94,.92,.90,.88,.85,.82,.78,.72,.66,.58,.46,.30],
+    zb:[.34,.26,.20,.17,.16,.16,.16,.16,.16,.16,.16,.16,.16,.16,.17,.18,.19,.21,.23,.26,.30],
+    zt:[.66,.80,.90,.93,.93,.91,.89,.87,.85,.83,.81,.79,.76,.73,.69,.65,.61,.56,.51,.46,.41],
+    e :[3.6,3.2,3.0,2.9,2.8,2.8,2.8,2.8,2.8,2.8,2.8,2.8,2.8,2.8,2.8,2.8,2.9,3.0,3.1,3.2,3.4]});
+  window.__qa.hullVolume=volume(hull);window.__qa.hullOpenEdges=watertight(hull);
+  let body=new Brush(hull,paint);body.updateMatrixWorld();
+  const ev=new Evaluator();
+  const wheelXs=[[-L/2+1.0,.5],[L/2-.98,.5]];            // x positions of rear/front axles
+  for(const [wx] of wheelXs){for(const sgn of[-1,1]){
+    const cg=new THREE.CylinderGeometry(.47,.47,.5,48);cg.rotateX(Math.PI/2);
+    const cb=new Brush(cg,paint);cb.position.set(wx,.46,sgn*.86);cb.updateMatrixWorld();
+    if(!Q.get('nocsg'))body=ev.evaluate(body,cb,SUBTRACTION);}}
+  if(Q.get('nocsg'))car.add(new THREE.Mesh(hull,paint));else{body.material=paint;car.add(body);}
+  if(Q.get('only')==='hull')return car;
+  // glasshouse + roof
+  const cab=loft(L,{
+    w :[.30,.46,.54,.57,.58,.58,.58,.57,.55,.52,.47,.40,.32],
+    zb:[.80,.78,.78,.78,.78,.78,.78,.78,.78,.78,.78,.78,.80],
+    zt:[.84,1.00,1.10,1.16,1.19,1.20,1.19,1.16,1.10,1.00,.92,.86,.82],
+    e:[2.4,2.5,2.6,2.6,2.6,2.6,2.6,2.6,2.6,2.6,2.6,2.6,2.6]},{nu:72,na:56,x0:-.20,x1:.14});
+  car.add(new THREE.Mesh(cab,glass));
+  // wheels
+  for(const [wx] of wheelXs)for(const sgn of[-1,1]){
+    const w=new THREE.Group();
+    const t=new THREE.Mesh(new THREE.TorusGeometry(.34,.12,40,80),tyre);t.scale.set(1,1,1.2);w.add(t);
+    const rim=new THREE.Mesh(new THREE.CylinderGeometry(.34,.34,.24,60),alloy);rim.rotation.x=Math.PI/2;w.add(rim);
+    const dish=new THREE.Mesh(new THREE.CylinderGeometry(.27,.27,.26,60),carbon);dish.rotation.x=Math.PI/2;w.add(dish);
+    for(let i=0;i<10;i++){const sp=new THREE.Mesh(new THREE.BoxGeometry(.5,.045,.27),alloy);sp.rotation.z=i*Math.PI/5;w.add(sp);}
+    const hub=new THREE.Mesh(new THREE.CylinderGeometry(.06,.06,.28,24),new THREE.MeshStandardMaterial({color:0x9a1010,metalness:.8,roughness:.3}));hub.rotation.x=Math.PI/2;w.add(hub);
+    const disc=new THREE.Mesh(new THREE.CylinderGeometry(.25,.25,.05,60),new THREE.MeshStandardMaterial({color:0x777a80,metalness:1,roughness:.35}));disc.rotation.x=Math.PI/2;disc.position.z=-sgn*.02;w.add(disc);
+    w.position.set(wx,.46,sgn*(.80)); w.scale.setScalar(wx<0?1.05:1);car.add(w);
+    const liner=new THREE.Mesh(new THREE.CylinderGeometry(.47,.47,.3,40,1,true,0,Math.PI*2),black);liner.rotation.x=Math.PI/2;liner.position.set(wx,.46,sgn*.74);car.add(liner);
+  }
+  // lights & details
+  const lamp=new THREE.MeshStandardMaterial({color:0xffffff,emissive:0xe8f1ff,emissiveIntensity:6});
+  const tail=new THREE.MeshStandardMaterial({color:0x300000,emissive:0xff1a10,emissiveIntensity:5});
+  for(const s of[-1,1]){
+    const hl=new THREE.Mesh(new THREE.BoxGeometry(.38,.035,.09),lamp);hl.position.set(L/2-.46,.55,s*.54);hl.rotation.set(0,s*.38,-.12*s*0);car.add(hl);
+    const hl2=hl.clone();hl2.position.y=.50;hl2.position.x-=.02;car.add(hl2);
+    const hh=new THREE.Mesh(new THREE.BoxGeometry(.55,.16,.2),black);hh.position.set(L/2-.46,.53,s*.58);hh.rotation.y=s*.38;car.add(hh);
+  }
+  const tl=new THREE.Mesh(new THREE.BoxGeometry(.03,.05,1.35),tail);tl.position.set(-L/2+.02,.64,0);car.add(tl);
+  const spl=new THREE.Mesh(new THREE.BoxGeometry(.5,.035,1.7),carbon);spl.position.set(L/2-.18,.17,0);car.add(spl);
+  const intake=new THREE.Mesh(new THREE.BoxGeometry(.06,.14,.9),black);intake.position.set(L/2-.03,.33,0);car.add(intake);
+  const dif=new THREE.Mesh(new THREE.BoxGeometry(.45,.14,1.1),carbon);dif.position.set(-L/2+.2,.27,0);car.add(dif);
+  for(const s of[-1,1]){const m=new THREE.Mesh(new THREE.SphereGeometry(.1,32,24),paint);m.scale.set(1.6,.8,1);m.position.set(.62,.80,s*.83);car.add(m);}
+  return car;
+}
+
+/* ---------- scene ---------- */
+const renderer=new THREE.WebGLRenderer({antialias:false,preserveDrawingBuffer:true,alpha:false});
+renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.0;
+renderer.setPixelRatio(1);renderer.setSize(OPT.w,OPT.h,false);
+document.getElementById('wrap').appendChild(renderer.domElement);
+const scene=new THREE.Scene();
+const env=hdrStudio();scene.environment=env;scene.background=new THREE.Color(0x070708);scene.environmentIntensity=1.0;scene.backgroundIntensity=0;
+/* studio rig: explicit area lights are sampled directly by the path tracer (clean, fast, predictable) */
+function panel(c,i,w,h,pos,tgt=[0,.5,0]){const l=new THREE.RectAreaLight(c,i,w,h);l.position.set(...pos);l.lookAt(...tgt);scene.add(l);return l;}
+panel(0xfff3e6,7,7,4,[0,6.5,.5]);                 // overhead softbox
+panel(0xfff8f0,12,1.6,5.5,[-6.5,2.4,3.8]);          // left strip (long highlight down the flank)
+panel(0xeef4ff,10,1.6,5.5,[6.5,2.4,-3.8]);          // right strip
+panel(0xff9a6a,5,2.5,2.2,[-1.5,1.4,-6.5]);         // warm rim/kicker
+panel(0xffffff,2.2,9,2.2,[0,.7,7.5]);                // low front fill (kills dead-black sides)
+let car;
+if(Q.get('model')){ // ?model=path/to/model.glb : render ANY licensed glTF in this same studio (auto-fit to ~4.6 m, sat on the floor)
+  const gltf=await new GLTFLoader().loadAsync(Q.get('model'));car=gltf.scene;
+  const bb=new THREE.Box3().setFromObject(car),sz=bb.getSize(new THREE.Vector3()),sc=4.6/Math.max(sz.x,sz.z);
+  car.scale.setScalar(sc);bb.setFromObject(car);const c0=bb.getCenter(new THREE.Vector3());car.position.set(-c0.x,-bb.min.y,-c0.z);
+}else car=buildCar(OPT.color);
+scene.add(car);
+const floor=new THREE.Mesh(new THREE.PlaneGeometry(400,400),new THREE.MeshPhysicalMaterial({color:0x0c0c0e,roughness:.28,metalness:0,clearcoat:.0}));floor.rotation.x=-Math.PI/2;scene.add(floor);
+const cam=new PhysicalCamera(24,OPT.w/OPT.h,.1,200);cam.fStop=3.2;cam.bokehSize=.0;
+function aim(az,el,dist){const t=new THREE.Vector3(.1,.55,0);
+  cam.position.set(Math.cos(az)*dist*Math.cos(el),Math.sin(el)*dist+.55,Math.sin(az)*dist*Math.cos(el));
+  cam.lookAt(t);cam.focusDistance=cam.position.distanceTo(new THREE.Vector3(-.2,.5,.9));cam.updateMatrixWorld();}
+aim(OPT.az,OPT.el,OPT.dist);
+
+const pt=new WebGLPathTracer(renderer);pt.renderDelay=0;pt.minSamples=1;pt.fadeDuration=0;pt.dynamicLowRes=false;pt.tiles.set(2,2);pt.bounces=8;pt.filterGlossyFactor=.5;
+pt.setScene(scene,cam);
+async function accumulate(n,onp){await new Promise(res=>{(function loop(){pt.renderSample();onp&&onp(pt.samples);pt.samples>=n?res():requestAnimationFrame(loop)})()});}
+
+/* ---------- photographic post: bloom, vignette, chromatic fringe, grain (on the final pixels) ---------- */
+function post(src){
+  const w=src.width,h=src.height,c=document.createElement('canvas');c.width=w;c.height=h;const x=c.getContext('2d',{willReadFrequently:true});x.drawImage(src,0,0);
+  const bl=document.createElement('canvas');bl.width=w>>2;bl.height=h>>2;const bx=bl.getContext('2d');bx.filter='blur('+Math.max(2,w/700)+'px) brightness(1.6) contrast(1.3)';bx.drawImage(src,0,0,bl.width,bl.height);
+  x.globalCompositeOperation='screen';x.globalAlpha=.16;x.drawImage(bl,0,0,w,h);x.globalAlpha=1;x.globalCompositeOperation='source-over';
+  const img=x.getImageData(0,0,w,h),d=img.data,cx=w/2,cy=h/2,md=Math.hypot(cx,cy);
+  let seed=1;const rnd=()=>{seed=(seed*16807)%2147483647;return seed/2147483647-.5};
+  for(let y=0;y<h;y++){const dy=(y-cy)/md;for(let xx=0;xx<w;xx++){const i=(y*w+xx)*4,dx=(xx-cx)/md,r=dx*dx+dy*dy,v=1-.38*r*r*1.6,g=rnd()*10;
+    d[i]=d[i]*v+g;d[i+1]=d[i+1]*v+g;d[i+2]=d[i+2]*v+g;}}
+  x.putImageData(img,0,0);return c;}
+
+window.renderStill=async(o={})=>{ // returns a data URL of the finished frame
+  const w=o.w||OPT.w,h=o.h||OPT.h;renderer.setSize(w,h,false);cam.aspect=w/h;cam.updateProjectionMatrix();
+  if(o.az!==undefined)aim(o.az,o.el??OPT.el,o.dist??OPT.dist);
+  pt.updateCamera();pt.reset();await accumulate(o.samples||OPT.samples,s=>{st.textContent=`path tracing ${w}x${h}: ${s}/${o.samples||OPT.samples} samples`});
+  const out=post(renderer.domElement);st.textContent=`done ${w}x${h}`;return out.toDataURL('image/png');};
+/* ---- animation: path-trace every frame, encode in the browser (WebCodecs + WebM), no ffmpeg needed ----
+   renderTurntable({w,h,samples,frames,fps,arc,az0}) -> Blob (video/webm). Time ~= frames x per-frame time (see README). */
+window.renderTurntable=async(o={})=>{
+  const w=o.w||1920,h=o.h||1080,frames=o.frames||60,fps=o.fps||30,samples=o.samples||64,arc=o.arc??Math.PI/2,az0=o.az0??OPT.az;
+  const level=w*h>2073600?'vp09.00.51.08':'vp09.00.41.08';
+  const muxer=new Muxer({target:new ArrayBufferTarget(),video:{codec:'V_VP9',width:w,height:h,frameRate:fps}});
+  const enc=new VideoEncoder({output:(c,m)=>muxer.addVideoChunk(c,m),error:e=>{throw e}});
+  enc.configure({codec:level,width:w,height:h,bitrate:Math.round(w*h*fps*.35),framerate:fps});
+  renderer.setSize(w,h,false);cam.aspect=w/h;cam.updateProjectionMatrix();
+  for(let f=0;f<frames;f++){
+    const t=f/(frames-1),e=t<.5?4*t*t*t:1-Math.pow(-2*t+2,3)/2;      // ease in-out so the move starts and ends softly
+    aim(az0+arc*e,OPT.el,OPT.dist);pt.updateCamera();pt.reset();
+    await accumulate(samples,s=>{st.textContent=`frame ${f+1}/${frames}  sample ${s}/${samples}`});
+    const fc=post(renderer.domElement);
+    const vf=new VideoFrame(fc,{timestamp:Math.round(f*1e6/fps),duration:Math.round(1e6/fps)});
+    enc.encode(vf,{keyFrame:f%30===0});vf.close();
+  }
+  await enc.flush();muxer.finalize();st.textContent='done';
+  return new Blob([muxer.target.buffer],{type:'video/webm'});};
+window.rasterCheck=(mode='normals')=>{ // fast QA view: check shape, scale, orientation before spending path-tracing time
+  scene.overrideMaterial=mode==='normals'?new THREE.MeshNormalMaterial():new THREE.MeshBasicMaterial({color:0xcccccc,wireframe:mode==='wire'});
+  renderer.setSize(OPT.w,OPT.h,false);renderer.render(scene,cam);scene.overrideMaterial=null;return renderer.domElement.toDataURL('image/png');};
+document.getElementById('vid').onclick=async()=>{const b=await window.renderTurntable({w:3840,h:2160,frames:48,samples:96});const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='car-4k-turntable.webm';a.click();};
+window.__ready=true;
+if(Q.get('view')){window.__png=window.rasterCheck(Q.get('view'));window.__done=true;} else
+if(OPT.auto){window.renderStill().then(u=>{window.__png=u;window.__done=true;});}
+document.getElementById('png').onclick=async()=>{const u=await window.renderStill({w:3840,h:2160,samples:Math.max(OPT.samples,256)});const a=document.createElement('a');a.href=u;a.download='car-4k.png';a.click();};
+</script>
