@@ -62,6 +62,30 @@ All are open-source (MIT or Apache-2.0) with their LICENSE and a SOURCE.txt reco
 and commit. Design skills with over 1,000 GitHub stars that are not bundled because their
 licence does not allow it are listed in `COMPANIONS.md`.
 
+## 0.3 Use ALL the skills: mandatory routing (every design task)
+
+There are 500+ bundled skills; `skills-index.tsv` lists every one. Never rely on the short
+list above alone. For every task, before the plan gate:
+
+1. **Route:** run `python3 -I scripts/route.py "<the user's task in your words>" 20` (from
+   this folder). It ranks every bundled skill against the task. Run it once per distinct
+   sub-need too (e.g. once for layout, once for motion, once for accessibility, once for
+   copy/brand) so each facet gets its specialists.
+2. **Always-on core (read their SKILL.md every time):** `dm-grounding`; the taste/anti-slop
+   layer (`vendored/taste-skill`, `vendored/impeccable`); `vendored/ui-ux-pro-max` for
+   style/palette/type/UX rules; and `dm-motion-graphics` whenever anything moves,
+   transitions, scrolls, or is a video.
+3. **Read the top routed skills** (at least the top 5 across facets, more for big tasks),
+   plus any specialty skill the task clearly needs (GSAP, Remotion/video-shotcraft, diagrams,
+   style presets, templates in `vendored/open-design`, accessibility audit, etc.). Apply
+   them together; where they conflict, the user's request wins, then this file's
+   anti-slop checklist, then the more specific skill.
+4. **Disclose:** in your final message list the skills you actually read and applied (paths
+   or names). Only list ones you really opened. Do not name a skill you did not use.
+5. If the task is one the router returns nothing for, say so and rely on the core set.
+
+After adding or updating skills, regenerate the index: `python3 -I scripts/build_index.py`.
+
 ## 0.5 Plan gate — pass before writing any code
 
 Before generating a single line of UI, state a short plan (layout, one signature motif,

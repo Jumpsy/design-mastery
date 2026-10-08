@@ -17,4 +17,5 @@ while IFS= read -r f; do
   [ "$d" = "$HERE" ] && continue
   [ -e "$DEST/$name" ] || { ln -s "$d" "$DEST/$name"; n=$((n+1)); }
 done < <(find "$HERE/companion-skills" -name SKILL.md -not -path "*/node_modules/*" | sort)
+python3 -I "$HERE/scripts/build_index.py" >/dev/null 2>&1 || true
 echo "Installed design-mastery + $n standalone skills into $DEST"
