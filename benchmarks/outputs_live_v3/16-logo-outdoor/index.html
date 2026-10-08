@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>MORAINE — Technical Alpine Equipment &bull; Logo Mark &amp; Usage Standards</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-granite: #12161a;
+      --surface-slate: #1a2027;
+      --surface-subtle: #222b34;
+      --border-steel: #2a3541;
+      --text-snow: #f0f4f8;
+      --text-mist: #8b9aa7;
+      --accent-blaze: #e65100;
+      --font-technical: 'Space Grotesk', sans-serif;
+      --font-body: 'Plus Jakarta Sans', sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body{background:#12161a;color:#f0f4f8;
+      font-family: var(--font-body);
+      font-size: 16px;
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    a:focus-visible, button:focus-visible {
+      outline: 2px solid #e65100;
+      outline-offset: 4px;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      * {
+        animation: none !important;
+        transition: none !important;
+      }
+    }
+
+    .blueprint-wrapper {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 32px 24px 64px;
+    }
+
+    header.sheet-header {
+      border-bottom: 1px solid #2a3541;
+      padding-bottom: 24px;
+      margin-bottom: 40px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .spec-header-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+      border-bottom: 1px solid #2a3541;
+      padding-bottom: 16px;
+    }
+
+    .spec-cell {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .spec-cell .label {
+      font-family: var(--font-technical);
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #e65100;
+    }
+
+    .spec-cell .val {
+      font-size: 14px;
+      color: #f0f4f8;
+      font-weight: 500;
+    }
+
+    .title-banner {
+      margin-top: 8px;
+    }
+
+    h1.sheet-title {
+      font-family: var(--font-technical);
+      font-size: 40px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      line-height: 1.1;
+      color: #f0f4f8;
+    }
+
+    em{color:#e65100;font-style:normal;}
+
+    .sheet-lead {
+      max-width: 760px;
+      font-size: 16px;
+      color: #8b9aa7;
+      margin-top: 8px;
+    }
+
+    main.sheet-layout {
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 32px;
+    }
+
+    section.sheet-block {
+      background: #1a2027;
+      border: 1px solid #2a3541;
+      border-radius: 4px;
+      padding: 32px;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    .block-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid #2a3541;
+      padding-bottom: 12px;
+    }
+
+    h2.block-title {
+      font-family: var(--font-technical);
+      font-size: 20px;
+      font-weight: 700;
+      color: #f0f4f8;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .block-tag {
+      font-family: var(--font-technical);
+      font-size: 12px;
+      color: #e65100;
+    }
+
+    /* Primary Lockup Hero Display */
+    .hero-lockup-frame {
+      background: #12161a;
+      border: 1px solid #2a3541;
+      border-radius: 2px;
+      padding: 48px 32px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 24px;
+      position: relative;
+    }
+
+    .mark-svg-container {
+      width: 140px;
+      height: 140px;
+    }
+
+    .wordmark-lockup {
+      font-family: var(--font-technical);
+      font-size: 36px;
+      font-weight: 700;
+      letter-spacing: 0.22em;
+      color: #f0f4f8;
+      text-transform: uppercase;
+    }
+
+    .wordmark-subline {
+      font-family: var(--font-technical);
+      font-size: 12px;
+      letter-spacing: 0.32em;
+      color: #8b9aa7;
+      text-transform: uppercase;
+      margin-top: -16px;
+    }
+
+    /* Construction Matrix */
+    .construction-diagram-wrap {
+      background: #12161a;
+      border: 1px solid #2a3541;
+      padding: 24px;
+      border-radius: 2px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .spec-details-list {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .spec-detail-box {
+      background: #222b34;
+      padding: 16px;
+      border-radius: 2px;
+      border: 1px solid #2a3541;
+    }
+
+    h3.spec-detail-title {
+      font-family: var(--font-technical);
+      font-size: 12px;
+      color: #e65100;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+
+    .spec-detail-text {
+      font-size: 14px;
+      color: #f0f4f8;
+      line-height: 1.4;
+    }
+
+    /* Scalability & Substrate Tests */
+    .scalability-strip {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 24px;
+      background: #12161a;
+      border: 1px solid #2a3541;
+      border-radius: 2px;
+    }
+
+    .scale-test-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .scale-caption {
+      font-family: var(--font-technical);
+      font-size: 12px;
+      color: #8b9aa7;
+    }
+
+    /* Don'ts & Violations Panel */
+    .violations-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .violation-card {
+      background: #12161a;
+      border: 1px solid #2a3541;
+      border-radius: 2px;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      align-items: center;
+      text-align: center;
+      position: relative;
+    }
+
+    .violation-badge {
+      position: absolute;
+      top: 8px;
+      left: 8px;
+      font-family: var(--font-technical);
+      font-size: 10px;
+      font-weight: 700;
+      color: #e65100;
+      border: 1px solid #e65100;
+      padding: 4px 8px;
+      border-radius: 2px;
+    }
+
+    .violation-demo {
+      height: 72px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .violation-text {
+      font-size: 12px;
+      color: #8b9aa7;
+      line-height: 1.3;
+    }
+
+    /* Clearspace Diagram Frame */
+    .clearspace-stage {
+      background: #12161a;
+      border: 1px dashed #2a3541;
+      padding: 32px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      position: relative;
+    }
+
+    .clearspace-annotation {
+      font-family: var(--font-technical);
+      font-size: 12px;
+      color: #e65100;
+    }
+
+    /* Footer Controls */
+    footer.sheet-footer {
+      margin-top: 48px;
+      padding-top: 24px;
+      border-top: 1px solid #2a3541;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .footer-stamp {
+      font-family: var(--font-technical);
+      font-size: 12px;
+      color: #8b9aa7;
+    }
+
+    .footer-actions {
+      display: flex;
+      gap: 12px;
+    }
+
+    .btn{background:#e65100;color:#f0f4f8;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 44px;
+      padding: 0 24px;
+      font-family: var(--font-technical);
+      font-size: 14px;
+      font-weight: 700;
+      border-radius: 4px;
+      cursor: pointer;
+      text-decoration: none;
+      border: 1px solid transparent;
+    }
+
+    .btn-secondary {
+      background-color: transparent;
+      color: #f0f4f8;
+      border: 1px solid #2a3541;
+    }
+
+    .btn-secondary:hover {
+      background-color: #222b34;
+    }
+
+    @media (max-width: 1024px) {
+      main.sheet-layout {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .blueprint-wrapper {
+        padding: 20px 16px 40px;
+      }
+      h1.sheet-title {
+        font-size: 32px;
+      }
+      .spec-details-list {
+        grid-template-columns: 1fr;
+      }
+      .violations-grid {
+        grid-template-columns: 1fr;
+      }
+      footer.sheet-footer {
+        flex-direction: column;
+        align-items: stretch;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="blueprint-wrapper">
+    <header class="sheet-header">
+      <div class="spec-header-grid">
+        <div class="spec-cell">
+          <span class="label">Drawing Reference</span>
+          <span class="val">AL-2026-M // REV-04</span>
+        </div>
+        <div class="spec-cell">
+          <span class="label">Hardware Classification</span>
+          <span class="val">Alpine Mountaineering &amp; Rigging</span>
+        </div>
+        <div class="spec-cell">
+          <span class="label">Geometry Authority</span>
+          <span class="val">Monoline Glacial Shear Vector</span>
+        </div>
+        <div class="spec-cell">
+          <span class="label">Safety Signature Color</span>
+          <span class="val">Rescue Blaze (#E65100)</span>
+        </div>
+      </div>
+
+      <div class="title-banner">
+        <h1 class="sheet-title">MORAINE: <em>Alpine Mark Standards</em></h1>
+        <p class="sheet-lead">
+          Technical identity specifications for extreme-altitude hardware and apparel. The mark synthesizes a glacial arête contour with a forged climbing carabiner gate.
+        </p>
+      </div>
+    </header>
+
+    <main class="sheet-layout">
+      <!-- Left Column: Primary Lockup & Construction Grid -->
+      <div style="display: flex; flex-direction: column; gap: 32px;">
+        <section class="sheet-block" aria-labelledby="primary-lockup-head">
+          <div class="block-head">
+            <h2 id="primary-lockup-head" class="block-title">01. Primary Lockup</h2>
+            <span class="block-tag">Horizontal Lockup Standard</span>
+          </div>
+
+          <div class="hero-lockup-frame">
+            <div class="mark-svg-container">
+              <svg width="140" height="140" viewBox="0 0 140 140" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Moraine outdoor logo: continuous glacial ridge and carabiner path">
+                <!-- Outer Calibration Ring -->
+                <circle cx="70" cy="70" r="66" stroke="#2a3541" stroke-width="1.5" stroke-dasharray="3 3" />
+                <path d="M70 4 L70 136" stroke="#2a3541" stroke-width="1" />
+                <path d="M4 70 L136 70" stroke="#2a3541" stroke-width="1" />
+                <!-- Continuous Glacial Ridge Carabiner Path -->
+                <path d="M42 108 L28 68 L70 24 L112 68 L98 108" stroke="#f0f4f8" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" />
+                <!-- Internal Forged Ridge Shear & Gate -->
+                <path d="M70 24 L70 82" stroke="#e65100" stroke-width="6" stroke-linecap="round" />
+                <circle cx="70" cy="98" r="5" fill="#e65100" />
+              </svg>
+            </div>
+
+            <div class="wordmark-lockup">MORAINE</div>
+            <div class="wordmark-subline">Technical Alpine Hardware &bull; Chamonix</div>
+          </div>
+
+          <div class="spec-details-list">
+            <div class="spec-detail-box">
+              <h3 class="spec-detail-title">Topographic Concept</h3>
+              <p class="spec-detail-text">Formed by a sharp 48-degree pyramidal arête intersected by an internal vertical shear line, echoing the profile of the Aiguille du Dru.</p>
+            </div>
+            <div class="spec-detail-box">
+              <h3 class="spec-detail-title">Laser &amp; Forging Tolerance</h3>
+              <p class="spec-detail-text">Calculated to endure laser ablation on titanium crampons, cold-forged aluminum carabiner gates, and woven micro-badges.</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- Construction Blueprint Panel -->
+        <section class="sheet-block" aria-labelledby="construction-head">
+          <div class="block-head">
+            <h2 id="construction-head" class="block-title">02. Mathematical Construction</h2>
+            <span class="block-tag">Vector Tangents &amp; Coordinates</span>
+          </div>
+
+          <div class="construction-diagram-wrap">
+            <svg width="320" height="180" viewBox="0 0 320 180" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Technical vector construction angles and coordinates">
+              <rect x="10" y="10" width="300" height="160" stroke="#2a3541" stroke-width="1" />
+              <line x1="160" y1="10" x2="160" y2="170" stroke="#e65100" stroke-width="1" stroke-dasharray="4 4" />
+              <line x1="10" y1="90" x2="310" y2="90" stroke="#2a3541" stroke-width="1" stroke-dasharray="4 4" />
+              <!-- Geometric Guide Lines -->
+              <path d="M110 140 L160 35 L210 140" stroke="#8b9aa7" stroke-width="1.5" />
+              <circle cx="160" cy="35" r="8" stroke="#e65100" stroke-width="1.5" />
+              <!-- Dimension Callouts -->
+              <text x="170" y="32" fill="#e65100" font-family="'Space Grotesk', sans-serif" font-size="10">VERTEX 48°</text>
+              <text x="165" y="100" fill="#8b9aa7" font-family="'Space Grotesk', sans-serif" font-size="10">DATUM Y: 0.00</text>
+              <text x="40" y="155" fill="#8b9aa7" font-family="'Space Grotesk', sans-serif" font-size="10">BASE WIDTH: 84MM</text>
+            </svg>
+          </div>
+        </section>
+      </div>
+
+      <!-- Right Column: Scalability, Clearspace, Don'ts -->
+      <div style="display: flex; flex-direction: column; gap: 32px;">
+        <section class="sheet-block" aria-labelledby="scale-head">
+          <div class="block-head">
+            <h2 id="scale-head" class="block-title">03. Scalability &amp; Physical Substrates</h2>
+            <span class="block-tag">16px to 64px Tests</span>
+          </div>
+
+          <div class="scalability-strip">
+            <div class="scale-test-item">
+              <svg width="16" height="16" viewBox="0 0 140 140" fill="none" role="img" aria-label="16px test">
+                <path d="M42 108 L28 68 L70 24 L112 68 L98 108" stroke="#f0f4f8" stroke-width="14" stroke-linecap="round" stroke-linejoin="round" />
+                <path d="M70 24 L70 82" stroke="#e65100" stroke-width="14" stroke-linecap="round" />
+              </svg>
+              <span class="scale-caption">16px Favicon</span>
+            </div>
+
+            <div class="scale-test-item">
+              <svg width="32" height="32" viewBox="0 0 140 140" fill="none" role="img" aria-label="32px test">
+                <path d="M42 108 L28 68 L70 24 L112 68 L98 108" stroke="#f0f4f8" stroke-width="10" stroke-linecap="round" stroke-linejoin="round" />
+                <path d="M70 24 L70 82" stroke="#e65100" stroke-width="10" stroke-linecap="round" />
+                <circle cx="70" cy="98" r="8" fill="#e65100" />
+              </svg>
+              <span class="scale-caption">32px App Token</span>
+            </div>
+
+            <div class="scale-test-item">
+              <svg width="64" height="64" viewBox="0 0 140 140" fill="none" role="img" aria-label="64px test">
+                <path d="M42 108 L28 68 L70 24 L112 68 L98 108" stroke="#f0f4f8" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" />
+                <path d="M70 24 L70 82" stroke="#e65100" stroke-width="6" stroke-linecap="round" />
+                <circle cx="70" cy="98" r="5" fill="#e65100" />
+              </svg>
+              <span class="scale-caption">64px Woven Patch</span>
+            </div>
+          </div>
+        </section>
+
+        <!-- Clearspace Panel -->
+        <section class="sheet-block" aria-labelledby="clearspace-head">
+          <div class="block-head">
+            <h2 id="clearspace-head" class="block-title">04. Protective Exclusion Zone</h2>
+            <span class="block-tag">Boundary Unit = 0.5X</span>
+          </div>
+
+          <div class="clearspace-stage">
+            <svg width="80" height="80" viewBox="0 0 140 140" fill="none" role="img" aria-label="Clearspace boundary demonstration">
+              <rect x="0" y="0" width="140" height="140" stroke="#e65100" stroke-width="1" stroke-dasharray="2 2" />
+              <path d="M42 108 L28 68 L70 24 L112 68 L98 108" stroke="#f0f4f8" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" />
+              <path d="M70 24 L70 82" stroke="#e65100" stroke-width="6" stroke-linecap="round" />
+              <circle cx="70" cy="98" r="5" fill="#e65100" />
+            </svg>
+            <div class="clearspace-annotation">0.5X Minimum Exclusion Area All Sides</div>
+          </div>
+        </section>
+
+        <!-- Don'ts Panel -->
+        <section class="sheet-block" aria-labelledby="violations-head">
+          <div class="block-head">
+            <h2 id="violations-head" class="block-title">05. Incorrect Usage Standards</h2>
+            <span class="block-tag">Zero Tolerance Violations</span>
+          </div>
+
+          <div class="violations-grid">
+            <div class="violation-card">
+              <span class="violation-badge">DO NOT</span>
+              <div class="violation-demo" style="transform: skewX(-16deg);">
+                <svg width="40" height="40" viewBox="0 0 140 140" fill="none">
+                  <path d="M42 108 L28 68 L70 24 L112 68 L98 108" stroke="#f0f4f8" stroke-width="8" />
+                </svg>
+              </div>
+              <p class="violation-text">Do not distort, stretch, or alter the geometric angle.</p>
+            </div>
+
+            <div class="violation-card">
+              <span class="violation-badge">DO NOT</span>
+              <div class="violation-demo">
+                <svg width="40" height="40" viewBox="0 0 140 140" fill="none">
+                  <path d="M42 108 L28 68 L70 24 L112 68 L98 108" stroke="#8b9aa7" stroke-width="8" />
+                  <path d="M70 24 L70 82" stroke="#8b9aa7" stroke-width="8" />
+                </svg>
+              </div>
+              <p class="violation-text">Do not alter or omit the high-visibility blaze accent line.</p>
+            </div>
+          </div>
+        </section>
+      </div>
+    </main>
+
+    <footer class="sheet-footer">
+      <div class="footer-stamp">
+        Engineering Spec Checked // ISO/DIS 9001 Hardgoods Certification // All Vector Paths Closed
+      </div>
+      <nav class="footer-actions" aria-label="Specification downloads">
+        <button class="btn btn-secondary" type="button">Master Vector (.SVG)</button>
+        <button class="btn" type="button">Download CAD DXF Spec</button>
+      </nav>
+    </footer>
+  </div>
+</body>
+</html>

@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Info Preservation</title>
+<style>
+:root { --accent:#c9622d; --ink:#1c1c1c; --bg:#faf8f4; }
+* { box-sizing:border-box; }
+body{ margin:0; font-family:-apple-system,'Segoe UI',sans-serif; background:#faf8f4; color:#1c1c1c; }
+.btn { display:inline-flex; align-items:center; justify-content:center; min-height:44px; padding:0 20px;
+  border-radius:6px; background:var(--ink); color:#fff; border:none; font-size:16px; cursor:pointer; }
+em { font-style:italic; color:var(--accent); }
+@media (max-width:480px) { .grid { grid-template-columns:1fr; } }
+
+</style>
+</head>
+<body>
+<header style="padding:24px 40px;border-bottom:1px solid #eee;"><h1 style="font-size:22px;margin:0;">Info Preservation</h1></header>
+<main style="max-width:900px;margin:0 auto;padding:40px 32px;">
+  <p style="color:#555;max-width:640px;">Design a medical dosage-reference chart where omitting or visually de-emphasizing any single row is a safety risk.</p>
+  <table style="width:100%;margin-top:24px;border-collapse:collapse;background:#fff;border-radius:8px;overflow:hidden;">
+    <caption style="text-align:left;padding:12px 16px;font-weight:600;">All dosages shown at equal size — no row is condensed or hidden</caption>
+    <tr><th style="text-align:left;padding:12px 16px;background:#f4f2ee;">Medication</th><th style="text-align:left;padding:12px 16px;background:#f4f2ee;">Dose</th><th style="text-align:left;padding:12px 16px;background:#f4f2ee;">Interval</th><th style="text-align:left;padding:12px 16px;background:#f4f2ee;">Warning</th></tr>
+    <tr><td style="padding:14px 16px;border-top:1px solid #eee;font-weight:600;">Amoxicillin</td><td style="padding:14px 16px;border-top:1px solid #eee;">20–40 mg/kg/day</td><td style="padding:14px 16px;border-top:1px solid #eee;">8h</td><td style="padding:14px 16px;border-top:1px solid #eee;color:#a33;">Take with food</td></tr>
+<tr><td style="padding:14px 16px;border-top:1px solid #eee;font-weight:600;">Ibuprofen</td><td style="padding:14px 16px;border-top:1px solid #eee;">5–10 mg/kg/dose</td><td style="padding:14px 16px;border-top:1px solid #eee;">6–8h</td><td style="padding:14px 16px;border-top:1px solid #eee;color:#a33;">Max 4 doses/day</td></tr>
+<tr><td style="padding:14px 16px;border-top:1px solid #eee;font-weight:600;">Acetaminophen</td><td style="padding:14px 16px;border-top:1px solid #eee;">10–15 mg/kg/dose</td><td style="padding:14px 16px;border-top:1px solid #eee;">4–6h</td><td style="padding:14px 16px;border-top:1px solid #eee;color:#a33;">Do not exceed 5 doses/day</td></tr>
+<tr><td style="padding:14px 16px;border-top:1px solid #eee;font-weight:600;">Prednisolone</td><td style="padding:14px 16px;border-top:1px solid #eee;">1–2 mg/kg/day</td><td style="padding:14px 16px;border-top:1px solid #eee;">24h</td><td style="padding:14px 16px;border-top:1px solid #eee;color:#a33;">Taper over 5 days, do not stop abruptly</td></tr>
+<tr><td style="padding:14px 16px;border-top:1px solid #eee;font-weight:600;">Cetirizine</td><td style="padding:14px 16px;border-top:1px solid #eee;">0.25 mg/kg/dose</td><td style="padding:14px 16px;border-top:1px solid #eee;">24h</td><td style="padding:14px 16px;border-top:1px solid #eee;color:#a33;">May cause drowsiness</td></tr>
+<tr><td style="padding:14px 16px;border-top:1px solid #eee;font-weight:600;">Ondansetron</td><td style="padding:14px 16px;border-top:1px solid #eee;">0.15 mg/kg/dose</td><td style="padding:14px 16px;border-top:1px solid #eee;">8h</td><td style="padding:14px 16px;border-top:1px solid #eee;color:#a33;">Do not exceed 3 doses/day</td></tr>
+  </table>
+  <p style="margin-top:20px;color:#a33;font-size:14px;">Every row above carries a safety-relevant warning — none are collapsed, paginated, or truncated.</p>
+  <button class="btn" style="margin-top:20px;">Print full chart</button>
+</main>
+<footer style="padding:16px 32px;"><nav aria-label="footer">Verify against current prescribing information</nav></footer>
+</body>
+</html>

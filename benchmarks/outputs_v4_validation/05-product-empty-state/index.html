@@ -1,0 +1,1980 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Linearis · Sprint 28 Task Board (Empty State Demo)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    /* ==========================================================================
+       DESIGN SYSTEM & CSS VARIABLES
+       4px/8px spacing scale for layout rhythm (fine-grained control chrome sized to content,
+       not forced onto the grid), WCAG AA contrast (4.5:1+) for all functional text
+       ========================================================================== */
+    :root {
+      /* Palette: Luminous Slate & Electric Indigo */
+      --bg-canvas: #f8fafc;
+      --bg-surface: #ffffff;
+      --bg-column: #f1f5f9;
+      --bg-column-empty: #ffffff;
+      --bg-subtle: #e2e8f0;
+      --bg-hover: #f1f5f9;
+
+      --border-hairline: #e2e8f0;
+      --border-strong: #cbd5e1;
+      --border-control: #64748b;
+      --border-focus: #4f46e5;
+      
+      --text-primary: #0f172a;
+      --text-secondary: #475569;
+      --text-muted: #64748b;
+      --text-subtle: #94a3b8;
+      
+      --accent-primary: #4f46e5;
+      --accent-hover: #4338ca;
+      --accent-active: #3730a3;
+      --accent-subtle: #eef2ff;
+      --accent-ring: rgba(79, 70, 229, 0.22);
+      --accent-cta-bg: var(--accent-primary);
+      --accent-primary-text: var(--accent-primary);
+
+      /* Semantic Status Colors */
+      --status-todo: #64748b;
+      --status-in-progress: #b45f0a;
+      --status-done: #059669;
+      /* Darker than --status-done: the 10px/600-weight "Done" badge text needs 4.5:1
+         against --bg-surface, but --status-done itself only gives 3.77:1 there. */
+      --status-done-text: #046c4e;
+
+      /* Priority Tokens */
+      --priority-urgent: #be123c;
+      --priority-urgent-bg: #ffe4e6;
+      --priority-high: #9a3412;
+      --priority-high-bg: #ffedd5;
+      --priority-med: #0369a1;
+      --priority-med-bg: #e0f2fe;
+      --priority-low: #475569;
+      --priority-low-bg: #f1f5f9;
+
+      /* Elevation / Shadows */
+      --shadow-xs: 0 1px 2px rgba(15, 23, 42, 0.04);
+      --shadow-sm: 0 1px 3px rgba(15, 23, 42, 0.06), 0 1px 2px rgba(15, 23, 42, 0.04);
+      --shadow-md: 0 4px 6px -1px rgba(15, 23, 42, 0.07), 0 2px 4px -2px rgba(15, 23, 42, 0.05);
+      --shadow-empty: 0 0 0 1px rgba(15, 23, 42, 0.03), 0 2px 4px rgba(15, 23, 42, 0.02);
+
+      /* Typography Scale (custom, not a strict modular ratio) */
+      --font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      --font-size-xs: 11px;
+      --font-size-sm: 12px;
+      --font-size-base: 14px;
+      --font-size-md: 16px;
+
+      /* Spacing Units (4px/8px Base Grid) */
+      --space-1: 4px;
+      --space-2: 8px;
+      --space-3: 12px;
+      --space-4: 16px;
+      --space-5: 20px;
+      --space-6: 24px;
+
+      /* Radii */
+      --radius-sm: 4px;
+      --radius-md: 8px;
+      --radius-lg: 12px;
+      --radius-pill: 9999px;
+
+      /* Motion Curves (Fast start, gentle settle) */
+      --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+      --duration-micro: 120ms;
+      --duration-standard: 220ms;
+      --duration-enter: 320ms;
+    }
+
+    /* Dark Mode Theme Tokens */
+    [data-theme="dark"] {
+      --bg-canvas: #090d16;
+      --bg-surface: #111726;
+      --bg-column: #0d121e;
+      --bg-column-empty: #131a2b;
+      --bg-subtle: #1c2438;
+      --bg-hover: #182033;
+
+      --border-hairline: #1e293b;
+      --border-strong: #334155;
+      --border-control: #64748b;
+      --border-focus: #6366f1;
+      
+      --text-primary: #f8fafc;
+      --text-secondary: #cbd5e1;
+      --text-muted: #94a3b8;
+      --text-subtle: #64748b;
+      
+      --accent-primary: #6366f1;
+      --accent-hover: #4f46e5;
+      --accent-active: #4338ca;
+      --accent-subtle: #1e1b4b;
+      --accent-ring: rgba(99, 102, 241, 0.3);
+      /* Darker than --accent-primary: white CTA text at 5.4:1 vs. accent-primary's 4.47:1 */
+      --accent-cta-bg: #5457e6;
+      /* Lighter than --accent-primary: small text on dark surfaces needs 4.5:1, accent-primary only gives ~4:1 */
+      --accent-primary-text: #8688f7;
+      /* Light theme's darkened --status-done-text (#046c4e) only gives 2.78:1 against
+         this dark surface; the original --status-done already passes here at 4.75:1. */
+      --status-done-text: var(--status-done);
+
+      --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.3);
+      --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.4);
+      --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.5);
+      --shadow-empty: 0 0 0 1px rgba(255, 255, 255, 0.03);
+    }
+
+    /* ==========================================================================
+       RESET & BASE STYLES
+       ========================================================================== */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    /* Author-origin display rules on elements like .empty-state-card/.task-composer
+       (display: flex) otherwise beat the UA stylesheet's [hidden]{display:none} at equal
+       specificity/importance, so the hidden IDL attribute silently stops working the moment
+       any component rule sets its own `display`. Restore native hidden behavior explicitly. */
+    [hidden] {
+      display: none !important;
+    }
+
+    body {
+      font-family: var(--font-family);
+      font-size: var(--font-size-base);
+      line-height: 1.5;
+      color: var(--text-primary);
+      background-color: var(--bg-canvas);
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      font-feature-settings: "cv02" 1, "tnum" 1;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    button, input, select, textarea {
+      font-family: inherit;
+      font-size: inherit;
+      color: inherit;
+    }
+
+    button {
+      cursor: pointer;
+      background: none;
+      border: none;
+      user-select: none;
+    }
+
+    :focus-visible {
+      outline: 2px solid var(--border-focus);
+      outline-offset: 2px;
+    }
+
+    /* Icon system: Consistent 1.6px stroke; 16x16 base size, scaled down inline for dense chrome */
+    .icon {
+      width: 16px;
+      height: 16px;
+      stroke-width: 1.6;
+      stroke: currentColor;
+      fill: none;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      display: inline-block;
+      vertical-align: middle;
+      flex-shrink: 0;
+    }
+
+    /* Keyboard Badge */
+    kbd {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-size: 10px;
+      font-weight: 600;
+      color: var(--text-muted);
+      background: var(--bg-canvas);
+      border: 1px solid var(--border-strong);
+      border-radius: var(--radius-sm);
+      padding: 1px 5px;
+      line-height: 1.2;
+    }
+
+    /* ==========================================================================
+       LAYOUT: APP SHELL & NAVIGATION
+       ========================================================================== */
+    .app-header {
+      background-color: var(--bg-surface);
+      border-bottom: 1px solid var(--border-hairline);
+      height: 56px;
+      padding: 0 var(--space-6);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 20;
+    }
+
+    .nav-left {
+      display: flex;
+      align-items: center;
+      gap: var(--space-4);
+    }
+
+    .brand-logo {
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+      font-weight: 700;
+      font-size: var(--font-size-base);
+      letter-spacing: -0.02em;
+      color: var(--text-primary);
+      text-decoration: none;
+    }
+
+    .brand-mark {
+      width: 28px;
+      height: 28px;
+      border-radius: var(--radius-md);
+      background: var(--accent-primary);
+      color: #ffffff;
+      display: grid;
+      place-items: center;
+    }
+
+    .breadcrumbs {
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+      font-size: var(--font-size-sm);
+      color: var(--text-muted);
+    }
+
+    .breadcrumbs .crumb-active {
+      color: var(--text-primary);
+      font-weight: 600;
+    }
+
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: var(--space-4);
+    }
+
+    .avatar-stack {
+      display: flex;
+      align-items: center;
+      padding-left: 6px;
+    }
+
+    .avatar {
+      width: 28px;
+      height: 28px;
+      border-radius: var(--radius-pill);
+      background: var(--bg-subtle);
+      border: 2px solid var(--bg-surface);
+      margin-left: -6px;
+      display: grid;
+      place-items: center;
+      font-size: 10px;
+      font-weight: 700;
+      color: var(--text-secondary);
+      position: relative;
+    }
+
+    .btn-icon {
+      width: 32px;
+      height: 32px;
+      display: grid;
+      place-items: center;
+      border-radius: var(--radius-md);
+      color: var(--text-secondary);
+      border: 1px solid var(--border-control);
+      background: var(--bg-surface);
+      transition: background-color var(--duration-micro) var(--ease-out), color var(--duration-micro) var(--ease-out);
+    }
+
+    .btn-icon:hover {
+      background: var(--bg-hover);
+      color: var(--text-primary);
+    }
+
+    /* Sub-header & Toolbar */
+    .board-toolbar {
+      padding: var(--space-4) var(--space-6);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: var(--space-4);
+      background: var(--bg-canvas);
+      border-bottom: 1px solid var(--border-hairline);
+    }
+
+    .toolbar-left {
+      display: flex;
+      align-items: center;
+      gap: var(--space-4);
+    }
+
+    .sprint-title-group {
+      display: flex;
+      align-items: center;
+      gap: var(--space-3);
+    }
+
+    .sprint-title {
+      font-size: var(--font-size-md);
+      font-weight: 700;
+      letter-spacing: -0.015em;
+    }
+
+    .status-pill {
+      font-size: var(--font-size-xs);
+      font-weight: 600;
+      color: #047857;
+      background: #ecfdf5;
+      padding: 2px 8px;
+      border-radius: var(--radius-pill);
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-1);
+    }
+
+    [data-theme="dark"] .status-pill {
+      background: #064e3b;
+      color: #6ee7b7;
+    }
+
+    .status-pill-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: currentColor;
+    }
+
+    /* Segmented Controls (§2.5 Control Functionality Floor) */
+    .segmented-control {
+      display: inline-flex;
+      background: var(--bg-surface);
+      border: 1px solid var(--border-control);
+      border-radius: var(--radius-md);
+      padding: 2px;
+      gap: 2px;
+    }
+
+    .segment-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-2);
+      padding: var(--space-1) var(--space-3);
+      font-size: var(--font-size-sm);
+      font-weight: 500;
+      color: var(--text-secondary);
+      border-radius: var(--radius-sm);
+      /* Transparent border reserves the space the selected state's visible border needs,
+         so toggling aria-selected doesn't shift layout by the border width. */
+      border: 1px solid transparent;
+      transition: background-color var(--duration-micro) var(--ease-out), color var(--duration-micro) var(--ease-out), box-shadow var(--duration-micro) var(--ease-out), border-color var(--duration-micro) var(--ease-out);
+    }
+
+    .segment-btn[aria-selected="true"],
+    .segment-btn[aria-pressed="true"] {
+      background: var(--bg-column);
+      color: var(--text-primary);
+      font-weight: 600;
+      /* --bg-column is only ~1.1:1 from --bg-surface in either theme, so the fill alone
+         can't carry the "selected" signal; --border-control gives 4.76:1 (light) /
+         3.76:1 (dark) against --bg-surface, clearing the 3:1 non-text UI threshold. */
+      border: 1px solid var(--border-control);
+      box-shadow: var(--shadow-xs);
+    }
+
+    .search-box {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    .search-input {
+      padding: var(--space-1) var(--space-3) var(--space-1) 32px;
+      font-size: var(--font-size-sm);
+      border: 1px solid var(--border-control);
+      border-radius: var(--radius-md);
+      background: var(--bg-surface);
+      color: var(--text-primary);
+      width: 200px;
+      transition: border-color var(--duration-micro) var(--ease-out), width var(--duration-standard) var(--ease-out);
+    }
+
+    .search-input:focus {
+      outline: none;
+      border-color: var(--border-focus);
+      width: 240px;
+    }
+
+    .search-box .icon {
+      position: absolute;
+      left: 10px;
+      color: var(--text-muted);
+      pointer-events: none;
+    }
+
+    .search-shortcut {
+      position: absolute;
+      right: 8px;
+      pointer-events: none;
+      border-color: var(--border-control);
+    }
+
+    /* Reset Demo Button */
+    .btn-reset {
+      font-size: var(--font-size-xs);
+      font-weight: 500;
+      color: var(--text-muted);
+      padding: var(--space-1) var(--space-2);
+      border-radius: var(--radius-sm);
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-1);
+      transition: color var(--duration-micro) var(--ease-out);
+    }
+
+    .btn-reset:hover {
+      color: var(--text-primary);
+    }
+
+    /* ==========================================================================
+       KANBAN BOARD GRID & COLUMNS
+       ========================================================================== */
+    .board-container {
+      flex: 1;
+      padding: var(--space-6);
+      display: grid;
+      grid-template-columns: repeat(3, minmax(320px, 1fr));
+      gap: var(--space-6);
+      align-items: start;
+      max-width: 1440px;
+      width: 100%;
+      margin: 0 auto;
+    }
+
+    .board-container.list-view {
+      display: flex;
+      flex-direction: column;
+      max-width: 840px;
+    }
+
+    .board-container.list-view .task-list {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .board-container.list-view .task-card {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      gap: var(--space-3);
+    }
+
+    .column {
+      background: var(--bg-column);
+      border-radius: var(--radius-lg);
+      padding: var(--space-3);
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-3);
+      min-height: 540px;
+      transition: background-color var(--duration-standard) var(--ease-out);
+    }
+
+    /* Highlight target column subtly */
+    .column-target {
+      background: var(--bg-column);
+      border: 1px solid var(--border-hairline);
+    }
+
+    .column-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: var(--space-2) var(--space-2) var(--space-1);
+    }
+
+    .column-title-group {
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+    }
+
+    .column-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+    }
+
+    .column-dot.todo {
+      border: 1.5px solid var(--status-todo);
+      background: transparent;
+    }
+
+    .column-dot.in-progress {
+      background: var(--status-in-progress);
+    }
+
+    .column-dot.done {
+      background: var(--status-done);
+    }
+
+    .column-title {
+      font-size: var(--font-size-sm);
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    .column-count {
+      font-size: var(--font-size-xs);
+      font-weight: 600;
+      color: var(--text-muted);
+      background: var(--bg-surface);
+      border: 1px solid var(--border-hairline);
+      border-radius: var(--radius-pill);
+      padding: 0 7px;
+      min-width: 20px;
+      height: 20px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform var(--duration-micro) var(--ease-out);
+    }
+
+    .column-actions {
+      display: flex;
+      align-items: center;
+      gap: var(--space-1);
+    }
+
+    .btn-column-action {
+      width: 26px;
+      height: 26px;
+      display: grid;
+      place-items: center;
+      border-radius: var(--radius-sm);
+      color: var(--text-muted);
+      transition: background-color var(--duration-micro) var(--ease-out), color var(--duration-micro) var(--ease-out);
+    }
+
+    .btn-column-action:hover {
+      background: var(--bg-surface);
+      color: var(--text-primary);
+    }
+
+    .task-list {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-2);
+      min-height: 80px;
+    }
+
+    /* ==========================================================================
+       TARGET COMPONENT: EMPTY STATE FOR "TO DO" COLUMN
+       Signature Motif: Architectural Blueprint Ghost Card
+       ========================================================================== */
+    .empty-state-card {
+      background: var(--bg-column-empty);
+      border: 1px solid var(--border-hairline);
+      border-radius: var(--radius-md);
+      padding: var(--space-6) var(--space-4) var(--space-5);
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      box-shadow: var(--shadow-empty);
+      position: relative;
+      overflow: hidden;
+      transition: border-color var(--duration-standard) var(--ease-out), box-shadow var(--duration-standard) var(--ease-out);
+      animation: emptyStateFadeIn var(--duration-enter) var(--ease-out) 40ms both;
+    }
+
+    .empty-state-card:hover {
+      border-color: var(--border-strong);
+    }
+
+    /* Architectural Blueprint Graphic (No cartoon blobs/rockets!) */
+    .blueprint-stage {
+      width: 100%;
+      max-width: 260px;
+      height: 120px;
+      margin-bottom: var(--space-5);
+      position: relative;
+      cursor: pointer;
+    }
+
+    .blueprint-card {
+      width: 100%;
+      height: 100%;
+      border: 1.5px dashed var(--border-control);
+      border-radius: var(--radius-md);
+      background: var(--bg-canvas);
+      padding: var(--space-3);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: relative;
+      transition: transform var(--duration-standard) var(--ease-out), border-color var(--duration-standard) var(--ease-out), background-color var(--duration-standard) var(--ease-out);
+    }
+
+    .blueprint-stage:hover .blueprint-card {
+      transform: translateY(-2px);
+      border-color: var(--accent-primary);
+      border-style: solid;
+      background: var(--accent-subtle);
+    }
+
+    /* Precision Blueprint Wireframe Elements */
+    .bp-row-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .bp-key {
+      display: flex;
+      align-items: center;
+      gap: var(--space-1);
+      font-size: var(--font-size-xs);
+      font-weight: 600;
+      color: var(--text-muted);
+      font-family: ui-monospace, monospace;
+      letter-spacing: 0.05em;
+    }
+
+    .bp-pill-ghost {
+      width: 38px;
+      height: 14px;
+      border-radius: var(--radius-pill);
+      background: var(--bg-subtle);
+    }
+
+    .bp-lines {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-2);
+      margin: var(--space-2) 0;
+    }
+
+    .bp-line {
+      height: 6px;
+      border-radius: var(--radius-pill);
+      background: var(--bg-subtle);
+    }
+
+    .bp-line-lg {
+      width: 82%;
+    }
+
+    .bp-line-sm {
+      width: 48%;
+    }
+
+    .bp-row-bottom {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-top: var(--space-2);
+      border-top: 1px dashed var(--border-hairline);
+    }
+
+    .bp-meta-group {
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+    }
+
+    .bp-circle-ghost {
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      border: 1.5px dashed var(--border-strong);
+      display: grid;
+      place-items: center;
+    }
+
+    .bp-badge-ghost {
+      width: 42px;
+      height: 14px;
+      border-radius: var(--radius-sm);
+      background: var(--bg-subtle);
+    }
+
+    /* Center Add Hover Stamp on Blueprint */
+    .bp-action-overlay {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-2);
+      color: var(--accent-primary);
+      font-size: var(--font-size-xs);
+      font-weight: 600;
+      opacity: 0;
+      transform: scale(0.95);
+      transition: opacity var(--duration-micro) var(--ease-out), transform var(--duration-micro) var(--ease-out);
+      pointer-events: none;
+    }
+
+    .blueprint-stage:hover .bp-action-overlay {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    .bp-action-badge {
+      background: var(--bg-surface);
+      border: 1px solid var(--accent-primary);
+      border-radius: var(--radius-pill);
+      padding: 4px 10px;
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-1);
+      box-shadow: var(--shadow-sm);
+    }
+
+    /* Copy Section: Clear, non-lorem, domain-specific */
+    .empty-heading {
+      font-size: var(--font-size-md);
+      font-weight: 600;
+      letter-spacing: -0.015em;
+      color: var(--text-primary);
+      margin-bottom: var(--space-2);
+    }
+
+    .empty-description {
+      font-size: var(--font-size-sm);
+      color: var(--text-muted);
+      line-height: 1.45;
+      max-width: 28ch;
+      margin-bottom: var(--space-5);
+    }
+
+    /* Primary CTA Button */
+    .btn-primary-cta {
+      background-color: var(--accent-cta-bg);
+      color: #ffffff;
+      font-size: var(--font-size-sm);
+      font-weight: 600;
+      height: 38px;
+      padding: 0 var(--space-4);
+      border-radius: var(--radius-md);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-2);
+      width: 100%;
+      box-shadow: 0 1px 2px var(--accent-ring);
+      transition: background-color var(--duration-micro) var(--ease-out), transform var(--duration-micro) var(--ease-out);
+    }
+
+    .btn-primary-cta:hover {
+      background-color: var(--accent-hover);
+    }
+
+    .btn-primary-cta:active {
+      transform: scale(0.98);
+      background-color: var(--accent-active);
+    }
+
+    .cta-shortcut {
+      color: #ffffff;
+      background: transparent;
+      border-color: rgba(255, 255, 255, 0.6);
+      margin-left: auto;
+    }
+
+    /* Filtered-empty state: real tasks exist but are hidden by search/filter, not a truly empty column */
+    .empty-state-card.is-filtered .blueprint-stage,
+    .empty-state-card.is-filtered .btn-primary-cta,
+    .empty-state-card.is-filtered .templates-section {
+      display: none;
+    }
+
+    /* Quick-Start Templates Section */
+    .templates-section {
+      width: 100%;
+      margin-top: var(--space-5);
+      padding-top: var(--space-4);
+      border-top: 1px solid var(--border-hairline);
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-2);
+      text-align: left;
+    }
+
+    .templates-label {
+      font-size: var(--font-size-xs);
+      font-weight: 600;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .template-chips {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-1);
+    }
+
+    .template-chip {
+      background: var(--bg-canvas);
+      border: 1px solid var(--border-control);
+      border-radius: var(--radius-md);
+      padding: var(--space-2) var(--space-3);
+      font-size: var(--font-size-xs);
+      color: var(--text-secondary);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      transition: background-color var(--duration-micro) var(--ease-out), border-color var(--duration-micro) var(--ease-out), color var(--duration-micro) var(--ease-out);
+    }
+
+    .template-chip:hover {
+      background: var(--bg-surface);
+      border-color: var(--border-strong);
+      color: var(--text-primary);
+    }
+
+    .template-chip .chip-name {
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+      font-weight: 500;
+    }
+
+    .template-chip .chip-action {
+      color: var(--accent-primary-text);
+      font-size: 10px;
+      font-weight: 600;
+      opacity: 0;
+      transition: opacity var(--duration-micro) var(--ease-out);
+    }
+
+    .template-chip:hover .chip-action {
+      opacity: 1;
+    }
+
+    /* ==========================================================================
+       INLINE TASK COMPOSER
+       Smoothly expands to replace or prepend in the column
+       ========================================================================== */
+    .task-composer {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-focus);
+      border-radius: var(--radius-md);
+      padding: var(--space-3);
+      box-shadow: 0 0 0 3px var(--accent-ring), var(--shadow-sm);
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-3);
+      animation: composerExpand var(--duration-standard) var(--ease-out) both;
+    }
+
+    .composer-input {
+      border: none;
+      background: transparent;
+      font-size: var(--font-size-base);
+      font-weight: 500;
+      color: var(--text-primary);
+      padding: var(--space-1) 0;
+      outline: none;
+      width: 100%;
+    }
+
+    .composer-input::placeholder {
+      color: var(--text-muted);
+    }
+
+    .composer-metadata {
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+      flex-wrap: wrap;
+    }
+
+    .composer-select {
+      font-size: var(--font-size-xs);
+      font-weight: 500;
+      color: var(--text-secondary);
+      background: var(--bg-column);
+      border: 1px solid var(--border-control);
+      border-radius: var(--radius-sm);
+      padding: 3px 8px;
+      cursor: pointer;
+    }
+
+    .composer-actions {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: var(--space-2);
+      padding-top: var(--space-2);
+      border-top: 1px solid var(--border-hairline);
+    }
+
+    .btn-secondary {
+      font-size: var(--font-size-xs);
+      font-weight: 500;
+      color: var(--text-secondary);
+      padding: 6px 12px;
+      border-radius: var(--radius-sm);
+      transition: background-color var(--duration-micro) var(--ease-out), color var(--duration-micro) var(--ease-out);
+    }
+
+    .btn-secondary:hover {
+      background: var(--bg-column);
+      color: var(--text-primary);
+    }
+
+    .btn-submit-task {
+      font-size: var(--font-size-xs);
+      font-weight: 600;
+      color: #ffffff;
+      background: var(--accent-cta-bg);
+      padding: 6px 12px;
+      border-radius: var(--radius-sm);
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-1);
+      transition: background-color var(--duration-micro) var(--ease-out);
+    }
+
+    .btn-submit-task:hover {
+      background: var(--accent-hover);
+    }
+
+    /* ==========================================================================
+       ACTUAL TASK CARDS (In Progress & Populated Tasks)
+       ========================================================================== */
+    .task-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-control);
+      border-radius: var(--radius-md);
+      padding: var(--space-3);
+      box-shadow: var(--shadow-xs);
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-2);
+      cursor: grab;
+      user-select: none;
+      transition: transform var(--duration-micro) var(--ease-out), box-shadow var(--duration-micro) var(--ease-out), border-color var(--duration-micro) var(--ease-out);
+      animation: taskCardSlideIn var(--duration-standard) var(--ease-out) both;
+    }
+
+    .task-card:hover {
+      border-color: var(--border-strong);
+      box-shadow: var(--shadow-sm);
+      transform: translateY(-1px);
+    }
+
+    .task-card.dragging {
+      opacity: 0.5;
+      cursor: grabbing;
+    }
+
+    .task-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .task-id {
+      font-size: var(--font-size-xs);
+      font-weight: 600;
+      color: var(--text-muted);
+      font-family: ui-monospace, monospace;
+    }
+
+    .task-priority-badge {
+      font-size: 10px;
+      font-weight: 600;
+      padding: 2px 6px;
+      border-radius: var(--radius-sm);
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+    }
+
+    .task-priority-badge.urgent {
+      background: var(--priority-urgent-bg);
+      color: var(--priority-urgent);
+    }
+
+    .task-priority-badge.high {
+      background: var(--priority-high-bg);
+      color: var(--priority-high);
+    }
+
+    .task-priority-badge.med {
+      background: var(--priority-med-bg);
+      color: var(--priority-med);
+    }
+
+    .task-priority-badge.low {
+      background: var(--priority-low-bg);
+      color: var(--priority-low);
+    }
+
+    .task-title {
+      font-size: var(--font-size-sm);
+      font-weight: 500;
+      line-height: 1.4;
+      color: var(--text-primary);
+    }
+
+    .task-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: var(--space-1);
+      padding-top: var(--space-2);
+      border-top: 1px solid var(--border-hairline);
+    }
+
+    .task-tags {
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+    }
+
+    .task-tag {
+      font-size: 10px;
+      font-weight: 500;
+      color: var(--text-muted);
+      background: var(--bg-canvas);
+      padding: 1px 6px;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border-hairline);
+    }
+
+    .task-card.completed .task-title {
+      color: var(--text-muted);
+      text-decoration: line-through;
+    }
+
+    /* Drag Drop Target Hint in Column.
+       This class is toggled directly onto the live .task-list container (the same
+       element holding real .task-card children), not onto a separate placeholder
+       element — so it must only add a highlight (border/background/padding), never
+       override .task-list's own display/height. Doing otherwise collapses the list
+       and its cards spill out of the shrunken box on any column with content. */
+    .drop-hint-slot {
+      border: 1.5px dashed var(--accent-primary);
+      background: var(--accent-subtle);
+      border-radius: var(--radius-md);
+      padding: var(--space-2);
+      transition: background-color var(--duration-micro) var(--ease-out), border-color var(--duration-micro) var(--ease-out);
+    }
+
+    /* Live Region Toast Notification */
+    .live-toast {
+      position: fixed;
+      bottom: var(--space-6);
+      right: var(--space-6);
+      background: var(--text-primary);
+      color: var(--bg-surface);
+      font-size: var(--font-size-xs);
+      font-weight: 500;
+      padding: var(--space-2) var(--space-4);
+      border-radius: var(--radius-pill);
+      box-shadow: var(--shadow-md);
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+      opacity: 0;
+      transform: translateY(12px);
+      pointer-events: none;
+      transition: opacity var(--duration-standard) var(--ease-out), transform var(--duration-standard) var(--ease-out);
+      z-index: 50;
+    }
+
+    .live-toast.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ==========================================================================
+       KEYFRAME ANIMATIONS (Crafted with Ease-Out per guidelines)
+       ========================================================================== */
+    @keyframes emptyStateFadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(8px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes composerExpand {
+      from {
+        opacity: 0;
+        transform: scale(0.97) translateY(-4px);
+      }
+      to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+      }
+    }
+
+    @keyframes taskCardSlideIn {
+      from {
+        opacity: 0;
+        transform: translateY(-8px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* ==========================================================================
+       ACCESSIBILITY & REDUCED MOTION
+       ========================================================================== */
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+      }
+    }
+
+    /* Responsive Adaptation */
+    @media (max-width: 1024px) {
+      .board-container {
+        grid-template-columns: repeat(3, minmax(280px, 1fr));
+        overflow-x: auto;
+        padding-bottom: var(--space-4);
+      }
+      .app-header {
+        padding: 0 var(--space-4);
+      }
+      .board-toolbar {
+        padding: var(--space-3) var(--space-4);
+      }
+    }
+
+    @media (max-width: 768px) {
+      .board-container {
+        display: flex;
+        flex-direction: column;
+      }
+      .column {
+        min-height: auto;
+        width: 100%;
+      }
+      .search-input {
+        width: 140px;
+      }
+      .search-input:focus {
+        width: 180px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Screen reader live feedback -->
+  <div id="live-region" class="live-toast" role="status" aria-live="polite">
+    <svg class="icon" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
+    <span id="toast-text">Board initialized</span>
+  </div>
+
+  <!-- Main Application Header -->
+  <header class="app-header" role="banner">
+    <div class="nav-left">
+      <a href="#" class="brand-logo" aria-label="Linearis Project Management Home">
+        <div class="brand-mark" aria-hidden="true">
+          <svg class="icon" viewBox="0 0 24 24" stroke="currentColor" fill="none">
+            <path d="M16.5 9.4 7.55 4.24a1.78 1.78 0 0 0-2.5 1.55v12.42a1.78 1.78 0 0 0 2.5 1.55l8.95-5.16a1.78 1.78 0 0 0 0-3.1Z"/>
+          </svg>
+        </div>
+        <span>Linearis</span>
+      </a>
+
+      <nav class="breadcrumbs" aria-label="Project Breadcrumb">
+        <span>Engineering</span>
+        <span aria-hidden="true">/</span>
+        <span class="crumb-active">Sprint 28 · Core Platform</span>
+      </nav>
+    </div>
+
+    <div class="nav-right">
+      <!-- Member Presence -->
+      <div class="avatar-stack" aria-label="Active team members">
+        <div class="avatar" title="Alex Rivera (You)">AR</div>
+        <div class="avatar" style="background:#e0e7ff; color:var(--accent-hover);" title="Marcus Chen">MC</div>
+        <div class="avatar" style="background:#fce7f3; color:#be185d;" title="Sarah Lin">SL</div>
+      </div>
+
+      <!-- Theme Switcher -->
+      <button class="btn-icon" id="theme-toggle" aria-label="Toggle Dark/Light Mode" title="Toggle Theme">
+        <svg class="icon" id="theme-icon" viewBox="0 0 24 24">
+          <circle cx="12" cy="12" r="5"></circle>
+          <line x1="12" y1="1" x2="12" y2="3"></line>
+          <line x1="12" y1="21" x2="12" y2="23"></line>
+          <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+          <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+          <line x1="1" y1="12" x2="3" y2="12"></line>
+          <line x1="21" y1="12" x2="23" y2="12"></line>
+          <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+          <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+        </svg>
+      </button>
+    </div>
+  </header>
+
+  <!-- Secondary Board Toolbar & Interactive Filter Controls -->
+  <section class="board-toolbar" aria-label="Board Filters and View Controls">
+    <div class="toolbar-left">
+      <div class="sprint-title-group">
+        <h1 class="sprint-title">Sprint 28 Execution</h1>
+        <span class="status-pill" id="sprint-status-pill">
+          <span class="status-pill-dot" aria-hidden="true"></span>
+          <span id="sprint-status-text">Active</span>
+        </span>
+      </div>
+
+      <!-- View Switcher (§2.5 Functional Segmented Control) -->
+      <div class="segmented-control" role="tablist" aria-label="Layout View">
+        <button class="segment-btn" role="tab" aria-selected="true" id="view-board">
+          <svg class="icon" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 3v18M15 3v18"/></svg>
+          Board
+        </button>
+        <button class="segment-btn" role="tab" aria-selected="false" id="view-list">
+          <svg class="icon" viewBox="0 0 24 24"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+          List
+        </button>
+      </div>
+    </div>
+
+    <div class="nav-right">
+      <!-- Assignee Filter (§2.5 Functional Segmented Filter) -->
+      <div class="segmented-control" role="group" aria-label="Filter Tasks">
+        <button class="segment-btn" aria-pressed="true" id="filter-all">
+          All Tasks (<span id="total-count-badge">6</span>)
+        </button>
+        <button class="segment-btn" aria-pressed="false" id="filter-mine">
+          Assigned to me (<span id="mine-count-badge">2</span>)
+        </button>
+      </div>
+
+      <!-- Live Search -->
+      <div class="search-box">
+        <svg class="icon" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input type="search" class="search-input" id="search-tasks" placeholder="Filter tasks..." aria-label="Filter tasks">
+        <kbd class="search-shortcut">/</kbd>
+      </div>
+
+      <!-- Quick Reset / Test Button -->
+      <button class="btn-reset" id="btn-reset-demo" title="Clear all To do tasks (including any moved in from other columns) and restore empty state">
+        <svg class="icon" viewBox="0 0 24 24"><path d="M3 12a9 9 0 0 1 15-6.7L21 8M21 3v5h-5M21 12a9 9 0 0 1-15 6.7L3 16M3 21v-5h5"/></svg>
+        Reset To Do
+      </button>
+    </div>
+  </section>
+
+  <!-- Kanban Columns Container -->
+  <main class="board-container" id="board-lane" role="region" aria-label="Kanban task board">
+
+    <!-- ==========================================================================
+         COLUMN 1: "TO DO" (THE TARGET EMPTY STATE COMPONENT)
+         ========================================================================== -->
+    <section class="column column-target" id="column-todo" aria-labelledby="todo-col-heading">
+      <header class="column-header">
+        <div class="column-title-group">
+          <span class="column-dot todo" aria-hidden="true"></span>
+          <h2 class="column-title" id="todo-col-heading">To do</h2>
+          <span class="column-count" id="todo-count" aria-label="0 tasks in To do">0</span>
+        </div>
+        <div class="column-actions">
+          <button class="btn-column-action" id="btn-quick-add-todo" aria-label="Add new task to To do" title="Add task (C)">
+            <svg class="icon" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          </button>
+        </div>
+      </header>
+
+      <!-- Inline Task Composer (Unfolds smoothly when active) -->
+      <form class="task-composer" id="todo-composer" hidden aria-label="New Task Form">
+        <input type="text" class="composer-input" id="new-task-title" placeholder="Issue title..." maxlength="120" required autofocus>
+        
+        <div class="composer-metadata">
+          <select class="composer-select" id="new-task-priority" aria-label="Priority">
+            <option value="high">High Priority</option>
+            <option value="med" selected>Medium Priority</option>
+            <option value="low">Low Priority</option>
+            <option value="urgent">Urgent</option>
+          </select>
+
+          <select class="composer-select" id="new-task-assignee" aria-label="Assignee">
+            <option value="AR" selected>Alex Rivera (You)</option>
+            <option value="MC">Marcus Chen</option>
+            <option value="SL">Sarah Lin</option>
+          </select>
+
+          <select class="composer-select" id="new-task-pts" aria-label="Story Points">
+            <option value="1 pt">1 pt</option>
+            <option value="2 pts">2 pts</option>
+            <option value="3 pts" selected>3 pts</option>
+            <option value="5 pts">5 pts</option>
+          </select>
+        </div>
+
+        <div class="composer-actions">
+          <button type="button" class="btn-secondary" id="btn-cancel-composer">Cancel</button>
+          <button type="submit" class="btn-submit-task">
+            <svg class="icon" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+            Add Task
+          </button>
+        </div>
+      </form>
+
+      <!-- THE PRODUCTION EMPTY STATE CARD -->
+      <div class="empty-state-card" id="todo-empty-state">
+        <!-- Interactive Architectural Blueprint Ghost-Card -->
+        <div class="blueprint-stage" id="bp-clickable-stage" role="button" tabindex="0" aria-label="Click to compose a new task into this empty column">
+          <div class="blueprint-card" aria-hidden="true">
+            <div class="bp-row-top">
+              <div class="bp-key">
+                <svg class="icon" style="width:12px;height:12px;" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/></svg>
+                <span>CORE-•••</span>
+              </div>
+              <div class="bp-pill-ghost"></div>
+            </div>
+
+            <div class="bp-lines">
+              <div class="bp-line bp-line-lg"></div>
+              <div class="bp-line bp-line-sm"></div>
+            </div>
+
+            <div class="bp-row-bottom">
+              <div class="bp-meta-group">
+                <div class="bp-circle-ghost">
+                  <svg class="icon" style="width:10px;height:10px;stroke:var(--text-subtle)" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                </div>
+                <div class="bp-badge-ghost"></div>
+              </div>
+              <span style="font-size:10px;color:var(--text-muted);font-family:monospace;">READY</span>
+            </div>
+          </div>
+
+          <!-- Hover Overlay Prompt -->
+          <div class="bp-action-overlay">
+            <span class="bp-action-badge">
+              <svg class="icon" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              Click to draft issue
+            </span>
+          </div>
+        </div>
+
+        <!-- Copywriting (Grounded, direct, no fluffy filler) -->
+        <h3 class="empty-heading" id="empty-heading">No tasks queued yet</h3>
+        <p class="empty-description" id="empty-description">
+          This sprint column is clear. Add the first task or instantiate a verified engineering template below.
+        </p>
+
+        <!-- Primary CTA with Keyboard Hint -->
+        <button class="btn-primary-cta" id="btn-create-first-task">
+          <svg class="icon" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          <span>Create Task</span>
+          <kbd class="cta-shortcut">C</kbd>
+        </button>
+
+        <!-- Quick Starter Template Chips -->
+        <div class="templates-section">
+          <span class="templates-label">Quick-start templates</span>
+          <div class="template-chips">
+            <button type="button" class="template-chip" data-title="Draft OpenTelemetry collector spec" data-priority="high" data-pts="3 pts">
+              <span class="chip-name">
+                <svg class="icon" viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+                Telemetry Collector Spec
+              </span>
+              <span class="chip-action">+ Insert</span>
+            </button>
+
+            <button type="button" class="template-chip" data-title="Review Redis v7.2 memory leak advisory" data-priority="urgent" data-pts="2 pts">
+              <span class="chip-name">
+                <svg class="icon" viewBox="0 0 24 24"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+                Redis Memory Advisory
+              </span>
+              <span class="chip-action">+ Insert</span>
+            </button>
+
+            <button type="button" class="template-chip" data-title="Setup Playwright E2E smoke tests" data-priority="med" data-pts="5 pts">
+              <span class="chip-name">
+                <svg class="icon" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                Playwright E2E Setup
+              </span>
+              <span class="chip-action">+ Insert</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Populated Task List Slot -->
+      <div class="task-list" id="todo-tasks" data-column="todo" aria-label="Tasks in To do"></div>
+    </section>
+
+
+    <!-- ==========================================================================
+         COLUMN 2: "IN PROGRESS" (Contextual Realism)
+         ========================================================================== -->
+    <section class="column" id="column-in-progress" aria-labelledby="prog-col-heading">
+      <header class="column-header">
+        <div class="column-title-group">
+          <span class="column-dot in-progress" aria-hidden="true"></span>
+          <h2 class="column-title" id="prog-col-heading">In progress</h2>
+          <span class="column-count" id="progress-count">2</span>
+        </div>
+      </header>
+
+      <div class="task-list" id="progress-tasks" data-column="progress" aria-label="Tasks in progress">
+        <!-- Authentic Engineering Task 1 -->
+        <article class="task-card" draggable="true" data-id="CORE-142" data-assignee="AR" data-priority="high">
+          <div class="task-header">
+            <span class="task-id">CORE-142</span>
+            <span class="task-priority-badge high">
+              <svg class="icon" style="width:10px;height:10px" viewBox="0 0 24 24"><polyline points="18 15 12 9 6 15"/></svg>
+              High
+            </span>
+          </div>
+          <h3 class="task-title">Implement JWT session revocation and token rotation</h3>
+          <div class="task-footer">
+            <div class="task-tags">
+              <span class="task-tag">Auth</span>
+              <span class="task-tag">3 pts</span>
+            </div>
+            <div class="avatar" style="width:22px;height:22px;font-size:9px;" title="Alex Rivera (You)">AR</div>
+          </div>
+        </article>
+
+        <!-- Authentic Engineering Task 2 -->
+        <article class="task-card" draggable="true" data-id="CORE-145" data-assignee="MC" data-priority="med">
+          <div class="task-header">
+            <span class="task-id">CORE-145</span>
+            <span class="task-priority-badge med">
+              <svg class="icon" style="width:10px;height:10px" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              Med
+            </span>
+          </div>
+          <h3 class="task-title">Migrate Redis cluster to private VPC peering</h3>
+          <div class="task-footer">
+            <div class="task-tags">
+              <span class="task-tag">Infra</span>
+              <span class="task-tag">5 pts</span>
+            </div>
+            <div class="avatar" style="width:22px;height:22px;font-size:9px;background:#e0e7ff;color:var(--accent-hover)" title="Marcus Chen">MC</div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+
+    <!-- ==========================================================================
+         COLUMN 3: "DONE" (Contextual Realism)
+         ========================================================================== -->
+    <section class="column" id="column-done" aria-labelledby="done-col-heading">
+      <header class="column-header">
+        <div class="column-title-group">
+          <span class="column-dot done" aria-hidden="true"></span>
+          <h2 class="column-title" id="done-col-heading">Done</h2>
+          <span class="column-count" id="done-count">4</span>
+        </div>
+      </header>
+
+      <div class="task-list" id="done-tasks" data-column="done" aria-label="Completed tasks">
+        <article class="task-card completed" draggable="true" data-id="CORE-138" data-assignee="SL" data-priority="med">
+          <div class="task-header">
+            <span class="task-id">CORE-138</span>
+            <span style="font-size:10px;color:var(--status-done-text);font-weight:600;display:flex;align-items:center;gap:2px">
+              <svg class="icon" style="width:12px;height:12px" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+              Done
+            </span>
+          </div>
+          <h3 class="task-title">Audit CORS origin headers on ingress gateways</h3>
+          <div class="task-footer">
+            <div class="task-tags">
+              <span class="task-tag">Security</span>
+              <span class="task-tag">2 pts</span>
+            </div>
+            <div class="avatar" style="width:22px;height:22px;font-size:9px;background:#fce7f3;color:#be185d" title="Sarah Lin">SL</div>
+          </div>
+        </article>
+
+        <article class="task-card completed" draggable="true" data-id="CORE-139" data-assignee="AR" data-priority="low">
+          <div class="task-header">
+            <span class="task-id">CORE-139</span>
+            <span style="font-size:10px;color:var(--status-done-text);font-weight:600;display:flex;align-items:center;gap:2px">
+              <svg class="icon" style="width:12px;height:12px" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+              Done
+            </span>
+          </div>
+          <h3 class="task-title">Tune connection pool timeouts for async workers</h3>
+          <div class="task-footer">
+            <div class="task-tags">
+              <span class="task-tag">Workers</span>
+              <span class="task-tag">1 pt</span>
+            </div>
+            <div class="avatar" style="width:22px;height:22px;font-size:9px;" title="Alex Rivera (You)">AR</div>
+          </div>
+        </article>
+
+        <article class="task-card completed" draggable="true" data-id="CORE-140" data-assignee="MC" data-priority="high">
+          <div class="task-header">
+            <span class="task-id">CORE-140</span>
+            <span style="font-size:10px;color:var(--status-done-text);font-weight:600;display:flex;align-items:center;gap:2px">
+              <svg class="icon" style="width:12px;height:12px" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+              Done
+            </span>
+          </div>
+          <h3 class="task-title">Automate database schema migration rollbacks</h3>
+          <div class="task-footer">
+            <div class="task-tags">
+              <span class="task-tag">Database</span>
+              <span class="task-tag">3 pts</span>
+            </div>
+            <div class="avatar" style="width:22px;height:22px;font-size:9px;background:#e0e7ff;color:var(--accent-hover)" title="Marcus Chen">MC</div>
+          </div>
+        </article>
+
+        <article class="task-card completed" draggable="true" data-id="CORE-141" data-assignee="SL" data-priority="med">
+          <div class="task-header">
+            <span class="task-id">CORE-141</span>
+            <span style="font-size:10px;color:var(--status-done-text);font-weight:600;display:flex;align-items:center;gap:2px">
+              <svg class="icon" style="width:12px;height:12px" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+              Done
+            </span>
+          </div>
+          <h3 class="task-title">Generate OpenAPI 3.1 specs from route controllers</h3>
+          <div class="task-footer">
+            <div class="task-tags">
+              <span class="task-tag">Docs</span>
+              <span class="task-tag">2 pts</span>
+            </div>
+            <div class="avatar" style="width:22px;height:22px;font-size:9px;background:#fce7f3;color:#be185d" title="Sarah Lin">SL</div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ==========================================================================
+       VANILLA JAVASCRIPT: ROBUST INTERACTION LOGIC
+       Satisfies Section 2.5 Interaction Depth & Section 4 Motion Notes
+       ========================================================================== */
+  -->
+  <script>
+    (function() {
+      'use strict';
+
+      // State store
+      let issueCounter = 150;
+      let activeFilter = 'all'; // 'all' or 'mine'
+      let draggedElement = null;
+
+      // DOM Selectors
+      const emptyState = document.getElementById('todo-empty-state');
+      const emptyHeading = document.getElementById('empty-heading');
+      const emptyDescription = document.getElementById('empty-description');
+      const composer = document.getElementById('todo-composer');
+      const taskInput = document.getElementById('new-task-title');
+      const todoTaskList = document.getElementById('todo-tasks');
+      const todoCountBadge = document.getElementById('todo-count');
+      const totalCountBadge = document.getElementById('total-count-badge');
+      const mineCountBadge = document.getElementById('mine-count-badge');
+      const liveToast = document.getElementById('live-region');
+      const toastText = document.getElementById('toast-text');
+      const themeToggle = document.getElementById('theme-toggle');
+      const themeIcon = document.getElementById('theme-icon');
+
+      // Sprint status: compute real days-remaining from the sprint end date
+      const sprintEndDate = new Date('2026-09-24T00:00:00');
+      function updateSprintStatus() {
+        const pillText = document.getElementById('sprint-status-text');
+        const msPerDay = 24 * 60 * 60 * 1000;
+        const daysLeft = Math.ceil((sprintEndDate - new Date()) / msPerDay);
+        pillText.textContent = daysLeft > 0 ? `Active · ${daysLeft}d left` : 'Sprint ended';
+      }
+
+      // Toast feedback helper
+      let toastTimer = null;
+      function notify(msg) {
+        toastText.textContent = msg;
+        liveToast.classList.add('show');
+        if (toastTimer) clearTimeout(toastTimer);
+        toastTimer = setTimeout(() => {
+          liveToast.classList.remove('show');
+        }, 2600);
+      }
+
+      // Sync Column Counts & Board Totals
+      function updateCounts() {
+        const todoCards = Array.from(todoTaskList.querySelectorAll('.task-card'));
+        const visibleTodo = todoCards.filter(c => !c.hidden).length;
+        todoCountBadge.textContent = visibleTodo;
+        todoCountBadge.setAttribute('aria-label', `${visibleTodo} task${visibleTodo === 1 ? '' : 's'} in To do`);
+
+        // Toggle empty state visibility based on visible task count, unless the composer is open.
+        // Distinguish a genuinely empty column (no cards exist) from a filtered-empty one
+        // (real cards exist but are hidden by search/assignee filter) — they are not the same state.
+        if (visibleTodo === 0 && composer.hidden) {
+          emptyState.hidden = false;
+          if (todoCards.length > 0) {
+            emptyState.classList.add('is-filtered');
+            emptyHeading.textContent = 'No matching tasks';
+            emptyDescription.textContent = 'No To do tasks match the current search or filter. Try a different term or switch back to "All".';
+          } else {
+            emptyState.classList.remove('is-filtered');
+            emptyHeading.textContent = 'No tasks queued yet';
+            emptyDescription.textContent = 'This sprint column is clear. Add the first task or instantiate a verified engineering template below.';
+          }
+        } else {
+          emptyState.hidden = true;
+        }
+
+        // Total Board Count
+        const allCards = Array.from(document.querySelectorAll('.task-card'));
+        const visibleAll = allCards.filter(c => !c.hidden).length;
+        const myCards = allCards.filter(c => c.dataset.assignee === 'AR');
+        
+        totalCountBadge.textContent = allCards.length;
+        mineCountBadge.textContent = myCards.length;
+
+        // Update progress and done counts
+        document.getElementById('progress-count').textContent = 
+          document.querySelectorAll('#progress-tasks .task-card:not([hidden])').length;
+        document.getElementById('done-count').textContent = 
+          document.querySelectorAll('#done-tasks .task-card:not([hidden])').length;
+      }
+
+      // Open / Close Composer
+      let composerTrigger = null;
+      function openComposer(prefillTitle = '', priority = 'med', pts = '3 pts', triggerEl = null) {
+        composerTrigger = triggerEl || document.activeElement;
+        emptyState.hidden = true;
+        composer.hidden = false;
+        if (prefillTitle) {
+          taskInput.value = prefillTitle;
+          document.getElementById('new-task-priority').value = priority;
+          document.getElementById('new-task-pts').value = pts;
+        } else {
+          taskInput.value = '';
+        }
+        taskInput.focus();
+      }
+
+      function closeComposer() {
+        composer.hidden = true;
+        taskInput.value = '';
+        updateCounts();
+        // Return focus to whatever triggered the composer, so keyboard users aren't dropped to <body>.
+        if (composerTrigger && document.contains(composerTrigger)) {
+          composerTrigger.focus();
+        }
+        composerTrigger = null;
+      }
+
+      // Event listeners for Composer triggers
+      document.getElementById('btn-create-first-task').addEventListener('click', (e) => openComposer('', 'med', '3 pts', e.currentTarget));
+      document.getElementById('bp-clickable-stage').addEventListener('click', (e) => openComposer('', 'med', '3 pts', e.currentTarget));
+      document.getElementById('bp-clickable-stage').addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          openComposer('', 'med', '3 pts', e.currentTarget);
+        }
+      });
+      document.getElementById('btn-quick-add-todo').addEventListener('click', (e) => openComposer('', 'med', '3 pts', e.currentTarget));
+      document.getElementById('btn-cancel-composer').addEventListener('click', () => closeComposer());
+
+      // Keyboard Shortcut: Press 'C' to open composer anywhere, Esc to close
+      document.addEventListener('keydown', (e) => {
+        // Escape closes the composer regardless of which element inside/around it has focus
+        // (a text field, or one of the composer's own buttons).
+        if (e.key === 'Escape' && !composer.hidden) {
+          closeComposer();
+          return;
+        }
+
+        if (['INPUT', 'SELECT', 'TEXTAREA'].includes(document.activeElement.tagName)) {
+          return;
+        }
+
+        if (e.key.toLowerCase() === 'c' && !e.metaKey && !e.ctrlKey) {
+          e.preventDefault();
+          openComposer();
+        }
+
+        if (e.key === '/' && !e.metaKey && !e.ctrlKey) {
+          e.preventDefault();
+          document.getElementById('search-tasks').focus();
+        }
+      });
+
+      // Template chip quick insertion
+      document.querySelectorAll('.template-chip').forEach(chip => {
+        chip.addEventListener('click', () => {
+          const title = chip.dataset.title;
+          const priority = chip.dataset.priority;
+          const pts = chip.dataset.pts;
+          createTaskCard({
+            title: title,
+            priority: priority,
+            assignee: 'AR',
+            pts: pts
+          });
+          notify(`Template "${title}" added to To do`);
+        });
+      });
+
+      // Create a Task Card DOM Element
+      function createTaskCard({ title, priority, assignee, pts }) {
+        issueCounter++;
+        const card = document.createElement('article');
+        card.className = 'task-card';
+        card.draggable = true;
+        card.dataset.id = `CORE-${issueCounter}`;
+        card.dataset.assignee = assignee;
+        card.dataset.priority = priority;
+
+        const assigneeColors = {
+          AR: { bg: 'var(--bg-subtle)', color: 'var(--text-secondary)' },
+          MC: { bg: '#e0e7ff', color: 'var(--accent-hover)' },
+          SL: { bg: '#fce7f3', color: '#be185d' }
+        };
+
+        const priorityLabel = priority.charAt(0).toUpperCase() + priority.slice(1);
+        const colClass = priority;
+
+        card.innerHTML = `
+          <div class="task-header">
+            <span class="task-id">CORE-${issueCounter}</span>
+            <span class="task-priority-badge ${colClass}">
+              <svg class="icon" style="width:10px;height:10px" viewBox="0 0 24 24"><polyline points="18 15 12 9 6 15"/></svg>
+              ${priorityLabel}
+            </span>
+          </div>
+          <h3 class="task-title"></h3>
+          <div class="task-footer">
+            <div class="task-tags">
+              <span class="task-tag">Sprint</span>
+              <span class="task-tag">${pts}</span>
+            </div>
+            <div class="avatar" style="width:22px;height:22px;font-size:9px;background:${assigneeColors[assignee].bg};color:${assigneeColors[assignee].color}" title="${assignee}">
+              ${assignee}
+            </div>
+          </div>
+        `;
+
+        card.querySelector('.task-title').textContent = title;
+
+        // Attach drag listeners
+        attachDragHandlers(card);
+
+        // Prepend to To Do container
+        todoTaskList.prepend(card);
+        closeComposer();
+        applyCurrentFilters();
+        updateCounts();
+        notify(`Task CORE-${issueCounter} created in To do`);
+      }
+
+      // Handle Composer Submission
+      composer.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const title = taskInput.value.trim();
+        if (!title) return;
+
+        const priority = document.getElementById('new-task-priority').value;
+        const assignee = document.getElementById('new-task-assignee').value;
+        const pts = document.getElementById('new-task-pts').value;
+
+        createTaskCard({ title, priority, assignee, pts });
+      });
+
+      // Reset Demo Button (Removes added tasks to show empty state again)
+      document.getElementById('btn-reset-demo').addEventListener('click', () => {
+        todoTaskList.innerHTML = '';
+        closeComposer();
+        updateCounts();
+        notify('Cleared To Do column — empty state restored');
+      });
+
+      // Filter: All vs Assigned to Me (§2.5 Functional Control)
+      const btnFilterAll = document.getElementById('filter-all');
+      const btnFilterMine = document.getElementById('filter-mine');
+
+      btnFilterAll.addEventListener('click', () => {
+        activeFilter = 'all';
+        btnFilterAll.setAttribute('aria-pressed', 'true');
+        btnFilterMine.setAttribute('aria-pressed', 'false');
+        applyCurrentFilters();
+        notify('Showing all team tasks');
+      });
+
+      btnFilterMine.addEventListener('click', () => {
+        activeFilter = 'mine';
+        btnFilterMine.setAttribute('aria-pressed', 'true');
+        btnFilterAll.setAttribute('aria-pressed', 'false');
+        applyCurrentFilters();
+        notify('Filtered to tasks assigned to Alex Rivera (You)');
+      });
+
+      // Search input filter
+      const searchInput = document.getElementById('search-tasks');
+      searchInput.addEventListener('input', () => {
+        applyCurrentFilters();
+      });
+
+      function applyCurrentFilters() {
+        const query = searchInput.value.toLowerCase().trim();
+        const cards = document.querySelectorAll('.task-card');
+
+        cards.forEach(card => {
+          const title = card.querySelector('.task-title').textContent.toLowerCase();
+          const id = card.dataset.id.toLowerCase();
+          const assignee = card.dataset.assignee;
+
+          const matchesSearch = !query || title.includes(query) || id.includes(query);
+          const matchesAssignee = (activeFilter === 'all') || (assignee === 'AR');
+
+          card.hidden = !(matchesSearch && matchesAssignee);
+        });
+
+        updateCounts();
+      }
+
+      // View switcher (Board vs List tab control)
+      const viewBoardBtn = document.getElementById('view-board');
+      const viewListBtn = document.getElementById('view-list');
+
+      const boardLane = document.getElementById('board-lane');
+
+      viewListBtn.addEventListener('click', () => {
+        viewBoardBtn.setAttribute('aria-selected', 'false');
+        viewListBtn.setAttribute('aria-selected', 'true');
+        boardLane.classList.add('list-view');
+        notify('Switched to list view');
+      });
+
+      viewBoardBtn.addEventListener('click', () => {
+        viewListBtn.setAttribute('aria-selected', 'false');
+        viewBoardBtn.setAttribute('aria-selected', 'true');
+        boardLane.classList.remove('list-view');
+        notify('Switched to board view');
+      });
+
+      // Theme toggle (Dark / Light)
+      const SUN_ICON = `<circle cx="12" cy="12" r="5"></circle>
+          <line x1="12" y1="1" x2="12" y2="3"></line>
+          <line x1="12" y1="21" x2="12" y2="23"></line>
+          <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+          <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+          <line x1="1" y1="12" x2="3" y2="12"></line>
+          <line x1="21" y1="12" x2="23" y2="12"></line>
+          <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+          <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>`;
+      const MOON_ICON = `<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>`;
+      let isDark = false;
+      themeToggle.addEventListener('click', () => {
+        isDark = !isDark;
+        document.documentElement.setAttribute('data-theme', isDark ? 'dark' : 'light');
+        themeIcon.innerHTML = isDark ? MOON_ICON : SUN_ICON;
+        notify(isDark ? 'Switched to Dark Theme' : 'Switched to Light Theme');
+      });
+
+      // ==========================================================================
+      // DRAG & DROP INTERACTION
+      // Allows moving cards into / out of the empty column to test dynamic empty state
+      // ==========================================================================
+      const COLUMN_ORDER = ['todo', 'progress', 'done'];
+
+      function moveCardToColumn(card, columnKey) {
+        const targetList = document.querySelector(`.task-list[data-column="${columnKey}"]`);
+        if (!targetList) return;
+        targetList.appendChild(card);
+        card.focus();
+        updateCounts();
+        notify(`Moved ${card.dataset.id} to ${targetList.getAttribute('aria-label')}`);
+      }
+
+      function attachDragHandlers(card) {
+        card.setAttribute('tabindex', '0');
+        card.addEventListener('dragstart', (e) => {
+          draggedElement = card;
+          card.classList.add('dragging');
+          e.dataTransfer.effectAllowed = 'move';
+          e.dataTransfer.setData('text/plain', card.dataset.id);
+        });
+
+        card.addEventListener('dragend', () => {
+          card.classList.remove('dragging');
+          draggedElement = null;
+          document.querySelectorAll('.task-list').forEach(l => l.classList.remove('drop-hint-slot'));
+          updateCounts();
+        });
+
+        card.addEventListener('keydown', (e) => {
+          const currentColumn = card.closest('.task-list').dataset.column;
+          const index = COLUMN_ORDER.indexOf(currentColumn);
+          if (e.key === 'ArrowRight' && index < COLUMN_ORDER.length - 1) {
+            e.preventDefault();
+            moveCardToColumn(card, COLUMN_ORDER[index + 1]);
+          } else if (e.key === 'ArrowLeft' && index > 0) {
+            e.preventDefault();
+            moveCardToColumn(card, COLUMN_ORDER[index - 1]);
+          }
+        });
+      }
+
+      document.querySelectorAll('.task-card').forEach(attachDragHandlers);
+
+      document.querySelectorAll('.task-list').forEach(list => {
+        list.addEventListener('dragover', (e) => {
+          e.preventDefault();
+          e.dataTransfer.dropEffect = 'move';
+          list.classList.add('drop-hint-slot');
+        });
+
+        list.addEventListener('dragleave', () => {
+          list.classList.remove('drop-hint-slot');
+        });
+
+        list.addEventListener('drop', (e) => {
+          e.preventDefault();
+          list.classList.remove('drop-hint-slot');
+          if (draggedElement) {
+            list.appendChild(draggedElement);
+            updateCounts();
+            notify(`Moved ${draggedElement.dataset.id} to ${list.dataset.column}`);
+          }
+        });
+      });
+
+      // Initial count calculation
+      updateCounts();
+      updateSprintStatus();
+    })();
+  </script>
+</body>
+</html>

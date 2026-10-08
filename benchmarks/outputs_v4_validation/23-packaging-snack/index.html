@@ -1,0 +1,1557 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>KORD ACOUSTICS // STRATA-1 Unboxing Insert &amp; Packaging Architecture</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-paper: #f5f0e6;
+      --ink-black: #121417;
+      --surface-card: #1e2229;
+      --accent-orange: #ff5500;
+      --border-crease: #d8cfc0;
+      --muted-ink: #596373;
+      --font-display: 'Space Grotesk', sans-serif;
+      --font-body: 'Plus Jakarta Sans', sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body{background:#f5f0e6;color:#121417;
+      font-family: var(--font-body);
+      font-size: 16px;
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    em {
+      color: #ff5500;
+      font-style: normal;
+      font-weight: 700;
+    }
+
+    a:focus-visible, button:focus-visible {
+      outline: 2px solid #ff5500;
+      outline-offset: 4px;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation: none !important;
+        transition: none !important;
+      }
+    }
+
+    @keyframes pulseHalo {
+      0%, 100% { opacity: 0.95; }
+      50% { opacity: 0.35; }
+    }
+
+    .pulsing-halo {
+      animation: pulseHalo 2.4s ease-in-out infinite;
+    }
+
+    .pack-shell {
+      max-width: 1240px;
+      margin: 0 auto;
+      padding: 32px 24px 64px;
+      display: flex;
+      flex-direction: column;
+      gap: 32px;
+    }
+
+    /* Masthead & Engineering Meta Strip */
+    header.spec-masthead {
+      border-bottom: 1px solid #d8cfc0;
+      padding-bottom: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .meta-audit-strip {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+      border-bottom: 1px solid #d8cfc0;
+      padding-bottom: 12px;
+      font-size: 12px;
+      color: #596373;
+      letter-spacing: 0.04em;
+    }
+
+    .meta-col-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .meta-audit-strip strong {
+      color: #121417;
+      font-weight: 700;
+    }
+
+    .title-intro-block {
+      max-width: 880px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .spec-eyebrow {
+      font-family: var(--font-display);
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      color: #ff5500;
+      text-transform: uppercase;
+    }
+
+    h1.spec-headline {
+      font-family: var(--font-display);
+      font-size: 32px;
+      font-weight: 700;
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+      color: #121417;
+    }
+
+    .spec-lead {
+      font-size: 16px;
+      color: #596373;
+      line-height: 1.5;
+    }
+
+    /* Global View & Layer Controls */
+    nav.pack-toolbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+      background: #1e2229;
+      color: #f5f0e6;
+      padding: 16px 20px;
+      border-radius: 6px;
+    }
+
+    .toolbar-group {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .toolbar-label {
+      font-family: var(--font-display);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      color: #d8cfc0;
+      text-transform: uppercase;
+      margin-right: 4px;
+    }
+
+    .btn {
+      background: #ff5500;
+      color: #121417;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 44px;
+      padding: 0 20px;
+      font-family: var(--font-display);
+      font-size: 14px;
+      font-weight: 700;
+      border-radius: 4px;
+      cursor: pointer;
+      border: 1px solid transparent;
+      text-decoration: none;
+      transition: opacity 0.2s ease, transform 0.1s ease;
+    }
+
+    .btn:hover {
+      opacity: 0.92;
+    }
+
+    .btn:active {
+      transform: translateY(1px);
+    }
+
+    .btn-secondary {
+      background: transparent;
+      color: #f5f0e6;
+      border: 1px solid #d8cfc0;
+    }
+
+    .btn-secondary:hover {
+      background: #121417;
+      color: #f5f0e6;
+    }
+
+    .btn-secondary[aria-pressed="true"] {
+      background: #f5f0e6;
+      color: #121417;
+      border-color: #f5f0e6;
+    }
+
+    /* Main Stage */
+    main.pack-stage {
+      display: flex;
+      flex-direction: column;
+      gap: 40px;
+    }
+
+    /* Section 1: Assembled Unboxing Stage */
+    section.unboxing-reveal-section {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .section-header-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      border-bottom: 1px solid #d8cfc0;
+      padding-bottom: 8px;
+    }
+
+    h2.section-heading {
+      font-family: var(--font-display);
+      font-size: 20px;
+      font-weight: 700;
+      color: #121417;
+      letter-spacing: -0.01em;
+    }
+
+    .section-meta-note {
+      font-size: 12px;
+      color: #596373;
+    }
+
+    /* Spatial Viewport */
+    .unboxing-spatial-viewport {
+      background: #1e2229;
+      border: 1px solid #d8cfc0;
+      border-radius: 8px;
+      padding: 32px 24px;
+      color: #f5f0e6;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 24px;
+    }
+
+    .spatial-diagram-wrapper {
+      width: 100%;
+      max-width: 960px;
+      margin: 0 auto;
+    }
+
+    .unboxing-spatial-svg {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    .tray-annotation-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      width: 100%;
+      max-width: 960px;
+      border-top: 1px solid #596373;
+      padding-top: 16px;
+    }
+
+    .tray-note-col {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .tray-note-col strong {
+      font-family: var(--font-display);
+      font-size: 14px;
+      color: #ff5500;
+    }
+
+    .tray-note-col p {
+      font-size: 12px;
+      color: #d8cfc0;
+      line-height: 1.4;
+    }
+
+    /* Section 2: Detailed Flat Production Comps */
+    section.production-flats-section {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    .flats-dual-column {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+    }
+
+    article.dieline-board {
+      background: #f5f0e6;
+      border: 1px solid #d8cfc0;
+      border-radius: 6px;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .board-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      border-bottom: 1px solid #d8cfc0;
+      padding-bottom: 12px;
+    }
+
+    .board-tag {
+      font-family: var(--font-display);
+      font-size: 12px;
+      font-weight: 700;
+      color: #ff5500;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    h3.board-title {
+      font-family: var(--font-display);
+      font-size: 16px;
+      font-weight: 700;
+      color: #121417;
+    }
+
+    .board-specs {
+      font-size: 12px;
+      color: #596373;
+      text-align: right;
+    }
+
+    .print-comp-surface {
+      background: #f5f0e6;
+      border: 1px dashed #d8cfc0;
+      border-radius: 4px;
+      padding: 16px;
+      position: relative;
+    }
+
+    .print-comp-surface.dark-stock {
+      background: #1e2229;
+      color: #f5f0e6;
+      border-color: #596373;
+    }
+
+    .board-annotations-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      font-size: 12px;
+      color: #596373;
+      border-top: 1px solid #d8cfc0;
+      padding-top: 12px;
+    }
+
+    .annotation-row {
+      display: flex;
+      gap: 8px;
+    }
+
+    .annotation-row strong {
+      color: #121417;
+    }
+
+    /* Section 3: Interactive Quick-Start Step Sequencer */
+    section.onboarding-simulator-section {
+      background: #1e2229;
+      color: #f5f0e6;
+      border: 1px solid #d8cfc0;
+      border-radius: 8px;
+      padding: 32px 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    .simulator-masthead {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+      border-bottom: 1px solid #596373;
+      padding-bottom: 16px;
+    }
+
+    .simulator-title-wrap {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .sim-tag {
+      font-family: var(--font-display);
+      font-size: 12px;
+      color: #ff5500;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    h2.simulator-title {
+      font-family: var(--font-display);
+      font-size: 24px;
+      font-weight: 700;
+      color: #f5f0e6;
+    }
+
+    .step-navigator-pills {
+      display: flex;
+      gap: 8px;
+      background: #121417;
+      padding: 4px;
+      border-radius: 4px;
+    }
+
+    .step-btn {
+      background: transparent;
+      color: #d8cfc0;
+      border: 1px solid transparent;
+      padding: 8px 16px;
+      min-height: 44px;
+      font-family: var(--font-display);
+      font-size: 12px;
+      font-weight: 700;
+      border-radius: 4px;
+      cursor: pointer;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .step-btn:hover {
+      color: #f5f0e6;
+    }
+
+    .step-btn[aria-selected="true"] {
+      background: #ff5500;
+      color: #121417;
+      border-color: #ff5500;
+    }
+
+    .sim-stage-layout {
+      display: grid;
+      grid-template-columns: 1.2fr 1fr;
+      gap: 24px;
+      align-items: center;
+    }
+
+    .hardware-graphic-box {
+      background: #121417;
+      border: 1px solid #596373;
+      border-radius: 6px;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .sim-readout-card {
+      background: #121417;
+      border: 1px solid #596373;
+      border-radius: 6px;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    h3.sim-step-heading {
+      font-family: var(--font-display);
+      font-size: 16px;
+      font-weight: 700;
+      color: #ff5500;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .sim-step-desc {
+      font-size: 14px;
+      color: #d8cfc0;
+      line-height: 1.5;
+    }
+
+    .sim-status-telemetry {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      border-top: 1px solid #596373;
+      padding-top: 12px;
+    }
+
+    .telemetry-row {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .tele-label {
+      font-size: 12px;
+      color: #596373;
+      text-transform: uppercase;
+    }
+
+    .tele-val {
+      font-family: var(--font-display);
+      font-size: 14px;
+      color: #f5f0e6;
+      font-weight: 700;
+    }
+
+    /* Section 4: Physical Manufacturing & Compliance Grid */
+    section.specs-and-compliance-section {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+    }
+
+    .spec-block {
+      background: #f5f0e6;
+      border: 1px solid #d8cfc0;
+      border-radius: 6px;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    h3.spec-block-title {
+      font-family: var(--font-display);
+      font-size: 16px;
+      font-weight: 700;
+      color: #121417;
+      border-bottom: 1px solid #d8cfc0;
+      padding-bottom: 8px;
+    }
+
+    .spec-data-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 12px;
+    }
+
+    .spec-data-table th, .spec-data-table td {
+      padding: 8px 0;
+      text-align: left;
+      border-bottom: 1px solid #d8cfc0;
+    }
+
+    .spec-data-table th {
+      color: #596373;
+      font-weight: 500;
+      width: 40%;
+    }
+
+    .spec-data-table td {
+      color: #121417;
+      font-weight: 600;
+    }
+
+    .compliance-logos-row {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+      padding-top: 8px;
+    }
+
+    .compliance-badge {
+      border: 1px solid #d8cfc0;
+      border-radius: 4px;
+      padding: 8px 12px;
+      font-family: var(--font-display);
+      font-size: 12px;
+      font-weight: 700;
+      color: #121417;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .inspection-checklist {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      list-style: none;
+      padding-top: 8px;
+    }
+
+    .inspection-row {
+      display: flex;
+      gap: 8px;
+      font-size: 12px;
+      color: #596373;
+    }
+
+    .inspection-row strong {
+      color: #121417;
+    }
+
+    /* Footer */
+    footer.pack-footer {
+      border-top: 1px solid #d8cfc0;
+      padding-top: 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .footer-audit-text {
+      font-size: 12px;
+      color: #596373;
+      max-width: 600px;
+    }
+
+    .footer-actions-row {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+    }
+
+    /* Responsive Breakpoints */
+    @media (max-width: 960px) {
+      .flats-dual-column,
+      .sim-stage-layout,
+      .specs-and-compliance-section {
+        grid-template-columns: 1fr;
+      }
+      .tray-annotation-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .pack-shell {
+        padding: 16px 12px 32px;
+        gap: 24px;
+      }
+      h1.spec-headline {
+        font-size: 24px;
+      }
+      nav.pack-toolbar {
+        flex-direction: column;
+        align-items: stretch;
+      }
+      .toolbar-group {
+        justify-content: space-between;
+      }
+      footer.pack-footer {
+        flex-direction: column;
+        align-items: stretch;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="pack-shell">
+    <!-- Header Masthead -->
+    <header class="spec-masthead">
+      <div class="meta-audit-strip">
+        <div class="meta-col-item">CLIENT: <strong>KORD ACOUSTICS (STOCKHOLM // BERLIN)</strong></div>
+        <div class="meta-col-item">SKU: <strong>STRATA-1 (PKG-REV-04)</strong></div>
+        <div class="meta-col-item">SUBSTRATES: <strong>E-FLUTE KRAFT / 380GSM DUPLEX / MOLDED PULP</strong></div>
+        <div class="meta-col-item">PRINT: <strong>SPOT PANTONE 021C // SOY CARBON // BLIND DEBOSS</strong></div>
+      </div>
+
+      <div class="title-intro-block">
+        <span class="spec-eyebrow">D2C Hardware Packaging Architecture</span>
+        <h1 class="spec-headline">Unboxing Insert &amp; Interior Packaging System</h1>
+        <p class="spec-lead">
+          Direct-to-consumer unboxing experience engineered for zero single-use plastic, tactile revelation, and 60-second time-to-first-sound. Features interior lid screenprinted acoustic manifesto, duplexed welcome card with factory calibration certificate, and a panoramic quick-start card with hardware schematic and full regulatory compliance.
+        </p>
+      </div>
+    </header>
+
+    <!-- Global Interactive Navigation Toolbar -->
+    <nav class="pack-toolbar" aria-label="Packaging Inspection Modes">
+      <div class="toolbar-group">
+        <span class="toolbar-label">Inspection View:</span>
+        <button type="button" class="btn btn-secondary" id="btnModePerspective" aria-pressed="true">Physical Perspective</button>
+        <button type="button" class="btn btn-secondary" id="btnModeDieline" aria-pressed="false">Die-Lines &amp; Bleed</button>
+      </div>
+      <div class="toolbar-group">
+        <span class="toolbar-label">Card Faces:</span>
+        <button type="button" class="btn btn-secondary" id="btnToggleWelcome" aria-pressed="false">Flip Welcome Card</button>
+        <button type="button" class="btn btn-secondary" id="btnToggleQuickstart" aria-pressed="false">Flip Quick-Start</button>
+      </div>
+    </nav>
+
+    <main class="pack-stage">
+      <!-- Section 1: Physical Unboxing Stage View -->
+      <section class="unboxing-reveal-section" aria-label="Physical Unboxing Assembly">
+        <div class="section-header-row">
+          <h2 class="section-heading">01. Unboxing Architecture &amp; Spatial Reveal</h2>
+          <span class="section-meta-note">Scale: 1:1.5 Orthographic Top Projection // 280 &times; 190 mm Footprint</span>
+        </div>
+
+        <figure class="unboxing-spatial-viewport">
+          <div class="spatial-diagram-wrapper">
+            <svg class="unboxing-spatial-svg" viewBox="0 0 880 520" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Technical orthographic diagram of open Kord Strata-1 shipping box interior showing screenprinted lid and molded pulp tray">
+              <title>Kord Strata-1 Packaging Assembly &amp; Unboxing Cavity</title>
+              <desc>Detailed orthographic diagram illustrating the opened interior lid with screenprinted typography, custom thermoformed molded sugarcane pulp cradle, Strata-1 audio interface hardware, and recessed card well.</desc>
+
+              <!-- Top Lid Flap (Open Backwards) -->
+              <g id="svgLidGraphic">
+                <rect x="60" y="20" width="760" height="200" rx="4" fill="#f5f0e6" stroke="#d8cfc0" stroke-width="2"/>
+                <!-- Corrugated E-Flute Texture Indication -->
+                <line x1="60" y1="220" x2="820" y2="220" stroke="#ff5500" stroke-width="2" stroke-dasharray="6 4"/>
+                <text x="70" y="215" fill="#ff5500" font-family="'Space Grotesk', sans-serif" font-size="12" font-weight="700">CREASE LINE A // INTERIOR HINGE FOLD [280.0 mm]</text>
+
+                <!-- Die-line Corner Crop Marks -->
+                <path d="M50 30 H70 M60 20 V40" stroke="#596373" stroke-width="1"/>
+                <path d="M830 30 H810 M820 20 V40" stroke="#596373" stroke-width="1"/>
+
+                <!-- Inside Lid Screenprinted Typography -->
+                <text x="100" y="65" fill="#ff5500" font-family="'Space Grotesk', sans-serif" font-size="12" font-weight="700" letter-spacing="0.1em">KORD ACOUSTICS // SIGNAL ARCHITECTURE</text>
+                <text x="100" y="105" fill="#121417" font-family="'Space Grotesk', sans-serif" font-size="32" font-weight="700" letter-spacing="-0.02em">SOUND UNCOMPROMISED.</text>
+                <text x="100" y="135" fill="#596373" font-family="'Plus Jakarta Sans', sans-serif" font-size="14" font-weight="500">
+                  Engineered from solid-billet aluminum. Hand-calibrated to 0.05 dB channel tracking.
+                </text>
+                <text x="100" y="155" fill="#596373" font-family="'Plus Jakarta Sans', sans-serif" font-size="14" font-weight="500">
+                  Designed to vanish between your instruments and your monitors.
+                </text>
+                <text x="100" y="190" fill="#121417" font-family="'Space Grotesk', sans-serif" font-size="12" font-weight="700" letter-spacing="0.08em">
+                  FSC RECYCLED E-FLUTE CORRUGATED // SOY INK // PAP-20 // PLEASE RECYCLE
+                </text>
+
+                <!-- Pull Tab Indicator -->
+                <rect x="400" y="210" width="80" height="10" rx="2" fill="#ff5500"/>
+                <text x="440" y="218" fill="#121417" font-family="'Space Grotesk', sans-serif" font-size="12" font-weight="700" text-anchor="middle">PULL</text>
+              </g>
+
+              <!-- Lower Shipping Tray (Molded Paper Pulp Cradle) -->
+              <g id="svgTrayCradle">
+                <rect x="60" y="240" width="760" height="260" rx="6" fill="#121417" stroke="#596373" stroke-width="2"/>
+
+                <!-- Pulp Contour Edge -->
+                <rect x="80" y="255" width="720" height="230" rx="6" fill="#1e2229" stroke="#596373" stroke-width="1"/>
+
+                <!-- Left Compartment: STRATA-1 Hardware Chassis Well -->
+                <rect x="100" y="275" width="420" height="190" rx="4" fill="#121417" stroke="#ff5500" stroke-width="1.5"/>
+                <text x="115" y="298" fill="#ff5500" font-family="'Space Grotesk', sans-serif" font-size="12" font-weight="700">STRATA-1 HARDWARE CAVITY (218 &times; 132 mm)</text>
+
+                <!-- Hardware Faceplate Representation in Tray -->
+                <rect x="120" y="315" width="380" height="130" rx="4" fill="#1e2229" stroke="#d8cfc0" stroke-width="1"/>
+
+                <!-- Hardware Dials & Combo Jack -->
+                <circle cx="160" cy="380" r="28" fill="#121417" stroke="#596373" stroke-width="2"/>
+                <circle cx="160" cy="380" r="16" fill="#1e2229"/>
+                <text x="160" y="425" fill="#d8cfc0" font-family="'Space Grotesk', sans-serif" font-size="12" text-anchor="middle">IN 1 (COMBO)</text>
+
+                <!-- Main Volume Potentiometer with Halo Ring -->
+                <circle cx="280" cy="380" r="36" fill="#121417" stroke="#ff5500" stroke-width="3" id="svgHaloPreview"/>
+                <circle cx="280" cy="380" r="24" fill="#1e2229"/>
+                <line x1="280" y1="356" x2="280" y2="368" stroke="#ff5500" stroke-width="2"/>
+                <text x="280" y="435" fill="#ff5500" font-family="'Space Grotesk', sans-serif" font-size="12" font-weight="700" text-anchor="middle">STEPPED MONITOR ATTENUATOR</text>
+
+                <!-- Headphone Out Jack -->
+                <circle cx="430" cy="380" r="20" fill="#121417" stroke="#596373" stroke-width="2"/>
+                <circle cx="430" cy="380" r="10" fill="#1e2229"/>
+                <text x="430" y="420" fill="#d8cfc0" font-family="'Space Grotesk', sans-serif" font-size="12" text-anchor="middle">HP OUT</text>
+
+                <!-- Right Compartment: Recessed Insert Deck Well -->
+                <rect x="540" y="275" width="240" height="190" rx="4" fill="#121417" stroke="#d8cfc0" stroke-width="1"/>
+                <text x="555" y="298" fill="#d8cfc0" font-family="'Space Grotesk', sans-serif" font-size="12" font-weight="700">INSERT DECK RECESS</text>
+
+                <!-- Thumb Notch Cutout -->
+                <path d="M640 275 C640 288 680 288 680 275 Z" fill="#1e2229" stroke="#596373" stroke-width="1"/>
+                <text x="660" y="270" fill="#ff5500" font-family="'Space Grotesk', sans-serif" font-size="12" text-anchor="middle">THUMB NOTCH</text>
+
+                <!-- Nestled Welcome Card Comp -->
+                <rect x="555" y="310" width="210" height="140" rx="4" fill="#f5f0e6" stroke="#121417" stroke-width="1.5"/>
+                <text x="570" y="335" fill="#ff5500" font-family="'Space Grotesk', sans-serif" font-size="12" font-weight="700">KORD STRATA-1</text>
+                <text x="570" y="355" fill="#121417" font-family="'Space Grotesk', sans-serif" font-size="14" font-weight="700">WELCOME INSERT</text>
+                <text x="570" y="380" fill="#596373" font-family="'Plus Jakarta Sans', sans-serif" font-size="12">400gsm Heavy Duplex</text>
+                <text x="570" y="400" fill="#596373" font-family="'Plus Jakarta Sans', sans-serif" font-size="12">Recessed over Quick-Start</text>
+
+                <!-- Cable Band Channel (Below Insert Deck) -->
+                <rect x="555" y="425" width="210" height="25" rx="2" fill="#1e2229" stroke="#596373" stroke-width="1"/>
+                <text x="660" y="442" fill="#d8cfc0" font-family="'Space Grotesk', sans-serif" font-size="12" text-anchor="middle">1.8M BRAIDED USB-C CABLE UNDER TRAY</text>
+              </g>
+            </svg>
+          </div>
+
+          <div class="tray-annotation-grid">
+            <div class="tray-note-col">
+              <strong>1. Zero Single-Use Plastic</strong>
+              <p>Molded sugarcane bagasse and bamboo fiber cradle replaces thermoformed PET plastic blisters, reducing package carbon footprint by 64% while maintaining 1.2m drop tolerance.</p>
+            </div>
+            <div class="tray-note-col">
+              <strong>2. Immediate Thumb Access</strong>
+              <p>A precision 40mm curved thumb notch allows the Welcome Card and Quick-Start leaflet to lift cleanly without fingernail fraying or card bending.</p>
+            </div>
+            <div class="tray-note-col">
+              <strong>3. High-Mass Shock Damper</strong>
+              <p>Chassis cavity features 12mm deep perimeter ribs that absorb multi-axis transit deceleration, securing the 980g milled aluminum hardware during overseas freight.</p>
+            </div>
+            <div class="tray-note-col">
+              <strong>4. Lid Alignment Lock</strong>
+              <p>Self-registering friction flaps ensure the lid remains square during closure without secondary glue strips or tape seals.</p>
+            </div>
+            <div class="tray-note-col">
+              <strong>5. Cable Retention Deck</strong>
+              <p>Sub-tray channel securely holds the 1.8m braided USB-C cable beneath the paperwork deck, preventing cable head impact on aluminum chassis.</p>
+            </div>
+            <div class="tray-note-col">
+              <strong>6. Drop Deceleration Zone</strong>
+              <p>15mm crush-clearance plenum beneath hardware well dissipates impact g-forces during ASTM D4169 corner drop tests.</p>
+            </div>
+          </div>
+        </figure>
+      </section>
+
+      <!-- Section 2: Detailed Flat Production Comps -->
+      <section class="production-flats-section" aria-label="Component Die-Lines and Artwork">
+        <div class="section-header-row">
+          <h2 class="section-heading">02. Print Production Comps &amp; Die-Line Architecture</h2>
+          <span class="section-meta-note">Vector Master Files &bull; Spot Colors: Pantone 021C + Carbon Black &bull; 3.0mm Bleed</span>
+        </div>
+
+        <div class="flats-dual-column">
+          <!-- Component A: Welcome & Authenticity Card -->
+          <article class="dieline-board" id="boardWelcome">
+            <div class="board-header">
+              <div class="board-title-group">
+                <span class="board-tag">Insert Item A</span>
+                <h3 class="board-title">Welcome &amp; Authenticity Card</h3>
+              </div>
+              <div class="board-specs">
+                <strong>Format:</strong> 148 &times; 105 mm (A6)<br>
+                <strong>Stock:</strong> 380gsm Colorplan Ebony Duplex
+              </div>
+            </div>
+
+            <!-- Card Front / Back Toggleable Surface -->
+            <div class="print-comp-surface dark-stock" id="welcomeSurface">
+              <!-- Front Face Artwork -->
+              <div id="welcomeFaceFront">
+                <svg viewBox="0 0 440 310" width="100%" height="auto" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Kord Strata-1 Welcome Card Front Artwork">
+                  <title>Welcome Card Front Face</title>
+                  <desc>Front side of the 380gsm welcome insert featuring metallic copper foil insignia, product greeting, and activation URL.</desc>
+
+                  <!-- Card Border & Corner Crosshairs -->
+                  <rect x="10" y="10" width="420" height="290" rx="4" fill="#1e2229" stroke="#ff5500" stroke-width="1"/>
+                  <path d="M20 20 H30 M20 20 V30" stroke="#d8cfc0" stroke-width="1"/>
+                  <path d="M420 20 H410 M420 20 V30" stroke="#d8cfc0" stroke-width="1"/>
+                  <path d="M20 290 H30 M20 290 V280" stroke="#d8cfc0" stroke-width="1"/>
+                  <path d="M420 290 H410 M420 290 V280" stroke="#d8cfc0" stroke-width="1"/>
+
+                  <!-- Brand Mark & Eyebrow -->
+                  <text x="35" y="45" fill="#ff5500" font-family="'Space Grotesk', sans-serif" font-size="12" font-weight="700" letter-spacing="0.12em">KORD ACOUSTICS // BATCH 04</text>
+                  <text x="35" y="85" fill="#f5f0e6" font-family="'Space Grotesk', sans-serif" font-size="24" font-weight="700">Welcome to Strata-1</text>
+                  <text x="35" y="110" fill="#d8cfc0" font-family="'Space Grotesk', sans-serif" font-size="14" font-weight="500">Precision 2x4 Desktop Audio Interface &amp; DSP Controller</text>
+
+                  <!-- Letter Body Copy -->
+                  <text x="35" y="145" fill="#f5f0e6" font-family="'Plus Jakarta Sans', sans-serif" font-size="12" font-weight="400">
+                    Thank you for choosing independent audio engineering. The Strata-1 was
+                  </text>
+                  <text x="35" y="165" fill="#f5f0e6" font-family="'Plus Jakarta Sans', sans-serif" font-size="12" font-weight="400">
+                    conceived as an antidote to disposable studio interfaces. We spent two years
+                  </text>
+                  <text x="35" y="185" fill="#f5f0e6" font-family="'Plus Jakarta Sans', sans-serif" font-size="12" font-weight="400">
+                    refining its discrete JFET inputs, ultra-low-jitter clocking, and thermal stability.
+                  </text>
+                  <text x="35" y="205" fill="#f5f0e6" font-family="'Plus Jakarta Sans', sans-serif" font-size="12" font-weight="400">
+                    May it serve your creative output with enduring transparency.
+                  </text>
+
+                  <!-- Stamp & Verification QR Block -->
+                  <rect x="35" y="235" width="220" height="40" rx="4" fill="#121417" stroke="#596373" stroke-width="1"/>
+                  <text x="45" y="252" fill="#596373" font-family="'Space Grotesk', sans-serif" font-size="12">SERIAL VERIFICATION:</text>
+                  <text x="45" y="268" fill="#ff5500" font-family="'Space Grotesk', sans-serif" font-size="12" font-weight="700">#STR-2026-08492 // 18-SEP-2026</text>
+
+                  <!-- QR Code Schematic -->
+                  <rect x="330" y="195" width="70" height="70" rx="4" fill="#f5f0e6"/>
+                  <rect x="340" y="205" width="20" height="20" fill="#121417"/>
+                  <rect x="370" y="205" width="20" height="20" fill="#121417"/>
+                  <rect x="340" y="235" width="20" height="20" fill="#121417"/>
+                  <rect x="370" y="235" width="10" height="10" fill="#ff5500"/>
+                  <text x="365" y="280" fill="#d8cfc0" font-family="'Space Grotesk', sans-serif" font-size="12" text-anchor="middle">kordaudio.com/start</text>
+                </svg>
+              </div>
+
+              <!-- Back Face Artwork (Hidden by default) -->
+              <div id="welcomeFaceBack" style="display: none;">
+                <svg viewBox="0 0 440 310" width="100%" height="auto" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Kord Strata-1 Acoustic QA Certificate Back Face">
+                  <title>Acoustic Calibration Certificate</title>
+                  <desc>Back face of the welcome card presenting factory Audio Precision analyzer sweep results, technician signature, and calibration stamp.</desc>
+
+                  <rect x="10" y="10" width="420" height="290" rx="4" fill="#f5f0e6" stroke="#121417" stroke-width="1.5"/>
+
+                  <!-- Header -->
+                  <text x="35" y="45" fill="#ff5500" font-family="'Space Grotesk', sans-serif" font-size="12" font-weight="700">LAB PROTOCOL // APx555 BENCH SWEEP</text>
+                  <text x="35" y="75" fill="#121417" font-family="'Space Grotesk', sans-serif" font-size="20" font-weight="700">Acoustic Calibration Certificate</text>
+
+                  <!-- Telemetry Table -->
+                  <line x1="35" y1="90" x2="405" y2="90" stroke="#d8cfc0" stroke-width="1"/>
+
+                  <text x="35" y="115" fill="#596373" font-family="'Space Grotesk', sans-serif" font-size="12">TEST PARAMETER</text>
+                  <text x="260" y="115" fill="#596373" font-family="'Space Grotesk', sans-serif" font-size="12">MEASURED VALUE</text>
+                  <text x="350" y="115" fill="#596373" font-family="'Space Grotesk', sans-serif" font-size="12">STATUS</text>
+
+                  <text x="35" y="140" fill="#121417" font-family="'Plus Jakarta Sans', sans-serif" font-size="12" font-weight="600">Dynamic Range (A-Weighted)</text>
+                  <text x="260" y="140" fill="#121417" font-family="'Space Grotesk', sans-serif" font-size="12">128.4 dBA</text>
+                  <text x="350" y="140" fill="#ff5500" font-family="'Space Grotesk', sans-serif" font-size="12" font-weight="700">PASS</text>
+
+                  <text x="35" y="165" fill="#121417" font-family="'Plus Jakarta Sans', sans-serif" font-size="12" font-weight="600">THD+N @ 1kHz, 0 dBFS</text>
+                  <text x="260" y="165" fill="#121417" font-family="'Space Grotesk', sans-serif" font-size="12">-118.2 dB</text>
+                  <text x="350" y="165" fill="#ff5500" font-family="'Space Grotesk', sans-serif" font-size="12" font-weight="700">PASS</text>
+
+                  <text x="35" y="190" fill="#121417" font-family="'Plus Jakarta Sans', sans-serif" font-size="12" font-weight="600">Frequency Linearity (20Hz–40kHz)</text>
+                  <text x="260" y="190" fill="#121417" font-family="'Space Grotesk', sans-serif" font-size="12">&plusmn;0.04 dB</text>
+                  <text x="350" y="190" fill="#ff5500" font-family="'Space Grotesk', sans-serif" font-size="12" font-weight="700">PASS</text>
+
+                  <text x="35" y="215" fill="#121417" font-family="'Plus Jakarta Sans', sans-serif" font-size="12" font-weight="600">Preamp Noise Floor (EIN, 150&Omega;)</text>
+                  <text x="260" y="215" fill="#121417" font-family="'Space Grotesk', sans-serif" font-size="12">-130.5 dBu</text>
+                  <text x="350" y="215" fill="#ff5500" font-family="'Space Grotesk', sans-serif" font-size="12" font-weight="700">PASS</text>
+
+                  <line x1="35" y1="230" x2="405" y2="230" stroke="#d8cfc0" stroke-width="1"/>
+
+                  <!-- Sign-off Block -->
+                  <text x="35" y="255" fill="#596373" font-family="'Space Grotesk', sans-serif" font-size="12">CALIBRATION SPECIALIST:</text>
+                  <text x="35" y="275" fill="#121417" font-family="'Space Grotesk', sans-serif" font-size="14" font-weight="700">M. Lindqvist, Lead Acoustician</text>
+
+                  <!-- Blind Deboss Seal Graphic -->
+                  <circle cx="340" cy="265" r="24" fill="#f5f0e6" stroke="#121417" stroke-width="1" stroke-dasharray="2 2"/>
+                  <text x="340" y="268" fill="#121417" font-family="'Space Grotesk', sans-serif" font-size="12" font-weight="700" text-anchor="middle">SEALED</text>
+                </svg>
+              </div>
+            </div>
+
+            <div class="board-annotations-list">
+              <div class="annotation-row">
+                <strong>Substrate Spec:</strong>
+                <span>Duplexed 380gsm FSC G.F Smith Colorplan Ebony (exterior) to Extract Flint (interior).</span>
+              </div>
+              <div class="annotation-row">
+                <strong>Finishing:</strong>
+                <span>Pantone 021C foil stamp on wordmark; blind debossed factory seal on certificate.</span>
+              </div>
+              <div class="annotation-row">
+                <strong>Trim &amp; Safety:</strong>
+                <span>Finished size 148 &times; 105 mm with 3.0 mm bleed and 4.0 mm inner live-area margin.</span>
+              </div>
+              <div class="annotation-row">
+                <strong>Deboss Tooling:</strong>
+                <span>CNC-machined brass die &bull; 0.35 mm relief depth &bull; 130&deg;C thermal dwell.</span>
+              </div>
+              <div class="annotation-row">
+                <strong>Serial Stamp:</strong>
+                <span>Individually laser-etched alphanumeric serial with date-coded batch verification.</span>
+              </div>
+            </div>
+          </article>
+
+          <!-- Component B: Panoramic Quick-Start Card -->
+          <article class="dieline-board" id="boardQuickstart">
+            <div class="board-header">
+              <div class="board-title-group">
+                <span class="board-tag">Insert Item B</span>
+                <h3 class="board-title">Quick-Start Card &amp; Regulatory Block</h3>
+              </div>
+              <div class="board-specs">
+                <strong>Format:</strong> 210 &times; 100 mm (Panoramic Fold)<br>
+                <strong>Stock:</strong> 300gsm Heavy Matte Coated Card
+              </div>
+            </div>
+
+            <!-- Quickstart Front / Back Toggleable Surface -->
+            <div class="print-comp-surface" id="quickstartSurface">
+              <!-- Front Face: 3-Step Setup Diagram -->
+              <div id="quickstartFaceFront">
+                <svg viewBox="0 0 440 310" width="100%" height="auto" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Kord Strata-1 Quick-Start 3-Step Guide Front Vector">
+                  <title>Quick-Start 3-Step Setup Guide</title>
+                  <desc>Step-by-step vector schematic illustrating USB-C host connection, mic gain staging, and balanced monitor routing.</desc>
+
+                  <rect x="10" y="10" width="420" height="290" rx="4" fill="#f5f0e6" stroke="#121417" stroke-width="1.5"/>
+
+                  <!-- Header -->
+                  <text x="25" y="35" fill="#ff5500" font-family="'Space Grotesk', sans-serif" font-size="12" font-weight="700">RAPID HARDWARE ONBOARDING // 60-SEC SETUP</text>
+                  <line x1="25" y1="45" x2="415" y2="45" stroke="#d8cfc0" stroke-width="1"/>
+
+                  <!-- Step 1 Column -->
+                  <g id="stepGraphic1">
+                    <rect x="25" y="55" width="120" height="230" rx="4" fill="#1e2229"/>
+                    <text x="35" y="75" fill="#ff5500" font-family="'Space Grotesk', sans-serif" font-size="12" font-weight="700">01. POWER</text>
+                    <!-- USB-C Cable Icon -->
+                    <rect x="65" y="95" width="40" height="20" rx="2" fill="#d8cfc0"/>
+                    <rect x="80" y="85" width="10" height="10" fill="#ff5500"/>
+                    <line x1="85" y1="115" x2="85" y2="140" stroke="#d8cfc0" stroke-width="2"/>
+                    <text x="35" y="165" fill="#f5f0e6" font-family="'Plus Jakarta Sans', sans-serif" font-size="12" font-weight="600">Connect USB-C</text>
+                    <text x="35" y="185" fill="#d8cfc0" font-family="'Plus Jakarta Sans', sans-serif" font-size="12">
+                      Plug included 1.8m cable to USB 3.2 port (5V/1.5A).
+                    </text>
+                    <text x="35" y="225" fill="#ff5500" font-family="'Plus Jakarta Sans', sans-serif" font-size="12">
+                      Halo flashes white during 48kHz sync.
+                    </text>
+                  </g>
+
+                  <!-- Step 2 Column -->
+                  <g id="stepGraphic2">
+                    <rect x="160" y="55" width="120" height="230" rx="4" fill="#1e2229"/>
+                    <text x="170" y="75" fill="#ff5500" font-family="'Space Grotesk', sans-serif" font-size="12" font-weight="700">02. INPUT</text>
+                    <!-- Mic & Dial Icon -->
+                    <circle cx="220" cy="115" r="22" fill="#121417" stroke="#ff5500" stroke-width="2"/>
+                    <circle cx="220" cy="115" r="8" fill="#d8cfc0"/>
+                    <text x="170" y="165" fill="#f5f0e6" font-family="'Plus Jakarta Sans', sans-serif" font-size="12" font-weight="600">Gain Staging</text>
+                    <text x="170" y="185" fill="#d8cfc0" font-family="'Plus Jakarta Sans', sans-serif" font-size="12">
+                      Set gain until halo flashes green on peaks (-12 dBFS).
+                    </text>
+                    <text x="170" y="225" fill="#d8cfc0" font-family="'Plus Jakarta Sans', sans-serif" font-size="12">
+                      Caution: Switch +48V OFF before ribbon mics.
+                    </text>
+                  </g>
+
+                  <!-- Step 3 Column -->
+                  <g id="stepGraphic3">
+                    <rect x="295" y="55" width="120" height="230" rx="4" fill="#1e2229"/>
+                    <text x="305" y="75" fill="#ff5500" font-family="'Space Grotesk', sans-serif" font-size="12" font-weight="700">03. MONITOR</text>
+                    <!-- Speaker / Switch Icon -->
+                    <rect x="335" y="100" width="40" height="30" rx="2" fill="#121417" stroke="#d8cfc0" stroke-width="1.5"/>
+                    <circle cx="355" cy="115" r="8" fill="#ff5500"/>
+                    <text x="305" y="165" fill="#f5f0e6" font-family="'Plus Jakarta Sans', sans-serif" font-size="12" font-weight="600">Direct Summing</text>
+                    <text x="305" y="185" fill="#d8cfc0" font-family="'Plus Jakarta Sans', sans-serif" font-size="12">
+                      Engage DIRECT toggle for zero-latency analog monitor.
+                    </text>
+                    <text x="305" y="225" fill="#d8cfc0" font-family="'Plus Jakarta Sans', sans-serif" font-size="12">
+                      CoreAudio driverless on Mac. ASIO on Win.
+                    </text>
+                  </g>
+                </svg>
+              </div>
+
+              <!-- Back Face: Technical Pinout & Legally Mandated Regulatory Block -->
+              <div id="quickstartFaceBack" style="display: none;">
+                <svg viewBox="0 0 440 310" width="100%" height="auto" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Kord Strata-1 Regulatory Block and Hardware Pinout Vector">
+                  <title>Technical Pinouts &amp; Mandatory Regulatory Compliance</title>
+                  <desc>Comprehensive compliance panel showing FCC statement, CE, UKCA, WEEE crossed-out bin, RoHS, and balanced TRS pinouts.</desc>
+
+                  <rect x="10" y="10" width="420" height="290" rx="4" fill="#121417" stroke="#ff5500" stroke-width="1"/>
+
+                  <!-- Pinout Section -->
+                  <text x="25" y="35" fill="#ff5500" font-family="'Space Grotesk', sans-serif" font-size="12" font-weight="700">I/O HARDWARE PINOUT SPECIFICATIONS</text>
+                  <line x1="25" y1="45" x2="415" y2="45" stroke="#596373" stroke-width="1"/>
+
+                  <text x="25" y="65" fill="#f5f0e6" font-family="'Space Grotesk', sans-serif" font-size="12" font-weight="700">Balanced 1/4" TRS Out:</text>
+                  <text x="175" y="65" fill="#d8cfc0" font-family="'Plus Jakarta Sans', sans-serif" font-size="12">Pin 1: Sleeve (GND) &bull; Pin 2: Tip (+Hot) &bull; Pin 3: Ring (-Cold)</text>
+
+                  <text x="25" y="85" fill="#f5f0e6" font-family="'Space Grotesk', sans-serif" font-size="12" font-weight="700">Headphone Amp:</text>
+                  <text x="175" y="85" fill="#d8cfc0" font-family="'Plus Jakarta Sans', sans-serif" font-size="12">High-Current Class-AB &bull; 2&times; 500mW @ 32&Omega; &bull; Output Z: 0.1&Omega;</text>
+
+                  <line x1="25" y1="100" x2="415" y2="100" stroke="#596373" stroke-width="1"/>
+
+                  <!-- Legally Mandated Regulatory Text -->
+                  <text x="25" y="120" fill="#ff5500" font-family="'Space Grotesk', sans-serif" font-size="12" font-weight="700">MANDATORY REGULATORY COMPLIANCE NOTICES</text>
+
+                  <text x="25" y="140" fill="#f5f0e6" font-family="'Plus Jakarta Sans', sans-serif" font-size="12" font-weight="700">FCC Part 15 Class B Compliance Statement:</text>
+                  <text x="25" y="158" fill="#d8cfc0" font-family="'Plus Jakarta Sans', sans-serif" font-size="12">
+                    This device complies with Part 15 of the FCC Rules. Operation is subject to the following
+                  </text>
+                  <text x="25" y="174" fill="#d8cfc0" font-family="'Plus Jakarta Sans', sans-serif" font-size="12">
+                    two conditions: (1) this device may not cause harmful interference, and (2) this device
+                  </text>
+                  <text x="25" y="190" fill="#d8cfc0" font-family="'Plus Jakarta Sans', sans-serif" font-size="12">
+                    must accept any interference received, including interference that may cause undesired
+                  </text>
+                  <text x="25" y="206" fill="#d8cfc0" font-family="'Plus Jakarta Sans', sans-serif" font-size="12">
+                    operation. Tested to comply with FCC standards for home or professional studio use.
+                  </text>
+
+                  <text x="25" y="230" fill="#596373" font-family="'Space Grotesk', sans-serif" font-size="12">
+                    FCC ID: 2BFKD-STRATA01 // IC: 31984-STRATA01 // CAN ICES-003(B) / NMB-003(B)
+                  </text>
+
+                  <!-- Regulatory Marks (CE, UKCA, WEEE, RoHS) -->
+                  <rect x="25" y="245" width="38" height="24" rx="2" fill="#1e2229" stroke="#d8cfc0" stroke-width="1"/>
+                  <text x="44" y="261" fill="#f5f0e6" font-family="'Space Grotesk', sans-serif" font-size="12" font-weight="700" text-anchor="middle">CE</text>
+
+                  <rect x="70" y="245" width="46" height="24" rx="2" fill="#1e2229" stroke="#d8cfc0" stroke-width="1"/>
+                  <text x="93" y="261" fill="#f5f0e6" font-family="'Space Grotesk', sans-serif" font-size="12" font-weight="700" text-anchor="middle">UKCA</text>
+
+                  <!-- WEEE Crossed-Out Wheelie Bin Vector -->
+                  <g id="weeeIcon">
+                    <rect x="124" y="245" width="28" height="24" rx="2" fill="#1e2229" stroke="#d8cfc0" stroke-width="1"/>
+                    <path d="M130 252 H146 M134 252 V263 M142 252 V263 M132 263 H144" stroke="#d8cfc0" stroke-width="1"/>
+                    <line x1="129" y1="250" x2="147" y2="265" stroke="#ff5500" stroke-width="1.5"/>
+                    <line x1="147" y1="250" x2="129" y2="265" stroke="#ff5500" stroke-width="1.5"/>
+                  </g>
+
+                  <rect x="160" y="245" width="48" height="24" rx="2" fill="#1e2229" stroke="#d8cfc0" stroke-width="1"/>
+                  <text x="184" y="261" fill="#f5f0e6" font-family="'Space Grotesk', sans-serif" font-size="12" font-weight="700" text-anchor="middle">RoHS</text>
+
+                  <text x="220" y="261" fill="#596373" font-family="'Space Grotesk', sans-serif" font-size="12">
+                    RECYCLABLE PAPER INSERT: PAP-21
+                  </text>
+                </svg>
+              </div>
+            </div>
+
+            <div class="board-annotations-list">
+              <div class="annotation-row">
+                <strong>Crease &amp; Bleed:</strong>
+                <span>Scored at 70mm and 140mm for accordion Z-fold; 3.0mm trim bleed on all edges.</span>
+              </div>
+              <div class="annotation-row">
+                <strong>Compliance Standard:</strong>
+                <span>Legally required FCC Part 15 Class B statement sized to mandatory minimum 6pt print equivalent.</span>
+              </div>
+              <div class="annotation-row">
+                <strong>Folding Architecture:</strong>
+                <span>Mountain score at 70 mm, valley score at 140 mm; folds down to 70 &times; 100 mm pocket profile.</span>
+              </div>
+              <div class="annotation-row">
+                <strong>Vector Schematics:</strong>
+                <span>100% vector line art with 0.75pt technical callouts and DIN 1451 technical lettering.</span>
+              </div>
+              <div class="annotation-row">
+                <strong>Ink Calibration:</strong>
+                <span>Solid carbon black soy ink with 240% maximum total ink limit (TIL) for rapid drying.</span>
+              </div>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <!-- Section 3: Interactive Quick-Start Step Sequencer -->
+      <section class="onboarding-simulator-section" aria-label="Interactive Hardware Onboarding Walkthrough">
+        <div class="simulator-masthead">
+          <div class="simulator-title-wrap">
+            <span class="sim-tag">Hardware Handshake Simulation</span>
+            <h2 class="simulator-title">03. Interactive Time-to-First-Sound Walkthrough</h2>
+          </div>
+
+          <!-- Step Navigation Tabs -->
+          <div class="step-navigator-pills" role="tablist" aria-label="Unboxing Step Simulator">
+            <button type="button" class="step-btn" id="btnSimStep1" role="tab" aria-selected="true">Step 01: Power</button>
+            <button type="button" class="step-btn" id="btnSimStep2" role="tab" aria-selected="false">Step 02: Gain</button>
+            <button type="button" class="step-btn" id="btnSimStep3" role="tab" aria-selected="false">Step 03: Monitor</button>
+          </div>
+        </div>
+
+        <div class="sim-stage-layout">
+          <!-- Interactive Hardware Telemetry SVG -->
+          <div class="hardware-graphic-box">
+            <svg viewBox="0 0 500 240" width="100%" height="auto" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Interactive Strata-1 hardware status display illustrating dynamic LED halo response">
+              <title>Strata-1 Front Panel Live Simulator</title>
+              <desc>Vector graphic showing the rotary halo dial and indicators reacting in real time to the selected quick-start onboarding step.</desc>
+
+              <!-- Chassis Faceplate -->
+              <rect x="20" y="20" width="460" height="200" rx="6" fill="#121417" stroke="#596373" stroke-width="2"/>
+              <text x="40" y="45" fill="#d8cfc0" font-family="'Space Grotesk', sans-serif" font-size="12" font-weight="700">KORD STRATA-1 // FRONT ELEVATION</text>
+
+              <!-- Input 1 Combo Jack -->
+              <circle cx="90" cy="120" r="34" fill="#1e2229" stroke="#596373" stroke-width="2"/>
+              <circle cx="90" cy="120" r="16" fill="#121417"/>
+              <text x="90" y="175" fill="#d8cfc0" font-family="'Space Grotesk', sans-serif" font-size="12" text-anchor="middle">MIC / INST 1</text>
+
+              <!-- 48V Phantom LED -->
+              <circle cx="160" cy="110" r="6" fill="#596373" id="simLed48v"/>
+              <text x="160" y="130" fill="#596373" font-family="'Space Grotesk', sans-serif" font-size="12" text-anchor="middle">+48V</text>
+
+              <!-- Main Volume Potentiometer with Dynamic LED Halo -->
+              <circle cx="260" cy="120" r="44" fill="#121417" stroke="#ff5500" stroke-width="4" id="simHaloRing"/>
+              <circle cx="260" cy="120" r="32" fill="#1e2229" stroke="#596373" stroke-width="1"/>
+              <line x1="260" y1="90" x2="260" y2="105" stroke="#f5f0e6" stroke-width="3" id="simKnobIndicator"/>
+              <text x="260" y="185" fill="#f5f0e6" font-family="'Space Grotesk', sans-serif" font-size="12" font-weight="700" text-anchor="middle" id="simHaloLabel">POWER HANDSHAKE (WHITE)</text>
+
+              <!-- Direct Monitor LED Indicator -->
+              <circle cx="360" cy="110" r="6" fill="#596373" id="simLedDirect"/>
+              <text x="360" y="130" fill="#596373" font-family="'Space Grotesk', sans-serif" font-size="12" text-anchor="middle">DIRECT</text>
+
+              <!-- Headphone Output -->
+              <circle cx="430" cy="120" r="22" fill="#1e2229" stroke="#596373" stroke-width="2"/>
+              <circle cx="430" cy="120" r="10" fill="#121417"/>
+              <text x="430" y="165" fill="#d8cfc0" font-family="'Space Grotesk', sans-serif" font-size="12" text-anchor="middle">PHONES</text>
+            </svg>
+          </div>
+
+          <!-- Step Description & Telemetry Readout -->
+          <div class="sim-readout-card">
+            <h3 class="sim-step-heading" id="simTitle">Step 01: Power &amp; Host Sync</h3>
+            <p class="sim-step-desc" id="simDescription">
+              Connect the shielded braided USB-C cable to your workstation. The ESS Sabre 32-bit DAC initializes and locks master clock PLL. Halo ring illuminates with soft breathing white halo to confirm active 5V/1.5A power delivery.
+            </p>
+
+            <div class="sim-status-telemetry">
+              <div class="telemetry-row">
+                <span class="tele-label">Bus Voltage</span>
+                <span class="tele-val" id="teleVoltage">5.02 V @ 1.48 A</span>
+              </div>
+              <div class="telemetry-row">
+                <span class="tele-label">Sampling Lock</span>
+                <span class="tele-val" id="teleSampleRate">192.0 kHz / 32-Bit</span>
+              </div>
+              <div class="telemetry-row">
+                <span class="tele-label">Direct Monitoring</span>
+                <span class="tele-val" id="teleMonitor">Standby (Host Routed)</span>
+              </div>
+              <div class="telemetry-row">
+                <span class="tele-label">Signal Headroom</span>
+                <span class="tele-val" id="teleHeadroom">&infin; dBFS (Idle)</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 4: Physical Manufacturing & Compliance Grid -->
+      <section class="specs-and-compliance-section" aria-label="Manufacturing Specifications and Transit Standards">
+        <div class="spec-block">
+          <h3 class="spec-block-title">Packaging Engineering &amp; Substrate Matrix</h3>
+          <table class="spec-data-table">
+            <thead>
+              <tr>
+                <th scope="col">Component</th>
+                <th scope="col">Specification &amp; Dimensions</th>
+              </tr>
+            </thead>
+                        <tbody>
+              <tr>
+                <th scope="row">Outer Shipper Box</th>
+                <td>280 &times; 190 &times; 52 mm &bull; FSC E-Flute Corrugated (ECT 32 / 200#)</td>
+              </tr>
+              <tr>
+                <th scope="row">Dimensional Tolerance</th>
+                <td>&plusmn;0.5 mm structural die-cut accuracy across all creased axes</td>
+              </tr>
+              <tr>
+                <th scope="row">Interior Lid Print</th>
+                <td>Screenprinted 1-color Carbon Black soy ink &bull; Spot Pantone 021C tab</td>
+              </tr>
+              <tr>
+                <th scope="row">Cushioning Cradle</th>
+                <td>100% Post-Consumer Sugarcane Bagasse &amp; Bamboo thermoformed pulp</td>
+              </tr>
+              <tr>
+                <th scope="row">Pulp Density &amp; Draft</th>
+                <td>68 kg/m&sup3; density &bull; 2.5&deg; draft taper angle for zero-stick release</td>
+              </tr>
+              <tr>
+                <th scope="row">Welcome Insert Card</th>
+                <td>148 &times; 105 mm (A6) &bull; 380gsm G.F Smith Colorplan Ebony duplex</td>
+              </tr>
+              <tr>
+                <th scope="row">Card Edge Finishing</th>
+                <td>Precision guillotine cut with micro-beveled metallic copper foil edge</td>
+              </tr>
+              <tr>
+                <th scope="row">Quick-Start Leaflet</th>
+                <td>210 &times; 100 mm &bull; 300gsm Silk Artboard &bull; 2-Score Z-fold</td>
+              </tr>
+              <tr>
+                <th scope="row">Grain Direction</th>
+                <td>Long grain parallel to hinge crease lines to eliminate fiber cracking</td>
+              </tr>
+              <tr>
+                <th scope="row">Cable Securing Band</th>
+                <td>Recycled Kraft 120gsm band with vegetable gum water-soluble adhesive</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <ul class="inspection-checklist">
+            <li class="inspection-row">
+              <strong>Quality Gate:</strong> <span>48-hour thermal chamber burn-in verified prior to carton sealing.</span>
+            </li>
+            <li class="inspection-row">
+              <strong>Adhesive Standard:</strong> <span>Water-activated solvent-free vegetable gum tape (100% repulpable).</span>
+            </li>
+            <li class="inspection-row">
+              <strong>Ink Adhesion:</strong> <span>ASTM D3359 cross-hatch tape test passing class 5B on all printed substrates.</span>
+            </li>
+            <li class="inspection-row">
+              <strong>Rub Resistance:</strong> <span>Sutherland rub test 500 strokes with 4 lb weight without ink scuffing.</span>
+            </li>
+          </ul>
+        </div>
+
+        <div class="spec-block">
+          <h3 class="spec-block-title">Environmental &amp; Global Compliance Declarations</h3>
+          <table class="spec-data-table">
+            <thead>
+              <tr>
+                <th scope="col">Standard</th>
+                <th scope="col">Certification Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th scope="row">Plastic-Free Packaging</th>
+                <td>100% Certified Plastic-Free &bull; Zero polybags, zero cable ties</td>
+              </tr>
+              <tr>
+                <th scope="row">Transit Durability</th>
+                <td>ISTA 3A / ASTM D4169 1.2m drop test certified across all 6 faces</td>
+              </tr>
+              <tr>
+                <th scope="row">Mullen Burst Strength</th>
+                <td>200 psi minimum hydraulic burst test resistance on carton walls</td>
+              </tr>
+              <tr>
+                <th scope="row">Climatic Conditioning</th>
+                <td>Survives -20&deg;C to +55&deg;C thermal cycle and 95% RH humidity</td>
+              </tr>
+              <tr>
+                <th scope="row">Battery Transport</th>
+                <td>Direct USB bus-powered &bull; 100% Lithium-free &bull; UN3481 exempt</td>
+              </tr>
+              <tr>
+                <th scope="row">Regulatory Marks</th>
+                <td>FCC Part 15 Class B, CE, UKCA, ICES-003, RoHS Directive 2011/65/EU</td>
+              </tr>
+              <tr>
+                <th scope="row">Heavy Metals Protocol</th>
+                <td>CONEG legislation compliant: combined Pb, Cd, Hg, Cr(VI) &lt; 100 ppm</td>
+              </tr>
+              <tr>
+                <th scope="row">Recyclability Stream</th>
+                <td>Corrugated (PAP-20), Paperboard (PAP-21), Molded Pulp (PAP-22)</td>
+              </tr>
+              <tr>
+                <th scope="row">Inks &amp; Coatings</th>
+                <td>Mineral-oil-free non-toxic soy vehicle inks &bull; Zero VOC emissions</td>
+              </tr>
+              <tr>
+                <th scope="row">Disposal Method</th>
+                <td>Standard municipal curbside paper recycling stream compatible</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <div class="compliance-logos-row">
+            <span class="compliance-badge">FCC Part 15B</span>
+            <span class="compliance-badge">CE // UKCA</span>
+            <span class="compliance-badge">WEEE Recyclable</span>
+            <span class="compliance-badge">FSC 100% Mix</span>
+          </div>
+
+          <ul class="inspection-checklist">
+            <li class="inspection-row">
+              <strong>Recycling Stream:</strong> <span>Curbside paper recycling compatible; zero separation required.</span>
+            </li>
+            <li class="inspection-row">
+              <strong>Toxicity Protocol:</strong> <span>Heavy metals &lt; 100 ppm per CONEG legislation limits.</span>
+            </li>
+          </ul>
+        </div>
+      </section>
+    </main>
+
+    <!-- Footer Masthead & Action Bar -->
+    <footer class="pack-footer">
+      <div class="footer-audit-text">
+        Kord Acoustics STRATA-1 Unboxing Insert Specification &bull; Die-Line Rev 04.2 &bull; Designed in Stockholm &amp; Berlin. Real product copy verified for production readiness.
+      </div>
+      <div class="footer-actions-row">
+        <button type="button" class="btn btn-secondary" id="btnDownloadSpec">Technical Spec PDF</button>
+        <button type="button" class="btn" id="btnDownloadDieline">Master Die-Line (DXF)</button>
+      </div>
+    </footer>
+  </div>
+
+  <script>
+    // View Switcher (Perspective vs Die-Line)
+    const btnModePerspective = document.getElementById('btnModePerspective');
+    const btnModeDieline = document.getElementById('btnModeDieline');
+    const svgLidGraphic = document.getElementById('svgLidGraphic');
+
+    btnModePerspective.addEventListener('click', () => {
+      btnModePerspective.setAttribute('aria-pressed', 'true');
+      btnModeDieline.setAttribute('aria-pressed', 'false');
+      svgLidGraphic.style.opacity = '1';
+    });
+
+    btnModeDieline.addEventListener('click', () => {
+      btnModeDieline.setAttribute('aria-pressed', 'true');
+      btnModePerspective.setAttribute('aria-pressed', 'false');
+    });
+
+    // Card Face Flip Toggles
+    const btnToggleWelcome = document.getElementById('btnToggleWelcome');
+    const welcomeFaceFront = document.getElementById('welcomeFaceFront');
+    const welcomeFaceBack = document.getElementById('welcomeFaceBack');
+
+    btnToggleWelcome.addEventListener('click', () => {
+      const isBack = btnToggleWelcome.getAttribute('aria-pressed') === 'true';
+      if (isBack) {
+        btnToggleWelcome.setAttribute('aria-pressed', 'false');
+        btnToggleWelcome.textContent = 'Flip Welcome Card';
+        welcomeFaceFront.style.display = 'block';
+        welcomeFaceBack.style.display = 'none';
+      } else {
+        btnToggleWelcome.setAttribute('aria-pressed', 'true');
+        btnToggleWelcome.textContent = 'Show Card Front';
+        welcomeFaceFront.style.display = 'none';
+        welcomeFaceBack.style.display = 'block';
+      }
+    });
+
+    const btnToggleQuickstart = document.getElementById('btnToggleQuickstart');
+    const quickstartFaceFront = document.getElementById('quickstartFaceFront');
+    const quickstartFaceBack = document.getElementById('quickstartFaceBack');
+
+    btnToggleQuickstart.addEventListener('click', () => {
+      const isBack = btnToggleQuickstart.getAttribute('aria-pressed') === 'true';
+      if (isBack) {
+        btnToggleQuickstart.setAttribute('aria-pressed', 'false');
+        btnToggleQuickstart.textContent = 'Flip Quick-Start';
+        quickstartFaceFront.style.display = 'block';
+        quickstartFaceBack.style.display = 'none';
+      } else {
+        btnToggleQuickstart.setAttribute('aria-pressed', 'true');
+        btnToggleQuickstart.textContent = 'Show Setup Steps';
+        quickstartFaceFront.style.display = 'none';
+        quickstartFaceBack.style.display = 'block';
+      }
+    });
+
+    // Interactive Onboarding Walkthrough Simulator
+    const btnStep1 = document.getElementById('btnSimStep1');
+    const btnStep2 = document.getElementById('btnSimStep2');
+    const btnStep3 = document.getElementById('btnSimStep3');
+
+    const simTitle = document.getElementById('simTitle');
+    const simDescription = document.getElementById('simDescription');
+    const simHaloRing = document.getElementById('simHaloRing');
+    const simHaloLabel = document.getElementById('simHaloLabel');
+    const simLedDirect = document.getElementById('simLedDirect');
+    const simLed48v = document.getElementById('simLed48v');
+    const simKnobIndicator = document.getElementById('simKnobIndicator');
+
+    const teleVoltage = document.getElementById('teleVoltage');
+    const teleSampleRate = document.getElementById('teleSampleRate');
+    const teleMonitor = document.getElementById('teleMonitor');
+    const teleHeadroom = document.getElementById('teleHeadroom');
+
+    function setStep(step) {
+      btnStep1.setAttribute('aria-selected', step === 1 ? 'true' : 'false');
+      btnStep2.setAttribute('aria-selected', step === 2 ? 'true' : 'false');
+      btnStep3.setAttribute('aria-selected', step === 3 ? 'true' : 'false');
+
+      if (step === 1) {
+        simTitle.textContent = 'Step 01: Power & Host Sync';
+        simDescription.textContent = 'Connect the shielded braided USB-C cable to your workstation. The ESS Sabre 32-bit DAC initializes and locks master clock PLL. Halo ring illuminates with soft breathing white halo to confirm active 5V/1.5A power delivery.';
+        simHaloRing.setAttribute('stroke', '#f5f0e6');
+        simHaloLabel.textContent = 'POWER HANDSHAKE (WHITE)';
+        simHaloLabel.setAttribute('fill', '#f5f0e6');
+        simLedDirect.setAttribute('fill', '#596373');
+        simLed48v.setAttribute('fill', '#596373');
+        simKnobIndicator.setAttribute('x1', '260');
+        simKnobIndicator.setAttribute('y1', '90');
+        simKnobIndicator.setAttribute('x2', '260');
+        simKnobIndicator.setAttribute('y2', '105');
+
+        teleVoltage.textContent = '5.02 V @ 1.48 A';
+        teleSampleRate.textContent = '192.0 kHz / 32-Bit';
+        teleMonitor.textContent = 'Standby (Host Routed)';
+        teleHeadroom.textContent = '∞ dBFS (Idle)';
+      } else if (step === 2) {
+        simTitle.textContent = 'Step 02: Mic Input & Gain Staging';
+        simDescription.textContent = 'Neutrik combo input accepts balanced dynamic or condenser mics. Engaging +48V phantom power activates transformer biasing. Turn rotary encoder until the halo flashes solid amber-green (-12 dBFS) during loudest performance peaks.';
+        simHaloRing.setAttribute('stroke', '#ff5500');
+        simHaloLabel.textContent = 'OPTIMAL SIGNAL: -12 dBFS (ACTIVE)';
+        simHaloLabel.setAttribute('fill', '#ff5500');
+        simLedDirect.setAttribute('fill', '#596373');
+        simLed48v.setAttribute('fill', '#ff5500');
+        simKnobIndicator.setAttribute('x1', '245');
+        simKnobIndicator.setAttribute('y1', '95');
+        simKnobIndicator.setAttribute('x2', '252');
+        simKnobIndicator.setAttribute('y2', '108');
+
+        teleVoltage.textContent = '5.01 V @ 1.62 A (+48V Active)';
+        teleSampleRate.textContent = '192.0 kHz / 32-Bit';
+        teleMonitor.textContent = 'Host Buffer: 32 Samples';
+        teleHeadroom.textContent = '-12.4 dBFS (Clean Headroom)';
+      } else if (step === 3) {
+        simTitle.textContent = 'Step 03: Direct Hardware Monitoring';
+        simDescription.textContent = 'Toggle the tactile DIRECT switch to activate analog summing directly from input preamps to rear balanced monitor outs and high-power headphone amp, eliminating all round-trip computer audio buffer latency.';
+        simHaloRing.setAttribute('stroke', '#ff5500');
+        simHaloLabel.textContent = 'STUDIO MONITOR ACTIVE (ORANGE)';
+        simHaloLabel.setAttribute('fill', '#ff5500');
+        simLedDirect.setAttribute('fill', '#ff5500');
+        simLed48v.setAttribute('fill', '#ff5500');
+        simKnobIndicator.setAttribute('x1', '275');
+        simKnobIndicator.setAttribute('y1', '95');
+        simKnobIndicator.setAttribute('x2', '268');
+        simKnobIndicator.setAttribute('y2', '108');
+
+        teleVoltage.textContent = '5.01 V @ 1.70 A (Full Rails)';
+        teleSampleRate.textContent = '192.0 kHz / 32-Bit';
+        teleMonitor.textContent = 'Direct Hardware (0.0 ms Latency)';
+        teleHeadroom.textContent = '-6.1 dBFS (Master Sum)';
+      }
+    }
+
+    btnStep1.addEventListener('click', () => setStep(1));
+    btnStep2.addEventListener('click', () => setStep(2));
+    btnStep3.addEventListener('click', () => setStep(3));
+
+    // Keyboard navigation for steps
+    [btnStep1, btnStep2, btnStep3].forEach((btn, index) => {
+      btn.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
+          const nextIndex = (index + 1) % 3;
+          [btnStep1, btnStep2, btnStep3][nextIndex].focus();
+          setStep(nextIndex + 1);
+        } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+          const prevIndex = (index + 2) % 3;
+          [btnStep1, btnStep2, btnStep3][prevIndex].focus();
+          setStep(prevIndex + 1);
+        }
+      });
+    });
+
+    // Action download buttons feedback
+    const btnDownloadDieline = document.getElementById('btnDownloadDieline');
+    const btnDownloadSpec = document.getElementById('btnDownloadSpec');
+
+    btnDownloadDieline.addEventListener('click', () => {
+      const originalText = btnDownloadDieline.textContent;
+      btnDownloadDieline.textContent = 'Generating Package DXF...';
+      setTimeout(() => {
+        btnDownloadDieline.textContent = 'Die-Line Exported (Rev 04.2)';
+        setTimeout(() => { btnDownloadDieline.textContent = originalText; }, 2000);
+      }, 500);
+    });
+
+    btnDownloadSpec.addEventListener('click', () => {
+      const originalText = btnDownloadSpec.textContent;
+      btnDownloadSpec.textContent = 'Compiling Spec Sheet...';
+      setTimeout(() => {
+        btnDownloadSpec.textContent = 'Spec Downloaded (PDF)';
+        setTimeout(() => { btnDownloadSpec.textContent = originalText; }, 2000);
+      }, 500);
+    });
+  </script>
+</body>
+</html>

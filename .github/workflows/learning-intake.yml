@@ -1,0 +1,39 @@
+name: learning-intake
+# SECURITY: uses pull_request_target so fork PRs can be merged automatically. It therefore
+# NEVER checks out or executes PR code. It reads the PR's single file as text through the
+# API and validates it with the validator from the trusted base branch.
+on:
+  pull_request_target:
+    types: [opened, synchronize, reopened]
+permissions:
+  contents: write
+  pull-requests: write
+jobs:
+  intake:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4          # base branch only (default for pull_request_target)
+      - name: Validate and merge
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PR: ${{ github.event.pull_request.number }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+          HEAD_REPO: ${{ github.event.pull_request.head.repo.full_name }}
+        run: |
+          set -euo pipefail
+          files=$(gh api "repos/$GITHUB_REPOSITORY/pulls/$PR/files" --paginate --jq '.[] | "\(.status) \(.filename)"')
+          n=$(printf '%s\n' "$files" | wc -l)
+          if [ "$n" -ne 1 ]; then echo "Not a learning submission (needs exactly 1 file)"; exit 0; fi
+          status=${files%% *}; path=${files#* }
+          if ! [[ "$status" == "added" && "$path" =~ ^learnings/inbox/[0-9]{8}-[0-9a-f]{10}\.md$ ]]; then
+            echo "Not a learning submission; left for manual review"; exit 0; fi
+          mkdir -p "$RUNNER_TEMP/in"
+          gh api "repos/$HEAD_REPO/contents/$path?ref=$HEAD_SHA" --jq .content | base64 -d > "$RUNNER_TEMP/in/l.md"
+          if ! out=$(python3 -I scripts/validate_learning.py "$RUNNER_TEMP/in/l.md" 2>&1); then
+            gh pr comment "$PR" --body "Automatic check failed: $out"; gh pr close "$PR"; exit 0; fi
+          # exact-duplicate guard
+          h=$(shasum -a 256 "$RUNNER_TEMP/in/l.md" | cut -d' ' -f1)
+          for f in learnings/inbox/*.md; do [ -e "$f" ] || continue
+            if [ "$(shasum -a 256 "$f" | cut -d' ' -f1)" = "$h" ]; then
+              gh pr close "$PR" --comment "Duplicate."; exit 0; fi; done
+          gh pr merge "$PR" --squash --match-head-commit "$HEAD_SHA"

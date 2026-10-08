@@ -1,0 +1,669 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ALTO SECO — Specialty Coffee Roasters Brand Identity System</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-dark: #141210;
+      --surface-dark: #1c1a17;
+      --surface-subtle: #24211d;
+      --paper-ground: #f4efe6;
+      --ink-primary: #141210;
+      --accent-terracotta: #c85a32;
+      --olive-canopy: #384233;
+      --solar-husk: #d4a359;
+      --font-display: 'Syne', sans-serif;
+      --font-body: 'Plus Jakarta Sans', sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body{background:#141210;color:#ede8df;
+      font-family: var(--font-body);
+      font-size: 16px;
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    a:focus-visible, button:focus-visible {
+      outline: 2px solid #c85a32;
+      outline-offset: 4px;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      * {
+        animation: none !important;
+        transition: none !important;
+      }
+    }
+
+    .wrapper {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 32px 24px 64px;
+    }
+
+    header.board-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      border-bottom: 1px solid #24211d;
+      padding-bottom: 24px;
+      margin-bottom: 40px;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+
+    .meta-col {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .meta-col .label {
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #d4a359;
+    }
+
+    .meta-col .val {
+      font-size: 14px;
+      color: #ede8df;
+    }
+
+    .brand-title-area {
+      flex: 1 1 100%;
+      margin-top: 16px;
+    }
+
+    h1.brand-title {
+      font-family: var(--font-display);
+      font-size: 44px;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      line-height: 1.1;
+      color: #ffffff;
+    }
+
+    .brand-title span.accent {
+      color: #c85a32;
+    }
+
+    .brand-thesis {
+      max-width: 720px;
+      font-size: 16px;
+      color: #ede8df;
+      margin-top: 12px;
+      font-weight: 400;
+    }
+
+    main.moodboard-grid {
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 32px;
+    }
+
+    section.board-panel {
+      background: #1c1a17;
+      border: 1px solid #24211d;
+      border-radius: 4px;
+      padding: 32px;
+      position: relative;
+    }
+
+    .panel-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+      border-bottom: 1px solid #24211d;
+      padding-bottom: 12px;
+    }
+
+    h2.panel-title {
+      font-family: var(--font-display);
+      font-size: 20px;
+      font-weight: 700;
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .panel-tag {
+      font-size: 12px;
+      color: #d4a359;
+    }
+
+    .logo-hero-display {
+      background: #141210;
+      border: 1px solid #24211d;
+      border-radius: 2px;
+      padding: 48px 32px;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 20px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .topo-backdrop {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      opacity: 0.12;
+      pointer-events: none;
+    }
+
+    .logo-svg-wrap {
+      position: relative;
+      z-index: 2;
+    }
+
+    .logotype-primary {
+      font-family: var(--font-display);
+      font-size: 32px;
+      font-weight: 800;
+      letter-spacing: 0.16em;
+      color: #ffffff;
+      text-transform: uppercase;
+      position: relative;
+      z-index: 2;
+    }
+
+    .logotype-subline {
+      font-size: 12px;
+      letter-spacing: 0.24em;
+      color: #d4a359;
+      text-transform: uppercase;
+      z-index: 2;
+    }
+
+    .mark-notes-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-top: 24px;
+    }
+
+    .mark-note-card {
+      background: #24211d;
+      padding: 16px;
+      border-radius: 2px;
+      border: 1px solid #24211d;
+    }
+
+    h3.note-label {
+      font-size: 12px;
+      color: #d4a359;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+
+    .note-content {
+      font-size: 14px;
+      color: #ede8df;
+    }
+
+    .color-spec-matrix {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+
+    .swatch-unit {
+      background: #24211d;
+      border-radius: 2px;
+      overflow: hidden;
+      border: 1px solid #24211d;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .swatch-fill {
+      height: 64px;
+      width: 100%;
+    }
+
+    .swatch-info {
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .swatch-name {
+      font-weight: 700;
+      font-size: 14px;
+      color: #ffffff;
+    }
+
+    .swatch-role {
+      font-size: 12px;
+      color: #ede8df;
+    }
+
+    .swatch-hex {
+      font-size: 12px;
+      color: #d4a359;
+      margin-top: 4px;
+    }
+
+    .type-specimen-group {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .type-row {
+      padding-bottom: 16px;
+      border-bottom: 1px solid #24211d;
+    }
+
+    .type-role-header {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 8px;
+    }
+
+    .type-role-header span {
+      font-size: 12px;
+      color: #d4a359;
+    }
+
+    .specimen-display {
+      font-family: var(--font-display);
+      font-size: 32px;
+      font-weight: 700;
+      color: #ffffff;
+      line-height: 1.2;
+    }
+
+    .specimen-body {
+      font-family: var(--font-body);
+      font-size: 16px;
+      color: #ede8df;
+      line-height: 1.5;
+    }
+
+    .packaging-stage {
+      background: #141210;
+      border: 1px solid #24211d;
+      border-radius: 4px;
+      padding: 40px 24px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .coffee-pouch-comp {
+      width: 280px;
+      background: #1c1a17;
+      border: 1px solid #24211d;
+      border-radius: 6px;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .pouch-crimp {
+      height: 16px;
+      background: #141210;
+      border-bottom: 1px solid #24211d;
+    }
+
+    .pouch-label-mount {
+      margin: 16px;
+      background: #f4efe6;
+      color: #141210;
+      padding: 20px 16px;
+      border-radius: 2px;
+      position: relative;
+    }
+
+    .label-seal {
+      font-size: 12px;
+      letter-spacing: 0.12em;
+      color: #c85a32;
+      text-transform: uppercase;
+      font-weight: 700;
+      margin-bottom: 8px;
+      display: block;
+    }
+
+    .label-title {
+      font-family: var(--font-display);
+      font-size: 20px;
+      font-weight: 800;
+      line-height: 1.1;
+      color: #141210;
+      margin-bottom: 4px;
+    }
+
+    .label-origin {
+      font-size: 12px;
+      font-weight: 600;
+      color: #384233;
+      margin-bottom: 12px;
+      border-bottom: 1px solid #d4a359;
+      padding-bottom: 8px;
+    }
+
+    .label-notes {
+      font-size: 12px;
+      line-height: 1.4;
+      color: #141210;
+      margin-bottom: 12px;
+    }
+
+    .label-specs-table {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      font-size: 12px;
+      color: #384233;
+      border-top: 1px solid #d4a359;
+      padding-top: 8px;
+    }
+
+    .pouch-bottom-weight {
+      font-size: 12px;
+      text-align: center;
+      color: #ede8df;
+      padding-bottom: 16px;
+      letter-spacing: 0.08em;
+    }
+
+    footer.board-footer {
+      margin-top: 48px;
+      padding-top: 24px;
+      border-top: 1px solid #24211d;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      min-height: 44px;
+      padding: 0 24px;
+      font-family: var(--font-body);
+      font-size: 14px;
+      font-weight: 600;
+      border-radius: 4px;
+      cursor: pointer;
+      text-decoration: none;
+      border: 1px solid transparent;
+    }
+
+    .btn-primary {
+      background-color: #c85a32;
+      color: #ffffff;
+    }
+
+    .btn-secondary {
+      background-color: transparent;
+      color: #ede8df;
+      border: 1px solid #24211d;
+    }
+
+    .board-status {
+      font-size: 12px;
+      color: #ede8df;
+    }
+
+    @media (max-width: 1024px) {
+      main.moodboard-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .wrapper {
+        padding: 20px 16px 40px;
+      }
+      h1.brand-title {
+        font-size: 32px;
+      }
+      .mark-notes-grid {
+        grid-template-columns: 1fr;
+      }
+      .color-spec-matrix {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      footer.board-footer {
+        flex-direction: column;
+        align-items: stretch;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrapper">
+    <header class="board-header">
+      <div class="meta-col">
+        <span class="label">Client &bull; Project</span>
+        <span class="val">Alto Seco Coffee Roasters // Identity v3.1</span>
+      </div>
+      <div class="meta-col">
+        <span class="label">Geographic Focus</span>
+        <span class="val">Sierra Sur, Oaxaca &amp; Huila, Colombia</span>
+      </div>
+      <div class="meta-col">
+        <span class="label">Brand Deliverable</span>
+        <span class="val">Design System &amp; Packaging Proof</span>
+      </div>
+      <div class="meta-col">
+        <span class="label">Art Direction</span>
+        <span class="val">Topographic Terroir / Architectural Restraint</span>
+      </div>
+
+      <div class="brand-title-area">
+        <h1 class="brand-title">ALTO SECO <span class="accent">ROASTERS</span></h1>
+        <p class="brand-thesis">
+          A specialty coffee brand identity celebrating high-elevation micro-climate micro-lots. Rooted in tactile volcanic textures, precise topographic cartography, and unyielding respect for single-cultivar harvest seasons.
+        </p>
+      </div>
+    </header>
+
+    <main class="moodboard-grid">
+      <div style="display: flex; flex-direction: column; gap: 32px;">
+        <section class="board-panel" aria-labelledby="mark-title">
+          <div class="panel-header">
+            <h2 id="mark-title" class="panel-title">
+              <span>01. Primary Emblem &amp; Monogram</span>
+            </h2>
+            <span class="panel-tag">SVG Vector Geometry</span>
+          </div>
+
+          <div class="logo-hero-display">
+            <svg class="topo-backdrop" viewBox="0 0 600 300" preserveAspectRatio="none" aria-hidden="true">
+              <path d="M0,150 C120,80 200,220 300,120 C400,40 480,180 600,110" fill="none" stroke="#d4a359" stroke-width="1.5" />
+              <path d="M0,190 C140,110 220,260 300,160 C380,80 490,220 600,150" fill="none" stroke="#d4a359" stroke-width="1" />
+              <path d="M0,230 C160,150 240,290 300,200 C360,120 500,260 600,190" fill="none" stroke="#d4a359" stroke-width="0.75" />
+            </svg>
+
+            <div class="logo-svg-wrap">
+              <svg width="120" height="120" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Alto Seco logo mark: stylized interlocking elevation contour and coffee bean seed">
+                <circle cx="60" cy="60" r="56" stroke="#24211d" stroke-width="1.5" stroke-dasharray="2 3" />
+                <path d="M60 16 L60 104" stroke="#24211d" stroke-width="1" />
+                <path d="M16 60 L104 60" stroke="#24211d" stroke-width="1" />
+                <path d="M60 26 C42 44 32 64 32 78 C32 92 44 98 60 98 C76 98 88 92 88 78 C88 64 78 44 60 26 Z" stroke="#ede8df" stroke-width="2.5" stroke-linejoin="round" />
+                <path d="M60 32 C66 48 54 62 64 78 C68 85 64 94 60 96" stroke="#c85a32" stroke-width="2.5" stroke-linecap="round" />
+                <circle cx="60" cy="26" r="3" fill="#c85a32" />
+                <circle cx="60" cy="98" r="2.5" fill="#d4a359" />
+              </svg>
+            </div>
+
+            <div class="logotype-primary">ALTO SECO</div>
+            <div class="logotype-subline">Micro-Roasters &bull; Sierra Sur // 2150m</div>
+          </div>
+
+          <div class="mark-notes-grid">
+            <div class="mark-note-card">
+              <h3 class="note-label">Geometric Architecture</h3>
+              <p class="note-content">Formed by dual parabolic arcs describing an 82-degree mountain incline, intersected by the natural organic S-crease of high-density hard-bean parchment.</p>
+            </div>
+            <div class="mark-note-card">
+              <h3 class="note-label">Reduction &amp; Scalability</h3>
+              <p class="note-content">Maintains total structural legibility at 16px favicon dimensions and stamps cleanly into burlap transit sacks, unglazed stoneware, and brass cupping spoons.</p>
+            </div>
+          </div>
+        </section>
+
+        <section class="board-panel" aria-labelledby="type-title">
+          <div class="panel-header">
+            <h2 id="type-title" class="panel-title">
+              <span>02. Typographic Hierarchy</span>
+            </h2>
+            <span class="panel-tag">Editorial Pairing</span>
+          </div>
+
+          <div class="type-specimen-group">
+            <div class="type-row">
+              <div class="type-role-header">
+                <span>Display &bull; Syne ExtraBold</span>
+                <span>Headings &amp; Logotype</span>
+              </div>
+              <div class="specimen-display">Terroir Driven. Washed at 2,150m.</div>
+            </div>
+
+            <div class="type-row">
+              <div class="type-role-header">
+                <span>Body &bull; Plus Jakarta Sans Regular</span>
+                <span>Storytelling &amp; Technical Packaging</span>
+              </div>
+              <p class="specimen-body">
+                We roast selectively to honor the labor of smallholder agronomists. Every lot is moisture-tested, roasted on cast-iron drums with calibrated conductive heat, and rested for fourteen days before dispatch.
+              </p>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <div style="display: flex; flex-direction: column; gap: 32px;">
+        <section class="board-panel" aria-labelledby="color-title">
+          <div class="panel-header">
+            <h2 id="color-title" class="panel-title">
+              <span>03. Color Architecture</span>
+            </h2>
+            <span class="panel-tag">5-Tone Soil &amp; Canopy Spec</span>
+          </div>
+
+          <div class="color-spec-matrix">
+            <div class="swatch-unit">
+              <div class="swatch-fill" style="background-color: #141210;"></div>
+              <div class="swatch-info">
+                <span class="swatch-name">Obsidian Basalt</span>
+                <span class="swatch-role">Primary Ground</span>
+                <span class="swatch-hex">#141210</span>
+              </div>
+            </div>
+
+            <div class="swatch-unit">
+              <div class="swatch-fill" style="background-color: #c85a32;"></div>
+              <div class="swatch-info">
+                <span class="swatch-name">Terracotta Slip</span>
+                <span class="swatch-role">Signature Accent</span>
+                <span class="swatch-hex">#C85A32</span>
+              </div>
+            </div>
+
+            <div class="swatch-unit">
+              <div class="swatch-fill" style="background-color: #384233;"></div>
+              <div class="swatch-info">
+                <span class="swatch-name">Canopy Shade</span>
+                <span class="swatch-role">Supporting Deep</span>
+                <span class="swatch-hex">#384233</span>
+              </div>
+            </div>
+
+            <div class="swatch-unit">
+              <div class="swatch-fill" style="background-color: #f4efe6;"></div>
+              <div class="swatch-info">
+                <span class="swatch-name">Parchment Vellum</span>
+                <span class="swatch-role">Packaging Surface</span>
+                <span class="swatch-hex">#F4EFE6</span>
+              </div>
+            </div>
+
+            <div class="swatch-unit">
+              <div class="swatch-fill" style="background-color: #d4a359;"></div>
+              <div class="swatch-info">
+                <span class="swatch-name">Solar Husk</span>
+                <span class="swatch-role">Metadata Foil</span>
+                <span class="swatch-hex">#D4A359</span>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="board-panel" aria-labelledby="pack-title">
+          <div class="panel-header">
+            <h2 id="pack-title" class="panel-title">
+              <span>04. Packaging Prototype Teaser</span>
+            </h2>
+            <span class="panel-tag">340g Stand-Up Pouch Mockup</span>
+          </div>
+
+          <div class="packaging-stage">
+            <article class="coffee-pouch-comp" aria-label="3D Coffee Pouch Package Simulation">
+              <div class="pouch-crimp"></div>
+
+              <div class="pouch-label-mount">
+                <span class="label-seal">Micro-Lot Harvest // No. 048</span>
+                <h3 class="label-title">FINCA EL MIRADOR</h3>
+                <div class="label-origin">Sierra Sur de Oaxaca &bull; 2,150 MASL</div>
+                <p class="label-notes">
+                  Crisp bergamot blossom, candied kumquat, wild mountain honey, and a silky muscovado sugar finish.
+                </p>
+
+                <div class="label-specs-table">
+                  <div>CULTIVAR: GESHA</div>
+                  <div>HARVEST: FEB 2026</div>
+                  <div>PROCESS: WASHED</div>
+                  <div>PRODUCER: RAMIREZ</div>
+                </div>
+              </div>
+
+              <div class="pouch-bottom-weight">WHOLE BEAN COFFEE &bull; 340G / 12 OZ</div>
+            </article>
+          </div>
+        </section>
+      </div>
+    </main>
+
+    <footer class="board-footer">
+      <div class="board-status">
+        Document Status: Approved for Master Die-Line &bull; Palette Checked for ISO/DIS 12647-2 Compliance
+      </div>
+      <div style="display: flex; gap: 12px;">
+        <button class="btn btn-secondary" type="button">Export Vector Assets</button>
+        <button class="btn btn-primary" type="button">Download Guidelines PDF</button>
+      </div>
+    </footer>
+  </div>
+</body>
+</html>

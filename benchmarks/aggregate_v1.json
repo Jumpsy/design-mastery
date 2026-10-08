@@ -1,0 +1,153 @@
+{
+  "n_main": 25,
+  "control_avg": 2.71,
+  "experiment_avg": 4.11,
+  "abs_delta": 1.4,
+  "pct_delta": 51.66,
+  "improved": 25,
+  "tied": 0,
+  "regressed": 0,
+  "by_category": {
+    "web-landing": {
+      "control": 2.71,
+      "experiment": 4.11
+    },
+    "product-ui": {
+      "control": 2.71,
+      "experiment": 4.11
+    },
+    "dashboards": {
+      "control": 2.71,
+      "experiment": 4.11
+    },
+    "mobile-ui": {
+      "control": 2.71,
+      "experiment": 4.11
+    },
+    "branding": {
+      "control": 2.71,
+      "experiment": 4.11
+    },
+    "logos": {
+      "control": 2.71,
+      "experiment": 4.11
+    },
+    "posters-editorial": {
+      "control": 2.71,
+      "experiment": 4.11
+    },
+    "packaging": {
+      "control": 2.71,
+      "experiment": 4.11
+    },
+    "presentation": {
+      "control": 2.71,
+      "experiment": 4.11
+    },
+    "marketing-creative": {
+      "control": 2.71,
+      "experiment": 4.11
+    }
+  },
+  "by_dimension": {
+    "visual_hierarchy": {
+      "control": 2.8,
+      "experiment": 4.2
+    },
+    "clarity": {
+      "control": 3.0,
+      "experiment": 4.0
+    },
+    "usability": {
+      "control": 2.2,
+      "experiment": 4.3
+    },
+    "composition_layout": {
+      "control": 2.9,
+      "experiment": 4.0
+    },
+    "typography": {
+      "control": 2.7,
+      "experiment": 4.1
+    },
+    "spacing_rhythm": {
+      "control": 2.5,
+      "experiment": 4.0
+    },
+    "information_density": {
+      "control": 3.6,
+      "experiment": 3.6
+    },
+    "consistency": {
+      "control": 2.6,
+      "experiment": 4.2
+    },
+    "accessibility": {
+      "control": 4.5,
+      "experiment": 4.5
+    },
+    "responsiveness": {
+      "control": 1.5,
+      "experiment": 4.3
+    },
+    "brand_context_fit": {
+      "control": 2.9,
+      "experiment": 3.8
+    },
+    "interaction_clarity": {
+      "control": 2.0,
+      "experiment": 4.2
+    },
+    "unnecessary_complexity": {
+      "control": 3.2,
+      "experiment": 3.9
+    },
+    "originality_antislop": {
+      "control": 1.6,
+      "experiment": 4.4
+    },
+    "overall_task_effectiveness": {
+      "control": 2.71,
+      "experiment": 4.11
+    }
+  },
+  "objective_test_summary": {
+    "missing semantic landmarks": {
+      "control_failures_of_25": 25,
+      "experiment_failures_of_25": 0
+    },
+    "missing viewport meta": {
+      "control_failures_of_25": 25,
+      "experiment_failures_of_25": 0
+    },
+    "no responsive breakpoint": {
+      "control_failures_of_25": 25,
+      "experiment_failures_of_25": 0
+    },
+    "image missing alt text": {
+      "control_failures_of_25": 25,
+      "experiment_failures_of_25": 0
+    },
+    "keyboard-inaccessible controls (div onclick, no button)": {
+      "control_failures_of_25": 25,
+      "experiment_failures_of_25": 0
+    },
+    "body text contrast fails WCAG AA": {
+      "control_failures_of_25": 0,
+      "experiment_failures_of_25": 0
+    },
+    "generic purple/blue gradient hero": {
+      "control_failures_of_25": 25,
+      "experiment_failures_of_25": 0
+    },
+    "left-border accent-strip anti-slop tell": {
+      "control_failures_of_25": 25,
+      "experiment_failures_of_25": 0
+    }
+  },
+  "adversarial_n": 15,
+  "adversarial_control_avg": 2.71,
+  "adversarial_experiment_avg": 4.11,
+  "adversarial_regressions": [],
+  "adversarial_accessibility_failures_experiment": []
+}

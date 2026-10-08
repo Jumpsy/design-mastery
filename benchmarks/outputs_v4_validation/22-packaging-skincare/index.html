@@ -1,0 +1,903 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PRAXIS CLINICAL LABS // Formula N° 04 Skincare Serum Packaging Specification</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,600;1,6..72,400&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+body{background:#f7f5f0;color:#141517;font-family:'Plus Jakarta Sans',sans-serif;font-size:16px;line-height:1.5;margin:0;padding:0;-webkit-font-smoothing:antialiased;}
+header,nav,main,section,footer,article{display:block;}
+*{box-sizing:border-box;margin:0;padding:0;}
+em{color:#0d47a1;font-style:normal;font-weight:600;}
+a:focus-visible,button:focus-visible,input:focus-visible{outline:2px solid #0d47a1;outline-offset:4px;}
+
+/* Typography modular scale (1.250 ratio) */
+h1{font-family:'Newsreader',serif;font-size:36px;font-weight:600;line-height:1.15;letter-spacing:-0.02em;color:#141517;margin-bottom:8px;}
+h2{font-family:'Newsreader',serif;font-size:24px;font-weight:600;line-height:1.2;color:#141517;margin-bottom:12px;}
+h3{font-family:'Plus Jakarta Sans',sans-serif;font-size:20px;font-weight:700;line-height:1.3;color:#141517;margin-bottom:8px;}
+p{font-size:16px;line-height:1.5;color:#383a40;}
+.text-lead{font-size:16px;line-height:1.5;color:#676a73;}
+.text-sub{font-size:14px;line-height:1.45;color:#383a40;}
+.text-caption{font-size:12px;line-height:1.4;color:#676a73;}
+.text-micro{font-size:10px;line-height:1.35;letter-spacing:0.04em;}
+
+/* Buttons and Controls */
+.btn{min-height:44px;padding:12px 24px;border:none;border-radius:4px;background:#0d47a1;color:#ffffff;font-family:'Plus Jakarta Sans',sans-serif;font-size:14px;font-weight:600;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:8px;text-decoration:none;}
+.btn:hover{background:#141517;}
+
+/* Containers & Grid on 4px modular spacing */
+.workbench-shell{max-width:1280px;margin:0 auto;padding:32px 24px 64px;}
+.header-band{border-bottom:1px solid #dcd6c8;padding-bottom:24px;margin-bottom:32px;}
+.meta-status-row{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px;border-bottom:1px solid #dcd6c8;padding-bottom:16px;margin-bottom:24px;}
+.meta-chip-list{display:flex;gap:8px;align-items:center;flex-wrap:wrap;}
+.status-pill{display:inline-flex;align-items:center;gap:8px;padding:4px 12px;background:#ffffff;border:1px solid #dcd6c8;border-radius:2px;font-size:12px;color:#383a40;font-weight:500;}
+.status-dot{width:8px;height:8px;border-radius:4px;background:#0d47a1;}
+.lighting-bar{display:flex;align-items:center;gap:8px;background:#ffffff;border:1px solid #dcd6c8;padding:4px 8px;border-radius:4px;}
+.light-btn{min-height:44px;padding:8px 16px;border:1px solid transparent;background:transparent;border-radius:2px;font-family:'Plus Jakarta Sans',sans-serif;font-size:12px;font-weight:600;color:#676a73;cursor:pointer;}
+.light-btn.active{background:#f7f5f0;color:#0d47a1;border-color:#dcd6c8;}
+
+/* Stage Nav Tabs */
+.stage-tab-list{display:flex;gap:8px;border-bottom:2px solid #dcd6c8;margin-bottom:32px;overflow-x:auto;}
+.tab-trigger{min-height:44px;padding:12px 20px;border:none;background:transparent;font-family:'Plus Jakarta Sans',sans-serif;font-size:14px;font-weight:600;color:#676a73;cursor:pointer;position:relative;white-space:nowrap;}
+.tab-trigger:hover{color:#141517;}
+.tab-trigger[aria-selected="true"]{color:#0d47a1;}
+.tab-trigger[aria-selected="true"]::after{content:'';position:absolute;bottom:-2px;left:0;right:0;height:2px;background:#0d47a1;}
+
+/* Tab Panels */
+.packaging-panel{display:none;}
+.packaging-panel.active{display:block;animation:fadePanel 200ms ease forwards;}
+
+/* Panel 1: Physical Presentation Stage */
+.stage-hero-grid{display:grid;grid-template-columns:1.2fr 0.8fr;gap:32px;align-items:start;}
+.plinth-display-box{background:#ffffff;border:1px solid #dcd6c8;border-radius:4px;padding:48px 24px;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:600px;position:relative;box-shadow:0 4px 16px rgba(20,21,23,0.04);}
+.comp-duo-lockup{display:flex;align-items:flex-end;justify-content:center;gap:40px;position:relative;z-index:2;}
+
+/* Physical Amber Bottle CSS comp */
+.bottle-unit-wrap{display:flex;flex-direction:column;align-items:center;position:relative;}
+.pipette-bulb{width:44px;height:44px;background:#141517;border-radius:16px 16px 4px 4px;box-shadow:inset 0 2px 4px rgba(255,255,255,0.15);}
+.pipette-collar{width:56px;height:24px;background:#141517;border-radius:2px;border-top:1px solid #383a40;margin-top:-2px;}
+.bottle-neck-ring{width:44px;height:12px;background:#2b1404;border-radius:2px;}
+.amber-bottle-core{width:152px;height:248px;background:#2b1404;border-radius:12px 12px 4px 4px;padding:20px 8px;display:flex;flex-direction:column;align-items:center;justify-content:center;box-shadow:0 24px 48px rgba(35,16,3,0.16);border:1px solid #4a2608;position:relative;}
+.bottle-label-skin{width:136px;height:200px;background:#f7f5f0;border:1px solid #dcd6c8;border-radius:2px;padding:12px 8px;display:flex;flex-direction:column;justify-content:space-between;text-align:center;color:#141517;}
+.bottle-label-rule{border-top:1px solid #141517;border-bottom:1px solid #141517;padding:8px 0;margin:6px 0;}
+
+/* Secondary Folding Carton comp */
+.carton-unit-wrap{display:flex;flex-direction:column;position:relative;}
+.carton-box-shell{width:168px;height:328px;background:#ffffff;border:1px solid #bcb4a2;border-radius:2px;padding:20px 16px;display:flex;flex-direction:column;justify-content:space-between;color:#141517;box-shadow:0 20px 40px rgba(20,21,23,0.08);}
+.carton-actives-list{border-top:1px solid #dcd6c8;border-bottom:1px solid #dcd6c8;padding:8px 0;margin:8px 0;display:flex;flex-direction:column;gap:4px;}
+.carton-row{display:flex;justify-content:space-between;font-size:10px;}
+
+/* Hotspot Buttons */
+.hotspot-tag{position:absolute;width:24px;height:24px;border-radius:12px;background:#0d47a1;color:#ffffff;border:2px solid #ffffff;font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 2px 8px rgba(13,71,161,0.25);z-index:5;}
+.hotspot-tag:hover{transform:scale(1.15);}
+.hotspot-pos-1{top:40px;right:24px;}
+.hotspot-pos-2{bottom:80px;left:16px;}
+
+/* Inspector Sidebar */
+.inspector-sidebar{background:#ffffff;border:1px solid #dcd6c8;border-radius:4px;padding:24px;display:flex;flex-direction:column;gap:24px;box-shadow:0 4px 12px rgba(20,21,23,0.04);}
+.calibrator-widget{background:#f7f5f0;border:1px solid #dcd6c8;border-radius:4px;padding:16px;display:flex;flex-direction:column;gap:12px;}
+.slider-control{width:100%;height:8px;background:#dcd6c8;border-radius:4px;outline:none;}
+.telemetry-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;}
+.telemetry-box{background:#ffffff;border:1px solid #dcd6c8;padding:8px;border-radius:2px;}
+.spec-record-list{display:flex;flex-direction:column;gap:12px;}
+.spec-row{display:grid;grid-template-columns:130px 1fr;gap:12px;border-bottom:1px solid #dcd6c8;padding-bottom:8px;font-size:14px;}
+
+/* Panel 2: Wrap Label Flat (120x48mm) */
+.flat-label-frame{background:#ffffff;border:1px solid #dcd6c8;border-radius:4px;padding:32px 24px;display:flex;flex-direction:column;gap:24px;}
+.flat-canvas-wrapper{background:#ede9df;border:1px dashed #bcb4a2;padding:32px 16px;display:flex;justify-content:center;overflow-x:auto;}
+.label-120x48{width:760px;min-width:760px;height:304px;background:#f7f5f0;border:1px solid #dcd6c8;display:grid;grid-template-columns:230px 300px 230px;color:#141517;}
+.label-sub-panel{padding:16px;display:flex;flex-direction:column;justify-content:space-between;}
+.label-border-r{border-right:1px solid #141517;}
+.label-border-l{border-left:1px solid #141517;}
+
+/* Panel 3: CAD Dieline Mechanical Flat */
+.cad-dieline-card{background:#ffffff;border:1px solid #dcd6c8;border-radius:4px;padding:32px 24px;display:flex;flex-direction:column;gap:24px;}
+.cad-dieline-viewport{background:#ffffff;border:1px solid #bcb4a2;padding:24px 16px;display:flex;flex-direction:column;align-items:center;overflow-x:auto;}
+.dieline-legend-strip{display:flex;gap:24px;justify-content:center;flex-wrap:wrap;margin-bottom:16px;font-size:12px;}
+.legend-entry{display:flex;align-items:center;gap:8px;}
+.swatch-line{width:24px;height:2px;}
+
+/* Panel 4: Clinical Monograph */
+.monograph-article{background:#ffffff;border:1px solid #dcd6c8;border-radius:4px;padding:40px 32px;display:flex;flex-direction:column;gap:32px;}
+.monograph-head{border-bottom:2px solid #141517;padding-bottom:16px;display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:16px;}
+.monograph-content-block{display:flex;flex-direction:column;gap:12px;}
+.monograph-data-table{width:100%;border-collapse:collapse;margin:12px 0;font-size:14px;}
+.monograph-data-table th{background:#f7f5f0;border-bottom:1px solid #bcb4a2;padding:8px 12px;text-align:left;font-size:12px;font-weight:700;text-transform:uppercase;}
+.monograph-data-table td{padding:12px;border-bottom:1px solid #dcd6c8;vertical-align:top;}
+
+/* Footer */
+footer.footer-bar{margin-top:48px;border-top:1px solid #dcd6c8;padding-top:24px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px;font-size:12px;color:#676a73;}
+
+/* Responsive Media Queries (2 distinct breakpoints) */
+@media (max-width:960px){
+  .stage-hero-grid{grid-template-columns:1fr;}
+  .workbench-shell{padding:24px 16px 48px;}
+}
+@media (max-width:540px){
+  .comp-duo-lockup{flex-direction:column;align-items:center;gap:24px;}
+  .meta-status-row{flex-direction:column;align-items:flex-start;}
+}
+
+@media (prefers-reduced-motion:reduce){
+  *{animation:none !important;transition:none !important;}
+}
+
+@keyframes fadePanel{
+  from{opacity:0;transform:translateY(4px);}
+  to{opacity:1;transform:translateY(0);}
+}
+</style>
+</head>
+<body>
+
+<div class="workbench-shell">
+
+  <!-- Masthead Section -->
+  <header class="header-band" role="banner">
+    <div class="meta-status-row">
+      <div class="meta-chip-list">
+        <div class="status-pill"><span class="status-dot"></span> JURISDICTION: EU COSMETICS REGULATION 1223/2009</div>
+        <div class="status-pill">BATCH RECORD: PRX-26-0941B</div>
+        <div class="status-pill">PRINT SPEC: 2-COLOR ROTARY SCREEN</div>
+      </div>
+      <div class="lighting-bar" role="radiogroup" aria-label="Inspection Lighting Environment">
+        <span class="text-caption">Substrate Lighting:</span>
+        <button class="light-btn active" role="radio" aria-checked="true" data-light="daylight">5000K Neutral</button>
+        <button class="light-btn" role="radio" aria-checked="false" data-light="tungsten">2800K Tungsten</button>
+        <button class="light-btn" role="radio" aria-checked="false" data-light="uv">365nm UV Spec</button>
+      </div>
+    </div>
+
+    <div>
+      <p class="text-caption" style="color:#0d47a1; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; margin-bottom:4px;">Clinical Pharmacopeia Monograph // Benchmark 22</p>
+      <h1>PRAXIS CLINICAL LABS</h1>
+      <p class="text-lead">
+        Comprehensive primary packaging and secondary carton system for <strong>Formula N° 04</strong>: 
+        Sebum Balancing and Intercellular Epidermal Lipid Restoration Concentrate. 
+        Engineered with a minimalist pharmacy-adjacent Swiss apothecary grid.
+      </p>
+    </div>
+  </header>
+
+  <!-- Viewport Switcher Navigation -->
+  <nav aria-label="Packaging Specification Views">
+    <div class="stage-tab-list" role="tablist">
+      <button class="tab-trigger" role="tab" id="tab-1" aria-selected="true" aria-controls="view-1" tabindex="0">
+        [01] 3D Physical Bottle &amp; Carton Comp
+      </button>
+      <button class="tab-trigger" role="tab" id="tab-2" aria-selected="false" aria-controls="view-2" tabindex="-1">
+        [02] 120 × 48mm Primary Wrap Label Flat
+      </button>
+      <button class="tab-trigger" role="tab" id="tab-3" aria-selected="false" aria-controls="view-3" tabindex="-1">
+        [03] CAD Reverse-Tuck Carton Dieline
+      </button>
+      <button class="tab-trigger" role="tab" id="tab-4" aria-selected="false" aria-controls="view-4" tabindex="-1">
+        [04] Clinical Monograph &amp; INCI Dossier
+      </button>
+    </div>
+  </nav>
+
+  <main>
+    <!-- VIEW 1: 3D Physical Presentation Comp -->
+    <section class="packaging-panel active" id="view-1" role="tabpanel" aria-labelledby="tab-1">
+      <div class="stage-hero-grid">
+        
+        <!-- Showcase Plinth Stage -->
+        <div class="plinth-display-box">
+          <div class="comp-duo-lockup">
+            
+            <!-- 30ml Primary Bottle Comp -->
+            <div class="bottle-unit-wrap" id="bottle-target-comp">
+              <div class="pipette-bulb"></div>
+              <div class="pipette-collar"></div>
+              <div class="bottle-neck-ring"></div>
+              <div class="amber-bottle-core">
+                <div class="bottle-label-skin">
+                  <div style="display:flex; justify-content:space-between; font-size:8px; border-bottom:1px solid #141517; padding-bottom:4px;">
+                    <span>PRAXIS CLINICAL</span>
+                    <span>30 ML ℮</span>
+                  </div>
+                  <div>
+                    <p style="font-family:'Newsreader',serif; font-size:16px; font-weight:600; text-transform:uppercase;">PRAXIS</p>
+                    <p class="text-micro" style="color:#0d47a1; font-weight:700;">DERMATOLOGIE GENÈVE</p>
+                  </div>
+                  <div class="bottle-label-rule">
+                    <p class="text-micro" style="font-weight:700;">FORMULA N° 04</p>
+                    <p style="font-size:10px; font-weight:700; line-height:1.2;">NIACINAMIDE 10%<br>+ ZINC PCA 2%</p>
+                    <p class="text-micro" style="color:#676a73; margin-top:2px;">Oligo-Hyaluronic 1.5% · Ectoin 1%</p>
+                  </div>
+                  <div style="font-size:8px; display:grid; grid-template-columns:1fr 1fr; text-align:left; border-bottom:1px solid #dcd6c8; padding-bottom:4px;">
+                    <span>pH 5.40 ± 0.15</span>
+                    <span style="text-align:right;">LOT 26-0941B</span>
+                    <span>PAO 6M</span>
+                    <span style="text-align:right;">EXP 09/2029</span>
+                  </div>
+                  <div style="display:flex; justify-content:space-between; font-size:8px; font-weight:600;">
+                    <span>SWISS COMPOUNDED</span>
+                    <span>1.01 FL. OZ.</span>
+                  </div>
+                </div>
+              </div>
+              <!-- Hotspot 1 -->
+              <button class="hotspot-tag hotspot-pos-1" id="btn-hotspot-glass" aria-label="Inspect Amber Glass Container Specs">1</button>
+            </div>
+
+            <!-- 350gsm Folding Boxboard Comp -->
+            <div class="carton-unit-wrap" id="carton-target-comp">
+              <div class="carton-box-shell">
+                <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #141517; padding-bottom:4px;">
+                  <span style="font-family:'Newsreader',serif; font-size:14px; font-style:italic; color:#0d47a1; font-weight:600;">℞</span>
+                  <span class="text-micro" style="color:#676a73;">CERTIFIED GMP // ISO 22716</span>
+                </div>
+                <div>
+                  <p style="font-family:'Newsreader',serif; font-size:18px; font-weight:600; text-transform:uppercase; line-height:1.1;">PRAXIS CLINICAL</p>
+                  <p class="text-micro" style="color:#0d47a1; font-weight:700; letter-spacing:0.06em;">SWISS DERMATOLOGICAL LABS</p>
+                </div>
+                <div>
+                  <p class="text-micro" style="font-weight:700;">FORMULA N° 04 // CONCENTRATE</p>
+                  <p style="font-size:12px; font-weight:700; margin-top:2px;">SEBUM BALANCING &amp; BARRIER RESTORATION SERUM</p>
+                  <div class="carton-actives-list">
+                    <div class="carton-row"><span>Niacinamide (Vit. B3)</span><strong>10.0% w/w</strong></div>
+                    <div class="carton-row"><span>Zinc L-PCA</span><strong>2.0% w/w</strong></div>
+                    <div class="carton-row"><span>Sodium Hyaluronate</span><strong>1.5% w/w</strong></div>
+                    <div class="carton-row"><span>Pure Ectoin</span><strong>1.0% w/w</strong></div>
+                  </div>
+                  <p class="text-micro" style="color:#676a73;">Targeted infundibular sebum reduction and stratum corneum lipid barrier re-densification.</p>
+                </div>
+                <div style="border-top:1px solid #141517; padding-top:6px;">
+                  <div style="display:flex; justify-content:space-between; font-size:10px; font-weight:700;">
+                    <span>30 mL ℮</span>
+                    <span>1.01 FL. OZ.</span>
+                  </div>
+                  <div style="display:flex; justify-content:space-between; font-size:8px; color:#676a73; margin-top:2px;">
+                    <span>GENÈVE · LONDON · NEW YORK</span>
+                    <span>FABRIQUÉ EN SUISSE</span>
+                  </div>
+                </div>
+              </div>
+              <!-- Hotspot 2 -->
+              <button class="hotspot-tag hotspot-pos-2" id="btn-hotspot-carton" aria-label="Inspect Folding Boxboard Specs">2</button>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Telemetry & Dropper Pipette Calibration Tool -->
+        <article class="inspector-sidebar">
+          <div>
+            <h2>Volumetric Dropper Calibrator</h2>
+            <p class="text-caption">Functioning continuous-input dosing engine and physical material inspection.</p>
+          </div>
+
+          <div class="calibrator-widget">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <label for="range-pipette" class="text-sub" style="font-weight:700;">Calibrated Dropper Volume:</label>
+              <span id="label-pipette-vol" style="font-size:18px; font-weight:700; color:#0d47a1;" aria-live="polite">0.50 mL</span>
+            </div>
+
+            <input 
+              type="range" 
+              id="range-pipette" 
+              class="slider-control" 
+              min="0.10" 
+              max="1.00" 
+              step="0.05" 
+              value="0.50"
+              role="slider"
+              aria-valuemin="0.10"
+              aria-valuemax="1.00"
+              aria-valuenow="0.50"
+              aria-label="Calibrated Pipette Volume in Milliliters"
+            >
+
+            <div class="telemetry-grid">
+              <div class="telemetry-box">
+                <p class="text-micro" style="color:#676a73;">DROPS</p>
+                <p id="hud-drops" style="font-size:14px; font-weight:700; color:#141517; margin-top:2px;">10 Drops</p>
+              </div>
+              <div class="telemetry-box">
+                <p class="text-micro" style="color:#676a73;">ZONE</p>
+                <p id="hud-zone" style="font-size:14px; font-weight:700; color:#141517; margin-top:2px;">Full Face</p>
+              </div>
+              <div class="telemetry-box">
+                <p class="text-micro" style="color:#676a73;">ACTIVE B3</p>
+                <p id="hud-actives" style="font-size:14px; font-weight:700; color:#141517; margin-top:2px;">50.0 mg</p>
+              </div>
+            </div>
+
+            <p class="text-micro" style="color:#676a73;">
+              <strong>Dispensing Protocol:</strong> Depress rubber bulb before full immersion. Calibrated borosilicate glass pipette draws fluid precisely to graduation ring. Apply directly to purified dermis.
+            </p>
+          </div>
+
+          <!-- Dynamic Hotspot Content Card -->
+          <div style="background:#ffffff; border:1px solid #0d47a1; border-radius:4px; padding:16px;" id="hotspot-detail-card">
+            <p class="text-micro" style="color:#0d47a1; font-weight:700; margin-bottom:4px;" id="hotspot-code">INSPECTION NODE 01 // AMBER BOROSILICATE GLASS</p>
+            <h3 style="font-size:16px; margin-bottom:4px;" id="hotspot-title">Type III Amber Borosilicate Tubular Bottle (30 mL)</h3>
+            <p class="text-sub" id="hotspot-body">
+              Engineered with 99.2% spectral barrier protection against actinic light degradation between 290nm and 450nm. Preserves delicate Zinc PCA and multi-molecular sodium hyaluronate integrity across 36-month shelf life.
+            </p>
+          </div>
+
+          <!-- Material Spec Rows -->
+          <div class="spec-record-list">
+            <div class="spec-row">
+              <span class="text-caption" style="font-weight:700;">PRIMARY SUBSTRATE</span>
+              <span class="text-sub">Tubular Amber Borosilicate Glass 30 mL (Ø 33.0mm × H 79.5mm)</span>
+            </div>
+            <div class="spec-row">
+              <span class="text-caption" style="font-weight:700;">CLOSURE SYSTEM</span>
+              <span class="text-sub">18/400 Phenolic Ribbed Cap with Nitrile Elastomer Bulb &amp; Pipette</span>
+            </div>
+            <div class="spec-row">
+              <span class="text-caption" style="font-weight:700;">LABEL STOCK</span>
+              <span class="text-sub">110 gsm FSC Cotton Vellum with Wet-Strength Acrylic Adhesive</span>
+            </div>
+            <div class="spec-row">
+              <span class="text-caption" style="font-weight:700;">CARTON STOCK</span>
+              <span class="text-sub">350 gsm Solid Bleached Sulfate (SBS) Reverse-Tuck Folding Carton</span>
+            </div>
+          </div>
+        </article>
+
+      </div>
+    </section>
+
+    <!-- VIEW 2: 120 x 48mm Primary Wrap Label Flat -->
+    <section class="packaging-panel" id="view-2" role="tabpanel" aria-labelledby="tab-2">
+      <div class="flat-label-frame">
+        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:16px;">
+          <div>
+            <h2>Primary Container Wrap Label Specification</h2>
+            <p class="text-sub">Mechanical Print Comp: 120.0 mm Width × 48.0 mm Height · Continuous 360° Cylindrical Bottle Wrap</p>
+          </div>
+          <a href="#view-3" class="btn" id="btn-goto-dieline">View Outer Carton Dieline</a>
+        </div>
+
+        <div class="flat-canvas-wrapper">
+          <div class="label-120x48" role="region" aria-label="120 by 48 millimeter primary label mechanical artwork">
+            
+            <!-- Left Sub-Panel: Usage, Safety & Storage -->
+            <div class="label-sub-panel label-border-r">
+              <div>
+                <p class="text-micro" style="font-weight:700; border-bottom:1px solid #141517; padding-bottom:4px; margin-bottom:6px;">DIRECTIONS &amp; PROTOCOL</p>
+                <p class="text-micro" style="margin-bottom:8px;">
+                  Dispense 4–6 drops (0.25–0.50 mL) onto cleansed skin. Gently massage over face and neck until absorbed. Use daily AM and PM before heavier emulsions.
+                </p>
+                <div style="background:#ede9df; border-left:2px solid #0d47a1; padding:4px 6px; margin-bottom:6px;">
+                  <p class="text-micro"><strong>CAUTION:</strong> Topical dermatological use only. If irritation manifests, discontinue use and consult a physician.</p>
+                </div>
+              </div>
+              <div style="border-top:1px solid #dcd6c8; padding-top:4px; font-size:8px;">
+                <p>STORE: 15°C–25°C · AWAY FROM SUNLIGHT</p>
+                <p>LOT: 26-0941B · EXP: 09/2029</p>
+              </div>
+            </div>
+
+            <!-- Center Sub-Panel: Primary Display Panel (PDP) -->
+            <div class="label-sub-panel" style="text-align:center;">
+              <div style="display:flex; justify-content:space-between; font-size:8px; border-bottom:1px solid #141517; padding-bottom:4px;">
+                <span>LABORATOIRE GENÈVE</span>
+                <span>CH-1204</span>
+              </div>
+              <div>
+                <p style="font-family:'Newsreader',serif; font-size:20px; font-weight:600; text-transform:uppercase; letter-spacing:0.04em;">PRAXIS</p>
+                <p class="text-micro" style="color:#0d47a1; font-weight:700; letter-spacing:0.12em;">CLINICAL SCIENCE</p>
+              </div>
+              <div class="bottle-label-rule">
+                <p class="text-micro" style="font-weight:700;">FORMULA N° 04</p>
+                <p style="font-size:12px; font-weight:700;">NIACINAMIDE 10%<br>+ ZINC PCA 2%</p>
+                <p class="text-micro" style="color:#676a73; margin-top:2px;">Oligo-Hyaluronic Acid 1.5% · Pure Ectoin 1.0%</p>
+              </div>
+              <div style="display:flex; justify-content:space-between; font-size:9px; font-weight:700; border-top:1px solid #141517; padding-top:4px;">
+                <span>30 mL ℮</span>
+                <span style="color:#0d47a1;">DERMATOLOGICALLY TESTED</span>
+                <span>1.01 FL. OZ.</span>
+              </div>
+            </div>
+
+            <!-- Right Sub-Panel: INCI Formula & Geneva Regulatory -->
+            <div class="label-sub-panel label-border-l">
+              <div>
+                <p class="text-micro" style="font-weight:700; border-bottom:1px solid #141517; padding-bottom:4px; margin-bottom:4px;">COMPOSITION (INCI)</p>
+                <p style="font-size:7.5px; line-height:1.3; color:#383a40; margin-bottom:6px;">
+                  <strong>INGREDIENTS:</strong> Aqua, Niacinamide (10%), Glycerin, Pentylene Glycol, Zinc PCA (2%), Sodium Hyaluronate (1.4 MDa), Hydrolyzed Hyaluronic Acid (50 kDa), Ectoin (1%), Panthenol, Allantoin, Beta-Glucan, Centella Asiatica Leaf Extract, Camellia Sinensis Leaf Extract, Biosaccharide Gum-1, Xanthan Gum, Phenoxyethanol, Ethylhexylglycerin, Sodium Phytate, Citric Acid.
+                </p>
+                <p style="font-size:8px; color:#676a73;">FORMULA pH: 5.40 ± 0.15</p>
+                <p style="font-size:8px; color:#676a73;">RESPONSIBLE: PRAXIS CLINICAL SA</p>
+                <p style="font-size:8px; color:#676a73;">RUE DU RHÔNE 14, 1204 GENÈVE</p>
+              </div>
+              <div style="display:flex; justify-content:space-between; align-items:center; border-top:1px solid #141517; padding-top:4px; font-size:8px; font-weight:600;">
+                <span>PAO 6M</span>
+                <span>FABRIQUÉ EN SUISSE</span>
+                <span>GL-72 ♳</span>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(280px, 1fr)); gap:16px;">
+          <div class="spec-row">
+            <span class="text-caption" style="font-weight:700;">PRINT RESOLUTION</span>
+            <span class="text-sub">Rotary silkscreen 1200 dpi UV micro-pigment with matte dispersion coat.</span>
+          </div>
+          <div class="spec-row">
+            <span class="text-caption" style="font-weight:700;">REGISTRATION</span>
+            <span class="text-sub">Optical register variance maintained under ±0.15 mm across all axes.</span>
+          </div>
+          <div class="spec-row">
+            <span class="text-caption" style="font-weight:700;">LEGAL COMPLIANCE</span>
+            <span class="text-sub">Meets EU Regulation (EC) 1223/2009 Article 19 mandatory labeling standards.</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- VIEW 3: CAD Reverse-Tuck Carton Structural Dieline -->
+    <section class="packaging-panel" id="view-3" role="tabpanel" aria-labelledby="tab-3">
+      <div class="cad-dieline-card">
+        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:16px;">
+          <div>
+            <h2>Secondary Folding Boxboard Structural Dieline</h2>
+            <p class="text-sub">Reverse-Tuck Carton (RTC) with Locking Base Flap · Outer Finished Dimensions: 42.0 × 42.0 × 108.0 mm</p>
+          </div>
+          <div class="status-pill">CAD REFERENCE: PRX-RTC-04-A</div>
+        </div>
+
+        <div class="cad-dieline-viewport">
+          <div class="dieline-legend-strip">
+            <div class="legend-entry">
+              <div class="swatch-line" style="background:#d32f2f;"></div>
+              <span>Die Cut Line (100% Through-Cut)</span>
+            </div>
+            <div class="legend-entry">
+              <div class="swatch-line" style="border-bottom:2px dashed #1976d2;"></div>
+              <span>Crease / Score Fold Line</span>
+            </div>
+            <div class="legend-entry">
+              <div class="swatch-line" style="background:#2e7d32;"></div>
+              <span>3.0 mm Bleed Safety Allowance</span>
+            </div>
+            <div class="legend-entry">
+              <span style="font-size:14px; color:#1976d2; font-weight:700;">⊕</span>
+              <span>Optical Register Reticle</span>
+            </div>
+          </div>
+
+          <!-- Structural Packaging Vector Dieline -->
+          <svg width="900" height="420" viewBox="0 0 900 420" xmlns="http://www.w3.org/2000/svg" aria-label="Vector structural folding carton dieline layout">
+            <!-- Background engineering grid -->
+            <rect width="100%" height="100%" fill="#ffffff" stroke="#dcd6c8" stroke-width="1"/>
+            
+            <!-- Registration Targets -->
+            <g stroke="#1976d2" stroke-width="0.8">
+              <circle cx="28" cy="28" r="8" fill="none"/>
+              <line x1="16" y1="28" x2="40" y2="28"/>
+              <line x1="28" y1="16" x2="28" y2="40"/>
+
+              <circle cx="872" cy="28" r="8" fill="none"/>
+              <line x1="860" y1="28" x2="884" y2="28"/>
+              <line x1="872" y1="16" x2="872" y2="40"/>
+
+              <circle cx="28" cy="392" r="8" fill="none"/>
+              <line x1="16" y1="392" x2="40" y2="392"/>
+              <line x1="28" y1="380" x2="28" y2="404"/>
+
+              <circle cx="872" cy="392" r="8" fill="none"/>
+              <line x1="860" y1="392" x2="884" y2="392"/>
+              <line x1="872" y1="380" x2="872" y2="404"/>
+            </g>
+
+            <!-- Color bars -->
+            <g transform="translate(360, 20)">
+              <rect x="0" y="0" width="16" height="12" fill="#00ffff" stroke="#141517" stroke-width="0.5"/>
+              <rect x="20" y="0" width="16" height="12" fill="#ff00ff" stroke="#141517" stroke-width="0.5"/>
+              <rect x="40" y="0" width="16" height="12" fill="#ffff00" stroke="#141517" stroke-width="0.5"/>
+              <rect x="60" y="0" width="16" height="12" fill="#141517" stroke="#141517" stroke-width="0.5"/>
+              <rect x="80" y="0" width="16" height="12" fill="#0d47a1" stroke="#141517" stroke-width="0.5"/>
+              <text x="105" y="10" font-family="'Plus Jakarta Sans',sans-serif" font-size="8" fill="#676a73">PANTONE 286C / BLACK 6C</text>
+            </g>
+
+            <!-- Cut Lines (Solid Red) -->
+            <!-- Main box outline: Glue Tab (130->165) | Left (165->305) | Front (305->445) | Right (445->585) | Back (585->725) -->
+            <g stroke="#d32f2f" stroke-width="1.5" fill="#f7f5f0">
+              <!-- Glue Tab left angled cut -->
+              <polygon points="130,120 165,100 165,340 130,320" fill="#ede9df" stroke="#d32f2f" stroke-width="1.5"/>
+
+              <!-- Panel 1 (Left): Top Dust Flap -->
+              <path d="M 165 100 L 165 65 C 205 65 265 65 305 80 L 305 100" />
+
+              <!-- Panel 2 (Front): Top Main Tuck Flap -->
+              <path d="M 305 100 L 305 40 C 335 35 415 35 445 40 L 445 100" />
+              
+              <!-- Panel 3 (Right): Top Dust Flap -->
+              <path d="M 445 100 L 445 80 C 485 65 545 65 585 65 L 585 100" />
+
+              <!-- Panel 4 (Back): Top edge -->
+              <line x1="585" y1="100" x2="725" y2="100" stroke="#d32f2f" stroke-width="1.5"/>
+              <line x1="725" y1="100" x2="725" y2="340" stroke="#d32f2f" stroke-width="1.5"/>
+
+              <!-- Bottom Flaps -->
+              <path d="M 165 340 L 165 375 C 205 375 265 375 305 360 L 305 340" />
+              <line x1="305" y1="340" x2="445" y2="340" stroke="#d32f2f" stroke-width="1.5"/>
+              <path d="M 445 340 L 445 360 C 485 375 545 375 585 375 L 585 340" />
+              <path d="M 585 340 L 585 400 C 615 405 695 405 725 400 L 725 340" />
+            </g>
+
+            <!-- Crease Lines (Dashed Blue) -->
+            <g stroke="#1976d2" stroke-width="1.5" stroke-dasharray="4,4">
+              <line x1="165" y1="100" x2="165" y2="340" />
+              <line x1="305" y1="100" x2="305" y2="340" />
+              <line x1="445" y1="100" x2="445" y2="340" />
+              <line x1="585" y1="100" x2="585" y2="340" />
+
+              <line x1="165" y1="100" x2="585" y2="100" />
+              <line x1="165" y1="340" x2="725" y2="340" />
+              <line x1="305" y1="60" x2="445" y2="60" />
+              <line x1="585" y1="380" x2="725" y2="380" />
+            </g>
+
+            <!-- Printed Graphic Simulation -->
+            <!-- Panel 1 (Left) -->
+            <g transform="translate(175, 115)" font-family="'Plus Jakarta Sans',sans-serif">
+              <text x="0" y="14" font-family="'Newsreader',serif" font-size="11" font-weight="600" fill="#141517">MECHANISM OF ACTION</text>
+              <line x1="0" y1="18" x2="118" y2="18" stroke="#141517" stroke-width="0.5"/>
+              <text x="0" y="32" font-size="7" font-weight="700" fill="#141517">1. SEBOCYTE DOWN-REGULATION</text>
+              <text x="0" y="42" font-size="6" fill="#4a4d55">Inhibits 5α-reductase cascade.</text>
+              <text x="0" y="56" font-size="7" font-weight="700" fill="#141517">2. CERAMIDE STIMULATION</text>
+              <text x="0" y="66" font-size="6" fill="#4a4d55">Augments epidermal lipids 1, 3, 6-II.</text>
+              <text x="0" y="80" font-size="7" font-weight="700" fill="#141517">3. ERYTHEMA RESOLUTION</text>
+              <text x="0" y="90" font-size="6" fill="#4a4d55">Suppresses inflammatory cytokines.</text>
+              <text x="0" y="112" font-size="6.5" font-weight="700" fill="#0d47a1">CLINICAL TRIALS (28D):</text>
+              <text x="0" y="124" font-size="6" fill="#141517">SEBUM REDUCTION: -44.2%</text>
+              <text x="0" y="134" font-size="6" fill="#141517">BARRIER RECOVERY: +28.6%</text>
+              <text x="0" y="195" font-size="6" fill="#9396a0">PANEL 1 / 4 [LEFT]</text>
+            </g>
+
+            <!-- Panel 2 (Front PDP) -->
+            <g transform="translate(315, 115)">
+              <text x="65" y="14" text-anchor="middle" font-family="'Newsreader',serif" font-size="13" font-weight="600" fill="#141517">PRAXIS CLINICAL</text>
+              <text x="65" y="24" text-anchor="middle" font-size="6" font-weight="700" fill="#0d47a1" letter-spacing="1">SWISS DERMATOLOGY</text>
+              <line x1="10" y1="30" x2="120" y2="30" stroke="#141517" stroke-width="0.75"/>
+              <text x="65" y="52" text-anchor="middle" font-size="7" font-weight="700" fill="#141517">FORMULA N° 04</text>
+              <text x="65" y="70" text-anchor="middle" font-size="10" font-weight="700" fill="#141517">NIACINAMIDE 10%</text>
+              <text x="65" y="82" text-anchor="middle" font-size="10" font-weight="700" fill="#141517">+ ZINC PCA 2%</text>
+              <line x1="20" y1="94" x2="110" y2="94" stroke="#dcd6c8" stroke-width="0.5"/>
+              <text x="65" y="110" text-anchor="middle" font-size="6" fill="#4a4d55">Multi-Depth Sebum Balancing</text>
+              <text x="65" y="120" text-anchor="middle" font-size="6" fill="#4a4d55">&amp; Lipid Restoration Serum</text>
+              <text x="10" y="195" font-size="7" font-weight="700" fill="#141517">30 mL ℮</text>
+              <text x="120" y="195" text-anchor="end" font-size="7" font-weight="700" fill="#141517">1.01 FL. OZ.</text>
+              <text x="65" y="208" text-anchor="middle" font-size="6" fill="#9396a0">PANEL 2 / 4 [FRONT]</text>
+            </g>
+
+            <!-- Panel 3 (Right) -->
+            <g transform="translate(455, 115)">
+              <text x="0" y="14" font-family="'Newsreader',serif" font-size="11" font-weight="600" fill="#141517">FULL INCI FORMULA</text>
+              <line x1="0" y1="18" x2="118" y2="18" stroke="#141517" stroke-width="0.5"/>
+              <text x="0" y="32" font-size="5.5" fill="#2b2e33">
+                <tspan x="0" dy="0">Aqua (Swiss Glacier Source),</tspan>
+                <tspan x="0" dy="9">Niacinamide (Pure USP 10%),</tspan>
+                <tspan x="0" dy="9">Glycerin (Vegetal 99.7%),</tspan>
+                <tspan x="0" dy="9">Pentylene Glycol, Zinc PCA (2%),</tspan>
+                <tspan x="0" dy="9">Sodium Hyaluronate (1.4 MDa),</tspan>
+                <tspan x="0" dy="9">Hydrolyzed Hyaluronate (50 kDa),</tspan>
+                <tspan x="0" dy="9">Ectoin (Natural Extremolyte 1%),</tspan>
+                <tspan x="0" dy="9">Panthenol (Pro-Vitamin B5),</tspan>
+                <tspan x="0" dy="9">Allantoin, Beta-Glucan, Centella,</tspan>
+                <tspan x="0" dy="9">Camellia Sinensis Extract,</tspan>
+                <tspan x="0" dy="9">Biosaccharide Gum-1, Xanthan,</tspan>
+                <tspan x="0" dy="9">Phenoxyethanol, Ethylhexylglycerin,</tspan>
+                <tspan x="0" dy="9">Sodium Phytate, Citric Acid.</tspan>
+              </text>
+              <line x1="0" y1="165" x2="118" y2="165" stroke="#dcd6c8" stroke-width="0.5"/>
+              <text x="0" y="178" font-size="6" fill="#4a4d55">pH VALUE: 5.40 ± 0.15</text>
+              <text x="0" y="195" font-size="6" fill="#9396a0">PANEL 3 / 4 [RIGHT]</text>
+            </g>
+
+            <!-- Panel 4 (Back) -->
+            <g transform="translate(595, 115)">
+              <text x="0" y="14" font-family="'Newsreader',serif" font-size="11" font-weight="600" fill="#141517">REGULATORY &amp; LOT</text>
+              <line x1="0" y1="18" x2="118" y2="18" stroke="#141517" stroke-width="0.5"/>
+              <text x="0" y="32" font-size="6" font-weight="700" fill="#141517">RESPONSIBLE PERSON (EU):</text>
+              <text x="0" y="42" font-size="6" fill="#4a4d55">Praxis Clinical SA, 1204 Genève</text>
+
+              <!-- EAN-13 Barcode -->
+              <g transform="translate(6, 60)">
+                <rect x="-4" y="-4" width="112" height="46" fill="#ffffff" stroke="#dcd6c8" stroke-width="0.5"/>
+                <g fill="#141517">
+                  <rect x="0" y="0" width="2" height="32"/>
+                  <rect x="4" y="0" width="1" height="32"/>
+                  <rect x="8" y="0" width="3" height="28"/>
+                  <rect x="13" y="0" width="1" height="28"/>
+                  <rect x="16" y="0" width="2" height="28"/>
+                  <rect x="21" y="0" width="4" height="28"/>
+                  <rect x="27" y="0" width="1" height="28"/>
+                  <rect x="31" y="0" width="2" height="28"/>
+                  <rect x="36" y="0" width="3" height="28"/>
+                  <rect x="42" y="0" width="1" height="28"/>
+                  <rect x="46" y="0" width="1.5" height="32"/>
+                  <rect x="49" y="0" width="1.5" height="32"/>
+                  <rect x="53" y="0" width="2" height="28"/>
+                  <rect x="58" y="0" width="3" height="28"/>
+                  <rect x="63" y="0" width="1" height="28"/>
+                  <rect x="67" y="0" width="4" height="28"/>
+                  <rect x="73" y="0" width="2" height="28"/>
+                  <rect x="78" y="0" width="1" height="28"/>
+                  <rect x="82" y="0" width="3" height="28"/>
+                  <rect x="88" y="0" width="1" height="28"/>
+                  <rect x="91" y="0" width="2" height="28"/>
+                  <rect x="96" y="0" width="1.5" height="32"/>
+                  <rect x="99" y="0" width="1.5" height="32"/>
+                </g>
+                <text x="52" y="40" text-anchor="middle" font-size="6.5" fill="#141517" letter-spacing="1">7 640189 230048</text>
+              </g>
+
+              <text x="0" y="132" font-size="6" fill="#141517">PAO 6M · PAP-21 · FSC-C102</text>
+              <text x="0" y="146" font-size="6" fill="#4a4d55">LOT: 26-0941B · EXP: 09/2029</text>
+              <text x="0" y="195" font-size="6" fill="#9396a0">PANEL 4 / 4 [BACK]</text>
+            </g>
+          </svg>
+        </div>
+
+        <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(260px, 1fr)); gap:16px;">
+          <div class="spec-row">
+            <span class="text-caption" style="font-weight:700;">BOARD STOCK</span>
+            <span class="text-sub">350 gsm Solid Bleached Sulfate (SBS) folding boxboard with smooth clay coat.</span>
+          </div>
+          <div class="spec-row">
+            <span class="text-caption" style="font-weight:700;">SPECIAL FINISH</span>
+            <span class="text-sub">Blind deboss 0.25 mm relief depth on brand mark and Rx pharmaceutical insignia.</span>
+          </div>
+          <div class="spec-row">
+            <span class="text-caption" style="font-weight:700;">RECYCLABILITY</span>
+            <span class="text-sub">Curbside recyclable PAP-21 standard with mineral oil-free vegetable inks.</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- VIEW 4: Clinical Monograph & INCI Disclosure -->
+    <section class="packaging-panel" id="view-4" role="tabpanel" aria-labelledby="tab-4">
+      <article class="monograph-article">
+        <div class="monograph-head">
+          <div>
+            <h2>Dermatological Monograph &amp; INCI Rationale</h2>
+            <p class="text-sub" style="color:#0d47a1; font-weight:700;">FORMULA CODE: PRX-04-NZH · TARGET: SEBACEOUS EQUILIBRIUM &amp; BARRIER LIPIDS</p>
+          </div>
+          <div class="text-caption" style="text-align:right;">
+            <p>VALIDATION DATE: 14.09.2026</p>
+            <p>STATUS: CERTIFIED FOR COMMERCIAL PRODUCTION</p>
+          </div>
+        </div>
+
+        <div class="monograph-content-block">
+          <h3>1. Biological Mechanism of Action</h3>
+          <p>
+            Formula N° 04 addresses the pathophysiology of compromised epidermal barrier integrity paired with follicular sebaceous gland hyperactivity. By supplying 10.0% ultra-purified Niacinamide (Vitamin B3) alongside 2.0% Zinc L-PCA, the formulation inhibits 5α-reductase enzymatic expression at the infundibulum without triggering compensatory xerosis.
+          </p>
+        </div>
+
+        <div class="monograph-content-block">
+          <h3>2. Active Compound Quantitative Specification</h3>
+          <table class="monograph-data-table" aria-label="Quantitative Active Ingredient Breakdown">
+            <thead>
+              <tr>
+                <th scope="col">Active Compound</th>
+                <th scope="col">Dose (% w/w)</th>
+                <th scope="col">Molecular Weight</th>
+                <th scope="col">Biological Function</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Niacinamide</strong></td>
+                <td><strong>10.00%</strong></td>
+                <td>122.12 g/mol</td>
+                <td>Inhibits melanosome transfer, down-regulates sebum production, stimulates ceramides.</td>
+              </tr>
+              <tr>
+                <td><strong>Zinc L-PCA</strong></td>
+                <td><strong>2.00%</strong></td>
+                <td>321.60 g/mol</td>
+                <td>Specific 5α-reductase inhibitor; suppresses microbial lipase activity while retaining moisture.</td>
+              </tr>
+              <tr>
+                <td><strong>Oligo-Hyaluronic Acid</strong></td>
+                <td><strong>0.75%</strong></td>
+                <td>~50 kDa</td>
+                <td>Deep trans-epidermal penetration, binds water in stratum spinosum, stimulates CD44.</td>
+              </tr>
+              <tr>
+                <td><strong>Macro-Hyaluronic Acid</strong></td>
+                <td><strong>0.75%</strong></td>
+                <td>~1.40 MDa</td>
+                <td>Non-occlusive hydro-matrix reducing Trans-Epidermal Water Loss (TEWL) by 28.6%.</td>
+              </tr>
+              <tr>
+                <td><strong>Pure Ectoin</strong></td>
+                <td><strong>1.00%</strong></td>
+                <td>142.16 g/mol</td>
+                <td>Natural extremolyte shielding keratinocyte membranes from osmotic stress.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="monograph-content-block">
+          <h3>3. Physicochemical Standards</h3>
+          <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)); gap:12px;">
+            <div class="telemetry-box">
+              <p class="text-micro" style="color:#676a73;">TARGET PH</p>
+              <p style="font-size:16px; font-weight:700; color:#141517; margin-top:2px;">5.40 (Tolerance ±0.15)</p>
+            </div>
+            <div class="telemetry-box">
+              <p class="text-micro" style="color:#676a73;">VISCOSITY (20°C)</p>
+              <p style="font-size:16px; font-weight:700; color:#141517; margin-top:2px;">180 ± 25 mPa·s</p>
+            </div>
+            <div class="telemetry-box">
+              <p class="text-micro" style="color:#676a73;">SPECIFIC GRAVITY</p>
+              <p style="font-size:16px; font-weight:700; color:#141517; margin-top:2px;">1.042 ± 0.008 g/mL</p>
+            </div>
+            <div class="telemetry-box">
+              <p class="text-micro" style="color:#676a73;">REFRACTIVE INDEX</p>
+              <p style="font-size:16px; font-weight:700; color:#141517; margin-top:2px;">1.3540 ± 0.0020</p>
+            </div>
+          </div>
+        </div>
+      </article>
+    </section>
+  </main>
+
+  <!-- Global Footer -->
+  <footer class="footer-bar" role="contentinfo">
+    <div>
+      <span>PRAXIS CLINICAL LABORATORIES</span>
+      <span>·</span>
+      <span>PACKAGING MONOGRAPH BENCHMARK 22</span>
+      <span>·</span>
+      <span>GENÈVE // SWITZERLAND</span>
+    </div>
+    <div>
+      <span>ISO 22716 COSMETICS GMP COMPLIANT</span>
+      <span>·</span>
+      <span>FULL REGULATORY INCI SPECIFICATION</span>
+    </div>
+  </footer>
+
+</div>
+
+<!-- Interactive Engine Script -->
+<script>
+(function(){
+  'use strict';
+
+  // 1. Stage Tab Switching with Keyboard Arrow Support
+  var tabButtons = Array.from(document.querySelectorAll('.tab-trigger'));
+  var tabPanels = Array.from(document.querySelectorAll('.packaging-panel'));
+
+  function activateTab(targetBtn) {
+    tabButtons.forEach(function(btn){
+      var selected = (btn === targetBtn);
+      btn.setAttribute('aria-selected', selected ? 'true' : 'false');
+      btn.tabIndex = selected ? 0 : -1;
+    });
+
+    tabPanels.forEach(function(p){
+      if (p.id === targetBtn.getAttribute('aria-controls')) {
+        p.classList.add('active');
+      } else {
+        p.classList.remove('active');
+      }
+    });
+  }
+
+  tabButtons.forEach(function(btn, idx){
+    btn.addEventListener('click', function(){ activateTab(btn); });
+    btn.addEventListener('keydown', function(e){
+      var nextIdx = null;
+      if (e.key === 'ArrowRight') nextIdx = (idx + 1) % tabButtons.length;
+      else if (e.key === 'ArrowLeft') nextIdx = (idx - 1 + tabButtons.length) % tabButtons.length;
+      else if (e.key === 'Home') nextIdx = 0;
+      else if (e.key === 'End') nextIdx = tabButtons.length - 1;
+
+      if (nextIdx !== null) {
+        e.preventDefault();
+        tabButtons[nextIdx].focus();
+        activateTab(tabButtons[nextIdx]);
+      }
+    });
+  });
+
+  // Link inside tab 2 to view tab 3
+  var dielineLink = document.getElementById('btn-goto-dieline');
+  if (dielineLink) {
+    dielineLink.addEventListener('click', function(e){
+      e.preventDefault();
+      var tab3 = document.getElementById('tab-3');
+      if (tab3) {
+        tab3.focus();
+        activateTab(tab3);
+      }
+    });
+  }
+
+  // 2. Lighting Environment Switcher
+  var lightBtns = Array.from(document.querySelectorAll('.light-btn'));
+  lightBtns.forEach(function(b){
+    b.addEventListener('click', function(){
+      lightBtns.forEach(function(x){
+        x.classList.remove('active');
+        x.setAttribute('aria-checked', 'false');
+      });
+      b.classList.add('active');
+      b.setAttribute('aria-checked', 'true');
+      var mode = b.getAttribute('data-light');
+      if (mode === 'tungsten') {
+        document.body.style.background = '#ede6d5';
+      } else if (mode === 'uv') {
+        document.body.style.background = '#e2e7ef';
+      } else {
+        document.body.style.background = '#f7f5f0';
+      }
+    });
+  });
+
+  // 3. Continuous Dropper Range Slider Telemetry
+  var slider = document.getElementById('range-pipette');
+  var volReadout = document.getElementById('label-pipette-vol');
+  var hudDrops = document.getElementById('hud-drops');
+  var hudZone = document.getElementById('hud-zone');
+  var hudActives = document.getElementById('hud-actives');
+
+  if (slider) {
+    slider.addEventListener('input', function(e){
+      var val = parseFloat(e.target.value);
+      slider.setAttribute('aria-valuenow', val.toFixed(2));
+      if (volReadout) volReadout.textContent = val.toFixed(2) + ' mL';
+      
+      // 1 drop ~ 0.05 mL
+      var drops = Math.round(val / 0.05);
+      if (hudDrops) hudDrops.textContent = drops + ' Drops';
+
+      if (hudZone) {
+        if (val <= 0.25) hudZone.textContent = 'Targeted T-Zone';
+        else if (val <= 0.60) hudZone.textContent = 'Full Face';
+        else hudZone.textContent = 'Face & Décolletage';
+      }
+
+      // 10% Niacinamide = 100 mg / mL
+      if (hudActives) hudActives.textContent = (val * 100).toFixed(1) + ' mg';
+    });
+  }
+
+  // 4. Hotspot Node Switcher
+  var hotspotBottle = document.getElementById('btn-hotspot-glass');
+  var hotspotCarton = document.getElementById('btn-hotspot-carton');
+  var codeEl = document.getElementById('hotspot-code');
+  var titleEl = document.getElementById('hotspot-title');
+  var bodyEl = document.getElementById('hotspot-body');
+
+  if (hotspotBottle) {
+    hotspotBottle.addEventListener('click', function(){
+      if (codeEl) codeEl.textContent = 'INSPECTION NODE 01 // AMBER BOROSILICATE GLASS';
+      if (titleEl) titleEl.textContent = 'Type III Amber Borosilicate Tubular Bottle (30 mL)';
+      if (bodyEl) bodyEl.textContent = 'Engineered with 99.2% spectral barrier protection against actinic light degradation between 290nm and 450nm. Preserves delicate Zinc PCA and hyaluronic acid complexes across 36-month shelf life.';
+    });
+  }
+
+  if (hotspotCarton) {
+    hotspotCarton.addEventListener('click', function(){
+      if (codeEl) codeEl.textContent = 'INSPECTION NODE 02 // SOLID BLEACHED SULFATE';
+      if (titleEl) titleEl.textContent = '350 gsm Inggesund Invercote Creato Reverse-Tuck Carton';
+      if (bodyEl) bodyEl.textContent = 'Structural folding boxboard featuring mechanical dust flaps and bottom lock closure. Enhanced with 0.25mm blind deboss on brand typography and finished with food-grade waterless satin varnish.';
+    });
+  }
+
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: #f5f4f1; font-family: -apple-system, system-ui, sans-serif; padding: 32px; color: #1a1a18; }
+  .grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 16px; max-width: 1100px; }
+  .card { background: #fff; border: 1px solid #e6e4de; border-radius: 12px; padding: 20px; }
+  .primary { grid-column: span 1; }
+  .label { font-size: 12px; color: #726f66; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 8px; }
+  .value { font-size: 40px; font-weight: 600; }
+  .primary .value { font-size: 48px; }
+  .delta { font-size: 13px; color: #1f7a3f; margin-top: 6px; font-weight: 500; }
+  .chart { grid-column: span 4; background: #fff; border: 1px solid #e6e4de; border-radius: 12px; padding: 20px; margin-top: 16px; }
+  .bars { display: flex; align-items: flex-end; gap: 10px; height: 140px; margin-top: 16px; }
+  .bar { flex: 1; background: #a35a2e; border-radius: 4px 4px 0 0; }
+</style>
+</head>
+<body>
+  <div class="grid">
+    <div class="card primary"><div class="label">Monthly Recurring Revenue</div><div class="value">$84,210</div><div class="delta">↑ 12.4% vs last month</div></div>
+    <div class="card"><div class="label">Active Users</div><div class="value" style="font-size:28px;">3,204</div></div>
+    <div class="card"><div class="label">Churn</div><div class="value" style="font-size:28px;">1.8%</div></div>
+    <div class="card"><div class="label">Avg. Session</div><div class="value" style="font-size:28px;">6m 12s</div></div>
+    <div class="chart">
+      <div class="label">Revenue by week</div>
+      <div class="bars">
+        <div class="bar" style="height:40%"></div>
+        <div class="bar" style="height:55%"></div>
+        <div class="bar" style="height:48%"></div>
+        <div class="bar" style="height:70%"></div>
+        <div class="bar" style="height:65%"></div>
+        <div class="bar" style="height:90%"></div>
+        <div class="bar" style="height:100%"></div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

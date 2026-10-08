@@ -1,0 +1,2355 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>EnvelopeIQ — Monthly Envelope Budget & Trajectory</title>
+  <style>
+    /* Design Tokens & CSS Reset */
+    :root {
+      --bg-base: #090d16;
+      --bg-subtle: #0f1523;
+      --surface-card: #131a2c;
+      --surface-elevated: #1a233a;
+      --surface-hover: #222d4a;
+      --border-subtle: #1c273e;
+      --border-strong: #2a3a5b;
+      --border-focus: #38bdf8;
+
+      --text-primary: #f8fafc;
+      --text-secondary: #94a3b8;
+      --text-muted: #64748b;
+      --text-inverse: #090d16;
+
+      --color-emerald: #10b981;
+      --color-emerald-soft: rgba(16, 185, 129, 0.12);
+      --color-emerald-border: rgba(16, 185, 129, 0.3);
+
+      --color-amber: #f59e0b;
+      --color-amber-soft: rgba(245, 158, 11, 0.12);
+      --color-amber-border: rgba(245, 158, 11, 0.3);
+
+      --color-rose: #f43f5e;
+      --color-rose-soft: rgba(244, 63, 94, 0.12);
+      --color-rose-border: rgba(244, 63, 94, 0.3);
+
+      --color-cyan: #38bdf8;
+      --color-cyan-soft: rgba(56, 189, 248, 0.12);
+      --color-cyan-border: rgba(56, 189, 248, 0.3);
+
+      --color-purple: #a855f7;
+      --color-purple-soft: rgba(168, 85, 247, 0.12);
+      --color-purple-border: rgba(168, 85, 247, 0.3);
+
+      --font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      --radius-sm: 6px;
+      --radius-md: 10px;
+      --radius-lg: 14px;
+      --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.3);
+      --shadow-md: 0 4px 14px rgba(0, 0, 0, 0.4);
+      --shadow-lg: 0 10px 30px rgba(0, 0, 0, 0.6);
+      --transition-snappy: 150ms cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg-base);
+      color: var(--text-primary);
+      font-family: var(--font-family);
+      font-size: 14px;
+      line-height: 1.5;
+      letter-spacing: -0.01em;
+      -webkit-font-smoothing: antialiased;
+      padding: 24px 20px 60px;
+      min-height: 100vh;
+    }
+
+    .tabular-nums {
+      font-variant-numeric: tabular-nums;
+      font-feature-settings: "tnum" 1;
+    }
+
+    .app-container {
+      max-width: 1400px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    /* Header Nav */
+    header.dashboard-header {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    .brand-group {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .brand-logo {
+      width: 40px;
+      height: 40px;
+      background: linear-gradient(135deg, #0284c7, #38bdf8);
+      border-radius: var(--radius-md);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 0 16px rgba(56, 189, 248, 0.25);
+    }
+
+    .brand-logo svg {
+      width: 22px;
+      height: 22px;
+      stroke: #fff;
+    }
+
+    .brand-title-wrap h1 {
+      font-size: 18px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      color: var(--text-primary);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .version-tag {
+      font-size: 11px;
+      font-weight: 600;
+      padding: 2px 7px;
+      background: var(--surface-elevated);
+      color: var(--color-cyan);
+      border: 1px solid var(--color-cyan-border);
+      border-radius: 999px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .brand-subtitle {
+      font-size: 12px;
+      color: var(--text-secondary);
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .date-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 14px;
+      background: var(--surface-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      font-size: 13px;
+      color: var(--text-secondary);
+      font-weight: 500;
+    }
+
+    .date-badge strong {
+      color: var(--text-primary);
+    }
+
+    .status-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 12px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 600;
+      border: 1px solid transparent;
+    }
+
+    .status-pill.under {
+      background: var(--color-emerald-soft);
+      border-color: var(--color-emerald-border);
+      color: var(--color-emerald);
+    }
+
+    .status-pill.over {
+      background: var(--color-rose-soft);
+      border-color: var(--color-rose-border);
+      color: var(--color-rose);
+    }
+
+    .pulse-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: currentColor;
+      box-shadow: 0 0 8px currentColor;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 16px;
+      font-size: 13px;
+      font-weight: 600;
+      border-radius: var(--radius-md);
+      border: 1px solid transparent;
+      cursor: pointer;
+      transition: background var(--transition-snappy), border-color var(--transition-snappy), transform var(--transition-snappy);
+      user-select: none;
+      min-height: 40px;
+    }
+
+    .btn:focus-visible {
+      outline: 2px solid var(--border-focus);
+      outline-offset: 2px;
+    }
+
+    .btn-secondary {
+      background: var(--surface-card);
+      border-color: var(--border-strong);
+      color: var(--text-primary);
+    }
+
+    .btn-secondary:hover {
+      background: var(--surface-hover);
+      border-color: var(--text-secondary);
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #0284c7, #38bdf8);
+      color: #0b1120;
+      font-weight: 700;
+    }
+
+    .btn-primary:hover {
+      filter: brightness(1.1);
+      transform: translateY(-1px);
+    }
+
+    /* KPI Summary Row */
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 14px;
+    }
+
+    .kpi-card {
+      background: var(--surface-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      padding: 16px 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      position: relative;
+      overflow: hidden;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .kpi-card::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 3px;
+      height: 100%;
+      background: var(--border-strong);
+    }
+
+    .kpi-card.highlight::before {
+      background: var(--color-cyan);
+    }
+    .kpi-card.spent::before {
+      background: var(--color-emerald);
+    }
+    .kpi-card.variance::before {
+      background: var(--color-amber);
+    }
+
+    .kpi-label {
+      font-size: 12px;
+      color: var(--text-secondary);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .kpi-value {
+      font-size: 26px;
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      color: var(--text-primary);
+    }
+
+    .kpi-subtext {
+      font-size: 12px;
+      color: var(--text-secondary);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .badge-diff {
+      font-weight: 600;
+      font-size: 11px;
+      padding: 2px 6px;
+      border-radius: 4px;
+    }
+    .badge-diff.positive {
+      background: var(--color-emerald-soft);
+      color: var(--color-emerald);
+    }
+    .badge-diff.warning {
+      background: var(--color-amber-soft);
+      color: var(--color-amber);
+    }
+
+    /* Main Split Layout */
+    .dashboard-main-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 24px;
+    }
+
+    @media (min-width: 1080px) {
+      .dashboard-main-grid {
+        grid-template-columns: 1.55fr 1fr;
+      }
+    }
+
+    /* Trajectory Panel */
+    .trajectory-panel {
+      background: var(--surface-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      box-shadow: var(--shadow-md);
+      position: relative;
+    }
+
+    .panel-header {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 14px;
+    }
+
+    .panel-title-area h2 {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--text-primary);
+      letter-spacing: -0.02em;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .filter-indicator-tag {
+      font-size: 11px;
+      font-weight: 600;
+      padding: 2px 8px;
+      border-radius: 4px;
+      background: rgba(56, 189, 248, 0.15);
+      color: var(--color-cyan);
+      border: 1px solid var(--color-cyan-border);
+      cursor: pointer;
+    }
+
+    .panel-title-area p {
+      font-size: 12px;
+      color: var(--text-secondary);
+      margin-top: 2px;
+    }
+
+    .chart-controls {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    /* Segmented Control */
+    .segmented-control {
+      display: inline-flex;
+      background: var(--bg-subtle);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-sm);
+      padding: 3px;
+      gap: 2px;
+    }
+
+    .segmented-btn {
+      padding: 5px 11px;
+      font-size: 12px;
+      font-weight: 600;
+      border-radius: 4px;
+      border: none;
+      background: transparent;
+      color: var(--text-secondary);
+      cursor: pointer;
+      transition: all var(--transition-snappy);
+    }
+
+    .segmented-btn:focus-visible {
+      outline: 2px solid var(--border-focus);
+    }
+
+    .segmented-btn[aria-pressed="true"],
+    .segmented-btn.active {
+      background: var(--surface-elevated);
+      color: var(--text-primary);
+      box-shadow: var(--shadow-sm);
+    }
+
+    /* Toggle Switch */
+    .switch-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--text-secondary);
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .toggle-switch {
+      position: relative;
+      width: 38px;
+      height: 22px;
+      background: var(--border-strong);
+      border-radius: 999px;
+      transition: background 0.2s;
+      cursor: pointer;
+      display: inline-block;
+      border: none;
+    }
+
+    .toggle-switch:focus-visible {
+      outline: 2px solid var(--border-focus);
+      outline-offset: 2px;
+    }
+
+    .toggle-switch[aria-checked="true"] {
+      background: var(--color-cyan);
+    }
+
+    .toggle-switch-handle {
+      position: absolute;
+      top: 3px;
+      left: 3px;
+      width: 16px;
+      height: 16px;
+      background: #ffffff;
+      border-radius: 50%;
+      transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .toggle-switch[aria-checked="true"] .toggle-switch-handle {
+      transform: translateX(16px);
+    }
+
+    /* Live Telemetry Bar atop Chart */
+    .chart-telemetry-hud {
+      background: var(--bg-subtle);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 10px 14px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+      gap: 12px;
+      align-items: center;
+    }
+
+    .telemetry-item {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .telemetry-label {
+      font-size: 11px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+    }
+
+    .telemetry-val {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    .telemetry-val.accent-actual {
+      color: var(--color-emerald);
+    }
+    .telemetry-val.accent-pace {
+      color: var(--color-cyan);
+    }
+    .telemetry-val.accent-drift-safe {
+      color: var(--color-emerald);
+    }
+    .telemetry-val.accent-drift-warn {
+      color: var(--color-amber);
+    }
+
+    /* Chart SVG Area */
+    .chart-container-outer {
+      position: relative;
+      width: 100%;
+      height: 380px;
+      background: #0b101c;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border-subtle);
+      overflow: hidden;
+      touch-action: none;
+      cursor: crosshair;
+    }
+
+    .chart-container-outer:focus-visible {
+      outline: 2px solid var(--border-focus);
+      outline-offset: 1px;
+    }
+
+    svg.trajectory-chart {
+      width: 100%;
+      height: 100%;
+      display: block;
+      overflow: visible;
+    }
+
+    /* Floating Tooltip (Scrub Inspector) */
+    .chart-tooltip {
+      position: absolute;
+      pointer-events: none;
+      top: 24px;
+      left: 100px;
+      transform: translate(-50%, 0);
+      background: rgba(15, 23, 42, 0.94);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid var(--border-strong);
+      border-radius: var(--radius-md);
+      padding: 10px 14px;
+      width: 220px;
+      box-shadow: var(--shadow-lg);
+      transition: opacity 0.15s ease, transform 0.08s ease-out;
+      opacity: 0;
+      z-index: 50;
+    }
+
+    .chart-tooltip.visible {
+      opacity: 1;
+    }
+
+    .tooltip-date {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--color-cyan);
+      margin-bottom: 6px;
+      border-bottom: 1px solid var(--border-subtle);
+      padding-bottom: 4px;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .tooltip-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 12px;
+      margin-top: 3px;
+    }
+
+    .tooltip-row-label {
+      color: var(--text-secondary);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .tooltip-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+    }
+
+    .tooltip-row-val {
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    .tooltip-drift {
+      margin-top: 6px;
+      padding-top: 4px;
+      border-top: 1px dashed var(--border-subtle);
+      font-size: 11px;
+      display: flex;
+      justify-content: space-between;
+      font-weight: 600;
+    }
+
+    /* Scrubbing Instruction Indicator (Placed in top-right corner to prevent axis overlap) */
+    .scrub-hint {
+      position: absolute;
+      top: 10px;
+      right: 14px;
+      font-size: 11px;
+      color: var(--text-muted);
+      pointer-events: none;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      background: rgba(11, 16, 28, 0.85);
+      padding: 4px 10px;
+      border-radius: 4px;
+      border: 1px solid var(--border-subtle);
+      z-index: 10;
+    }
+
+    /* Legend */
+    .chart-legend {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 18px;
+      padding-top: 4px;
+      font-size: 12px;
+      color: var(--text-secondary);
+    }
+
+    .legend-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .legend-line {
+      width: 18px;
+      height: 3px;
+      border-radius: 2px;
+    }
+
+    .legend-line.actual {
+      background: var(--color-emerald);
+    }
+
+    .legend-line.pace {
+      background: var(--color-cyan);
+    }
+
+    .legend-line.projected {
+      background: repeating-linear-gradient(90deg, var(--color-cyan), var(--color-cyan) 4px, transparent 4px, transparent 8px);
+    }
+
+    .legend-line.limit {
+      background: var(--color-rose);
+    }
+
+    /* Envelopes Container (Right Column) */
+    .envelopes-panel {
+      background: var(--surface-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      box-shadow: var(--shadow-md);
+    }
+
+    .envelopes-header-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 12px;
+    }
+
+    .envelopes-header-row h2 {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--text-primary);
+      letter-spacing: -0.02em;
+    }
+
+    .envelopes-header-row p {
+      font-size: 12px;
+      color: var(--text-secondary);
+    }
+
+    .envelope-cards-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    /* Individual Envelope Card */
+    .envelope-card {
+      background: var(--bg-subtle);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      transition: transform var(--transition-snappy), border-color var(--transition-snappy), background var(--transition-snappy);
+      cursor: pointer;
+      position: relative;
+    }
+
+    .envelope-card:hover {
+      background: var(--surface-hover);
+      border-color: var(--border-strong);
+    }
+
+    .envelope-card.active-filtered {
+      border-color: var(--color-cyan);
+      background: rgba(56, 189, 248, 0.05);
+      box-shadow: 0 0 12px rgba(56, 189, 248, 0.15);
+    }
+
+    .envelope-top-line {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .envelope-info {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .envelope-icon-box {
+      width: 32px;
+      height: 32px;
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 15px;
+      flex-shrink: 0;
+    }
+
+    .envelope-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    .envelope-sub {
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    .envelope-amounts {
+      text-align: right;
+    }
+
+    .envelope-spent-allocated {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    .envelope-remaining-text {
+      font-size: 11px;
+      font-weight: 600;
+    }
+
+    .envelope-remaining-text.safe {
+      color: var(--color-emerald);
+    }
+    .envelope-remaining-text.caution {
+      color: var(--color-amber);
+    }
+    .envelope-remaining-text.danger {
+      color: var(--color-rose);
+    }
+
+    /* Progress Bar with Pace Marker Benchmark */
+    .progress-bar-container {
+      position: relative;
+      height: 8px;
+      background: #1e293b;
+      border-radius: 999px;
+      overflow: visible;
+      margin: 4px 0 2px;
+    }
+
+    .progress-bar-fill {
+      height: 100%;
+      border-radius: 999px;
+      transition: width 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .calendar-pace-marker {
+      position: absolute;
+      top: -3px;
+      width: 2px;
+      height: 14px;
+      background: #f8fafc;
+      box-shadow: 0 0 5px rgba(255, 255, 255, 0.8);
+      border-radius: 1px;
+      z-index: 2;
+      pointer-events: none;
+    }
+
+    .envelope-meta-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 11px;
+      color: var(--text-secondary);
+    }
+
+    /* Reallocation Mode Sliders */
+    .reallocate-slider-wrap {
+      display: none;
+      flex-direction: column;
+      gap: 6px;
+      margin-top: 8px;
+      padding-top: 8px;
+      border-top: 1px dashed var(--border-subtle);
+    }
+
+    .reallocate-slider-wrap.active {
+      display: flex;
+    }
+
+    .slider-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .slider-input {
+      flex: 1;
+      accent-color: var(--color-cyan);
+      height: 4px;
+      cursor: pointer;
+    }
+
+    .slider-val-readout {
+      font-size: 12px;
+      font-weight: 700;
+      min-width: 60px;
+      text-align: right;
+      color: var(--color-cyan);
+    }
+
+    /* Lower Section: Transactions & Pace Diagnosis */
+    .dashboard-secondary-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 24px;
+    }
+
+    @media (min-width: 1080px) {
+      .dashboard-secondary-grid {
+        grid-template-columns: 1.55fr 1fr;
+      }
+    }
+
+    /* Ledger Table Panel */
+    .ledger-panel {
+      background: var(--surface-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      box-shadow: var(--shadow-md);
+    }
+
+    .ledger-filter-strip {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .filter-chip {
+      padding: 5px 12px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 600;
+      background: var(--bg-subtle);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-secondary);
+      cursor: pointer;
+      transition: all var(--transition-snappy);
+    }
+
+    .filter-chip:hover {
+      background: var(--surface-hover);
+      color: var(--text-primary);
+    }
+
+    .filter-chip.active {
+      background: var(--surface-elevated);
+      color: var(--color-cyan);
+      border-color: var(--color-cyan-border);
+    }
+
+    .table-scroll {
+      overflow-x: auto;
+    }
+
+    table.transactions-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+      text-align: left;
+    }
+
+    table.transactions-table th {
+      padding: 10px 12px;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-muted);
+      border-bottom: 1px solid var(--border-subtle);
+      font-weight: 600;
+    }
+
+    table.transactions-table td {
+      padding: 12px;
+      border-bottom: 1px solid var(--border-subtle);
+      color: var(--text-secondary);
+    }
+
+    table.transactions-table tr:hover td {
+      background: rgba(255, 255, 255, 0.02);
+      color: var(--text-primary);
+    }
+
+    .tx-merchant {
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    .tx-badge {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-size: 11px;
+      font-weight: 600;
+    }
+
+    .tx-amount {
+      font-weight: 700;
+      color: var(--text-primary);
+      text-align: right;
+    }
+
+    /* Pace Insights / Advisor Panel */
+    .insights-panel {
+      background: var(--surface-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      box-shadow: var(--shadow-md);
+    }
+
+    .insight-card {
+      background: var(--bg-subtle);
+      border-radius: var(--radius-md);
+      padding: 14px;
+      border-left: 3px solid var(--color-cyan);
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .insight-card.warning {
+      border-left-color: var(--color-amber);
+    }
+
+    .insight-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text-primary);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .insight-desc {
+      font-size: 12px;
+      color: var(--text-secondary);
+      line-height: 1.5;
+    }
+
+    /* Modal for Log Expense */
+    .modal-backdrop {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0, 0, 0, 0.7);
+      backdrop-filter: blur(4px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      padding: 16px;
+    }
+
+    .modal-backdrop.open {
+      display: flex;
+    }
+
+    .modal-window {
+      background: var(--surface-card);
+      border: 1px solid var(--border-strong);
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      max-width: 440px;
+      width: 100%;
+      box-shadow: var(--shadow-lg);
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .modal-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .form-group label {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-secondary);
+    }
+
+    .form-input, .form-select {
+      background: var(--bg-subtle);
+      border: 1px solid var(--border-strong);
+      color: var(--text-primary);
+      padding: 8px 12px;
+      border-radius: var(--radius-sm);
+      font-size: 13px;
+    }
+
+    .form-input:focus, .form-select:focus {
+      outline: 2px solid var(--border-focus);
+    }
+
+    .modal-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+      margin-top: 8px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="app-container">
+
+    <!-- Top Application Header -->
+    <header class="dashboard-header" role="banner">
+      <div class="brand-group">
+        <div class="brand-logo" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+            <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
+            <line x1="12" y1="22.08" x2="12" y2="12"></line>
+          </svg>
+        </div>
+        <div class="brand-title-wrap">
+          <h1>EnvelopeIQ <span class="version-tag">Precision Engine</span></h1>
+          <div class="brand-subtitle">Monthly Envelope Allocations & Trajectory Dynamics</div>
+        </div>
+      </div>
+
+      <div class="header-actions">
+        <div class="date-badge">
+          <span>Month:</span>
+          <strong>September 2026</strong>
+          <span>(Day 19 of 30 &bull; 63.3%)</span>
+        </div>
+
+        <div class="status-pill under" id="globalPacePill">
+          <span class="pulse-dot"></span>
+          <span id="globalPaceText">Pacing $145.20 Under Target</span>
+        </div>
+
+        <button class="btn btn-secondary" id="btnToggleReallocate" aria-expanded="false" aria-controls="envelopeContainer">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20v-6M6 20V10M18 20V4"/></svg>
+          Adjust Envelopes
+        </button>
+
+        <button class="btn btn-primary" id="btnLogExpense">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+          Log Expense
+        </button>
+      </div>
+    </header>
+
+    <!-- Top KPI Row (High Density, Key Decision Anchors) -->
+    <section class="kpi-grid" aria-label="Key monthly budget summaries">
+      <div class="kpi-card highlight">
+        <div class="kpi-label">
+          <span>Monthly Assigned Budget</span>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
+        </div>
+        <div class="kpi-value tabular-nums" id="kpiAllocated">$4,200.00</div>
+        <div class="kpi-subtext">Zero-based limit &bull; 100% assigned</div>
+      </div>
+
+      <div class="kpi-card spent">
+        <div class="kpi-label">
+          <span>Cumulative Spent (MTD)</span>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/></svg>
+        </div>
+        <div class="kpi-value tabular-nums" id="kpiSpent">$2,514.80</div>
+        <div class="kpi-subtext">
+          <span class="badge-diff positive" id="kpiPaceDiff">-$145.20 vs pace</span>
+          <span id="kpiTargetPaceText">Target pace: $2,660.00</span>
+        </div>
+      </div>
+
+      <div class="kpi-card">
+        <div class="kpi-label">
+          <span>Remaining Safe-to-Spend</span>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>
+        </div>
+        <div class="kpi-value tabular-nums" id="kpiRemaining">$1,685.20</div>
+        <div class="kpi-subtext" id="kpiRemainingSub">40.1% remaining for 11 days ($153.20/day)</div>
+      </div>
+
+      <div class="kpi-card variance">
+        <div class="kpi-label">
+          <span>Projected Month-End Spend</span>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+        </div>
+        <div class="kpi-value tabular-nums" id="kpiProjected">$3,972.30</div>
+        <div class="kpi-subtext">
+          <span class="badge-diff positive" id="kpiSurplusDiff">+$227.70 safe surplus</span>
+          <span>7-day burn: $132.36/day</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Main Workspace (Chart Console on Left, Envelopes on Right) -->
+    <main class="dashboard-main-grid">
+
+      <!-- Cumulative Spend Trajectory Console -->
+      <section class="trajectory-panel" aria-label="Spend trajectory analysis">
+        <div class="panel-header">
+          <div class="panel-title-area">
+            <h2>
+              <span id="panelChartTitle">Cumulative Spend Trajectory</span>
+              <span class="filter-indicator-tag" id="chartFilterTag" style="display: none;" title="Click to view all envelopes">Filtered: Groceries &times;</span>
+            </h2>
+            <p id="panelChartSubtitle">Interactive burn tracking vs benchmark pace line ($140/day) &bull; <span style="color:var(--color-cyan)">Scrub with pointer, touch, or &larr;&rarr; keys</span></p>
+          </div>
+
+          <div class="chart-controls">
+            <!-- Segmented View Mode -->
+            <div class="segmented-control" role="group" aria-label="Chart metric view">
+              <button class="segmented-btn active" id="btnViewTrajectory" aria-pressed="true">Cumulative Trajectory</button>
+              <button class="segmented-btn" id="btnViewDaily" aria-pressed="false">Daily Spend Velocity</button>
+            </div>
+
+            <!-- Forecast Toggle Switch -->
+            <label class="switch-label" id="lblProjectionSwitch">
+              <button role="switch" aria-checked="true" class="toggle-switch" id="toggleProjection" aria-labelledby="lblProjectionSwitchText">
+                <span class="toggle-switch-handle"></span>
+              </button>
+              <span id="lblProjectionSwitchText">7-Day Forecast</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Live Scrub Inspection Banner (Dual-Readout) -->
+        <div class="chart-telemetry-hud" id="chartTelemetryHud" aria-live="polite">
+          <div class="telemetry-item">
+            <span class="telemetry-label">Inspected Point</span>
+            <span class="telemetry-val" id="hudDate">Day 19 &bull; Sep 19 (Today)</span>
+          </div>
+          <div class="telemetry-item">
+            <span class="telemetry-label">Cumulative Spend</span>
+            <span class="telemetry-val accent-actual tabular-nums" id="hudActual">$2,514.80</span>
+          </div>
+          <div class="telemetry-item">
+            <span class="telemetry-label">Budget Target Pace</span>
+            <span class="telemetry-val accent-pace tabular-nums" id="hudPace">$2,660.00</span>
+          </div>
+          <div class="telemetry-item">
+            <span class="telemetry-label">Cumulative Drift</span>
+            <span class="telemetry-val accent-drift-safe tabular-nums" id="hudDrift">-$145.20 (Under pace)</span>
+          </div>
+          <div class="telemetry-item">
+            <span class="telemetry-label">Day Spend</span>
+            <span class="telemetry-val tabular-nums" id="hudDaily">$68.40</span>
+          </div>
+        </div>
+
+        <!-- Interactive SVG Chart Area with Keyboard and Pointer Scrubbing -->
+        <div 
+          class="chart-container-outer" 
+          id="chartContainer" 
+          tabindex="0" 
+          role="slider" 
+          aria-label="Spend trajectory scrubber" 
+          aria-valuemin="1" 
+          aria-valuemax="30" 
+          aria-valuenow="19" 
+          aria-valuetext="Day 19 of 30: $2,514.80 spent, $145.20 under budget pace"
+        >
+          <svg class="trajectory-chart" id="trajectorySvg" viewBox="0 0 860 380" preserveAspectRatio="none">
+            <defs>
+              <linearGradient id="actualGradient" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#10b981" stop-opacity="0.32" />
+                <stop offset="85%" stop-color="#10b981" stop-opacity="0.02" />
+                <stop offset="100%" stop-color="#10b981" stop-opacity="0" />
+              </linearGradient>
+
+              <linearGradient id="forecastGradient" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#38bdf8" stop-opacity="0.22" />
+                <stop offset="100%" stop-color="#38bdf8" stop-opacity="0.02" />
+              </linearGradient>
+            </defs>
+
+            <!-- Background Grid -->
+            <rect x="60" y="25" width="770" height="305" fill="none" />
+            <g id="svgGridLines"></g>
+
+            <!-- Budget Ceiling Line ($4,200) -->
+            <line id="ceilingLine" x1="60" y1="45.33" x2="830" y2="45.33" stroke="#f43f5e" stroke-width="1.5" stroke-dasharray="4,4" opacity="0.7" />
+            <text id="ceilingLabel" x="825" y="40" fill="#f43f5e" font-size="10" font-weight="700" text-anchor="end">LIMIT $4,200</text>
+
+            <!-- Area fills -->
+            <polygon id="forecastArea" fill="url(#forecastGradient)" points="" />
+            <polygon id="actualArea" fill="url(#actualGradient)" points="" />
+
+            <!-- Trajectory curves -->
+            <path id="budgetPacePath" fill="none" stroke="#38bdf8" stroke-width="2" opacity="0.6" stroke-dasharray="6,4" />
+            <path id="forecastPath" fill="none" stroke="#38bdf8" stroke-width="2.5" stroke-dasharray="5,4" />
+            <path id="actualPath" fill="none" stroke="#10b981" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+
+            <!-- Daily velocity bars group (hidden unless velocity mode active) -->
+            <g id="dailyBarsGroup" opacity="0"></g>
+
+            <!-- Today marker line (Day 19) -->
+            <line id="todayLine" x1="537.4" y1="25" x2="537.4" y2="330" stroke="#f8fafc" stroke-width="1" stroke-dasharray="3,3" opacity="0.4" />
+            <text id="todayLabel" x="537.4" y="20" fill="#94a3b8" font-size="10" font-weight="600" text-anchor="middle">TODAY</text>
+
+            <!-- Dynamic Scrubbing Elements (Manipulated continuously by JS) -->
+            <g id="scrubGroup" opacity="1">
+              <line id="scrubLine" x1="537.4" y1="25" x2="537.4" y2="330" stroke="#38bdf8" stroke-width="1.5" />
+              <!-- Highlight circles on lines -->
+              <circle id="scrubDotPace" cx="537.4" cy="149.7" r="4.5" fill="#38bdf8" stroke="#090d16" stroke-width="2" />
+              <circle id="scrubDotActual" cx="537.4" cy="159.5" r="6" fill="#10b981" stroke="#ffffff" stroke-width="2" />
+            </g>
+
+            <!-- Axis Labels -->
+            <g id="svgYAxisLabels" font-size="10" fill="#64748b" text-anchor="end"></g>
+            <g id="svgXAxisLabels" font-size="10" fill="#64748b" text-anchor="middle"></g>
+          </svg>
+
+          <!-- Floating Inspection HUD Tooltip -->
+          <div class="chart-tooltip visible" id="chartTooltip">
+            <div class="tooltip-date">
+              <span id="ttDate">Day 19 &bull; Sep 19</span>
+              <span id="ttTag" style="color: var(--color-emerald)">Today</span>
+            </div>
+            <div class="tooltip-row">
+              <span class="tooltip-row-label">
+                <span class="tooltip-dot" id="ttActualDot" style="background: var(--color-emerald)"></span>
+                Cumulative:
+              </span>
+              <span class="tooltip-row-val tabular-nums" id="ttSpent">$2,514.80</span>
+            </div>
+            <div class="tooltip-row">
+              <span class="tooltip-row-label">
+                <span class="tooltip-dot" style="background: var(--color-cyan)"></span>
+                Budget Pace:
+              </span>
+              <span class="tooltip-row-val tabular-nums" id="ttPace">$2,660.00</span>
+            </div>
+            <div class="tooltip-row">
+              <span class="tooltip-row-label">
+                <span class="tooltip-dot" style="background: #94a3b8"></span>
+                Day Burn:
+              </span>
+              <span class="tooltip-row-val tabular-nums" id="ttDaily">$68.40</span>
+            </div>
+            <div class="tooltip-drift" id="ttDriftRow">
+              <span>Drift from Target:</span>
+              <span id="ttDrift" style="color: var(--color-emerald)">-$145.20 (Safe)</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Legend / Key -->
+        <div class="chart-legend">
+          <div class="legend-item">
+            <span class="legend-line actual" id="legendActualLine"></span>
+            <span id="legendActualLabel">Actual Cumulative Spend</span>
+          </div>
+          <div class="legend-item">
+            <span class="legend-line pace"></span>
+            <span id="legendPaceLabel">Ideal Linear Pace ($140/day)</span>
+          </div>
+          <div class="legend-item" id="legendProjectedItem">
+            <span class="legend-line projected"></span>
+            <span>7-Day Pace Projection</span>
+          </div>
+          <div class="legend-item">
+            <span class="legend-line limit"></span>
+            <span id="legendLimitLabel">Monthly Budget Cap ($4,200)</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- Monthly Budget Envelopes Panel -->
+      <section class="envelopes-panel" aria-label="Monthly budget envelopes">
+        <div class="envelopes-header-row">
+          <div>
+            <h2>Budget Envelopes</h2>
+            <p>Allocated vs Spent &bull; Click to filter trajectory</p>
+          </div>
+          <div class="envelope-total-indicator">
+            <span style="font-size: 11px; color: var(--text-muted); text-transform: uppercase;">Total Assigned</span>
+            <div style="font-size: 16px; font-weight: 700; color: var(--color-cyan)" class="tabular-nums" id="envTotalAssigned">$4,200.00</div>
+          </div>
+        </div>
+
+        <!-- Envelopes List -->
+        <div class="envelope-cards-list" id="envelopeContainer" role="region" aria-live="polite">
+          <!-- Dynamically populated envelopes with progress & calendar pace benchmark -->
+        </div>
+      </section>
+    </main>
+
+    <!-- Lower Diagnostic & Ledger Grid -->
+    <section class="dashboard-secondary-grid">
+
+      <!-- Recent Transactions Table Filtered by Envelope -->
+      <div class="ledger-panel" aria-label="Recent envelope transactions">
+        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+          <div>
+            <h3 style="font-size: 15px; font-weight: 700; color: var(--text-primary);">Envelope Activity Ledger</h3>
+            <p style="font-size: 12px; color: var(--text-secondary);">Filtered by active envelope category</p>
+          </div>
+
+          <!-- Category filter chips -->
+          <div class="ledger-filter-strip" id="ledgerFilters">
+            <button class="filter-chip active" data-category="all">All Envelopes</button>
+            <button class="filter-chip" data-category="groceries">Groceries</button>
+            <button class="filter-chip" data-category="dining">Dining</button>
+            <button class="filter-chip" data-category="transport">Transport</button>
+            <button class="filter-chip" data-category="subscriptions">Subscriptions</button>
+            <button class="filter-chip" data-category="housing">Housing</button>
+            <button class="filter-chip" data-category="wellness">Personal</button>
+          </div>
+        </div>
+
+        <div class="table-scroll">
+          <table class="transactions-table">
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Merchant / Description</th>
+                <th>Envelope</th>
+                <th style="text-align: right;">Amount</th>
+                <th style="text-align: right;">Envelope Impact</th>
+              </tr>
+            </thead>
+            <tbody id="transactionTableBody">
+              <!-- Populated via JS -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Pace Diagnostics & Recommendations -->
+      <div class="insights-panel" aria-label="Budget health diagnostics">
+        <h3 style="font-size: 15px; font-weight: 700; color: var(--text-primary);">Trajectory Diagnostic Insights</h3>
+
+        <div class="insight-card">
+          <div class="insight-title">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--color-emerald)" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+            Net Velocity Under Ceiling
+          </div>
+          <div class="insight-desc">
+            Your cumulative burn of <strong>$2,514.80</strong> is <strong>$145.20 behind</strong> the benchmark trajectory pace on Day 19. At your current 7-day velocity of $132.36/day, you are projected to finish the month at <strong>$3,972.30</strong>, yielding an unallocated cash reserve of <strong>$227.70</strong>.
+          </div>
+        </div>
+
+        <div class="insight-card warning">
+          <div class="insight-title">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--color-amber)" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+            Dining Envelope Alert: 76.6% Consumed
+          </div>
+          <div class="insight-desc">
+            Dining & Takeout has exhausted $498.20 of its $650.00 envelope with 11 days remaining (only $13.80/day remaining). It exceeds the Day 19 calendar pace benchmark (63.3%) by +13.3%. Consider reallocating $60.00 from your Transport surplus.
+          </div>
+        </div>
+
+        <div class="insight-card">
+          <div class="insight-title">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--color-cyan)" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+            Fixed Charges Completed
+          </div>
+          <div class="insight-desc">
+            Subscriptions ($314.50 / $320.00) has completed all 5 monthly recurring billings. The remaining $5.50 envelope balance can safely roll over or cover tax fluctuations.
+          </div>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <!-- Modal for Logging New Expense -->
+  <div class="modal-backdrop" id="expenseModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <div class="modal-window">
+      <h3 class="modal-title" id="modalTitle">Log Envelope Expense</h3>
+      <form id="expenseForm">
+        <div class="form-group">
+          <label for="expMerchant">Merchant / Description</label>
+          <input type="text" id="expMerchant" class="form-input" placeholder="e.g. Trader Joe's, Metro Card" required />
+        </div>
+
+        <div class="form-group">
+          <label for="expCategory">Envelope Category</label>
+          <select id="expCategory" class="form-select" required>
+            <option value="groceries">Groceries & Household</option>
+            <option value="dining">Dining & Takeout</option>
+            <option value="transport">Transport & Fuel</option>
+            <option value="subscriptions">Subscriptions & Tech</option>
+            <option value="housing">Housing & Utilities</option>
+            <option value="wellness">Personal & Wellness</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="expAmount">Amount ($ USD)</label>
+          <input type="number" step="0.01" min="0.01" id="expAmount" class="form-input" placeholder="0.00" required />
+        </div>
+
+        <div class="modal-actions">
+          <button type="button" class="btn btn-secondary" id="btnCancelExpense">Cancel</button>
+          <button type="submit" class="btn btn-primary">Save Expense</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Application Logic & Interactive Scrubbing Engine -->
+  <script>
+    (function() {
+      'use strict';
+
+      // --- Financial State Model ---
+      const TOTAL_DAYS = 30;
+      const CURRENT_DAY = 19; // September 19, 2026
+
+      // Category Envelope Definitions
+      let envelopes = [
+        {
+          id: 'groceries',
+          name: 'Groceries & Household',
+          icon: '🛒',
+          allocated: 950.00,
+          spent: 612.40,
+          color: '#10b981',
+          bgSoft: 'rgba(16, 185, 129, 0.15)',
+          note: 'On track with weekly shopping'
+        },
+        {
+          id: 'dining',
+          name: 'Dining & Takeout',
+          icon: '🍽️',
+          allocated: 650.00,
+          spent: 498.20,
+          color: '#f59e0b',
+          bgSoft: 'rgba(245, 158, 11, 0.15)',
+          note: 'Burn rate +13.3% above calendar benchmark'
+        },
+        {
+          id: 'transport',
+          name: 'Transport & Fuel',
+          icon: '⛽',
+          allocated: 400.00,
+          spent: 215.10,
+          color: '#06b6d4',
+          bgSoft: 'rgba(6, 182, 212, 0.15)',
+          note: 'Commute and transit pass'
+        },
+        {
+          id: 'subscriptions',
+          name: 'Subscriptions & Tech',
+          icon: '⚡',
+          allocated: 320.00,
+          spent: 314.50,
+          color: '#a855f7',
+          bgSoft: 'rgba(168, 85, 247, 0.15)',
+          note: 'All 5 recurring services billed'
+        },
+        {
+          id: 'housing',
+          name: 'Housing & Utilities',
+          icon: '🏠',
+          allocated: 1380.00,
+          spent: 624.60,
+          color: '#3b82f6',
+          bgSoft: 'rgba(59, 130, 246, 0.15)',
+          note: 'Water/Broadband paid; Gas due Sep 24'
+        },
+        {
+          id: 'wellness',
+          name: 'Personal & Wellness',
+          icon: '🌿',
+          allocated: 500.00,
+          spent: 250.00,
+          color: '#14b8a6',
+          bgSoft: 'rgba(20, 184, 166, 0.15)',
+          note: 'Gym, prescriptions, self-care'
+        }
+      ];
+
+      // Daily spend distribution with category tags
+      const dailySpendData = [
+        { day: 1,  spend: 120.50, cat: 'groceries', note: 'Grocery haul & pantry stock' },
+        { day: 2,  spend: 95.20,  cat: 'transport', note: 'Transit pass renewal & coffee' },
+        { day: 3,  spend: 184.10, cat: 'housing',   note: 'Electric utility bill' },
+        { day: 4,  spend: 65.00,  cat: 'groceries', note: 'Midweek provisions' },
+        { day: 5,  spend: 210.40, cat: 'dining',    note: 'Weekend restaurant dinner' },
+        { day: 6,  spend: 145.80, cat: 'groceries', note: 'Household supplies' },
+        { day: 7,  spend: 88.30,  cat: 'transport', note: 'Gasoline refill' },
+        { day: 8,  spend: 172.00, cat: 'housing',   note: 'Broadband internet & streaming' },
+        { day: 9,  spend: 115.60, cat: 'wellness',  note: 'Farmer market & pharmacy' },
+        { day: 10, spend: 94.20,  cat: 'dining',    note: 'Dining with colleagues' },
+        { day: 11, spend: 245.80, cat: 'wellness',  note: 'Gym quarterly membership & wellness' },
+        { day: 12, spend: 132.40, cat: 'groceries', note: 'Grocery restock' },
+        { day: 13, spend: 78.10,  cat: 'transport', note: 'Coffee & metro fare' },
+        { day: 14, spend: 162.50, cat: 'dining',    note: 'Dinner takeout & drinks' },
+        { day: 15, spend: 110.00, cat: 'housing',   note: 'Water utility payment' },
+        { day: 16, spend: 185.30, cat: 'groceries', note: 'Bulk household essentials' },
+        { day: 17, spend: 92.70,  cat: 'transport', note: 'Vehicle wash & commuter tolls' },
+        { day: 18, spend: 148.50, cat: 'dining',    note: 'Dining out & movie' },
+        { day: 19, spend: 68.40,  cat: 'groceries', note: 'Produce & lunch specials' }
+      ];
+
+      // Build active trajectory data based on filter ('all' vs specific envelope)
+      function computeTrajectoryData(categoryFilter) {
+        let totalAllocated = 0;
+        if (categoryFilter === 'all') {
+          totalAllocated = envelopes.reduce((sum, e) => sum + e.allocated, 0);
+        } else {
+          const match = envelopes.find(e => e.id === categoryFilter);
+          totalAllocated = match ? match.allocated : 0;
+        }
+
+        const pacePerDay = totalAllocated / TOTAL_DAYS;
+        let days = [];
+        let cum = 0;
+
+        for (let d = 1; d <= CURRENT_DAY; d++) {
+          const daySpendItems = dailySpendData.filter(item => item.day === d);
+          let dayAmt = 0;
+          let note = '';
+          daySpendItems.forEach(item => {
+            if (categoryFilter === 'all' || item.cat === categoryFilter) {
+              dayAmt += item.spend;
+              note = item.note;
+            }
+          });
+
+          cum += dayAmt;
+          days.push({
+            day: d,
+            date: `Sep ${d}`,
+            dailySpend: dayAmt,
+            cumulativeSpend: cum,
+            projectedSpend: cum,
+            budgetPace: d * pacePerDay,
+            isProjected: false,
+            note: note || (categoryFilter === 'all' ? 'Daily expenditure' : `${categoryFilter} expense`)
+          });
+        }
+
+        // Compute 7-day run rate
+        const last7 = days.slice(-7);
+        const avg7 = last7.reduce((s, x) => s + x.dailySpend, 0) / 7;
+
+        let projCum = cum;
+        for (let d = CURRENT_DAY + 1; d <= TOTAL_DAYS; d++) {
+          projCum += avg7;
+          days.push({
+            day: d,
+            date: `Sep ${d}`,
+            dailySpend: avg7,
+            cumulativeSpend: null,
+            projectedSpend: projCum,
+            budgetPace: d * pacePerDay,
+            isProjected: true,
+            note: '7-day moving average velocity'
+          });
+        }
+
+        return {
+          totalAllocated,
+          pacePerDay,
+          days,
+          maxY: Math.max(totalAllocated * 1.08, 100)
+        };
+      }
+
+      // Initial dataset
+      let activeTrajectory = computeTrajectoryData('all');
+
+      // Transaction Ledger Mock Data
+      let transactions = [
+        { id: 'tx-1', date: 'Sep 19', merchant: 'Whole Foods Market', category: 'groceries', amount: 54.20 },
+        { id: 'tx-2', date: 'Sep 19', merchant: 'Artisan Cafe', category: 'dining', amount: 14.20 },
+        { id: 'tx-3', date: 'Sep 18', merchant: 'Trattoria Bella', category: 'dining', amount: 112.50 },
+        { id: 'tx-4', date: 'Sep 18', merchant: 'MTA Transit Card', category: 'transport', amount: 36.00 },
+        { id: 'tx-5', date: 'Sep 17', merchant: 'Shell Gas Station', category: 'transport', amount: 62.70 },
+        { id: 'tx-6', date: 'Sep 16', merchant: 'Costco Wholesale', category: 'groceries', amount: 185.30 },
+        { id: 'tx-7', date: 'Sep 15', merchant: 'Municipal Water District', category: 'housing', amount: 110.00 },
+        { id: 'tx-8', date: 'Sep 14', merchant: 'Sushi Roku', category: 'dining', amount: 98.50 },
+        { id: 'tx-9', date: 'Sep 13', merchant: 'Blue Bottle Coffee', category: 'dining', amount: 18.10 },
+        { id: 'tx-10', date: 'Sep 12', merchant: 'Trader Joe\'s', category: 'groceries', amount: 132.40 },
+        { id: 'tx-11', date: 'Sep 11', merchant: 'Equinox Health Club', category: 'wellness', amount: 210.00 },
+        { id: 'tx-12', date: 'Sep 08', merchant: 'Verizon Fios Fiber', category: 'housing', amount: 89.99 },
+        { id: 'tx-13', date: 'Sep 08', merchant: 'Netflix 4K & Spotify Family', category: 'subscriptions', amount: 43.98 }
+      ];
+
+      // Application UI State
+      let state = {
+        viewMode: 'trajectory',
+        showProjection: true,
+        activeCategoryFilter: 'all',
+        scrubbedDay: CURRENT_DAY,
+        isReallocating: false
+      };
+
+      // Coordinate Geometry for Chart SVG (viewBox: 0 0 860 380)
+      const SVG_WIDTH = 860;
+      const SVG_HEIGHT = 380;
+      const MARGIN = { top: 30, right: 30, bottom: 50, left: 60 };
+      const PLOT_WIDTH = SVG_WIDTH - MARGIN.left - MARGIN.right; // 770
+      const PLOT_HEIGHT = SVG_HEIGHT - MARGIN.top - MARGIN.bottom; // 300
+
+      function getXForDay(day) {
+        return MARGIN.left + ((day - 1) / (TOTAL_DAYS - 1)) * PLOT_WIDTH;
+      }
+
+      function getYForAmount(val) {
+        const clamped = Math.max(0, Math.min(val, activeTrajectory.maxY));
+        return (MARGIN.top + PLOT_HEIGHT) - (clamped / activeTrajectory.maxY) * PLOT_HEIGHT;
+      }
+
+      function getDayForX(xCoord) {
+        const clampedX = Math.max(MARGIN.left, Math.min(MARGIN.left + PLOT_WIDTH, xCoord));
+        const fraction = (clampedX - MARGIN.left) / PLOT_WIDTH;
+        return 1 + fraction * (TOTAL_DAYS - 1);
+      }
+
+      // DOM Elements
+      const chartContainer = document.getElementById('chartContainer');
+      const trajectorySvg = document.getElementById('trajectorySvg');
+      const svgGridLines = document.getElementById('svgGridLines');
+      const svgYAxisLabels = document.getElementById('svgYAxisLabels');
+      const svgXAxisLabels = document.getElementById('svgXAxisLabels');
+      const ceilingLine = document.getElementById('ceilingLine');
+      const ceilingLabel = document.getElementById('ceilingLabel');
+      const budgetPacePath = document.getElementById('budgetPacePath');
+      const forecastPath = document.getElementById('forecastPath');
+      const actualPath = document.getElementById('actualPath');
+      const forecastArea = document.getElementById('forecastArea');
+      const actualArea = document.getElementById('actualArea');
+      const dailyBarsGroup = document.getElementById('dailyBarsGroup');
+      const scrubLine = document.getElementById('scrubLine');
+      const scrubDotPace = document.getElementById('scrubDotPace');
+      const scrubDotActual = document.getElementById('scrubDotActual');
+      const chartTooltip = document.getElementById('chartTooltip');
+
+      // Telemetry HUD Elements
+      const hudDate = document.getElementById('hudDate');
+      const hudActual = document.getElementById('hudActual');
+      const hudPace = document.getElementById('hudPace');
+      const hudDrift = document.getElementById('hudDrift');
+      const hudDaily = document.getElementById('hudDaily');
+
+      // Tooltip inner elements
+      const ttDate = document.getElementById('ttDate');
+      const ttTag = document.getElementById('ttTag');
+      const ttSpent = document.getElementById('ttSpent');
+      const ttPace = document.getElementById('ttPace');
+      const ttDaily = document.getElementById('ttDaily');
+      const ttDrift = document.getElementById('ttDrift');
+      const ttActualDot = document.getElementById('ttActualDot');
+
+      // Controls & Legends
+      const panelChartTitle = document.getElementById('panelChartTitle');
+      const panelChartSubtitle = document.getElementById('panelChartSubtitle');
+      const chartFilterTag = document.getElementById('chartFilterTag');
+      const btnViewTrajectory = document.getElementById('btnViewTrajectory');
+      const btnViewDaily = document.getElementById('btnViewDaily');
+      const toggleProjection = document.getElementById('toggleProjection');
+      const legendActualLine = document.getElementById('legendActualLine');
+      const legendActualLabel = document.getElementById('legendActualLabel');
+      const legendPaceLabel = document.getElementById('legendPaceLabel');
+      const legendLimitLabel = document.getElementById('legendLimitLabel');
+
+      const envelopeContainer = document.getElementById('envelopeContainer');
+      const btnToggleReallocate = document.getElementById('btnToggleReallocate');
+      const ledgerFilters = document.getElementById('ledgerFilters');
+      const transactionTableBody = document.getElementById('transactionTableBody');
+
+      // Expense Modal
+      const btnLogExpense = document.getElementById('btnLogExpense');
+      const expenseModal = document.getElementById('expenseModal');
+      const btnCancelExpense = document.getElementById('btnCancelExpense');
+      const expenseForm = document.getElementById('expenseForm');
+
+      // --- Chart Axes & Grid Renderer ---
+      function renderAxes() {
+        const maxY = activeTrajectory.maxY;
+        // Generate 4-5 nice round steps
+        const step = maxY <= 1000 ? 250 : 1000;
+        let gridHtml = '';
+        let yLabelHtml = '';
+
+        for (let val = 0; val <= maxY; val += step) {
+          const y = getYForAmount(val);
+          gridHtml += `<line x1="${MARGIN.left}" y1="${y}" x2="${MARGIN.left + PLOT_WIDTH}" y2="${y}" stroke="#1e293b" stroke-width="1" stroke-dasharray="2,2" />`;
+          yLabelHtml += `<text x="${MARGIN.left - 10}" y="${y + 3}">$${val >= 1000 ? (val/1000) + 'k' : val}</text>`;
+        }
+
+        svgGridLines.innerHTML = gridHtml;
+        svgYAxisLabels.innerHTML = yLabelHtml;
+
+        // X Gridlines and Labels (Days 1, 5, 10, 15, 20, 25, 30)
+        const xDays = [1, 5, 10, 15, 20, 25, 30];
+        let xLabelHtml = '';
+        xDays.forEach(d => {
+          const x = getXForDay(d);
+          xLabelHtml += `<text x="${x}" y="${MARGIN.top + PLOT_HEIGHT + 20}">Day ${d}</text>`;
+        });
+        svgXAxisLabels.innerHTML = xLabelHtml;
+
+        // Ceiling Line
+        const ceilingY = getYForAmount(activeTrajectory.totalAllocated);
+        ceilingLine.setAttribute('y1', ceilingY);
+        ceilingLine.setAttribute('y2', ceilingY);
+        ceilingLabel.setAttribute('y', Math.max(ceilingY - 5, 22));
+        ceilingLabel.textContent = `LIMIT $${activeTrajectory.totalAllocated.toLocaleString('en-US')}`;
+      }
+
+      // --- Curve Updates ---
+      function updateChartPaths() {
+        const days = activeTrajectory.days;
+        const baseY = MARGIN.top + PLOT_HEIGHT;
+
+        // 1. Budget Pace Line
+        let paceD = `M ${getXForDay(1)} ${getYForAmount(activeTrajectory.pacePerDay)}`;
+        for (let d = 2; d <= TOTAL_DAYS; d++) {
+          paceD += ` L ${getXForDay(d)} ${getYForAmount(d * activeTrajectory.pacePerDay)}`;
+        }
+        budgetPacePath.setAttribute('d', paceD);
+
+        // 2. Actual Spend Path
+        let actualD = '';
+        let actualAreaPts = [`${getXForDay(1)},${baseY}`];
+
+        for (let i = 0; i < CURRENT_DAY; i++) {
+          const dayObj = days[i];
+          const x = getXForDay(dayObj.day);
+          const y = getYForAmount(dayObj.cumulativeSpend);
+
+          if (i === 0) {
+            actualD += `M ${x} ${y}`;
+          } else {
+            actualD += ` L ${x} ${y}`;
+          }
+          actualAreaPts.push(`${x},${y}`);
+        }
+
+        const lastActualX = getXForDay(CURRENT_DAY);
+        actualAreaPts.push(`${lastActualX},${baseY}`);
+
+        actualPath.setAttribute('d', actualD);
+        actualArea.setAttribute('points', actualAreaPts.join(' '));
+
+        // Color coding for envelope mode vs all mode
+        if (state.activeCategoryFilter !== 'all') {
+          const env = envelopes.find(e => e.id === state.activeCategoryFilter);
+          const strokeCol = env ? env.color : '#10b981';
+          actualPath.setAttribute('stroke', strokeCol);
+          legendActualLine.style.background = strokeCol;
+          ttActualDot.style.background = strokeCol;
+        } else {
+          actualPath.setAttribute('stroke', '#10b981');
+          legendActualLine.style.background = '#10b981';
+          ttActualDot.style.background = '#10b981';
+        }
+
+        // 3. Forecast Path (Days 19..30)
+        if (state.showProjection) {
+          forecastPath.style.display = 'block';
+          forecastArea.style.display = 'block';
+
+          let forecastD = `M ${lastActualX} ${getYForAmount(days[CURRENT_DAY - 1].cumulativeSpend)}`;
+          let forecastPts = [`${lastActualX},${baseY}`, `${lastActualX},${getYForAmount(days[CURRENT_DAY - 1].cumulativeSpend)}`];
+
+          for (let d = CURRENT_DAY + 1; d <= TOTAL_DAYS; d++) {
+            const dayObj = days[d - 1];
+            const x = getXForDay(dayObj.day);
+            const y = getYForAmount(dayObj.projectedSpend);
+            forecastD += ` L ${x} ${y}`;
+            forecastPts.push(`${x},${y}`);
+          }
+
+          forecastPts.push(`${getXForDay(TOTAL_DAYS)},${baseY}`);
+
+          forecastPath.setAttribute('d', forecastD);
+          forecastArea.setAttribute('points', forecastPts.join(' '));
+        } else {
+          forecastPath.style.display = 'none';
+          forecastArea.style.display = 'none';
+        }
+
+        // 4. Daily Velocity Bars
+        renderDailyBars();
+      }
+
+      function renderDailyBars() {
+        let barsHtml = '';
+        const barWidth = 14;
+        const maxDaily = Math.max(...activeTrajectory.days.map(d => d.dailySpend), activeTrajectory.pacePerDay * 1.5);
+
+        activeTrajectory.days.forEach(d => {
+          const x = getXForDay(d.day) - barWidth / 2;
+          const barHeight = maxDaily > 0 ? (d.dailySpend / maxDaily) * (PLOT_HEIGHT * 0.7) : 0;
+          const y = (MARGIN.top + PLOT_HEIGHT) - barHeight;
+          const isOver = d.dailySpend > activeTrajectory.pacePerDay;
+          const fill = d.isProjected ? '#0284c7' : (isOver ? '#f59e0b' : '#10b981');
+          const opacity = d.isProjected ? '0.4' : '0.85';
+
+          barsHtml += `<rect x="${x}" y="${y}" width="${barWidth}" height="${barHeight}" rx="2" fill="${fill}" opacity="${opacity}" />`;
+        });
+
+        dailyBarsGroup.innerHTML = barsHtml;
+      }
+
+      // --- Interactive Scrubbing & Crosshair Controller ---
+      function updateScrubPosition(dayFloat) {
+        const clampedDay = Math.max(1, Math.min(TOTAL_DAYS, dayFloat));
+        state.scrubbedDay = clampedDay;
+
+        const x = getXForDay(clampedDay);
+        scrubLine.setAttribute('x1', x);
+        scrubLine.setAttribute('x2', x);
+
+        const paceVal = clampedDay * activeTrajectory.pacePerDay;
+        const paceY = getYForAmount(paceVal);
+        scrubDotPace.setAttribute('cx', x);
+        scrubDotPace.setAttribute('cy', paceY);
+
+        const nearestDayIndex = Math.round(clampedDay) - 1;
+        const dayRecord = activeTrajectory.days[nearestDayIndex];
+
+        let actualVal;
+        let actualY;
+        let isFuture = clampedDay > CURRENT_DAY;
+
+        if (!isFuture) {
+          const lowerIndex = Math.floor(clampedDay) - 1;
+          const upperIndex = Math.min(activeTrajectory.days.length - 1, Math.ceil(clampedDay) - 1);
+          const weight = clampedDay - Math.floor(clampedDay);
+
+          if (lowerIndex === upperIndex || lowerIndex < 0) {
+            actualVal = activeTrajectory.days[lowerIndex >= 0 ? lowerIndex : 0].cumulativeSpend;
+          } else {
+            const v1 = activeTrajectory.days[lowerIndex].cumulativeSpend;
+            const v2 = activeTrajectory.days[upperIndex].cumulativeSpend;
+            actualVal = v1 + (v2 - v1) * weight;
+          }
+          actualY = getYForAmount(actualVal);
+          scrubDotActual.setAttribute('fill', state.activeCategoryFilter !== 'all' ? (envelopes.find(e => e.id === state.activeCategoryFilter)?.color || '#10b981') : '#10b981');
+        } else {
+          const lowerIndex = Math.floor(clampedDay) - 1;
+          const upperIndex = Math.min(activeTrajectory.days.length - 1, Math.ceil(clampedDay) - 1);
+          const weight = clampedDay - Math.floor(clampedDay);
+          const v1 = activeTrajectory.days[lowerIndex].projectedSpend;
+          const v2 = activeTrajectory.days[upperIndex].projectedSpend;
+          actualVal = v1 + (v2 - v1) * weight;
+          actualY = getYForAmount(actualVal);
+          scrubDotActual.setAttribute('fill', '#38bdf8');
+        }
+
+        scrubDotActual.setAttribute('cx', x);
+        scrubDotActual.setAttribute('cy', actualY);
+
+        const drift = actualVal - paceVal;
+        const isUnder = drift <= 0;
+
+        // Update Chart Telemetry Strip
+        hudDate.innerHTML = `Day ${Math.round(clampedDay)} &bull; ${dayRecord.date} ${Math.round(clampedDay) === CURRENT_DAY ? '<span style="color:var(--color-cyan)">(Today)</span>' : (isFuture ? '<span style="color:var(--text-muted)">(Forecast)</span>' : '')}`;
+        hudActual.textContent = `$${actualVal.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+        hudPace.textContent = `$${paceVal.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+        hudDrift.textContent = `${isUnder ? '-' : '+'}$${Math.abs(drift).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} (${isUnder ? 'Under pace' : 'Over pace'})`;
+        hudDrift.className = `telemetry-val ${isUnder ? 'accent-drift-safe' : 'accent-drift-warn'}`;
+        hudDaily.textContent = `$${dayRecord.dailySpend.toFixed(2)}`;
+
+        // Update Tooltip HUD
+        ttDate.textContent = `Day ${Math.round(clampedDay)} • ${dayRecord.date}`;
+        if (Math.round(clampedDay) === CURRENT_DAY) {
+          ttTag.textContent = 'Today';
+          ttTag.style.color = 'var(--color-emerald)';
+        } else if (isFuture) {
+          ttTag.textContent = 'Forecast';
+          ttTag.style.color = 'var(--color-cyan)';
+        } else {
+          ttTag.textContent = 'Recorded';
+          ttTag.style.color = 'var(--text-secondary)';
+        }
+
+        ttSpent.textContent = `$${actualVal.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+        ttPace.textContent = `$${paceVal.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+        ttDaily.textContent = `$${dayRecord.dailySpend.toFixed(2)}`;
+
+        ttDrift.textContent = `${isUnder ? '-' : '+'}$${Math.abs(drift).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} (${isUnder ? 'Safe' : 'Pace Deficit'})`;
+        ttDrift.style.color = isUnder ? 'var(--color-emerald)' : 'var(--color-amber)';
+
+        // Position tooltip smoothly relative to container width
+        const containerRect = chartContainer.getBoundingClientRect();
+        const svgPixelX = (x / SVG_WIDTH) * containerRect.width;
+        
+        let tooltipLeft = svgPixelX;
+        if (svgPixelX > containerRect.width - 240) {
+          tooltipLeft = svgPixelX - 120;
+        } else if (svgPixelX < 120) {
+          tooltipLeft = svgPixelX + 110;
+        }
+
+        chartTooltip.style.left = `${tooltipLeft}px`;
+        chartTooltip.classList.add('visible');
+
+        // Accessible slider updates
+        chartContainer.setAttribute('aria-valuenow', Math.round(clampedDay));
+        chartContainer.setAttribute('aria-valuetext', `Day ${Math.round(clampedDay)} of 30: $${actualVal.toFixed(2)} spend vs $${paceVal.toFixed(2)} budget target`);
+      }
+
+      // Pointer Event Handlers for Continuous Scrubbing
+      function handlePointerMove(e) {
+        const rect = chartContainer.getBoundingClientRect();
+        const relativeX = e.clientX - rect.left;
+        const svgCoordinateX = (relativeX / rect.width) * SVG_WIDTH;
+
+        const day = getDayForX(svgCoordinateX);
+        updateScrubPosition(day);
+      }
+
+      chartContainer.addEventListener('pointermove', handlePointerMove);
+      chartContainer.addEventListener('pointerdown', (e) => {
+        chartContainer.setPointerCapture(e.pointerId);
+        handlePointerMove(e);
+      });
+      chartContainer.addEventListener('pointerup', (e) => {
+        if (chartContainer.hasPointerCapture(e.pointerId)) {
+          chartContainer.releasePointerCapture(e.pointerId);
+        }
+      });
+      chartContainer.addEventListener('pointercancel', (e) => {
+        if (chartContainer.hasPointerCapture(e.pointerId)) {
+          chartContainer.releasePointerCapture(e.pointerId);
+        }
+        updateScrubPosition(CURRENT_DAY);
+      });
+
+      // Pointer leave resets smoothly to Today (Day 19)
+      chartContainer.addEventListener('pointerleave', () => {
+        updateScrubPosition(CURRENT_DAY);
+      });
+
+      // Keyboard Accessibility for Scrubbing (ArrowLeft, ArrowRight, Home, End)
+      chartContainer.addEventListener('keydown', (e) => {
+        let newDay = state.scrubbedDay;
+        if (e.key === 'ArrowLeft') {
+          newDay = Math.max(1, Math.round(state.scrubbedDay) - 1);
+          e.preventDefault();
+        } else if (e.key === 'ArrowRight') {
+          newDay = Math.min(TOTAL_DAYS, Math.round(state.scrubbedDay) + 1);
+          e.preventDefault();
+        } else if (e.key === 'Home') {
+          newDay = 1;
+          e.preventDefault();
+        } else if (e.key === 'End') {
+          newDay = TOTAL_DAYS;
+          e.preventDefault();
+        }
+
+        if (newDay !== state.scrubbedDay) {
+          updateScrubPosition(newDay);
+        }
+      });
+
+      // View Modes & Segmented Controls
+      btnViewTrajectory.addEventListener('click', () => {
+        state.viewMode = 'trajectory';
+        btnViewTrajectory.classList.add('active');
+        btnViewTrajectory.setAttribute('aria-pressed', 'true');
+        btnViewDaily.classList.remove('active');
+        btnViewDaily.setAttribute('aria-pressed', 'false');
+
+        actualPath.style.display = 'block';
+        actualArea.style.display = 'block';
+        budgetPacePath.style.display = 'block';
+        if (state.showProjection) {
+          forecastPath.style.display = 'block';
+          forecastArea.style.display = 'block';
+        }
+        dailyBarsGroup.style.opacity = '0';
+        scrubLine.style.display = 'block';
+        scrubDotActual.style.display = 'block';
+        scrubDotPace.style.display = 'block';
+      });
+
+      btnViewDaily.addEventListener('click', () => {
+        state.viewMode = 'daily';
+        btnViewDaily.classList.add('active');
+        btnViewDaily.setAttribute('aria-pressed', 'true');
+        btnViewTrajectory.classList.remove('active');
+        btnViewTrajectory.setAttribute('aria-pressed', 'false');
+
+        actualPath.style.display = 'none';
+        actualArea.style.display = 'none';
+        budgetPacePath.style.display = 'none';
+        forecastPath.style.display = 'none';
+        forecastArea.style.display = 'none';
+        dailyBarsGroup.style.opacity = '1';
+      });
+
+      // Projection Toggle Switch
+      toggleProjection.addEventListener('click', () => {
+        state.showProjection = !state.showProjection;
+        toggleProjection.setAttribute('aria-checked', state.showProjection ? 'true' : 'false');
+        updateChartPaths();
+        updateScrubPosition(state.scrubbedDay);
+      });
+
+      // Render Budget Envelopes with Dynamic Pace Markers
+      function renderEnvelopes() {
+        const calendarPaceRatio = CURRENT_DAY / TOTAL_DAYS; // 63.3%
+        let html = '';
+
+        envelopes.forEach(env => {
+          const pctSpent = (env.spent / env.allocated) * 100;
+          const remaining = env.allocated - env.spent;
+          const isCaution = pctSpent > (calendarPaceRatio * 100 + 5);
+          const isDanger = remaining < 0;
+
+          let statusClass = 'safe';
+          let statusText = 'On Track';
+          if (isDanger) {
+            statusClass = 'danger';
+            statusText = 'Over Budget';
+          } else if (isCaution) {
+            statusClass = 'caution';
+            statusText = 'Ahead of Pace';
+          }
+
+          const isSelected = state.activeCategoryFilter === env.id;
+
+          html += `
+            <div class="envelope-card ${isSelected ? 'active-filtered' : ''}" data-env-id="${env.id}" role="button" tabindex="0" aria-label="${env.name} envelope: $${env.spent.toFixed(2)} of $${env.allocated.toFixed(2)} spent">
+              <div class="envelope-top-line">
+                <div class="envelope-info">
+                  <div class="envelope-icon-box" style="background: ${env.bgSoft}; color: ${env.color}">${env.icon}</div>
+                  <div>
+                    <div class="envelope-title">${env.name}</div>
+                    <div class="envelope-sub">${env.note}</div>
+                  </div>
+                </div>
+                <div class="envelope-amounts">
+                  <div class="envelope-spent-allocated tabular-nums">$${env.spent.toFixed(2)} <span style="color:var(--text-muted); font-weight:400;">/ $${env.allocated.toFixed(2)}</span></div>
+                  <div class="envelope-remaining-text ${statusClass} tabular-nums">$${remaining.toFixed(2)} left (${statusText})</div>
+                </div>
+              </div>
+
+              <!-- Progress Bar with Pace Tick Marker -->
+              <div class="progress-bar-container" title="Pace marker indicates expected consumption (63.3%) by Day 19">
+                <div class="progress-bar-fill" style="width: ${Math.min(100, pctSpent)}%; background: ${env.color};"></div>
+                <div class="calendar-pace-marker" style="left: ${calendarPaceRatio * 100}%" title="Calendar Pace Benchmark: 63.3%"></div>
+              </div>
+
+              <div class="envelope-meta-row">
+                <span>${pctSpent.toFixed(1)}% spent</span>
+                <span>Day 19 Benchmark: ${(calendarPaceRatio * 100).toFixed(1)}%</span>
+                <span class="tabular-nums">$${(remaining / (TOTAL_DAYS - CURRENT_DAY)).toFixed(2)}/day left</span>
+              </div>
+
+              <!-- Reallocation Slider Container -->
+              <div class="reallocate-slider-wrap ${state.isReallocating ? 'active' : ''}" id="sliderWrap-${env.id}">
+                <div class="slider-row">
+                  <label for="slider-${env.id}" style="font-size: 11px; color: var(--text-secondary); width: 80px;">Allocation:</label>
+                  <input type="range" class="slider-input" id="slider-${env.id}" min="100" max="2000" step="10" value="${env.allocated}" data-env-id="${env.id}">
+                  <span class="slider-val-readout tabular-nums" id="readout-${env.id}">$${env.allocated}</span>
+                </div>
+              </div>
+            </div>
+          `;
+        });
+
+        envelopeContainer.innerHTML = html;
+
+        // Attach envelope click handlers
+        document.querySelectorAll('.envelope-card').forEach(card => {
+          card.addEventListener('click', (e) => {
+            if (e.target.tagName === 'INPUT') return;
+            const envId = card.getAttribute('data-env-id');
+            selectCategoryFilter(state.activeCategoryFilter === envId ? 'all' : envId);
+          });
+
+          card.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+              if (e.target.tagName === 'INPUT') return;
+              e.preventDefault();
+              const envId = card.getAttribute('data-env-id');
+              selectCategoryFilter(state.activeCategoryFilter === envId ? 'all' : envId);
+            }
+          });
+        });
+
+        // Attach slider change handlers
+        document.querySelectorAll('.slider-input').forEach(slider => {
+          slider.addEventListener('input', (e) => {
+            const envId = e.target.getAttribute('data-env-id');
+            const newVal = parseFloat(e.target.value);
+            const targetEnv = envelopes.find(en => en.id === envId);
+            if (targetEnv) {
+              targetEnv.allocated = newVal;
+              document.getElementById(`readout-${envId}`).textContent = `$${newVal}`;
+              recalculateTotals();
+            }
+          });
+        });
+      }
+
+      function recalculateTotals() {
+        const totalAlloc = envelopes.reduce((acc, en) => acc + en.allocated, 0);
+        const totalSpent = envelopes.reduce((acc, en) => acc + en.spent, 0);
+        const totalRemain = totalAlloc - totalSpent;
+
+        document.getElementById('kpiAllocated').textContent = `$${totalAlloc.toLocaleString('en-US', { minimumFractionDigits: 2 })}`;
+        document.getElementById('envTotalAssigned').textContent = `$${totalAlloc.toLocaleString('en-US', { minimumFractionDigits: 2 })}`;
+        document.getElementById('kpiRemaining').textContent = `$${totalRemain.toLocaleString('en-US', { minimumFractionDigits: 2 })}`;
+
+        // Refresh trajectory calculation with updated allocations
+        activeTrajectory = computeTrajectoryData(state.activeCategoryFilter);
+        renderAxes();
+        updateChartPaths();
+        updateScrubPosition(state.scrubbedDay);
+      }
+
+      // Toggle Reallocation sliders
+      btnToggleReallocate.addEventListener('click', () => {
+        state.isReallocating = !state.isReallocating;
+        btnToggleReallocate.setAttribute('aria-expanded', state.isReallocating ? 'true' : 'false');
+        btnToggleReallocate.classList.toggle('btn-primary', state.isReallocating);
+        btnToggleReallocate.classList.toggle('btn-secondary', !state.isReallocating);
+
+        document.querySelectorAll('.reallocate-slider-wrap').forEach(wrap => {
+          wrap.classList.toggle('active', state.isReallocating);
+        });
+      });
+
+      // Filter Controller (Integrates envelopes, trajectory chart, and ledger)
+      function selectCategoryFilter(catId) {
+        state.activeCategoryFilter = catId;
+
+        // Update filter chips
+        document.querySelectorAll('.filter-chip').forEach(chip => {
+          chip.classList.toggle('active', chip.getAttribute('data-category') === catId);
+        });
+
+        // Update envelope cards
+        document.querySelectorAll('.envelope-card').forEach(card => {
+          card.classList.toggle('active-filtered', card.getAttribute('data-env-id') === catId);
+        });
+
+        // Update chart title & filter tag
+        if (catId === 'all') {
+          panelChartTitle.textContent = 'Cumulative Spend Trajectory';
+          panelChartSubtitle.textContent = 'Interactive tracking of actual burn vs benchmark pace line ($140/day)';
+          chartFilterTag.style.display = 'none';
+          legendActualLabel.textContent = 'Actual Cumulative Spend';
+          legendPaceLabel.textContent = 'Ideal Linear Pace ($140/day)';
+          legendLimitLabel.textContent = 'Monthly Budget Cap ($4,200)';
+        } else {
+          const env = envelopes.find(e => e.id === catId);
+          const envName = env ? env.name : catId;
+          panelChartTitle.textContent = `${envName} Trajectory`;
+          panelChartSubtitle.textContent = `Actual burn vs linear allowance ($${(env.allocated / TOTAL_DAYS).toFixed(2)}/day)`;
+          chartFilterTag.style.display = 'inline-block';
+          chartFilterTag.innerHTML = `Filtered: ${envName} &times;`;
+          legendActualLabel.textContent = `${envName} Spend`;
+          legendPaceLabel.textContent = `Category Pace ($${(env.allocated / TOTAL_DAYS).toFixed(2)}/day)`;
+          legendLimitLabel.textContent = `Envelope Cap ($${env.allocated})`;
+        }
+
+        // Recompute trajectory for active category
+        activeTrajectory = computeTrajectoryData(catId);
+        renderAxes();
+        updateChartPaths();
+        updateScrubPosition(state.scrubbedDay);
+        renderTransactions();
+      }
+
+      chartFilterTag.addEventListener('click', () => {
+        selectCategoryFilter('all');
+      });
+
+      ledgerFilters.addEventListener('click', (e) => {
+        const chip = e.target.closest('.filter-chip');
+        if (!chip) return;
+        const cat = chip.getAttribute('data-category');
+        selectCategoryFilter(cat);
+      });
+
+      function renderTransactions() {
+        const filtered = state.activeCategoryFilter === 'all' 
+          ? transactions 
+          : transactions.filter(t => t.category === state.activeCategoryFilter);
+
+        let html = '';
+        if (filtered.length === 0) {
+          html = `<tr><td colspan="5" style="text-align: center; color: var(--text-muted); padding: 24px;">No recorded transactions in this envelope.</td></tr>`;
+        } else {
+          filtered.forEach(tx => {
+            const env = envelopes.find(e => e.id === tx.category) || { name: tx.category, color: '#94a3b8', bgSoft: 'rgba(255,255,255,0.05)' };
+            html += `
+              <tr>
+                <td style="color: var(--text-muted); font-size: 12px;">${tx.date}</td>
+                <td><span class="tx-merchant">${tx.merchant}</span></td>
+                <td><span class="tx-badge" style="background: ${env.bgSoft}; color: ${env.color}; border: 1px solid ${env.color}40">${env.name}</span></td>
+                <td class="tx-amount tabular-nums">$${tx.amount.toFixed(2)}</td>
+                <td style="text-align: right; font-size: 11px; color: var(--text-secondary);">Deducted from envelope</td>
+              </tr>
+            `;
+          });
+        }
+        transactionTableBody.innerHTML = html;
+      }
+
+      // Expense Modal Logic
+      btnLogExpense.addEventListener('click', () => {
+        expenseModal.classList.add('open');
+        document.getElementById('expMerchant').focus();
+      });
+
+      btnCancelExpense.addEventListener('click', () => {
+        expenseModal.classList.remove('open');
+      });
+
+      expenseForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const merchant = document.getElementById('expMerchant').value.trim();
+        const category = document.getElementById('expCategory').value;
+        const amount = parseFloat(document.getElementById('expAmount').value);
+
+        if (!merchant || isNaN(amount) || amount <= 0) return;
+
+        // 1. Add to transactions list
+        const newTx = {
+          id: 'tx-' + Date.now(),
+          date: 'Sep 19',
+          merchant: merchant,
+          category: category,
+          amount: amount
+        };
+        transactions.unshift(newTx);
+
+        // 2. Update envelope spent
+        const targetEnv = envelopes.find(en => en.id === category);
+        if (targetEnv) {
+          targetEnv.spent += amount;
+        }
+
+        // 3. Add to dailySpendData
+        dailySpendData.push({
+          day: CURRENT_DAY,
+          spend: amount,
+          cat: category,
+          note: merchant
+        });
+
+        // 4. Recompute totals & trajectory
+        activeTrajectory = computeTrajectoryData(state.activeCategoryFilter);
+        renderAxes();
+        updateChartPaths();
+        updateScrubPosition(CURRENT_DAY);
+        renderEnvelopes();
+        renderTransactions();
+        recalculateTotals();
+
+        // Close modal
+        expenseForm.reset();
+        expenseModal.classList.remove('open');
+      });
+
+      // Escape key closes modal
+      window.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && expenseModal.classList.contains('open')) {
+          expenseModal.classList.remove('open');
+        }
+      });
+
+      // Initialize Dashboard
+      renderAxes();
+      updateChartPaths();
+      renderEnvelopes();
+      renderTransactions();
+      updateScrubPosition(CURRENT_DAY);
+
+    })();
+  </script>
+</body>
+</html>

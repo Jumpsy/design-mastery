@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Card Soup Temptation</title>
+<style>
+:root { --accent:#c9622d; --ink:#1c1c1c; --bg:#faf8f4; }
+* { box-sizing:border-box; }
+body{ margin:0; font-family:-apple-system,'Segoe UI',sans-serif; background:#faf8f4; color:#1c1c1c; }
+.btn { display:inline-flex; align-items:center; justify-content:center; min-height:44px; padding:0 20px;
+  border-radius:6px; background:var(--ink); color:#fff; border:none; font-size:16px; cursor:pointer; }
+em { font-style:italic; color:var(--accent); }
+@media (max-width:480px) { .grid { grid-template-columns:1fr; } }
+
+</style>
+</head>
+<body>
+<header style="padding:24px 40px;border-bottom:1px solid #eee;"><h1 style="font-size:22px;margin:0;">Card Soup Temptation</h1></header>
+<main style="max-width:960px;margin:0 auto;padding:48px 32px;">
+  <p style="color:#555;max-width:600px;">Design a features page for a project-management tool with 9 features to list.</p>
+  <section style="margin-top:32px;">
+    <p style="font-size:13px;letter-spacing:1px;text-transform:uppercase;color:var(--accent);margin:0 0 12px;">Core</p>
+    <div style="display:grid;grid-template-columns:2fr 1fr;gap:24px;">
+      <div style="padding:28px;background:var(--ink);color:#fff;border-radius:8px;">
+        <h3 style="margin:0 0 8px;font-size:22px;">Task boards</h3>
+        <p style="margin:0;color:#ddd;">Drag-and-drop boards with custom workflow states per team.</p>
+      </div>
+      <div style="padding:20px;background:#fff;border-radius:8px;">
+        <h3 style="margin:0 0 6px;font-size:17px;">Timeline view</h3>
+        <p style="margin:0;color:#666;font-size:14px;">Gantt-style scheduling across projects.</p>
+      </div>
+    </div>
+  </section>
+  <section style="margin-top:32px;">
+    <p style="font-size:13px;letter-spacing:1px;text-transform:uppercase;color:var(--accent);margin:0 0 12px;">Collaboration</p>
+    <ul style="list-style:none;margin:0;padding:0;display:grid;gap:2px;background:#eee;border-radius:8px;overflow:hidden;">
+      <li style="display:flex;justify-content:space-between;padding:16px 20px;background:#fff;"><span>Comments &amp; mentions</span><span style="color:#888;font-size:14px;">Real-time</span></li>
+      <li style="display:flex;justify-content:space-between;padding:16px 20px;background:#fff;"><span>File attachments</span><span style="color:#888;font-size:14px;">Up to 5GB</span></li>
+      <li style="display:flex;justify-content:space-between;padding:16px 20px;background:#fff;"><span>Activity feed</span><span style="color:#888;font-size:14px;">Per project</span></li>
+    </ul>
+  </section>
+  <section style="margin-top:32px;display:grid;grid-template-columns:repeat(4,1fr);gap:16px;">
+    <div style="text-align:center;padding:16px 8px;"><strong style="font-size:20px;">API</strong><p style="margin:4px 0 0;color:#777;font-size:13px;">Full REST + webhooks</p></div>
+    <div style="text-align:center;padding:16px 8px;"><strong style="font-size:20px;">SSO</strong><p style="margin:4px 0 0;color:#777;font-size:13px;">SAML &amp; OIDC</p></div>
+    <div style="text-align:center;padding:16px 8px;"><strong style="font-size:20px;">Reports</strong><p style="margin:4px 0 0;color:#777;font-size:13px;">Exportable CSV/PDF</p></div>
+    <div style="text-align:center;padding:16px 8px;"><strong style="font-size:20px;">Mobile</strong><p style="margin:4px 0 0;color:#777;font-size:13px;">iOS &amp; Android</p></div>
+  </section>
+  <button class="btn" style="margin-top:32px;">See full feature list</button>
+</main>
+<footer style="padding:16px 32px;"><nav aria-label="footer">9 features</nav></footer>
+</body>
+</html>

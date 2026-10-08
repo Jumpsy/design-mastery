@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Pricing card — plan-gate live test</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600&display=swap');
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: #eee5d4;
+    font-family: 'Inter', system-ui, sans-serif;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+  }
+  .card {
+    width: 340px;
+    background: #f7f1e3;
+    border-radius: 18px;
+    padding: 40px 34px;
+  }
+  .tier {
+    font-family: 'Instrument Serif', serif;
+    font-size: 22px;
+    color: #1a1712;
+    margin-bottom: 6px;
+  }
+  .desc {
+    font-size: 13px;
+    color: #6b6455;
+    margin-bottom: 28px;
+  }
+  .price {
+    font-family: 'Instrument Serif', serif;
+    font-size: 56px;
+    color: #1a1712;
+    display: flex;
+    align-items: baseline;
+    gap: 6px;
+    margin-bottom: 30px;
+  }
+  .price em {
+    font-style: italic;
+    font-size: 20px;
+    color: #6b6455;
+  }
+  .features { margin-bottom: 32px; }
+  .feature {
+    font-size: 14px;
+    color: #423d32;
+    padding: 12px 0;
+    border-bottom: 1px solid #e2d8c2;
+  }
+  .feature:last-child { border-bottom: none; }
+  .cta {
+    display: block;
+    width: 100%;
+    text-align: center;
+    background: #a32e21;
+    color: #f7f1e3;
+    border: none;
+    border-radius: 999px;
+    padding: 14px 0;
+    font-weight: 600;
+    font-size: 14px;
+    cursor: pointer;
+  }
+</style>
+</head>
+<body>
+  <div class="card">
+    <div class="tier">Pro</div>
+    <div class="desc">For teams shipping every week.</div>
+    <div class="price">$32<em>/mo</em></div>
+    <div class="features">
+      <div class="feature">Unlimited projects</div>
+      <div class="feature">Priority build queue</div>
+      <div class="feature">Team seats, no per-seat fee</div>
+      <div class="feature">Direct support channel</div>
+    </div>
+    <button class="cta">Start Pro</button>
+  </div>
+</body>
+</html>

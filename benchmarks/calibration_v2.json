@@ -1,0 +1,40 @@
+{
+  "identical_output_test": {
+    "pass": true,
+    "note": "same artifact scored twice yields identical scores (deterministic, no hidden identity input)."
+  },
+  "swapped_label_test": {
+    "pass": true,
+    "note": "scorer takes no label argument; relabeling A<->B cannot change output."
+  },
+  "duplicate_output_test": {
+    "pass": true,
+    "delta": 0.0,
+    "note": "identical artifact in both slots scores identically (delta=0.0)."
+  },
+  "worse_experiment_fixture_test": {
+    "pass": true,
+    "worse_experiment_score": 3.136,
+    "normal_experiment_score": 3.643,
+    "note": "an experiment-styled fixture with real objective failures (gradient, no alt, div-onclick, no viewport) scores LOWER than a normal-quality experiment artifact \u2014 confirms the scorer is willing to penalize EXPERIMENT-labeled/styled output."
+  },
+  "better_control_fixture_test": {
+    "pass": true,
+    "better_control_score": 3.643,
+    "normal_control_score": 2.764,
+    "note": "a control-styled fixture with real objective wins (semantic tags, button, alt text, media query, no gradient) scores HIGHER than a normal control artifact \u2014 confirms the scorer rewards real structural quality regardless of visual idiom, not the CONTROL label."
+  },
+  "repeatability_test": {
+    "pass": true,
+    "variances_by_sample": {
+      "1": 0.0,
+      "5": 0.0,
+      "9": 0.0,
+      "13": 0.0,
+      "18": 0.0,
+      "22": 0.0
+    },
+    "note": "harness is deterministic (static template + regex scoring, no live model calls), so repeated scoring of the same artifact has exactly 0 variance. This is disclosed as a limitation: it means the harness cannot detect run-to-run generation variance, only measure a fixed artifact consistently."
+  },
+  "_all_pass": true
+}

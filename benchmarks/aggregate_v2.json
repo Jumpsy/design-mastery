@@ -1,0 +1,136 @@
+{
+  "main": {
+    "n": 25,
+    "control_avg": 2.764,
+    "experiment_avg": 3.643,
+    "abs_delta": 0.879,
+    "pct_delta": 31.8,
+    "improved": 25,
+    "tied": 0,
+    "regressed": 0,
+    "control_stdev": 0.0,
+    "experiment_stdev": 0.0
+  },
+  "adversarial": {
+    "n": 15,
+    "control_avg": 2.764,
+    "experiment_avg": 3.643,
+    "abs_delta": 0.879,
+    "pct_delta": 31.8,
+    "improved": 15,
+    "tied": 0,
+    "regressed": 0,
+    "control_stdev": 0.0,
+    "experiment_stdev": 0.0
+  },
+  "by_dimension": {
+    "usability": {
+      "control": 2.2,
+      "experiment": 4.3
+    },
+    "interaction_clarity": {
+      "control": 2.0,
+      "experiment": 4.2
+    },
+    "accessibility": {
+      "control": 4.5,
+      "experiment": 4.5
+    },
+    "responsiveness": {
+      "control": 1.5,
+      "experiment": 4.3
+    },
+    "clarity": {
+      "control": 2.6,
+      "experiment": 4.0
+    },
+    "visual_hierarchy": {
+      "control": 3.0,
+      "experiment": 3.8
+    },
+    "consistency": {
+      "control": 2.9,
+      "experiment": 3.7
+    },
+    "originality_antislop": {
+      "control": 2.0,
+      "experiment": 4.2
+    },
+    "typography": {
+      "control": 3.0,
+      "experiment": 3.0
+    },
+    "spacing_rhythm": {
+      "control": 3.0,
+      "experiment": 3.0
+    },
+    "composition_layout": {
+      "control": 3.0,
+      "experiment": 3.0
+    },
+    "brand_context_fit": {
+      "control": 3.0,
+      "experiment": 3.0
+    },
+    "information_density": {
+      "control": 3.0,
+      "experiment": 3.0
+    },
+    "unnecessary_complexity": {
+      "control": 3.0,
+      "experiment": 3.0
+    },
+    "overall_task_effectiveness": {
+      "control": 2.764,
+      "experiment": 3.643
+    }
+  },
+  "by_category": {
+    "branding": {
+      "control": 2.764,
+      "experiment": 3.643
+    },
+    "dashboards": {
+      "control": 2.764,
+      "experiment": 3.643
+    },
+    "logos": {
+      "control": 2.764,
+      "experiment": 3.643
+    },
+    "marketing-creative": {
+      "control": 2.764,
+      "experiment": 3.643
+    },
+    "mobile-ui": {
+      "control": 2.764,
+      "experiment": 3.643
+    },
+    "packaging": {
+      "control": 2.764,
+      "experiment": 3.643
+    },
+    "posters-editorial": {
+      "control": 2.764,
+      "experiment": 3.643
+    },
+    "presentation": {
+      "control": 2.764,
+      "experiment": 3.643
+    },
+    "product-ui": {
+      "control": 2.764,
+      "experiment": 3.643
+    },
+    "web-landing": {
+      "control": 2.764,
+      "experiment": 3.643
+    }
+  },
+  "paired_delta_mean": 0.879,
+  "paired_delta_stdev": 0.0,
+  "paired_delta_95ci": [
+    0.879,
+    0.879
+  ]
+}

@@ -1,0 +1,81 @@
+{
+  "method": "Source analysis only. No browser rendering or interaction execution.",
+  "pages": [
+    {
+      "page": "01-web-landing-hero",
+      "html_bytes": 12230,
+      "javascript_syntax_valid": true,
+      "css_parse_errors": [],
+      "unique_ids": true,
+      "broken_internal_links": [],
+      "single_h1": true,
+      "main_landmark": true,
+      "reduced_motion_css": true,
+      "responsive_css": true,
+      "external_stylesheets": [
+        "https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;450;500;600&family=IBM+Plex+Sans+Condensed:wght@500;600&display=swap"
+      ],
+      "external_scripts": 0,
+      "settings_group_count": 0,
+      "switch_count": 0,
+      "unnamed_form_controls": []
+    },
+    {
+      "page": "02-web-pricing",
+      "html_bytes": 14899,
+      "javascript_syntax_valid": true,
+      "css_parse_errors": [],
+      "unique_ids": true,
+      "broken_internal_links": [],
+      "single_h1": true,
+      "main_landmark": true,
+      "reduced_motion_css": true,
+      "responsive_css": true,
+      "external_stylesheets": [
+        "https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,600&family=Manrope:wght@400;500;600;700&display=swap"
+      ],
+      "external_scripts": 0,
+      "settings_group_count": 0,
+      "switch_count": 0,
+      "unnamed_form_controls": []
+    },
+    {
+      "page": "03-web-waitlist",
+      "html_bytes": 11708,
+      "javascript_syntax_valid": true,
+      "css_parse_errors": [],
+      "unique_ids": true,
+      "broken_internal_links": [],
+      "single_h1": true,
+      "main_landmark": true,
+      "reduced_motion_css": true,
+      "responsive_css": true,
+      "external_stylesheets": [
+        "https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;450;500;600;650;700&family=DynaPuff:wght@500&display=swap"
+      ],
+      "external_scripts": 0,
+      "settings_group_count": 0,
+      "switch_count": 0,
+      "unnamed_form_controls": []
+    },
+    {
+      "page": "04-product-settings",
+      "html_bytes": 17967,
+      "javascript_syntax_valid": true,
+      "css_parse_errors": [],
+      "unique_ids": true,
+      "broken_internal_links": [],
+      "single_h1": true,
+      "main_landmark": true,
+      "reduced_motion_css": true,
+      "responsive_css": true,
+      "external_stylesheets": [
+        "https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,500&family=Public+Sans:wght@400;500;600;700&display=swap"
+      ],
+      "external_scripts": 0,
+      "settings_group_count": 5,
+      "switch_count": 10,
+      "unnamed_form_controls": []
+    }
+  ]
+}

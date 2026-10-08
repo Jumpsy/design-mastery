@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Accessibility Constraint</title>
+<style>
+:root { --accent:#c9622d; --ink:#1c1c1c; --bg:#faf8f4; }
+* { box-sizing:border-box; }
+body{ margin:0; font-family:-apple-system,'Segoe UI',sans-serif; background:#faf8f4; color:#1c1c1c; }
+.btn { display:inline-flex; align-items:center; justify-content:center; min-height:44px; padding:0 20px;
+  border-radius:6px; background:var(--ink); color:#fff; border:none; font-size:16px; cursor:pointer; }
+em { font-style:italic; color:var(--accent); }
+@media (max-width:480px) { .grid { grid-template-columns:1fr; } }
+body{ color:#111 !important; background:#fff !important; } .btn{ min-height:48px; font-size:18px; }
+</style>
+</head>
+<body>
+<header style="padding:28px 40px;border-bottom:1px solid #eee;"><h1 style="font-size:22px;margin:0;">Accessibility Constraint</h1></header>
+<main style="max-width:680px;margin:0 auto;padding:40px 32px;">
+  <p style="font-size:19px;color:#333;line-height:1.5;">Design a UI for low-vision users: no text under 18px, contrast ratio must exceed 7:1, all interactive targets >=48px.</p>
+  <section style="margin-top:32px;display:grid;gap:20px;">
+    <div style="display:flex;justify-content:space-between;align-items:center;padding:20px;background:#fff;border-radius:8px;">
+      <span style="font-size:19px;">Email notifications</span>
+      <button class="btn" style="min-height:48px;min-width:96px;font-size:18px;">Toggle</button>
+    </div>
+    <div style="display:flex;justify-content:space-between;align-items:center;padding:20px;background:#fff;border-radius:8px;">
+      <span style="font-size:19px;">Two-factor auth</span>
+      <button class="btn" style="min-height:48px;min-width:96px;font-size:18px;">Toggle</button>
+    </div>
+  </section>
+  <section style="margin-top:32px;padding:20px;border-radius:8px;background:#fdecea;">
+    <h3 style="margin:0 0 10px;font-size:19px;color:#8a1f1f;">Danger zone</h3>
+    <button class="btn" style="background:#8a1f1f;min-height:48px;font-size:18px;">Delete account</button>
+  </section>
+</main>
+<footer style="padding:20px 40px;"><nav aria-label="footer" style="font-size:18px;">v2.0</nav></footer>
+</body>
+</html>

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Georgia&family=Inter:wght@400;500;600&display=swap');
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: #f5f4f1; font-family: 'Inter', sans-serif; padding: 48px; color: #1c1a16; }
+  .sheet { max-width: 900px; margin: 0 auto; }
+  h1 { font-family: Georgia, serif; font-style: italic; font-size: 32px; margin-bottom: 40px; }
+  .section { margin-bottom: 36px; }
+  .section h2 { font-size: 12px; text-transform: uppercase; letter-spacing: 0.08em; color: #726f66; margin-bottom: 14px; }
+  .swatches { display: flex; gap: 16px; }
+  .swatch { width: 120px; }
+  .swatch .box { height: 80px; border-radius: 8px; border: 1px solid #e6e4de; }
+  .swatch .name { font-size: 13px; font-weight: 500; margin-top: 8px; }
+  .swatch .hex { font-size: 11px; color: #726f66; }
+  .type-sample { display: flex; flex-direction: column; gap: 12px; }
+  .type-sample .display { font-family: Georgia, serif; font-style: italic; font-size: 40px; }
+  .type-sample .body { font-family: 'Inter', sans-serif; font-size: 15px; color: #4a4740; }
+  .clearspace { border: 1px dashed #c9a24b; padding: 40px; display: inline-block; border-radius: 8px; }
+  .mark { width: 60px; height: 60px; }
+</style>
+</head>
+<body>
+  <div class="sheet">
+    <h1>Fieldnote — Brand Guidelines</h1>
+    <div class="section">
+      <h2>Palette</h2>
+      <div class="swatches">
+        <div class="swatch"><div class="box" style="background:#1c1a16"></div><div class="name">Ground</div><div class="hex">#1C1A16</div></div>
+        <div class="swatch"><div class="box" style="background:#f4ede1"></div><div class="name">Paper</div><div class="hex">#F4EDE1</div></div>
+        <div class="swatch"><div class="box" style="background:#c9a24b"></div><div class="name">Signature Gold</div><div class="hex">#C9A24B</div></div>
+        <div class="swatch"><div class="box" style="background:#8c8577"></div><div class="name">Muted</div><div class="hex">#8C8577</div></div>
+      </div>
+    </div>
+    <div class="section">
+      <h2>Type</h2>
+      <div class="type-sample">
+        <div class="display">Dark Roast</div>
+        <div class="body">Georgia italic for display moments; Inter for body copy and UI labels. Never mix a second display face.</div>
+      </div>
+    </div>
+    <div class="section">
+      <h2>Mark clearspace</h2>
+      <div class="clearspace">
+        <svg class="mark" viewBox="0 0 200 200"><path d="M 62 48 C 62 48, 128 46, 140 92 C 150 130, 118 158, 70 152 C 66 151.5, 63 149, 63 145 L 63 55 C 63 51, 62 48, 62 48 Z" fill="none" stroke="#a32e21" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+      <p style="font-size:12px;color:#726f66;margin-top:8px;">Minimum clearspace = mark height on all sides. Never place on a busy background.</p>
+    </div>
+  </div>
+</body>
+</html>

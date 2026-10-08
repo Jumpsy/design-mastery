@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="UTF-8">
+<title>Benchmark adv-11: accessibility-constraint</title>
+<style>
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:Inter,system-ui,sans-serif;background:#fff;color:#4a4a4a}
+    .hero{background:linear-gradient(135deg,#6d5bf0,#3b82f6);color:#fff;text-align:center;padding:37px 19px 51px}
+    .hero h1{font-size:41px;margin-bottom:13px}
+    .pill{display:inline-block;background:#fff2;border-radius:999px;padding:11px 27px;margin:6px}
+    .grid{display:flex;gap:17px;padding:23px;flex-wrap:wrap}
+    .card{border-left:4px solid #6d5bf0;border-radius:8px;box-shadow:0 2px 6px #0002;padding:14px;flex:1;min-width:180px}
+    .icon-circle{width:40px;height:40px;border-radius:50%;background:#e0e0ff;margin-bottom:8px}
+    .fakebtn{display:inline-block;background:#6d5bf0;color:#fff;border-radius:8px;padding:9px 18px;cursor:pointer}
+    
+    </style></head>
+<body>
+
+    <div class="hero">
+      <h1>Benchmark adv-11: accessibility-constraint</h1>
+      <p>The all-in-one platform for your workflow.</p>
+      <div class="pill">Get Started</div><div class="pill">Learn More</div>
+    </div>
+    <div class="grid">
+      <div class="card"><div class="icon-circle"></div><div class="fakebtn" onclick="alert(1)">Feature One</div></div>
+      <div class="card"><div class="icon-circle"></div><div class="fakebtn" onclick="alert(1)">Feature Two</div></div>
+      <div class="card"><div class="icon-circle"></div><div class="fakebtn" onclick="alert(1)">Feature Three</div></div>
+    </div>
+    <img src="stock-photo.jpg">
+    
+</body></html>

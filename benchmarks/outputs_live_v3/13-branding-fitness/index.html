@@ -1,0 +1,779 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Tensile Studio — Brand Identity Guidelines</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=Work+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #f8f7f4;
+      --carbon: #171a19;
+      --ochre: #c45b37;
+      --basalt: #414744;
+      --line: #e3e1da;
+      --salt: #eeede8;
+      --display: 'Syne', sans-serif;
+      --body: 'Work Sans', system-ui, sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body{background:#f8f7f4;color:#171a19;
+      font-family: var(--body);
+      font-size: 16px;
+      line-height: 1.5;
+      padding: 48px 32px;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .spec-sheet {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 48px;
+    }
+
+    /* Masthead Header */
+    header.guideline-header {
+      border-bottom: 2px solid var(--carbon);
+      padding-bottom: 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      gap: 24px;
+    }
+
+    .masthead-titles span {
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--ochre);
+      display: block;
+      margin-bottom: 8px;
+    }
+
+    h1.brand-title {
+      font-family: var(--display);
+      font-size: 40px;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      line-height: 1.1;
+      text-transform: uppercase;
+    }
+
+    .meta-col {
+      text-align: right;
+      font-size: 12px;
+      color: var(--basalt);
+    }
+
+    .meta-col strong {
+      display: block;
+      color: var(--carbon);
+      font-weight: 600;
+    }
+
+    .toolbar {
+      display: flex;
+      gap: 12px;
+    }
+
+    button.spec-btn {
+      font: inherit;
+      color: var(--carbon);
+      background: #ffffff;
+      border: 1px solid var(--line);
+      border-radius: 4px;
+      min-height: 44px;
+      padding: 8px 16px;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    button.spec-btn:hover {
+      background: var(--salt);
+    }
+
+    button.spec-btn:focus-visible {
+      outline: 2px solid var(--ochre);
+      outline-offset: 2px;
+    }
+
+    section.spec-section {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .section-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      border-bottom: 1px solid var(--line);
+      padding-bottom: 12px;
+    }
+
+    h2.section-heading {
+      font-family: var(--display);
+      font-size: 20px;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+      text-transform: uppercase;
+    }
+
+    .section-num {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--ochre);
+      letter-spacing: 0.08em;
+    }
+
+    /* Section 1: Logo Architecture */
+    .logo-grid {
+      display: grid;
+      grid-template-columns: 1.5fr 1fr;
+      gap: 24px;
+    }
+
+    .mark-card {
+      background: #ffffff;
+      border: 1px solid var(--line);
+      border-radius: 4px;
+      padding: 32px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .mark-display-area {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 180px;
+      position: relative;
+    }
+
+    .clearspace-box {
+      border: 1px dashed #c0bdaf;
+      padding: 24px 32px;
+      position: relative;
+      background: #faf9f6;
+    }
+
+    .clearspace-tag {
+      position: absolute;
+      top: 4px;
+      left: 8px;
+      font-size: 12px;
+      color: var(--basalt);
+      font-weight: 600;
+    }
+
+    .mark-svg-lockup {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .mark-emblem {
+      width: 48px;
+      height: 48px;
+    }
+
+    .wordmark-text {
+      font-family: var(--display);
+      font-size: 28px;
+      font-weight: 800;
+      letter-spacing: -0.04em;
+      line-height: 1;
+      text-transform: uppercase;
+    }
+
+    .rules-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-top: 24px;
+      border-top: 1px solid var(--line);
+      padding-top: 16px;
+      font-size: 14px;
+      color: var(--basalt);
+    }
+
+    .rule-item strong {
+      color: var(--carbon);
+      margin-right: 4px;
+    }
+
+    /* Violations Card */
+    .violations-card {
+      background: #ffffff;
+      border: 1px solid var(--line);
+      border-radius: 4px;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .violation-title {
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--ochre);
+    }
+
+    .violation-sample {
+      border: 1px solid #ebd9d2;
+      border-radius: 4px;
+      padding: 12px;
+      background: #fcf6f4;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .violation-icon {
+      color: var(--ochre);
+      font-weight: 700;
+      font-size: 16px;
+    }
+
+    .violation-desc {
+      font-size: 14px;
+      color: var(--carbon);
+      line-height: 1.4;
+    }
+
+    /* Section 2: Color Palette */
+    .palette-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+    }
+
+    .swatch-card {
+      background: #ffffff;
+      border: 1px solid var(--line);
+      border-radius: 4px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .swatch-block {
+      height: 96px;
+      width: 100%;
+    }
+
+    .swatch-details {
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .swatch-role {
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--ochre);
+    }
+
+    .swatch-name {
+      font-size: 16px;
+      font-weight: 700;
+      font-family: var(--display);
+    }
+
+    .swatch-codes {
+      font-size: 12px;
+      color: var(--basalt);
+      margin-top: 4px;
+    }
+
+    .swatch-rule {
+      font-size: 12px;
+      color: var(--carbon);
+      line-height: 1.4;
+      margin-top: 8px;
+      border-top: 1px solid var(--line);
+      padding-top: 8px;
+    }
+
+    /* Section 3: Typography */
+    .type-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+    }
+
+    .type-spec-card {
+      background: #ffffff;
+      border: 1px solid var(--line);
+      border-radius: 4px;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .type-role-badge {
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--ochre);
+    }
+
+    .type-sample-display {
+      font-family: var(--display);
+      font-size: 28px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      line-height: 1.2;
+    }
+
+    .type-sample-body {
+      font-family: var(--body);
+      font-size: 16px;
+      line-height: 1.5;
+      color: var(--carbon);
+    }
+
+    .type-attributes {
+      font-size: 12px;
+      color: var(--basalt);
+      border-top: 1px solid var(--line);
+      padding-top: 12px;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    /* Section 4: Sample Application */
+    .application-container {
+      background: #171a19;
+      border-radius: 8px;
+      padding: 48px 36px;
+      color: #ffffff;
+      display: grid;
+      grid-template-columns: 1.1fr 1fr;
+      gap: 36px;
+      align-items: center;
+    }
+
+    .rfid-card {
+      width: 340px;
+      height: 216px;
+      background: #1e2221;
+      border-radius: 12px;
+      padding: 20px 24px;
+      border: 1px solid #323936;
+      box-shadow: 0 16px 32px rgba(0,0,0,0.4);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: relative;
+    }
+
+    .rfid-card::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 80px;
+      height: 80px;
+      border-top: 2px solid var(--ochre);
+      border-right: 2px solid var(--ochre);
+      border-top-right-radius: 12px;
+      opacity: 0.4;
+    }
+
+    .card-top-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .card-chip {
+      width: 32px;
+      height: 24px;
+      background: #cca964;
+      border-radius: 4px;
+      border: 1px solid #aa8746;
+    }
+
+    .card-tier-label {
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--ochre);
+    }
+
+    .card-middle-row h2 {
+      font-family: var(--display);
+      font-size: 20px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      text-transform: uppercase;
+    }
+
+    .card-middle-row span {
+      font-size: 12px;
+      color: #929c97;
+      letter-spacing: 0.04em;
+    }
+
+    .card-bottom-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      font-size: 12px;
+      color: #c1ccc6;
+    }
+
+    .pass-spec-info h2 {
+      font-family: var(--display);
+      font-size: 20px;
+      font-weight: 700;
+      margin-bottom: 12px;
+      text-transform: uppercase;
+      letter-spacing: -0.01em;
+    }
+
+    .pass-spec-info p {
+      font-size: 14px;
+      color: #a4b0a9;
+      line-height: 1.5;
+      margin-bottom: 16px;
+    }
+
+    .spec-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 12px;
+    }
+
+    .spec-table td {
+      padding: 8px 0;
+      border-bottom: 1px solid #2b332f;
+    }
+
+    .spec-table td:first-child {
+      color: #838e88;
+    }
+
+    .spec-table td:last-child {
+      text-align: right;
+      font-weight: 600;
+      color: #ffffff;
+    }
+
+    footer.guidelines-footer {
+      border-top: 1px solid var(--line);
+      padding-top: 24px;
+      display: flex;
+      justify-content: space-between;
+      font-size: 12px;
+      color: var(--basalt);
+    }
+
+    #copyToast {
+      display: none;
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: var(--carbon);
+      color: #ffffff;
+      padding: 12px 20px;
+      border-radius: 4px;
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    @media (max-width: 900px) {
+      .logo-grid { grid-template-columns: 1fr; }
+      .palette-grid { grid-template-columns: 1fr 1fr; }
+      .type-grid { grid-template-columns: 1fr; }
+      .application-container { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 600px) {
+      body { padding: 24px 16px; }
+      .palette-grid { grid-template-columns: 1fr; }
+      header.guideline-header { flex-direction: column; align-items: flex-start; }
+      .meta-col { text-align: left; }
+      .rfid-card { width: 100%; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      * {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="spec-sheet">
+    <header class="guideline-header">
+      <div class="masthead-titles">
+        <span>Master Identity Specification · Volume 01</span>
+        <h1 class="brand-title">Tensile Studio</h1>
+      </div>
+      <div class="meta-col">
+        <strong>SoHo / Stockholm Studios</strong>
+        <span>Release 2.4 · Architectural Movement</span>
+      </div>
+      <div class="toolbar">
+        <button type="button" class="spec-btn" id="copyTokensBtn" aria-label="Copy JSON brand color tokens">
+          Copy Tokens
+        </button>
+      </div>
+    </header>
+
+    <!-- SECTION 1: LOGO & CLEARSPACE -->
+    <section class="spec-section" aria-labelledby="logo-arch-title">
+      <div class="section-head">
+        <h2 class="section-heading" id="logo-arch-title">01. Logo Mark &amp; Construction</h2>
+        <span class="section-num">SECTION 01</span>
+      </div>
+
+      <div class="logo-grid">
+        <article class="mark-card">
+          <div class="mark-display-area">
+            <div class="clearspace-box">
+              <span class="clearspace-tag">1.5X BOUNDARY</span>
+              <div class="mark-svg-lockup">
+                <!-- Isometric T-Span Vector Mark -->
+                <svg class="mark-emblem" viewBox="0 0 64 64" fill="none" aria-label="Tensile Studio primary mark: Isometric T-Span monogram">
+                  <path d="M8 16H56V26H38V56H26V26H8V16Z" fill="#171a19"/>
+                  <line x1="8" y1="16" x2="56" y2="16" stroke="#c45b37" stroke-width="3"/>
+                  <line x1="26" y1="26" x2="38" y2="56" stroke="#c45b37" stroke-width="2" stroke-dasharray="3 3"/>
+                </svg>
+                <div class="wordmark-text">Tensile</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="rules-list">
+            <div class="rule-item">
+              <strong>Clearspace:</strong> Maintain minimum padding equivalent to 1.5× the height of the crossbeam crossbar around all four sides.
+            </div>
+            <div class="rule-item">
+              <strong>Minimum Scale:</strong> Digital screen threshold is 24px height; physical print threshold is 8mm.
+            </div>
+          </div>
+        </article>
+
+        <article class="violations-card">
+          <div class="violation-title">Prohibited Usages</div>
+          
+          <div class="violation-sample">
+            <span class="violation-icon" aria-hidden="true">✕</span>
+            <div class="violation-desc"><strong>Do not distort or slant:</strong> The isometric angles must never be sheared or artificially italicized.</div>
+          </div>
+
+          <div class="violation-sample">
+            <span class="violation-icon" aria-hidden="true">✕</span>
+            <div class="violation-desc"><strong>No shadows or glow filters:</strong> The mark is an architectural line drawing; avoid raster effects.</div>
+          </div>
+
+          <div class="violation-sample">
+            <span class="violation-icon" aria-hidden="true">✕</span>
+            <div class="violation-desc"><strong>No pill or round containment:</strong> Never enclose the glyph inside a generic app icon circle.</div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- SECTION 2: COLOR SYSTEM -->
+    <section class="spec-section" aria-labelledby="palette-title">
+      <div class="section-head">
+        <h2 class="section-heading" id="palette-title">02. Semantic Color Architecture</h2>
+        <span class="section-num">SECTION 02</span>
+      </div>
+
+      <div class="palette-grid">
+        <article class="swatch-card">
+          <div class="swatch-block" style="background: #f8f7f4; border-bottom: 1px solid var(--line);"></div>
+          <div class="swatch-details">
+            <span class="swatch-role">Dominant Neutral</span>
+            <span class="swatch-name">Mineral Bone</span>
+            <div class="swatch-codes">HEX: #f8f7f4 · RGB: 248, 247, 244</div>
+            <p class="swatch-rule">Studio wall plaster, paper ephemera, web canvas.</p>
+          </div>
+        </article>
+
+        <article class="swatch-card">
+          <div class="swatch-block" style="background: #171a19;"></div>
+          <div class="swatch-details">
+            <span class="swatch-role">Deep Ink</span>
+            <span class="swatch-name">Forged Carbon</span>
+            <div class="swatch-codes">HEX: #171a19 · RGB: 23, 26, 25</div>
+            <p class="swatch-rule">All typography, high-contrast apparatus framing.</p>
+          </div>
+        </article>
+
+        <article class="swatch-card">
+          <div class="swatch-block" style="background: #c45b37;"></div>
+          <div class="swatch-details">
+            <span class="swatch-role">Signature Accent</span>
+            <span class="swatch-name">Kinetic Ochre</span>
+            <div class="swatch-codes">HEX: #c45b37 · RGB: 196, 91, 55</div>
+            <p class="swatch-rule">Tensile resistance markers, focal callouts, active class alerts.</p>
+          </div>
+        </article>
+
+        <article class="swatch-card">
+          <div class="swatch-block" style="background: #414744;"></div>
+          <div class="swatch-details">
+            <span class="swatch-role">Secondary Tint</span>
+            <span class="swatch-name">Slate Basalt</span>
+            <div class="swatch-codes">HEX: #414744 · RGB: 65, 71, 68</div>
+            <p class="swatch-rule">Gridlines, secondary metadata, structural hardware.</p>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- SECTION 3: TYPOGRAPHY SYSTEM -->
+    <section class="spec-section" aria-labelledby="type-title">
+      <div class="section-head">
+        <h2 class="section-heading" id="type-title">03. Typographic Hierarchy</h2>
+        <span class="section-num">SECTION 03</span>
+      </div>
+
+      <div class="type-grid">
+        <article class="type-spec-card">
+          <span class="type-role-badge">Display Typeface</span>
+          <div class="type-sample-display">Syne ExtraBold · 800</div>
+          <p class="type-sample-body">
+            Sculptural, wide geometric sans serif used for campaign declarations, studio environmental signage, and quarterly collection titles.
+          </p>
+          <div class="type-attributes">
+            <span>Tracking: -0.03em</span>
+            <span>Usage: Headlines, Posters</span>
+          </div>
+        </article>
+
+        <article class="type-spec-card">
+          <span class="type-role-badge">Editorial &amp; Body Sans</span>
+          <div class="type-sample-display" style="font-family: var(--body); font-weight: 600; font-size: 20px;">Work Sans Medium · 500</div>
+          <p class="type-sample-body">
+            Engineered for biomechanical training notes, class schedule grids, digital apps, and instructional clarity.
+          </p>
+          <div class="type-attributes">
+            <span>Leading: 1.50</span>
+            <span>Usage: Schedules, Body, Specs</span>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- SECTION 4: SAMPLE APPLICATION -->
+    <section class="spec-section" aria-labelledby="app-title">
+      <div class="section-head">
+        <h2 class="section-heading" id="app-title">04. Physical Touchpoint: Member RFID Keycard</h2>
+        <span class="section-num">SECTION 04</span>
+      </div>
+
+      <div class="application-container">
+        <!-- Rendered Physical Member Card -->
+        <article class="rfid-card" aria-label="Tensile Studio founding member RFID card mockup">
+          <div class="card-top-row">
+            <div class="card-chip" aria-hidden="true"></div>
+            <span class="card-tier-label">Tier II · Athletic</span>
+          </div>
+          <div class="card-middle-row">
+            <h2>Tensile</h2>
+            <span>Movement &amp; Reform Studio</span>
+          </div>
+          <div class="card-bottom-row">
+            <span>ID: 884-TENSILE-NY</span>
+            <span>EXP: 12/28</span>
+          </div>
+        </article>
+
+        <!-- Spec Breakdown Info -->
+        <div class="pass-spec-info">
+          <h2>Material &amp; Finishing</h2>
+          <p>
+            The physical membership keycard is fabricated from matte anodized composite with laser-engraved copper foil lettering.
+          </p>
+          <table class="spec-table" aria-label="Card production specifications">
+            <tbody>
+              <tr>
+                <td>Substrate Material</td>
+                <td>Recycled Polymer &amp; Carbon Core</td>
+              </tr>
+              <tr>
+                <td>Foil Accent</td>
+                <td>Kinetic Ochre Hot Stamp</td>
+              </tr>
+              <tr>
+                <td>Frequency</td>
+                <td>13.56 MHz RFID Access</td>
+              </tr>
+              <tr>
+                <td>Studio Door Access</td>
+                <td>Locker, Reformer Bay, Sauna Suite</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <footer class="guidelines-footer">
+      <span>© 2026 Tensile Studio Identity Group</span>
+      <span>Confidential · For internal and partner agency use only</span>
+    </footer>
+  </div>
+
+  <div id="copyToast" role="status" aria-live="polite">
+    ✓ Brand tokens copied to clipboard
+  </div>
+
+  <script>
+    document.getElementById('copyTokensBtn').addEventListener('click', function() {
+      const tokens = {
+        name: "Tensile Studio",
+        colors: {
+          mineralBone: "#f8f7f4",
+          forgedCarbon: "#171a19",
+          kineticOchre: "#c45b37",
+          slateBasalt: "#414744"
+        },
+        typography: {
+          display: "Syne",
+          body: "Work Sans"
+        }
+      };
+      navigator.clipboard.writeText(JSON.stringify(tokens, null, 2)).then(() => {
+        const toast = document.getElementById('copyToast');
+        toast.style.display = 'block';
+        setTimeout(() => { toast.style.display = 'none'; }, 3000);
+      });
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SYNAPSE 2027 — International Symposium on Latent Space Topologies</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --ground-void: #0a0c10;
+      --surface-tensor: #161a23;
+      --line-coord: #252d3d;
+      --text-chalk: #f5f7fa;
+      --text-steel: #7d8c9e;
+      --signal-orange: #ff4d00;
+      --font-mono: 'Space Grotesk', sans-serif;
+      --font-sans: 'Plus Jakarta Sans', sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body{background:#0a0c10;color:#f5f7fa;
+      font-family: var(--font-sans);
+      font-size: 16px;
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    a:focus-visible, button:focus-visible {
+      outline: 2px solid #ff4d00;
+      outline-offset: 4px;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      * {
+        animation: none !important;
+        transition: none !important;
+      }
+    }
+
+    .poster-gallery-wrap {
+      max-width: 1024px;
+      margin: 0 auto;
+      padding: 32px 24px 64px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    /* Swiss Tech Symposium Poster Frame (ISO Proportion) */
+    main.symposium-poster {
+      width: 100%;
+      max-width: 800px;
+      background: #0a0c10;
+      border: 1px solid #252d3d;
+      border-radius: 2px;
+      padding: 40px;
+      box-shadow: 0 24px 48px rgba(0,0,0,0.8);
+      display: flex;
+      flex-direction: column;
+      gap: 28px;
+      position: relative;
+    }
+
+    header.symposium-header {
+      display: flex;
+      justify-content: space-between;
+      border-bottom: 2px solid #252d3d;
+      padding-bottom: 16px;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .header-col {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .header-col .tag {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: #ff4d00;
+    }
+
+    .header-col .info {
+      font-size: 14px;
+      font-weight: 600;
+      color: #f5f7fa;
+    }
+
+    /* Headline Block */
+    article.poster-title-area {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .symposium-edition {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      letter-spacing: 0.24em;
+      color: #ff4d00;
+      text-transform: uppercase;
+    }
+
+    h1.symposium-title {
+      font-family: var(--font-mono);
+      font-size: 52px;
+      font-weight: 700;
+      line-height: 0.95;
+      letter-spacing: -0.03em;
+      color: #f5f7fa;
+      text-transform: uppercase;
+    }
+
+    h1.symposium-title span.accent-char {
+      color: #ff4d00;
+    }
+
+    .symposium-subhead {
+      font-size: 16px;
+      color: #7d8c9e;
+      max-width: 680px;
+      line-height: 1.4;
+      margin-top: 4px;
+    }
+
+    /* Axonometric Latent Matrix Visual */
+    figure.lattice-stage {
+      background: #161a23;
+      border: 1px solid #252d3d;
+      padding: 24px;
+      border-radius: 2px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .lattice-svg {
+      width: 100%;
+      height: 240px;
+    }
+
+    /* Academic Tracks & Keynote Roster */
+    section.program-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      border-top: 2px solid #252d3d;
+      border-bottom: 2px solid #252d3d;
+      padding: 24px 0;
+    }
+
+    .program-column {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    h2.column-heading {
+      font-family: var(--font-mono);
+      font-size: 14px;
+      font-weight: 700;
+      color: #ff4d00;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      border-bottom: 1px solid #252d3d;
+      padding-bottom: 8px;
+    }
+
+    em{color:#ff4d00;font-style:normal;}
+
+    .keynote-entry {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .keynote-name {
+      font-size: 14px;
+      font-weight: 700;
+      color: #f5f7fa;
+    }
+
+    .keynote-inst {
+      font-size: 12px;
+      color: #7d8c9e;
+    }
+
+    .track-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .track-entry {
+      font-size: 14px;
+      color: #f5f7fa;
+      display: flex;
+      gap: 8px;
+    }
+
+    .track-num {
+      font-family: var(--font-mono);
+      color: #ff4d00;
+      font-weight: 700;
+    }
+
+    /* Venue & Date Footer Strip */
+    section.symposium-location-strip {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .location-details {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .venue-name-bold {
+      font-family: var(--font-mono);
+      font-size: 16px;
+      font-weight: 700;
+      color: #f5f7fa;
+    }
+
+    .venue-coords {
+      font-size: 12px;
+      color: #7d8c9e;
+    }
+
+    .registration-dates {
+      text-align: right;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .dates-callout {
+      font-family: var(--font-mono);
+      font-size: 16px;
+      font-weight: 700;
+      color: #ff4d00;
+    }
+
+    .cfp-deadline {
+      font-size: 12px;
+      color: #7d8c9e;
+    }
+
+    /* Page Footer Toolbar */
+    footer.symposium-toolbar {
+      width: 100%;
+      max-width: 800px;
+      margin-top: 32px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .toolbar-label {
+      font-size: 12px;
+      color: #7d8c9e;
+    }
+
+    .btn{background:#ff4d00;color:#0a0c10;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 44px;
+      padding: 0 24px;
+      font-family: var(--font-mono);
+      font-size: 14px;
+      font-weight: 700;
+      border-radius: 2px;
+      cursor: pointer;
+      text-decoration: none;
+      border: 1px solid transparent;
+    }
+
+    .btn-secondary {
+      background-color: transparent;
+      color: #f5f7fa;
+      border: 1px solid #252d3d;
+    }
+
+    .btn-secondary:hover {
+      background-color: #161a23;
+    }
+
+    @media (max-width: 840px) {
+      h1.symposium-title {
+        font-size: 40px;
+      }
+      main.symposium-poster {
+        padding: 32px 24px;
+      }
+    }
+
+    @media (max-width: 640px) {
+      main.symposium-poster {
+        padding: 24px 16px;
+      }
+      h1.symposium-title {
+        font-size: 32px;
+      }
+      section.program-grid {
+        grid-template-columns: 1fr;
+      }
+      .registration-dates {
+        text-align: left;
+      }
+      footer.symposium-toolbar {
+        flex-direction: column;
+        align-items: stretch;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="poster-gallery-wrap">
+    <main class="symposium-poster">
+      <header class="symposium-header">
+        <div class="header-col">
+          <span class="tag">Academic Host</span>
+          <span class="info">ETH Z&uuml;rich &bull; D-INFK</span>
+        </div>
+        <div class="header-col">
+          <span class="tag">Co-Organizers</span>
+          <span class="info">MIT CSAIL &bull; ELLIS Institute</span>
+        </div>
+        <div class="header-col">
+          <span class="tag">Proceedings</span>
+          <span class="info">IEEE Transactions &bull; OpenReview</span>
+        </div>
+      </header>
+
+      <article class="poster-title-area">
+        <div class="symposium-edition">Ninth Annual International Symposium &bull; 2027</div>
+        <h1 class="symposium-title">
+          SYNAPSE <span class="accent-char">2027</span>
+        </h1>
+        <p class="symposium-subhead">
+          Latent Space Topologies, High-Dimensional Geometries &amp; Neuro-Symbolic Verification in Large Foundation Architectures.
+        </p>
+      </article>
+
+      <!-- Isometric Axonometric Matrix Graphic -->
+      <figure class="lattice-stage">
+        <svg class="lattice-svg" viewBox="0 0 600 240" preserveAspectRatio="none" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Axonometric isometric latent space coordinate matrix">
+          <!-- Isometric Grid Coordinates -->
+          <line x1="50" y1="200" x2="300" y2="50" stroke="#252d3d" stroke-width="1.5" />
+          <line x1="550" y1="200" x2="300" y2="50" stroke="#252d3d" stroke-width="1.5" />
+          <line x1="300" y1="50" x2="300" y2="220" stroke="#ff4d00" stroke-width="2" />
+          
+          <!-- Cross Latent Layers -->
+          <polygon points="300,70 420,130 300,190 180,130" stroke="#7d8c9e" stroke-width="1.5" fill="#161a23" fill-opacity="0.6" />
+          <polygon points="300,40 480,120 300,200 120,120" stroke="#252d3d" stroke-width="1" stroke-dasharray="3 3" />
+
+          <!-- High-Dimensional Tensor Nodes -->
+          <circle cx="300" cy="70" r="5" fill="#ff4d00" />
+          <circle cx="420" cy="130" r="4" fill="#f5f7fa" />
+          <circle cx="180" cy="130" r="4" fill="#f5f7fa" />
+          <circle cx="300" cy="190" r="4" fill="#ff4d00" />
+
+          <!-- Coordinate Dimension Annotations -->
+          <text x="312" y="66" fill="#ff4d00" font-family="'Space Grotesk', sans-serif" font-size="10">NODE ZERO // TENSOR APEX</text>
+          <text x="430" y="134" fill="#7d8c9e" font-family="'Space Grotesk', sans-serif" font-size="10">&phi; = 1.618 &bull; DIM_W</text>
+          <text x="90" y="134" fill="#7d8c9e" font-family="'Space Grotesk', sans-serif" font-size="10">&theta; = 45.00&deg; &bull; ISO_PROJECTION</text>
+        </svg>
+      </figure>
+
+      <section class="program-grid">
+        <div class="program-column">
+          <h2 class="column-heading">Distinguished Keynotes</h2>
+          <div class="keynote-entry">
+            <span class="keynote-name">Prof. Yoshua Bengio</span>
+            <span class="keynote-inst">Mila &bull; Universit&eacute; de Montr&eacute;al</span>
+          </div>
+          <div class="keynote-entry">
+            <span class="keynote-name">Dr. Demis Hassabis</span>
+            <span class="keynote-inst">Google DeepMind</span>
+          </div>
+          <div class="keynote-entry">
+            <span class="keynote-name">Prof. Leslie Kaelbling</span>
+            <span class="keynote-inst">MIT CSAIL &bull; Neuro-Symbolics</span>
+          </div>
+        </div>
+
+        <div class="program-column">
+          <h2 class="column-heading">Research Tracks</h2>
+          <div class="track-list">
+            <div class="track-entry"><span class="track-num">01.</span> Non-Euclidean Latent Topologies</div>
+            <div class="track-entry"><span class="track-num">02.</span> Formal Verification of Foundation Weights</div>
+            <div class="track-entry"><span class="track-num">03.</span> Thermodynamic Limits of Inference</div>
+            <div class="track-entry"><span class="track-num">04.</span> Geometric Deep Learning &amp; Lie Groups</div>
+          </div>
+        </div>
+      </section>
+
+      <section class="symposium-location-strip">
+        <div class="location-details">
+          <div class="venue-name-bold">ETH Z&uuml;rich &bull; Main Auditorium (HG F 30)</div>
+          <div class="venue-coords">R&auml;mistrasse 101 &bull; 8092 Z&uuml;rich &bull; 47.3769&deg; N, 8.5417&deg; E</div>
+        </div>
+
+        <div class="registration-dates">
+          <div class="dates-callout">18&ndash;21 OCTOBER 2027</div>
+          <div class="cfp-deadline">Paper Submissions Due: 15 May 2027</div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="symposium-toolbar">
+      <div class="toolbar-label">
+        Official Symposium Specimen // Swiss Typographic System // ISO 216 B1 Scale
+      </div>
+      <nav style="display: flex; gap: 12px;" aria-label="Symposium registration">
+        <button class="btn btn-secondary" type="button">Download CFP (.PDF)</button>
+        <button class="btn" type="button">Register Academic Delegation</button>
+      </nav>
+    </footer>
+  </div>
+</body>
+</html>

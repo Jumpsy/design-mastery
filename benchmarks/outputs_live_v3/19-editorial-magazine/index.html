@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>THE SILENT QUARRIES — Feature Spread &bull; MONOLITH Journal</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,600;0,6..72,800;1,6..72,400;1,6..72,600&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --paper-travertine: #f5f2eb;
+      --paper-pure: #ffffff;
+      --ink-charcoal: #1a1917;
+      --ink-stone: #7a7469;
+      --sienna-accent: #b84a39;
+      --line-grid: #d8d2c5;
+      --font-editorial: 'Newsreader', serif;
+      --font-grotesk: 'Plus Jakarta Sans', sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body{background:#f5f2eb;color:#1a1917;
+      font-family: var(--font-editorial);
+      font-size: 16px;
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    a:focus-visible, button:focus-visible {
+      outline: 2px solid #b84a39;
+      outline-offset: 4px;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      * {
+        animation: none !important;
+        transition: none !important;
+      }
+    }
+
+    .spread-canvas {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 32px 24px 64px;
+    }
+
+    header.journal-folio-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid #d8d2c5;
+      padding-bottom: 16px;
+      margin-bottom: 32px;
+      font-family: var(--font-grotesk);
+      font-size: 12px;
+      color: #7a7469;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .folio-meta strong {
+      color: #1a1917;
+    }
+
+    /* Two-Page Magazine Spread Simulation */
+    main.magazine-spread-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      background: #ffffff;
+      border: 1px solid #d8d2c5;
+      box-shadow: 0 16px 36px rgba(26,25,23,0.06);
+      position: relative;
+    }
+
+    /* Subtle print gutter center divider */
+    main.magazine-spread-grid::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 50%;
+      width: 1px;
+      background: #d8d2c5;
+      box-shadow: inset 1px 0 3px rgba(0,0,0,0.04);
+    }
+
+    /* Left Page (Page 42) */
+    article.page-left {
+      padding: 48px 40px;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    .page-header-strip {
+      display: flex;
+      justify-content: space-between;
+      font-family: var(--font-grotesk);
+      font-size: 12px;
+      color: #7a7469;
+      border-bottom: 1px solid #d8d2c5;
+      padding-bottom: 8px;
+    }
+
+    .section-category {
+      font-family: var(--font-grotesk);
+      font-size: 12px;
+      font-weight: 700;
+      color: #b84a39;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+    }
+
+    h1.feature-headline {
+      font-family: var(--font-editorial);
+      font-size: 44px;
+      font-weight: 800;
+      line-height: 1.05;
+      letter-spacing: -0.02em;
+      color: #1a1917;
+      margin-top: 8px;
+    }
+
+    h1.feature-headline em {
+      font-style: italic;
+      color: #b84a39;
+    }
+
+    .feature-deck {
+      font-size: 20px;
+      line-height: 1.4;
+      color: #1a1917;
+      font-weight: 400;
+      border-bottom: 1px solid #d8d2c5;
+      padding-bottom: 16px;
+    }
+
+    .byline-cluster {
+      display: flex;
+      gap: 24px;
+      font-family: var(--font-grotesk);
+      font-size: 12px;
+      color: #7a7469;
+    }
+
+    .byline-cluster span strong {
+      color: #1a1917;
+    }
+
+    /* Left Page Architectural Plate */
+    figure.quarry-plate {
+      margin-top: 8px;
+      background: #f5f2eb;
+      border: 1px solid #d8d2c5;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .plate-vector {
+      width: 100%;
+      height: 180px;
+      background: #1a1917;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    figcaption.plate-caption {
+      font-family: var(--font-grotesk);
+      font-size: 12px;
+      color: #7a7469;
+      line-height: 1.4;
+    }
+
+    /* Right Page (Page 43) */
+    article.page-right {
+      padding: 48px 40px;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    /* Pull Quote Hero Block */
+    blockquote.monument-quote {
+      border-top: 2px solid #1a1917;
+      border-bottom: 2px solid #1a1917;
+      padding: 24px 0;
+      margin: 8px 0;
+    }
+
+    .quote-text {
+      font-family: var(--font-editorial);
+      font-size: 24px;
+      font-style: italic;
+      line-height: 1.25;
+      color: #1a1917;
+    }
+
+    .quote-attribution {
+      font-family: var(--font-grotesk);
+      font-size: 12px;
+      font-weight: 700;
+      color: #b84a39;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-top: 12px;
+      display: block;
+    }
+
+    /* Two-Column Body Prose */
+    .body-columns-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      font-family: var(--font-editorial);
+      font-size: 16px;
+      line-height: 1.6;
+      color: #1a1917;
+      text-align: justify;
+    }
+
+    .drop-cap::first-letter {
+      font-family: var(--font-editorial);
+      font-size: 44px;
+      float: left;
+      line-height: 0.8;
+      margin-right: 8px;
+      padding-top: 4px;
+      color: #b84a39;
+      font-weight: 800;
+    }
+
+    /* Geological Sidebar */
+    aside.spec-sidebar {
+      background: #f5f2eb;
+      border: 1px solid #d8d2c5;
+      padding: 16px;
+      font-family: var(--font-grotesk);
+    }
+
+    h2.sidebar-title {
+      font-size: 12px;
+      font-weight: 700;
+      color: #1a1917;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 8px;
+      border-bottom: 1px solid #d8d2c5;
+      padding-bottom: 4px;
+    }
+
+    .sidebar-metrics {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      font-size: 12px;
+      color: #7a7469;
+    }
+
+    .metric-val {
+      font-weight: 700;
+      color: #1a1917;
+    }
+
+    /* Spread Controls Footer */
+    footer.spread-footer {
+      margin-top: 48px;
+      padding-top: 24px;
+      border-top: 1px solid #d8d2c5;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+      font-family: var(--font-grotesk);
+    }
+
+    .print-spec {
+      font-size: 12px;
+      color: #7a7469;
+    }
+
+    .btn{background:#b84a39;color:#ffffff;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 44px;
+      padding: 0 24px;
+      font-family: var(--font-grotesk);
+      font-size: 14px;
+      font-weight: 600;
+      border-radius: 2px;
+      cursor: pointer;
+      text-decoration: none;
+      border: 1px solid transparent;
+    }
+
+    .btn-secondary {
+      background-color: transparent;
+      color: #1a1917;
+      border: 1px solid #d8d2c5;
+    }
+
+    .btn-secondary:hover {
+      background-color: #ffffff;
+    }
+
+    @media (max-width: 1024px) {
+      main.magazine-spread-grid {
+        grid-template-columns: 1fr;
+      }
+      main.magazine-spread-grid::after {
+        display: none;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .spread-canvas {
+        padding: 20px 16px 40px;
+      }
+      article.page-left, article.page-right {
+        padding: 32px 20px;
+      }
+      h1.feature-headline {
+        font-size: 32px;
+      }
+      .body-columns-grid {
+        grid-template-columns: 1fr;
+      }
+      footer.spread-footer {
+        flex-direction: column;
+        align-items: stretch;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="spread-canvas">
+    <header class="journal-folio-bar">
+      <div class="folio-meta">MONOLITH JOURNAL // VOL. 18 &bull; ISSUE 02</div>
+      <div class="folio-meta">ARCHITECTURE &amp; TECTONICS</div>
+      <div class="folio-meta">PAGES 42&ndash;43</div>
+    </header>
+
+    <main class="magazine-spread-grid">
+      <!-- Left Page: Page 42 -->
+      <article class="page-left">
+        <div class="page-header-strip">
+          <span>MONOLITH // DISPATCH</span>
+          <span>42</span>
+        </div>
+
+        <div class="section-category">Material Culture // Alentejo, Portugal</div>
+
+        <h1 class="feature-headline">
+          THE SILENT <em>QUARRIES</em>
+        </h1>
+
+        <p class="feature-deck">
+          Two hundred meters beneath the sun-bleached olive groves of Vila Viçosa, massive diamond wire saws are slicing monolithic marble monoliths that will anchor the zero-carbon megastructures of the next century.
+        </p>
+
+        <div class="byline-cluster">
+          <span>Words by <strong>Helena Vaz de Silva</strong></span>
+          <span>Photography by <strong>Tiago Casanova</strong></span>
+        </div>
+
+        <figure class="quarry-plate">
+          <div class="plate-vector">
+            <svg width="100%" height="160" viewBox="0 0 500 160" preserveAspectRatio="none" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Vector illustration of subterranean Portuguese marble stratification">
+              <rect width="500" height="160" fill="#1a1917" />
+              <!-- Subterranean Stratum Lines -->
+              <path d="M0 40 Q120 20 250 45 T500 30" stroke="#7a7469" stroke-width="1.5" />
+              <path d="M0 80 Q180 95 320 70 T500 85" stroke="#d8d2c5" stroke-width="2" />
+              <path d="M0 120 Q140 105 280 130 T500 115" stroke="#b84a39" stroke-width="1.5" />
+              <!-- Step-cut quarry terraces -->
+              <rect x="60" y="40" width="80" height="90" fill="#f5f2eb" opacity="0.1" />
+              <rect x="220" y="55" width="120" height="75" fill="#f5f2eb" opacity="0.15" />
+              <circle cx="280" cy="90" r="3" fill="#b84a39" />
+              <text x="290" y="94" fill="#d8d2c5" font-family="'Plus Jakarta Sans', sans-serif" font-size="10">DATUM BENCH -180M</text>
+            </svg>
+          </div>
+          <figcaption class="plate-caption">
+            FIG. 04: Primary extraction cut at the Codaçal pit. High-purity Rosa Aurora veins run at a continuous 34-degree dip angle through the Cambrian crystalline bedrock.
+          </figcaption>
+        </figure>
+      </article>
+
+      <!-- Right Page: Page 43 -->
+      <article class="page-right">
+        <div class="page-header-strip">
+          <span>THE SILENT QUARRIES</span>
+          <span>43</span>
+        </div>
+
+        <blockquote class="monument-quote">
+          <div class="quote-text">
+            "We are not digging graves; we are excavating the permanent skeleton of European civil architecture."
+          </div>
+          <span class="quote-attribution">&mdash; Alvaro Siza, Studio Notes</span>
+        </blockquote>
+
+        <div class="body-columns-grid">
+          <p class="drop-cap">
+            The descent into the Codaçal rift begins not with darkness, but with an overwhelming, blinding luminescence. In midsummer, the noon sun strikes the sheer 80-meter vertical calcite walls, turning the pit into an immense subterranean cathedral of white dust and mirrored light. Down here, diesel fumes are banned; giant hydraulic wire saws hum with a steady, monastic vibration as diamond beads slice through stone at fourteen meters an hour.
+          </p>
+          <p>
+            For three decades, architecture treated natural stone as a bourgeois indulgence&mdash;a paper-thin cladding glued over steel rebar. Today, structural engineers in Zurich and Lisbon are rediscovering what Roman master builders understood empirically: solid unreinforced post-tensioned stone possesses compressive strength rivaling high-performance concrete, with an embodied carbon footprint reduced by nearly eighty-five percent.
+          </p>
+        </div>
+
+        <aside class="spec-sidebar">
+          <h2 class="sidebar-title">Geological Specification &bull; Estremoz Anticline</h2>
+          <div class="sidebar-metrics">
+            <div>Compressive Strength: <span class="metric-val">128 MPa</span></div>
+            <div>Calcite Purity: <span class="metric-val">99.2%</span></div>
+            <div>Bulk Density: <span class="metric-val">2,710 kg/m&sup3;</span></div>
+            <div>Embodied Carbon: <span class="metric-val">0.08 kg CO&sup2;e/kg</span></div>
+          </div>
+        </aside>
+      </article>
+    </main>
+
+    <footer class="spread-footer">
+      <div class="print-spec">
+        Format: Two-Page A4 Spread (420 &times; 297mm) // Print Standard: ISO 12647 FOGRA39 // 300 DPI
+      </div>
+      <nav style="display: flex; gap: 12px;" aria-label="Spread controls">
+        <button class="btn btn-secondary" type="button">Previous Spread</button>
+        <button class="btn" type="button">Next Feature &rarr;</button>
+      </nav>
+    </footer>
+  </div>
+</body>
+</html>

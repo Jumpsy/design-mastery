@@ -1,0 +1,2265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TENSORMESH // Series A Investor Pitch Sequence</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    /* ==========================================================================
+       DESIGN SYSTEM TOKENS & RESET
+       - Strict 4px/8px modular rhythm
+       - 1.25 modular typographic scale
+       - WCAG AA/AAA compliant contrast ratios
+       - Zero generic gradients / zero clip art / zero card soup
+       ========================================================================== */
+    :root {
+      /* Surface & Structure */
+      --bg-canvas: #07090e;
+      --bg-slide: #0d121c;
+      --bg-panel: #131b2a;
+      --bg-panel-elevated: #1a2438;
+      --bg-subtle: #0f1624;
+      --border-subtle: #1f2c42;
+      --border-strong: #2d3f5e;
+      --border-focus: #38bdf8;
+
+      /* Typography */
+      --text-primary: #f8fafc;
+      --text-secondary: #94a3b8;
+      --text-muted: #64748b;
+      --text-dim: #475569;
+
+      /* Semantic Accents (Purpose-driven data encodings) */
+      --accent-problem: #f43f5e;       /* Rose coral for stranded memory / waste */
+      --accent-problem-dim: #881337;
+      --accent-solution: #06b6d4;      /* Cyan ice for kernel virtualization / fabric */
+      --accent-solution-dim: #164e63;
+      --accent-solution-light: #67e8f9;
+      --accent-traction: #10b981;      /* Emerald phosphor for revenue & retention */
+      --accent-traction-dim: #064e3b;
+      --accent-amber: #f59e0b;         /* Technical warning / fragmentation */
+
+      /* Fonts */
+      --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      --font-mono: 'JetBrains Mono', SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+
+      /* Transitions */
+      --ease-deck: cubic-bezier(0.16, 1, 0.3, 1);
+      --transition-slide: 350ms var(--ease-deck);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg-canvas);
+      color: var(--text-primary);
+      font-family: var(--font-sans);
+      font-size: 16px;
+      line-height: 1.5;
+      overflow-x: hidden;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    /* Accessibility focus indicators */
+    button:focus-visible, a:focus-visible, input:focus-visible, [tabindex="0"]:focus-visible {
+      outline: 2px solid var(--border-focus);
+      outline-offset: 2px;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, ::before, ::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+      }
+    }
+
+    /* ==========================================================================
+       TOP PRESENTATION MASTHEAD (DECK CHROME)
+       ========================================================================== */
+    .deck-masthead {
+      height: 56px;
+      background-color: #090d14;
+      border-bottom: 1px solid var(--border-subtle);
+      padding: 0 32px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-shrink: 0;
+      z-index: 50;
+    }
+
+    .brand-group {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .brand-mark {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-family: var(--font-mono);
+      font-weight: 700;
+      font-size: 14px;
+      letter-spacing: 0.12em;
+      color: var(--text-primary);
+      text-transform: uppercase;
+    }
+
+    .brand-mark svg {
+      width: 18px;
+      height: 18px;
+      color: var(--accent-solution);
+    }
+
+    .series-badge {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      background-color: var(--bg-panel);
+      color: var(--text-secondary);
+      border: 1px solid var(--border-subtle);
+      padding: 2px 8px;
+      border-radius: 4px;
+    }
+
+    /* Slide Switcher Segmented Tabs */
+    .slide-tabs {
+      display: flex;
+      align-items: center;
+      background-color: var(--bg-panel);
+      border: 1px solid var(--border-subtle);
+      border-radius: 6px;
+      padding: 2px;
+      gap: 2px;
+    }
+
+    .slide-tab {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      font-family: var(--font-mono);
+      font-size: 12px;
+      font-weight: 500;
+      padding: 6px 14px;
+      border-radius: 4px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: color 150ms ease, background-color 150ms ease;
+    }
+
+    .slide-tab:hover {
+      color: var(--text-primary);
+      background-color: rgba(255, 255, 255, 0.04);
+    }
+
+    .slide-tab.active {
+      background-color: var(--bg-panel-elevated);
+      color: var(--text-primary);
+      font-weight: 600;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+    }
+
+    .slide-tab .tab-num {
+      color: var(--text-dim);
+    }
+
+    .slide-tab.active .tab-num {
+      color: var(--accent-solution);
+    }
+
+    .deck-controls {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .nav-btn {
+      background-color: var(--bg-panel);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-secondary);
+      font-family: var(--font-mono);
+      font-size: 12px;
+      padding: 6px 12px;
+      border-radius: 4px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: background-color 150ms ease, border-color 150ms ease, color 150ms ease;
+    }
+
+    .nav-btn:hover:not(:disabled) {
+      background-color: var(--bg-panel-elevated);
+      border-color: var(--border-strong);
+      color: var(--text-primary);
+    }
+
+    .nav-btn:disabled {
+      opacity: 0.35;
+      cursor: not-allowed;
+    }
+
+    /* ==========================================================================
+       MAIN PRESENTATION STAGE (16:9 VIEWPORT)
+       ========================================================================== */
+    .deck-stage-container {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      position: relative;
+    }
+
+    .deck-stage {
+      width: 100%;
+      max-width: 1600px;
+      aspect-ratio: 16 / 9;
+      max-height: calc(100vh - 128px);
+      background-color: var(--bg-slide);
+      border: 1px solid var(--border-subtle);
+      border-radius: 8px;
+      box-shadow: 0 24px 64px -12px rgba(0, 0, 0, 0.7);
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Individual Slide Frame */
+    .slide-frame {
+      position: absolute;
+      inset: 0;
+      padding: 48px 56px 40px;
+      display: flex;
+      flex-direction: column;
+      opacity: 0;
+      pointer-events: none;
+      transform: translateX(32px);
+      transition: opacity var(--transition-slide), transform var(--transition-slide);
+    }
+
+    .slide-frame.active {
+      opacity: 1;
+      pointer-events: auto;
+      transform: translateX(0);
+      z-index: 10;
+    }
+
+    .slide-frame.prev {
+      transform: translateX(-32px);
+    }
+
+    /* Slide Header System */
+    .slide-header {
+      margin-bottom: 24px;
+      flex-shrink: 0;
+    }
+
+    .slide-kicker {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .slide-kicker-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+    }
+
+    .slide-1 .slide-kicker { color: var(--accent-problem); }
+    .slide-1 .slide-kicker-dot { background-color: var(--accent-problem); }
+
+    .slide-2 .slide-kicker { color: var(--accent-solution); }
+    .slide-2 .slide-kicker-dot { background-color: var(--accent-solution); }
+
+    .slide-3 .slide-kicker { color: var(--accent-traction); }
+    .slide-3 .slide-kicker-dot { background-color: var(--accent-traction); }
+
+    .slide-title {
+      font-size: 32px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      line-height: 1.2;
+      color: var(--text-primary);
+      max-width: 1280px;
+      margin-bottom: 8px;
+    }
+
+    .slide-subtitle {
+      font-size: 15px;
+      color: var(--text-secondary);
+      line-height: 1.5;
+      max-width: 1100px;
+    }
+
+    /* Slide Content Viewport (Fluid & Structured) */
+    .slide-body {
+      flex: 1;
+      min-height: 0;
+      display: grid;
+      gap: 28px;
+      align-items: stretch;
+    }
+
+    /* Common Card / Panel Elements */
+    .card-panel {
+      background-color: var(--bg-panel);
+      border: 1px solid var(--border-subtle);
+      border-radius: 6px;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+
+    .panel-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    .panel-title {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--text-secondary);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .panel-tag {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      padding: 2px 6px;
+      border-radius: 3px;
+      background-color: var(--bg-panel-elevated);
+      color: var(--text-muted);
+    }
+
+    /* Metric Display Units */
+    .metric-group {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin-bottom: 18px;
+    }
+
+    .metric-card {
+      background-color: var(--bg-subtle);
+      border: 1px solid var(--border-subtle);
+      border-radius: 6px;
+      padding: 14px 16px;
+    }
+
+    .metric-value {
+      font-family: var(--font-mono);
+      font-size: 32px;
+      font-weight: 700;
+      line-height: 1.1;
+      margin-bottom: 4px;
+      color: var(--text-primary);
+    }
+
+    .metric-value.problem-val { color: var(--accent-problem); }
+    .metric-value.solution-val { color: var(--accent-solution-light); }
+    .metric-value.traction-val { color: var(--accent-traction); }
+
+    .metric-label {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-secondary);
+    }
+
+    .metric-sub {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    /* ==========================================================================
+       SLIDE 1: PROBLEM SPECIFICS
+       ========================================================================== */
+    .slide-1 .slide-body {
+      grid-template-columns: 4.8fr 7.2fr;
+    }
+
+    .problem-causes {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .cause-item {
+      background-color: var(--bg-panel);
+      border: 1px solid var(--border-subtle);
+      border-left: 3px solid var(--border-strong);
+      border-radius: 4px;
+      padding: 12px 14px;
+      transition: border-left-color 150ms ease, background-color 150ms ease;
+    }
+
+    .cause-item:hover, .cause-item.active-inspect {
+      border-left-color: var(--accent-problem);
+      background-color: var(--bg-panel-elevated);
+    }
+
+    .cause-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 4px;
+    }
+
+    .cause-name {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    .cause-penalty {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--accent-problem);
+    }
+
+    .cause-desc {
+      font-size: 12px;
+      color: var(--text-secondary);
+      line-height: 1.4;
+    }
+
+    /* Slide 1 Chart: 24h Telemetry */
+    .telemetry-chart-container {
+      position: relative;
+      flex: 1;
+      min-height: 190px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .chart-svg-wrap {
+      flex: 1;
+      width: 100%;
+      position: relative;
+      cursor: crosshair;
+    }
+
+    .chart-svg {
+      width: 100%;
+      height: 100%;
+      display: block;
+      overflow: visible;
+    }
+
+    .chart-hud {
+      position: absolute;
+      top: 10px;
+      right: 12px;
+      background-color: rgba(9, 13, 20, 0.9);
+      border: 1px solid var(--border-strong);
+      border-radius: 4px;
+      padding: 6px 10px;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      display: flex;
+      gap: 16px;
+      pointer-events: none;
+      z-index: 20;
+    }
+
+    .hud-col {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .hud-label {
+      color: var(--text-muted);
+      font-size: 9px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .hud-val {
+      color: var(--text-primary);
+      font-weight: 600;
+    }
+
+    .hud-val.loss {
+      color: var(--accent-problem);
+    }
+
+    /* Spend Waterfall Bar */
+    .spend-breakdown-section {
+      margin-top: 14px;
+    }
+
+    .waterfall-bar {
+      display: flex;
+      height: 22px;
+      border-radius: 4px;
+      overflow: hidden;
+      margin-bottom: 8px;
+      border: 1px solid var(--border-subtle);
+    }
+
+    .bar-seg {
+      height: 100%;
+      transition: filter 150ms ease, opacity 150ms ease;
+      cursor: pointer;
+      position: relative;
+    }
+
+    .bar-seg:hover {
+      filter: brightness(1.25);
+    }
+
+    .seg-active { background-color: var(--accent-solution); width: 36%; }
+    .seg-overprov { background-color: var(--accent-problem); width: 31%; }
+    .seg-coldstart { background-color: #f97316; width: 21%; }
+    .seg-frag { background-color: var(--accent-amber); width: 12%; }
+
+    .waterfall-legend {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+    }
+
+    .legend-item {
+      font-family: var(--font-mono);
+      font-size: 10.5px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--text-secondary);
+      background-color: var(--bg-subtle);
+      padding: 4px 6px;
+      border-radius: 3px;
+      border: 1px solid var(--border-subtle);
+      cursor: pointer;
+      transition: border-color 150ms ease;
+    }
+
+    .legend-item:hover {
+      border-color: var(--border-strong);
+      color: var(--text-primary);
+    }
+
+    .legend-pip {
+      width: 7px;
+      height: 7px;
+      border-radius: 2px;
+      flex-shrink: 0;
+    }
+
+    /* ==========================================================================
+       SLIDE 2: SOLUTION SPECIFICS
+       ========================================================================== */
+    .slide-2 .slide-body {
+      grid-template-columns: 4.5fr 7.5fr;
+    }
+
+    .solution-specs {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .spec-card {
+      background-color: var(--bg-panel);
+      border: 1px solid var(--border-subtle);
+      border-radius: 6px;
+      padding: 14px 16px;
+    }
+
+    .spec-card-num {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--accent-solution);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 4px;
+    }
+
+    .spec-card-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 4px;
+    }
+
+    .spec-card-desc {
+      font-size: 12.5px;
+      color: var(--text-secondary);
+      line-height: 1.4;
+    }
+
+    /* Architecture Simulator / Comparison View */
+    .sim-controls-strip {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 14px;
+      background-color: var(--bg-subtle);
+      border: 1px solid var(--border-subtle);
+      border-radius: 6px;
+      padding: 6px 10px;
+    }
+
+    .sim-mode-toggle {
+      display: flex;
+      gap: 4px;
+    }
+
+    .sim-mode-btn {
+      background: transparent;
+      border: 1px solid transparent;
+      color: var(--text-secondary);
+      font-family: var(--font-mono);
+      font-size: 11.5px;
+      padding: 5px 12px;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: all 150ms ease;
+    }
+
+    .sim-mode-btn:hover {
+      color: var(--text-primary);
+    }
+
+    .sim-mode-btn.active {
+      background-color: var(--bg-panel-elevated);
+      border-color: var(--border-strong);
+      color: var(--text-primary);
+      font-weight: 600;
+    }
+
+    .sim-mode-btn.active.mode-legacy {
+      border-color: var(--accent-problem-dim);
+      color: #fda4af;
+    }
+
+    .sim-mode-btn.active.mode-tensormesh {
+      border-color: var(--accent-solution-dim);
+      color: var(--accent-solution-light);
+    }
+
+    .sim-status-pill {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      padding: 3px 8px;
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .status-legacy {
+      background-color: rgba(244, 63, 94, 0.12);
+      color: #fda4af;
+      border: 1px solid rgba(244, 63, 94, 0.3);
+    }
+
+    .status-tensormesh {
+      background-color: rgba(6, 182, 212, 0.12);
+      color: var(--accent-solution-light);
+      border: 1px solid rgba(6, 182, 212, 0.3);
+    }
+
+    /* HBM3 Memory Matrix & Pipeline Flow */
+    .arch-display-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      flex: 1;
+    }
+
+    .pipeline-view {
+      background-color: var(--bg-subtle);
+      border: 1px solid var(--border-subtle);
+      border-radius: 6px;
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .pipeline-step {
+      background-color: var(--bg-panel);
+      border: 1px solid var(--border-subtle);
+      border-radius: 4px;
+      padding: 8px 10px;
+      position: relative;
+    }
+
+    .pipeline-step-label {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .pipeline-step-val {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-top: 2px;
+    }
+
+    .pipeline-connector {
+      text-align: center;
+      color: var(--border-strong);
+      font-size: 12px;
+      margin: 2px 0;
+    }
+
+    /* VRAM Block Grid Map */
+    .vram-grid-view {
+      background-color: var(--bg-subtle);
+      border: 1px solid var(--border-subtle);
+      border-radius: 6px;
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .vram-grid-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+
+    .vram-title {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+    }
+
+    .vram-stat-badge {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--accent-solution-light);
+    }
+
+    .vram-blocks-container {
+      display: grid;
+      grid-template-columns: repeat(8, 1fr);
+      gap: 5px;
+      margin-bottom: 10px;
+      flex: 1;
+    }
+
+    .vram-block {
+      aspect-ratio: 1;
+      border-radius: 3px;
+      border: 1px solid var(--border-subtle);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-mono);
+      font-size: 9px;
+      font-weight: 600;
+      transition: all 250ms ease;
+    }
+
+    .vram-block.pinned {
+      background-color: rgba(244, 63, 94, 0.25);
+      border-color: rgba(244, 63, 94, 0.5);
+      color: #fda4af;
+    }
+
+    .vram-block.idle-waste {
+      background-color: rgba(255, 255, 255, 0.02);
+      border-color: rgba(255, 255, 255, 0.06);
+      color: var(--text-dim);
+    }
+
+    .vram-block.mesh-active-1 {
+      background-color: rgba(6, 182, 212, 0.28);
+      border-color: rgba(6, 182, 212, 0.6);
+      color: #a5f3fc;
+    }
+
+    .vram-block.mesh-active-2 {
+      background-color: rgba(16, 185, 129, 0.28);
+      border-color: rgba(16, 185, 129, 0.6);
+      color: #a7f3d0;
+    }
+
+    .vram-block.mesh-active-3 {
+      background-color: rgba(168, 85, 247, 0.28);
+      border-color: rgba(168, 85, 247, 0.6);
+      color: #e9d5ff;
+    }
+
+    .vram-block.mesh-active-4 {
+      background-color: rgba(245, 158, 11, 0.28);
+      border-color: rgba(245, 158, 11, 0.6);
+      color: #fde68a;
+    }
+
+    .vram-legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      font-family: var(--font-mono);
+      font-size: 10px;
+      color: var(--text-muted);
+    }
+
+    .vram-legend-item {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .vram-legend-pip {
+      width: 8px;
+      height: 8px;
+      border-radius: 2px;
+    }
+
+    /* Live Telemetry Meter */
+    .sim-results-strip {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-top: 12px;
+      padding-top: 10px;
+      border-top: 1px solid var(--border-subtle);
+    }
+
+    .result-kpi {
+      background-color: var(--bg-subtle);
+      border: 1px solid var(--border-subtle);
+      border-radius: 4px;
+      padding: 8px 10px;
+    }
+
+    .result-kpi-lbl {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+    }
+
+    .result-kpi-val {
+      font-family: var(--font-mono);
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-top: 2px;
+    }
+
+    /* ==========================================================================
+       SLIDE 3: TRACTION SPECIFICS
+       ========================================================================== */
+    .slide-3 .slide-body {
+      grid-template-columns: 7.2fr 4.8fr;
+    }
+
+    /* ARR Timeline Chart */
+    .arr-chart-wrap {
+      flex: 1;
+      position: relative;
+      min-height: 180px;
+      margin-bottom: 14px;
+    }
+
+    .arr-svg {
+      width: 100%;
+      height: 100%;
+      display: block;
+      cursor: crosshair;
+    }
+
+    .arr-hud {
+      position: absolute;
+      top: 6px;
+      right: 8px;
+      background-color: rgba(13, 18, 28, 0.94);
+      border: 1px solid var(--border-strong);
+      border-radius: 4px;
+      padding: 6px 10px;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      display: flex;
+      gap: 14px;
+      pointer-events: none;
+      z-index: 20;
+    }
+
+    /* Cohort Net Retention Heatmap Matrix */
+    .cohort-section {
+      background-color: var(--bg-subtle);
+      border: 1px solid var(--border-subtle);
+      border-radius: 6px;
+      padding: 12px 14px;
+    }
+
+    .cohort-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+
+    .cohort-title {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .cohort-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-family: var(--font-mono);
+      font-size: 11px;
+    }
+
+    .cohort-table th {
+      color: var(--text-muted);
+      font-weight: 500;
+      text-align: center;
+      padding: 4px 6px;
+      border-bottom: 1px solid var(--border-subtle);
+      font-size: 10px;
+    }
+
+    .cohort-table th:first-child {
+      text-align: left;
+    }
+
+    .cohort-table td {
+      padding: 4px 6px;
+      text-align: center;
+      border: 1px solid rgba(255, 255, 255, 0.03);
+      cursor: pointer;
+      transition: filter 150ms ease, outline 150ms ease;
+    }
+
+    .cohort-table td:hover {
+      outline: 1px solid var(--border-focus);
+      filter: brightness(1.2);
+    }
+
+    .cohort-table td.c-cohort-name {
+      text-align: left;
+      color: var(--text-secondary);
+      font-weight: 600;
+      border: none;
+    }
+
+    /* Heatmap cell coloring */
+    .heat-100 { background-color: rgba(16, 185, 129, 0.12); color: #6ee7b7; }
+    .heat-115 { background-color: rgba(16, 185, 129, 0.22); color: #6ee7b7; font-weight: 600; }
+    .heat-130 { background-color: rgba(16, 185, 129, 0.35); color: #a7f3d0; font-weight: 600; }
+    .heat-150 { background-color: rgba(16, 185, 129, 0.50); color: #d1fae5; font-weight: 700; }
+    .heat-165 { background-color: rgba(16, 185, 129, 0.65); color: #ecfdf5; font-weight: 700; }
+
+    .cohort-cell-inspector {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--text-secondary);
+      margin-top: 6px;
+      padding-top: 6px;
+      border-top: 1px dashed var(--border-subtle);
+      min-height: 20px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .cohort-cell-inspector span.highlight {
+      color: var(--accent-solution-light);
+      font-weight: 600;
+    }
+
+    /* Right Column: Investor Metrics Ledger & Deployments */
+    .traction-ledger {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .ledger-stat-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .ledger-tile {
+      background-color: var(--bg-panel);
+      border: 1px solid var(--border-subtle);
+      border-radius: 6px;
+      padding: 12px 14px;
+    }
+
+    .ledger-val {
+      font-family: var(--font-mono);
+      font-size: 26px;
+      font-weight: 700;
+      color: var(--accent-traction);
+      line-height: 1.1;
+      margin-bottom: 2px;
+    }
+
+    .ledger-lbl {
+      font-size: 12.5px;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    .ledger-detail {
+      font-family: var(--font-mono);
+      font-size: 10.5px;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    .enterprise-proof-card {
+      background-color: var(--bg-panel);
+      border: 1px solid var(--border-subtle);
+      border-radius: 6px;
+      padding: 14px 16px;
+      flex: 1;
+    }
+
+    .proof-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 8px;
+    }
+
+    .proof-title {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .proof-quote {
+      font-size: 12.5px;
+      color: var(--text-secondary);
+      line-height: 1.45;
+      margin-bottom: 10px;
+      font-style: italic;
+      border-left: 2px solid var(--accent-traction);
+      padding-left: 10px;
+    }
+
+    .proof-metrics-list {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      font-family: var(--font-mono);
+      font-size: 11px;
+    }
+
+    .proof-metric-pill {
+      background-color: var(--bg-subtle);
+      border: 1px solid var(--border-subtle);
+      border-radius: 4px;
+      padding: 6px 8px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .p-val {
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    .p-lbl {
+      font-size: 10px;
+      color: var(--text-muted);
+    }
+
+    /* ==========================================================================
+       BOTTOM DECK FOOTER & PROGRESS
+       ========================================================================== */
+    .deck-footer {
+      height: 48px;
+      background-color: #090d14;
+      border-top: 1px solid var(--border-subtle);
+      padding: 0 32px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-shrink: 0;
+      font-family: var(--font-mono);
+      font-size: 11.5px;
+      color: var(--text-muted);
+    }
+
+    .deck-progress-container {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .progress-bar-track {
+      width: 140px;
+      height: 4px;
+      background-color: var(--bg-panel);
+      border-radius: 2px;
+      overflow: hidden;
+    }
+
+    .progress-bar-fill {
+      height: 100%;
+      width: 33.333%;
+      background-color: var(--accent-solution);
+      transition: width var(--transition-slide), background-color var(--transition-slide);
+    }
+
+    .shortcut-hints {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .key-badge {
+      display: inline-block;
+      background-color: var(--bg-panel);
+      border: 1px solid var(--border-strong);
+      color: var(--text-secondary);
+      font-family: var(--font-mono);
+      font-size: 10px;
+      padding: 1px 5px;
+      border-radius: 3px;
+      margin: 0 2px;
+    }
+
+    /* Responsive fallbacks */
+    @media (max-width: 1100px) {
+      .deck-stage {
+        aspect-ratio: auto;
+        max-height: none;
+        height: auto;
+      }
+      .slide-frame {
+        position: relative;
+        inset: auto;
+        opacity: 1 !important;
+        transform: none !important;
+        display: none;
+        padding: 32px 24px;
+      }
+      .slide-frame.active {
+        display: flex;
+      }
+      .slide-1 .slide-body, .slide-2 .slide-body, .slide-3 .slide-body {
+        grid-template-columns: 1fr;
+      }
+      .slide-title {
+        font-size: 24px;
+      }
+      .shortcut-hints {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ========================================================================
+       TOP MASTHEAD & SLIDE SWITCHER CONTROLS
+       ======================================================================== -->
+  <header class="deck-masthead" role="banner">
+    <div class="brand-group">
+      <div class="brand-mark" aria-label="TensorMesh pitch presentation">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
+          <polyline points="2 17 12 22 22 17"></polyline>
+          <polyline points="2 12 12 17 22 12"></polyline>
+        </svg>
+        <span>TENSORMESH</span>
+      </div>
+      <span class="series-badge">SERIES A // CONFIDENTIAL</span>
+    </div>
+
+    <!-- Segmented Interactive Slide Tabs -->
+    <nav class="slide-tabs" aria-label="Pitch deck slides">
+      <button class="slide-tab active" id="tab-slide-1" data-index="1" aria-controls="slide-1" aria-selected="true" role="tab">
+        <span class="tab-num">01</span> PROBLEM
+      </button>
+      <button class="slide-tab" id="tab-slide-2" data-index="2" aria-controls="slide-2" aria-selected="false" role="tab">
+        <span class="tab-num">02</span> SOLUTION
+      </button>
+      <button class="slide-tab" id="tab-slide-3" data-index="3" aria-controls="slide-3" aria-selected="false" role="tab">
+        <span class="tab-num">03</span> TRACTION
+      </button>
+    </nav>
+
+    <!-- Navigation Action Controls -->
+    <div class="deck-controls">
+      <button class="nav-btn" id="prev-btn" aria-label="Previous slide (Left Arrow)" disabled>
+        <span aria-hidden="true">&larr;</span> PREV
+      </button>
+      <button class="nav-btn" id="next-btn" aria-label="Next slide (Right Arrow or Space)">
+        NEXT <span aria-hidden="true">&rarr;</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- ========================================================================
+       STAGE CANVAS: 16:9 VIEWPORT CONTAINER
+       ======================================================================== -->
+  <main class="deck-stage-container" role="main">
+    <div class="deck-stage" id="deck-stage">
+
+      <!-- ====================================================================
+           SLIDE 1: PROBLEM (SETUP + TENSION)
+           ==================================================================== -->
+      <article class="slide-frame slide-1 active" id="slide-1" role="tabpanel" aria-labelledby="tab-slide-1" aria-hidden="false">
+        <header class="slide-header">
+          <div class="slide-kicker">
+            <span class="slide-kicker-dot"></span>
+            01 / PROBLEM // HARDWARE INEFFICIENCY
+          </div>
+          <h1 class="slide-title">64% of enterprise GPU spend is stranded in idle VRAM and cold-start latency.</h1>
+          <p class="slide-subtitle">Hyperscale clusters run at just 36.2% Model FLOPs Utilization (MFU). Monolithic process memory locks and 14-second checkpoint reload delays cost Fortune 500 AI deployments $142,000/month per 64-node H100 pod.</p>
+        </header>
+
+        <div class="slide-body">
+          <!-- Left Column: Key tension metrics & structural causes -->
+          <div class="card-panel">
+            <div class="panel-head">
+              <span class="panel-title">H100 Cluster Financial Bleed</span>
+              <span class="panel-tag">64-NODE POD BENCHMARK</span>
+            </div>
+
+            <div class="metric-group">
+              <div class="metric-card">
+                <div class="metric-value problem-val">$142K</div>
+                <div class="metric-label">Monthly Waste</div>
+                <div class="metric-sub">Per 64× H100 node cluster</div>
+              </div>
+              <div class="metric-card">
+                <div class="metric-value problem-val">36.2%</div>
+                <div class="metric-label">Average MFU</div>
+                <div class="metric-sub">63.8% compute capacity idle</div>
+              </div>
+              <div class="metric-card">
+                <div class="metric-value problem-val">14.8s</div>
+                <div class="metric-label">P99 Swap Latency</div>
+                <div class="metric-sub">Blocks query routing</div>
+              </div>
+            </div>
+
+            <div class="problem-causes" id="causes-list">
+              <div class="cause-item active-inspect" data-cause="pinning">
+                <div class="cause-header">
+                  <span class="cause-name">1. Monolithic Memory Pinning (31% of waste)</span>
+                  <span class="cause-penalty">$44,020/mo</span>
+                </div>
+                <p class="cause-desc">Standard CUDA drivers pin 80GB HBM per model instance. When request streams pause between user chat turns, the entire card remains locked and unavailable to other models.</p>
+              </div>
+
+              <div class="cause-item" data-cause="coldstart">
+                <div class="cause-header">
+                  <span class="cause-name">2. Cold-Start Checkpoint Reloads (21% of waste)</span>
+                  <span class="cause-penalty">$29,820/mo</span>
+                </div>
+                <p class="cause-desc">Swapping a 70B parameter model from host NVMe takes 14.8 seconds over PCIe. Teams over-provision duplicate dedicated clusters to avoid user-facing latency penalties.</p>
+              </div>
+
+              <div class="cause-item" data-cause="frag">
+                <div class="cause-header">
+                  <span class="cause-name">3. KV-Cache Tail Fragmentation (12% of waste)</span>
+                  <span class="cause-penalty">$17,040/mo</span>
+                </div>
+                <p class="cause-desc">Dynamic attention contexts fragment memory addresses, triggering out-of-memory faults even when 25% of total high-bandwidth memory is physically unwritten.</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right Column: Interactive 24h Telemetry Chart & Spend Waterfall -->
+          <div class="card-panel">
+            <div class="panel-head">
+              <span class="panel-title">Production Cluster Telemetry: 24h Memory Allocation</span>
+              <span class="panel-tag">HOVER / SCRUB TO INSPECT LOSS</span>
+            </div>
+
+            <div class="telemetry-chart-container">
+              <!-- Dynamic Floating Telemetry HUD -->
+              <div class="chart-hud" id="telemetry-hud" aria-live="polite">
+                <div class="hud-col">
+                  <span class="hud-label">Time</span>
+                  <span class="hud-val" id="hud-time">14:00 EST</span>
+                </div>
+                <div class="hud-col">
+                  <span class="hud-label">Reserved VRAM</span>
+                  <span class="hud-val">80.0 GB (100%)</span>
+                </div>
+                <div class="hud-col">
+                  <span class="hud-label">Utilized VRAM</span>
+                  <span class="hud-val" id="hud-utilized">28.4 GB (35.5%)</span>
+                </div>
+                <div class="hud-col">
+                  <span class="hud-label">Stranded Waste</span>
+                  <span class="hud-val loss" id="hud-waste">51.6 GB (64.5%)</span>
+                </div>
+                <div class="hud-col">
+                  <span class="hud-label">Hourly Bleed</span>
+                  <span class="hud-val loss" id="hud-loss">$197.20/hr</span>
+                </div>
+              </div>
+
+              <!-- Interactive SVG Telemetry Chart -->
+              <div class="chart-svg-wrap" id="telemetry-svg-wrap" tabindex="0" role="slider" aria-label="24-hour cluster memory telemetry scrub" aria-valuemin="0" aria-valuemax="24" aria-valuenow="14" aria-valuetext="14:00 EST, 51.6 GB Stranded Waste">
+                <svg class="chart-svg" id="telemetry-svg" viewBox="0 0 760 210" preserveAspectRatio="none">
+                  <defs>
+                    <pattern id="waste-hatch" width="12" height="12" patternTransform="rotate(45 0 0)" patternUnits="userSpaceOnUse">
+                      <line x1="0" y1="0" x2="0" y2="12" stroke="rgba(244, 63, 94, 0.14)" stroke-width="2" />
+                    </pattern>
+                  </defs>
+
+                  <!-- Background Grid Lines -->
+                  <line x1="40" y1="20" x2="740" y2="20" stroke="#1f2c42" stroke-width="1" stroke-dasharray="4 4" />
+                  <text x="32" y="24" fill="#64748b" font-size="10" font-family="var(--font-mono)" text-anchor="end">80GB</text>
+
+                  <line x1="40" y1="75" x2="740" y2="75" stroke="#1f2c42" stroke-width="1" stroke-dasharray="4 4" />
+                  <text x="32" y="79" fill="#64748b" font-size="10" font-family="var(--font-mono)" text-anchor="end">56GB</text>
+
+                  <line x1="40" y1="130" x2="740" y2="130" stroke="#1f2c42" stroke-width="1" stroke-dasharray="4 4" />
+                  <text x="32" y="134" fill="#64748b" font-size="10" font-family="var(--font-mono)" text-anchor="end">28GB</text>
+
+                  <line x1="40" y1="185" x2="740" y2="185" stroke="#1f2c42" stroke-width="1" />
+                  <text x="32" y="189" fill="#64748b" font-size="10" font-family="var(--font-mono)" text-anchor="end">0GB</text>
+
+                  <!-- Time axis ticks -->
+                  <text x="40" y="202" fill="#64748b" font-size="10" font-family="var(--font-mono)">00:00</text>
+                  <text x="215" y="202" fill="#64748b" font-size="10" font-family="var(--font-mono)">06:00</text>
+                  <text x="390" y="202" fill="#64748b" font-size="10" font-family="var(--font-mono)">12:00</text>
+                  <text x="565" y="202" fill="#64748b" font-size="10" font-family="var(--font-mono)">18:00</text>
+                  <text x="730" y="202" fill="#64748b" font-size="10" font-family="var(--font-mono)" text-anchor="end">24:00</text>
+
+                  <!-- Stranded Waste Shaded Region (Between 80GB line and Active Utilized curve) -->
+                  <!-- 80GB is at y=20. Bottom active curve starts at (40, 150)... -->
+                  <path id="waste-region" d="M 40 20 L 740 20 L 740 135 L 705 130 L 670 125 L 635 120 L 600 128 L 565 115 L 530 110 L 495 122 L 460 128 L 425 118 L 390 126 L 355 130 L 320 132 L 285 138 L 250 144 L 215 148 L 180 152 L 145 150 L 110 148 L 75 145 L 40 150 Z" fill="url(#waste-hatch)" />
+
+                  <!-- Ceiling: 80GB Locked VRAM (Red dashed line) -->
+                  <line x1="40" y1="20" x2="740" y2="20" stroke="var(--accent-problem)" stroke-width="2" stroke-dasharray="6 4" />
+                  <text x="640" y="15" fill="var(--accent-problem)" font-size="10" font-family="var(--font-mono)" font-weight="600">80GB RESERVED HBM (LOCKED)</text>
+
+                  <!-- Active Utilization Curve -->
+                  <path id="active-curve" d="M 40 150 Q 75 145 110 148 T 180 152 T 250 144 T 320 132 T 390 126 T 460 128 T 530 110 T 600 128 T 670 125 T 740 135" fill="none" stroke="var(--accent-solution)" stroke-width="2.5" />
+
+                  <!-- Active Curve Fill to 0GB baseline -->
+                  <path d="M 40 150 Q 75 145 110 148 T 180 152 T 250 144 T 320 132 T 390 126 T 460 128 T 530 110 T 600 128 T 670 125 T 740 135 L 740 185 L 40 185 Z" fill="rgba(6, 182, 212, 0.12)" />
+
+                  <!-- Interactive Scrubber Elements -->
+                  <line id="scrub-line" x1="448" y1="20" x2="448" y2="185" stroke="var(--border-focus)" stroke-width="1.5" stroke-dasharray="2 2" />
+                  <circle id="scrub-dot-active" cx="448" cy="126" r="5" fill="var(--accent-solution)" stroke="#fff" stroke-width="2" />
+                  <circle id="scrub-dot-waste" cx="448" cy="20" r="4" fill="var(--accent-problem)" stroke="#fff" stroke-width="1.5" />
+                </svg>
+              </div>
+            </div>
+
+            <!-- Spend Allocation Breakdown (Interactive Waterfall) -->
+            <div class="spend-breakdown-section">
+              <div class="panel-head" style="margin-bottom: 8px; padding-bottom: 6px;">
+                <span class="panel-title" style="font-size: 11px;">Where $1.00 of GPU Cluster Spend Actually Goes</span>
+                <span class="panel-tag" id="waterfall-selected-tag">TOTAL BREAKDOWN</span>
+              </div>
+
+              <div class="waterfall-bar" id="waterfall-bar" role="group" aria-label="GPU spend breakdown bar">
+                <div class="bar-seg seg-active" data-seg="active" title="Actual Tensor Compute: 36%" tabindex="0"></div>
+                <div class="bar-seg seg-overprov" data-seg="overprov" title="Static Over-provisioning: 31%" tabindex="0"></div>
+                <div class="bar-seg seg-coldstart" data-seg="coldstart" title="Cold Start Model Swapping: 21%" tabindex="0"></div>
+                <div class="bar-seg seg-frag" data-seg="frag" title="KV-Cache Address Fragmentation: 12%" tabindex="0"></div>
+              </div>
+
+              <div class="waterfall-legend">
+                <div class="legend-item" data-seg="active">
+                  <span class="legend-pip" style="background-color: var(--accent-solution);"></span>
+                  <span>Active Compute <strong>36¢</strong></span>
+                </div>
+                <div class="legend-item" data-seg="overprov">
+                  <span class="legend-pip" style="background-color: var(--accent-problem);"></span>
+                  <span>Locked VRAM <strong>31¢</strong></span>
+                </div>
+                <div class="legend-item" data-seg="coldstart">
+                  <span class="legend-pip" style="background-color: #f97316;"></span>
+                  <span>Cold Swaps <strong>21¢</strong></span>
+                </div>
+                <div class="legend-item" data-seg="frag">
+                  <span class="legend-pip" style="background-color: var(--accent-amber);"></span>
+                  <span>Fragmented <strong>12¢</strong></span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <!-- ====================================================================
+           SLIDE 2: SOLUTION (RESOLUTION MECHANISM)
+           ==================================================================== -->
+      <article class="slide-frame slide-2" id="slide-2" role="tabpanel" aria-labelledby="tab-slide-2" aria-hidden="true">
+        <header class="slide-header">
+          <div class="slide-kicker">
+            <span class="slide-kicker-dot"></span>
+            02 / SOLUTION // KERNEL ARCHITECTURE
+          </div>
+          <h1 class="slide-title">Sub-millisecond kernel multiplexing reclaims stranded VRAM without code changes.</h1>
+          <p class="slide-subtitle">TensorMesh virtualizes GPU high-bandwidth memory into 4MB micro-pages across NVLink fabrics. By intercepting CUDA runtime calls via LD_PRELOAD, four large foundation models co-exist on the same silicon with 28ms weight pre-fetching.</p>
+        </header>
+
+        <div class="slide-body">
+          <!-- Left Column: Architectural Pillars & Value Proposition -->
+          <div class="card-panel">
+            <div class="panel-head">
+              <span class="panel-title">Virtualization Mechanism</span>
+              <span class="panel-tag">LD_PRELOAD C++ ENGINE</span>
+            </div>
+
+            <div class="solution-specs">
+              <div class="spec-card">
+                <div class="spec-card-num">Innovation 01</div>
+                <div class="spec-card-title">4MB Paged Virtual Memory Pool</div>
+                <p class="spec-card-desc">Decouples logical model weights from physical HBM addresses. Paged blocks load on-demand over NVLink (900 GB/s) rather than pinning 80GB monolithic blocks continuously.</p>
+              </div>
+
+              <div class="spec-card">
+                <div class="spec-card-num">Innovation 02</div>
+                <div class="spec-card-title">Zero-Copy Kernel Context Switching</div>
+                <p class="spec-card-desc">Asynchronous tensor streaming swaps weights during generation pauses. Swap latency collapses from 14.8 seconds to 28 milliseconds (98.1% reduction).</p>
+              </div>
+
+              <div class="spec-card">
+                <div class="spec-card-num">Innovation 03</div>
+                <div class="spec-card-title">Drop-in Framework Compatibility</div>
+                <p class="spec-card-desc">Zero code refactoring or model quantization required. Works out of the box with PyTorch, vLLM, TensorRT-LLM, and Triton inference servers.</p>
+              </div>
+            </div>
+
+            <div class="metric-card" style="margin-top: 14px; background: var(--bg-subtle);">
+              <div class="metric-value solution-val">3.2×</div>
+              <div class="metric-label">Inference Density Jump</div>
+              <div class="metric-sub">Run 4 concurrent models on 1 H100 with zero throughput degradation</div>
+            </div>
+          </div>
+
+          <!-- Right Column: Interactive Architecture & Memory Simulator -->
+          <div class="card-panel">
+            <!-- Functional Simulator Mode Controller -->
+            <div class="sim-controls-strip">
+              <div class="sim-mode-toggle" role="group" aria-label="Runtime architecture simulator toggle">
+                <button class="sim-mode-btn mode-legacy" id="btn-mode-legacy" aria-pressed="false">
+                  1. Monolithic CUDA (Static)
+                </button>
+                <button class="sim-mode-btn mode-tensormesh active" id="btn-mode-tensormesh" aria-pressed="true">
+                  2. TensorMesh Paged Fabric (Active)
+                </button>
+              </div>
+              <div class="sim-status-pill status-tensormesh" id="sim-status-pill">
+                <span style="display:inline-block; width:6px; height:6px; border-radius:50%; background:currentColor;"></span>
+                <span id="sim-status-text">TENSORMESH: 4 MODELS PACKED</span>
+              </div>
+            </div>
+
+            <!-- Architecture Schematic & VRAM Block Visualization -->
+            <div class="arch-display-grid">
+              <!-- Execution Pipeline Flow -->
+              <div class="pipeline-view">
+                <div class="pipeline-step">
+                  <div class="pipeline-step-label">Layer 1: Query Ingestion</div>
+                  <div class="pipeline-step-val" id="pipe-layer-1">Concurrent Multi-Tenant Streams</div>
+                </div>
+
+                <div class="pipeline-connector">&darr;</div>
+
+                <div class="pipeline-step" id="pipe-layer-2-box" style="border-color: var(--accent-solution-dim); background: rgba(6, 182, 212, 0.08);">
+                  <div class="pipeline-step-label" id="pipe-layer-2-lbl">Layer 2: Scheduling Layer</div>
+                  <div class="pipeline-step-val" id="pipe-layer-2-val" style="color: var(--accent-solution-light);">TensorMesh Micro-Kernel Scheduler</div>
+                </div>
+
+                <div class="pipeline-connector">&darr;</div>
+
+                <div class="pipeline-step">
+                  <div class="pipeline-step-label">Layer 3: Interconnect Transport</div>
+                  <div class="pipeline-step-val" id="pipe-layer-3">NVLink 900 GB/s Direct Fabric</div>
+                </div>
+
+                <div class="pipeline-connector">&darr;</div>
+
+                <div class="pipeline-step" id="pipe-layer-4-box" style="border-color: var(--accent-solution-dim); background: rgba(6, 182, 212, 0.08);">
+                  <div class="pipeline-step-label">Layer 4: Physical Silicon Execution</div>
+                  <div class="pipeline-step-val" id="pipe-layer-4-val" style="color: var(--accent-solution-light);">H100 Tensor Cores (86.4% MFU)</div>
+                </div>
+              </div>
+
+              <!-- 80GB VRAM High-Bandwidth Memory Allocation Matrix -->
+              <div class="vram-grid-view">
+                <div class="vram-grid-header">
+                  <span class="vram-title">80GB HBM3 Memory Allocation</span>
+                  <span class="vram-stat-badge" id="vram-stat-badge">76.4 GB Active / 4.5% Idle</span>
+                </div>
+
+                <!-- 32 Physical Memory Page Blocks (2.5GB each = 80GB total) -->
+                <div class="vram-blocks-container" id="vram-blocks-container" aria-label="80GB VRAM block allocation visualizer">
+                  <!-- Dynamically populated or rendered -->
+                </div>
+
+                <div class="vram-legend" id="vram-legend">
+                  <div class="vram-legend-item">
+                    <span class="vram-legend-pip" style="background: rgba(6, 182, 212, 0.8);"></span>
+                    <span>Llama-3 (70B)</span>
+                  </div>
+                  <div class="vram-legend-item">
+                    <span class="vram-legend-pip" style="background: rgba(16, 185, 129, 0.8);"></span>
+                    <span>Mistral-Large</span>
+                  </div>
+                  <div class="vram-legend-item">
+                    <span class="vram-legend-pip" style="background: rgba(168, 85, 247, 0.8);"></span>
+                    <span>Qwen-Coder</span>
+                  </div>
+                  <div class="vram-legend-item">
+                    <span class="vram-legend-pip" style="background: rgba(245, 158, 11, 0.8);"></span>
+                    <span>DeepSeek-V3</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Live Telemetry KPI Meter (Toggles with Simulator) -->
+            <div class="sim-results-strip">
+              <div class="result-kpi">
+                <div class="result-kpi-lbl">Active Throughput</div>
+                <div class="result-kpi-val" id="kpi-throughput" style="color: var(--accent-solution-light);">1,320 req/s</div>
+              </div>
+              <div class="result-kpi">
+                <div class="result-kpi-lbl">Weight Swap Latency</div>
+                <div class="result-kpi-val" id="kpi-latency" style="color: var(--accent-solution-light);">28 ms</div>
+              </div>
+              <div class="result-kpi">
+                <div class="result-kpi-lbl">Real Silicon MFU</div>
+                <div class="result-kpi-val" id="kpi-mfu" style="color: var(--accent-solution-light);">86.4%</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <!-- ====================================================================
+           SLIDE 3: TRACTION (EVIDENCE + RESOLUTION)
+           ==================================================================== -->
+      <article class="slide-frame slide-3" id="slide-3" role="tabpanel" aria-labelledby="tab-slide-3" aria-hidden="true">
+        <header class="slide-header">
+          <div class="slide-kicker">
+            <span class="slide-kicker-dot"></span>
+            03 / TRACTION // COMMERCIAL EXPANSION
+          </div>
+          <h1 class="slide-title">ARR expanded 13.3× to $9.6M with 168% Net Retention across 38 enterprise clusters.</h1>
+          <p class="slide-subtitle">High-margin software licensing ($4,800/GPU/yr) delivering 84.2% non-GAAP gross margin. 4 of the top 10 AI frontier labs and 34 Fortune 500 enterprises have deployed TensorMesh into production compute fabrics.</p>
+        </header>
+
+        <div class="slide-body">
+          <!-- Left Column: Interactive 14-Month ARR Growth & Cohort Retention Heatmap -->
+          <div class="card-panel">
+            <div class="panel-head">
+              <span class="panel-title">14-Month Monthly ARR Expansion</span>
+              <span class="panel-tag">HOVER BARS TO SCRUB FINANCIAL DATA</span>
+            </div>
+
+            <div class="arr-chart-wrap">
+              <!-- Floating ARR HUD -->
+              <div class="arr-hud" id="arr-hud" aria-live="polite">
+                <div class="hud-col">
+                  <span class="hud-label">Month</span>
+                  <span class="hud-val" id="arr-hud-month">M14 (Current)</span>
+                </div>
+                <div class="hud-col">
+                  <span class="hud-label">Annual Run-Rate</span>
+                  <span class="hud-val" id="arr-hud-arr" style="color: var(--accent-traction);">$9.60M</span>
+                </div>
+                <div class="hud-col">
+                  <span class="hud-label">Active Clusters</span>
+                  <span class="hud-val" id="arr-hud-clusters">38 Enterprise</span>
+                </div>
+                <div class="hud-col">
+                  <span class="hud-label">YoY Growth</span>
+                  <span class="hud-val" style="color: var(--accent-solution-light);">+340%</span>
+                </div>
+              </div>
+
+              <!-- Interactive SVG ARR Chart -->
+              <svg class="arr-svg" id="arr-svg" viewBox="0 0 740 180" preserveAspectRatio="none" role="img" aria-label="14-month ARR growth chart from $720K to $9.6M">
+                <defs>
+                  <linearGradient id="bar-gradient" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stop-color="#10b981" stop-opacity="0.9" />
+                    <stop offset="100%" stop-color="#064e3b" stop-opacity="0.4" />
+                  </linearGradient>
+                  <linearGradient id="bar-gradient-hover" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stop-color="#34d399" stop-opacity="1" />
+                    <stop offset="100%" stop-color="#10b981" stop-opacity="0.7" />
+                  </linearGradient>
+                </defs>
+
+                <!-- Grid lines -->
+                <line x1="45" y1="20" x2="720" y2="20" stroke="#1f2c42" stroke-width="1" stroke-dasharray="4 4" />
+                <text x="36" y="24" fill="#64748b" font-size="10" font-family="var(--font-mono)" text-anchor="end">$10M</text>
+
+                <line x1="45" y1="60" x2="720" y2="60" stroke="#1f2c42" stroke-width="1" stroke-dasharray="4 4" />
+                <text x="36" y="64" fill="#64748b" font-size="10" font-family="var(--font-mono)" text-anchor="end">$7.5M</text>
+
+                <line x1="45" y1="100" x2="720" y2="100" stroke="#1f2c42" stroke-width="1" stroke-dasharray="4 4" />
+                <text x="36" y="104" fill="#64748b" font-size="10" font-family="var(--font-mono)" text-anchor="end">$5.0M</text>
+
+                <line x1="45" y1="140" x2="720" y2="140" stroke="#1f2c42" stroke-width="1" stroke-dasharray="4 4" />
+                <text x="36" y="144" fill="#64748b" font-size="10" font-family="var(--font-mono)" text-anchor="end">$2.5M</text>
+
+                <line x1="45" y1="165" x2="720" y2="165" stroke="#1f2c42" stroke-width="1" />
+
+                <!-- 14 Monthly ARR Bars (x: 55 to 695, gap 46px) -->
+                <!-- Values: 0.72M(153), 0.94M(150), 1.25M(145), 1.68M(138), 2.15M(130), 2.80M(120), 3.55M(108), 4.40M(95), 5.35M(79), 6.40M(63), 7.45M(46), 8.50M(29), 9.10M(19), 9.60M(11) -->
+                <g id="arr-bars-group">
+                  <rect class="arr-bar" data-m="1" data-val="0.72" data-cust="6" x="55" y="153" width="28" height="12" rx="2" fill="url(#bar-gradient)" />
+                  <rect class="arr-bar" data-m="2" data-val="0.94" data-cust="8" x="103" y="150" width="28" height="15" rx="2" fill="url(#bar-gradient)" />
+                  <rect class="arr-bar" data-m="3" data-val="1.25" data-cust="10" x="151" y="145" width="28" height="20" rx="2" fill="url(#bar-gradient)" />
+                  <rect class="arr-bar" data-m="4" data-val="1.68" data-cust="13" x="199" y="138" width="28" height="27" rx="2" fill="url(#bar-gradient)" />
+                  <rect class="arr-bar" data-m="5" data-val="2.15" data-cust="16" x="247" y="130" width="28" height="35" rx="2" fill="url(#bar-gradient)" />
+                  <rect class="arr-bar" data-m="6" data-val="2.80" data-cust="19" x="295" y="120" width="28" height="45" rx="2" fill="url(#bar-gradient)" />
+                  <rect class="arr-bar" data-m="7" data-val="3.55" data-cust="22" x="343" y="108" width="28" height="57" rx="2" fill="url(#bar-gradient)" />
+                  <rect class="arr-bar" data-m="8" data-val="4.40" data-cust="26" x="391" y="95" width="28" height="70" rx="2" fill="url(#bar-gradient)" />
+                  <rect class="arr-bar" data-m="9" data-val="5.35" data-cust="29" x="439" y="79" width="28" height="86" rx="2" fill="url(#bar-gradient)" />
+                  <rect class="arr-bar" data-m="10" data-val="6.40" data-cust="32" x="487" y="63" width="28" height="102" rx="2" fill="url(#bar-gradient)" />
+                  <rect class="arr-bar" data-m="11" data-val="7.45" data-cust="34" x="535" y="46" width="28" height="119" rx="2" fill="url(#bar-gradient)" />
+                  <rect class="arr-bar" data-m="12" data-val="8.50" data-cust="36" x="583" y="29" width="28" height="136" rx="2" fill="url(#bar-gradient)" />
+                  <rect class="arr-bar" data-m="13" data-val="9.10" data-cust="37" x="631" y="19" width="28" height="146" rx="2" fill="url(#bar-gradient)" />
+                  <rect class="arr-bar active-bar" data-m="14" data-val="9.60" data-cust="38" x="679" y="11" width="28" height="154" rx="2" fill="url(#bar-gradient-hover)" />
+                </g>
+
+                <!-- Growth trajectory path connecting tops -->
+                <path d="M 69 153 L 117 150 L 165 145 L 213 138 L 261 130 L 309 120 L 357 108 L 405 95 L 453 79 L 501 63 L 549 46 L 597 29 L 645 19 L 693 11" fill="none" stroke="var(--accent-solution-light)" stroke-width="2" />
+
+                <!-- Month labels -->
+                <text x="69" y="177" fill="#64748b" font-size="9.5" font-family="var(--font-mono)" text-anchor="middle">M1</text>
+                <text x="165" y="177" fill="#64748b" font-size="9.5" font-family="var(--font-mono)" text-anchor="middle">M3</text>
+                <text x="309" y="177" fill="#64748b" font-size="9.5" font-family="var(--font-mono)" text-anchor="middle">M6</text>
+                <text x="453" y="177" fill="#64748b" font-size="9.5" font-family="var(--font-mono)" text-anchor="middle">M9</text>
+                <text x="597" y="177" fill="#64748b" font-size="9.5" font-family="var(--font-mono)" text-anchor="middle">M12</text>
+                <text x="693" y="177" fill="var(--text-primary)" font-size="9.5" font-family="var(--font-mono)" font-weight="700" text-anchor="middle">M14</text>
+              </svg>
+            </div>
+
+            <!-- Vintage Cohort Net Expansion Heatmap -->
+            <div class="cohort-section">
+              <div class="cohort-head">
+                <span class="cohort-title">Cohort Net Dollar Retention (%)</span>
+                <span class="panel-tag">NEGATIVE CHURN PROFILE</span>
+              </div>
+
+              <table class="cohort-table" aria-label="Quarterly cohort net retention matrix">
+                <thead>
+                  <tr>
+                    <th>Cohort</th>
+                    <th>Launch</th>
+                    <th>Month 3</th>
+                    <th>Month 6</th>
+                    <th>Month 9</th>
+                    <th>Month 12+</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="c-cohort-name">Q1 '25</td>
+                    <td class="heat-100" data-cohort="Q1 '25" data-mo="M1" data-val="100%" data-desc="Initial pilot across 6 AI teams">100%</td>
+                    <td class="heat-115" data-cohort="Q1 '25" data-mo="M3" data-val="118%" data-desc="Expanded to secondary model clusters">118%</td>
+                    <td class="heat-130" data-cohort="Q1 '25" data-mo="M6" data-val="134%" data-desc="Production SLA expansion across full pod">134%</td>
+                    <td class="heat-150" data-cohort="Q1 '25" data-mo="M9" data-val="152%" data-desc="Adopted by core inference platform team">152%</td>
+                    <td class="heat-165" data-cohort="Q1 '25" data-mo="M12" data-val="168%" data-desc="Expanded from 6 to 18 H100 pods as query volume surged">168%</td>
+                  </tr>
+                  <tr>
+                    <td class="c-cohort-name">Q2 '25</td>
+                    <td class="heat-100" data-cohort="Q2 '25" data-mo="M1" data-val="100%" data-desc="Onboarded 7 Tier-1 enterprise accounts">100%</td>
+                    <td class="heat-115" data-cohort="Q2 '25" data-mo="M3" data-val="122%" data-desc="Multi-cluster expansion to fine-tuning nodes">122%</td>
+                    <td class="heat-130" data-cohort="Q2 '25" data-mo="M6" data-val="141%" data-desc="Global latency failover license added">141%</td>
+                    <td class="heat-150" data-cohort="Q2 '25" data-mo="M9" data-val="162%" data-desc="Corporate-wide GPU orchestrator standard">162%</td>
+                    <td style="color:var(--text-dim);">-</td>
+                  </tr>
+                  <tr>
+                    <td class="c-cohort-name">Q3 '25</td>
+                    <td class="heat-100" data-cohort="Q3 '25" data-mo="M1" data-val="100%" data-desc="Added 9 frontier AI developer teams">100%</td>
+                    <td class="heat-115" data-cohort="Q3 '25" data-mo="M3" data-val="125%" data-desc="Self-serve conversion to 3-year commitment">125%</td>
+                    <td class="heat-130" data-cohort="Q3 '25" data-mo="M6" data-val="147%" data-desc="Autonomous vehicle cluster rollout">147%</td>
+                    <td style="color:var(--text-dim);">-</td>
+                    <td style="color:var(--text-dim);">-</td>
+                  </tr>
+                  <tr>
+                    <td class="c-cohort-name">Q4 '25</td>
+                    <td class="heat-100" data-cohort="Q4 '25" data-mo="M1" data-val="100%" data-desc="8 defense and fintech enterprise contracts">100%</td>
+                    <td class="heat-115" data-cohort="Q4 '25" data-mo="M3" data-val="128%" data-desc="Doubled active node count within 90 days">128%</td>
+                    <td style="color:var(--text-dim);">-</td>
+                    <td style="color:var(--text-dim);">-</td>
+                    <td style="color:var(--text-dim);">-</td>
+                  </tr>
+                </tbody>
+              </table>
+
+              <div class="cohort-cell-inspector" id="cohort-inspector">
+                <span>Select or hover any cell to inspect cohort driver:</span>
+                <span class="highlight" id="cohort-desc">Q1 '25 Cohort at Month 12: Expanded from 6 to 18 H100 pods as query volume surged</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right Column: Investor Economics Ledger & Proof Points -->
+          <div class="card-panel">
+            <div class="panel-head">
+              <span class="panel-title">Series A Unit Economics</span>
+              <span class="panel-tag">AUDITED FINANCIALS</span>
+            </div>
+
+            <div class="traction-ledger">
+              <div class="ledger-stat-row">
+                <div class="ledger-tile">
+                  <div class="ledger-val">$9.6M</div>
+                  <div class="ledger-lbl">Ending ARR</div>
+                  <div class="ledger-detail">+340% YoY expansion</div>
+                </div>
+                <div class="ledger-tile">
+                  <div class="ledger-val">168%</div>
+                  <div class="ledger-lbl">Net Dollar Retention</div>
+                  <div class="ledger-detail">Zero churn across Top 20</div>
+                </div>
+              </div>
+
+              <div class="ledger-stat-row">
+                <div class="ledger-tile">
+                  <div class="ledger-val">84.2%</div>
+                  <div class="ledger-lbl">Gross Margin</div>
+                  <div class="ledger-detail">Pure software license</div>
+                </div>
+                <div class="ledger-tile">
+                  <div class="ledger-val">3.8 Mo</div>
+                  <div class="ledger-lbl">CAC Payback</div>
+                  <div class="ledger-detail">42-day sales cycle</div>
+                </div>
+              </div>
+
+              <!-- Production Proof Card -->
+              <div class="enterprise-proof-card">
+                <div class="proof-head">
+                  <span class="proof-title">Flagship Enterprise Validation</span>
+                  <span class="panel-tag">PRODUCTION CASE STUDY</span>
+                </div>
+                <p class="proof-quote">"TensorMesh allowed us to compress our active inference footprint from 256 H100s to 96 H100s while cutting P99 latency by 62%. Saved $1.4M in year one."</p>
+                <div class="proof-metrics-list">
+                  <div class="proof-metric-pill">
+                    <span class="p-val">$1.4M / yr</span>
+                    <span class="p-lbl">Customer Net Cost Savings</span>
+                  </div>
+                  <div class="proof-metric-pill">
+                    <span class="p-val">3.4× ACV</span>
+                    <span class="p-lbl">Expansion in Month 6</span>
+                  </div>
+                  <div class="proof-metric-pill">
+                    <span class="p-val">4 of Top 10</span>
+                    <span class="p-lbl">Frontier AI Labs Deployed</span>
+                  </div>
+                  <div class="proof-metric-pill">
+                    <span class="p-val">38 Customers</span>
+                    <span class="p-lbl">Average ACV $252,600</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </article>
+
+    </div>
+  </main>
+
+  <!-- ========================================================================
+       BOTTOM FOOTER & PRESENTATION NAVIGATION AIDS
+       ======================================================================== -->
+  <footer class="deck-footer" role="contentinfo">
+    <div class="deck-progress-container">
+      <span id="slide-counter-display">SLIDE 01 OF 03</span>
+      <div class="progress-bar-track" aria-hidden="true">
+        <div class="progress-bar-fill" id="progress-bar-fill"></div>
+      </div>
+    </div>
+
+    <div class="shortcut-hints">
+      <span>NAVIGATE: <span class="key-badge">&larr;</span> <span class="key-badge">&rarr;</span> OR <span class="key-badge">SPACE</span></span>
+      <span>JUMP: <span class="key-badge">1</span> <span class="key-badge">2</span> <span class="key-badge">3</span></span>
+      <span>FULLSCREEN: <span class="key-badge">F</span></span>
+    </div>
+
+    <div>
+      <span>SERIES A INVESTOR SYNDICATE &bull; Q3 2026</span>
+    </div>
+  </footer>
+
+  <!-- ========================================================================
+       INTERACTION SCRIPTS: NAVIGATION, DATA SCRUBBING, ARCHITECTURE SIMULATOR
+       ======================================================================== -->
+  <script>
+    (function () {
+      'use strict';
+
+      // State Management
+      let currentSlide = 1;
+      const totalSlides = 3;
+
+      // DOM Elements
+      const slides = [
+        document.getElementById('slide-1'),
+        document.getElementById('slide-2'),
+        document.getElementById('slide-3')
+      ];
+      const tabs = [
+        document.getElementById('tab-slide-1'),
+        document.getElementById('tab-slide-2'),
+        document.getElementById('tab-slide-3')
+      ];
+      const prevBtn = document.getElementById('prev-btn');
+      const nextBtn = document.getElementById('next-btn');
+      const counterDisplay = document.getElementById('slide-counter-display');
+      const progressFill = document.getElementById('progress-bar-fill');
+
+      // Slide Navigation Core
+      function goToSlide(index) {
+        if (index < 1 || index > totalSlides || index === currentSlide) return;
+
+        const previousIndex = currentSlide;
+        currentSlide = index;
+
+        // Update slides visibility & spatial classes
+        slides.forEach((slide, i) => {
+          const slideNum = i + 1;
+          slide.classList.remove('active', 'prev');
+          if (slideNum === currentSlide) {
+            slide.classList.add('active');
+            slide.setAttribute('aria-hidden', 'false');
+          } else {
+            if (slideNum < currentSlide) {
+              slide.classList.add('prev');
+            }
+            slide.setAttribute('aria-hidden', 'true');
+          }
+        });
+
+        // Update Tabs
+        tabs.forEach((tab, i) => {
+          const slideNum = i + 1;
+          if (slideNum === currentSlide) {
+            tab.classList.add('active');
+            tab.setAttribute('aria-selected', 'true');
+          } else {
+            tab.classList.remove('active');
+            tab.setAttribute('aria-selected', 'false');
+          }
+        });
+
+        // Update Controls & Counter
+        prevBtn.disabled = (currentSlide === 1);
+        nextBtn.disabled = (currentSlide === totalSlides);
+        counterDisplay.textContent = `SLIDE 0${currentSlide} OF 0${totalSlides}`;
+        progressFill.style.width = `${(currentSlide / totalSlides) * 100}%`;
+
+        // Color accent for progress fill matching slide kicker
+        if (currentSlide === 1) progressFill.style.backgroundColor = 'var(--accent-problem)';
+        else if (currentSlide === 2) progressFill.style.backgroundColor = 'var(--accent-solution)';
+        else if (currentSlide === 3) progressFill.style.backgroundColor = 'var(--accent-traction)';
+      }
+
+      // Button handlers
+      prevBtn.addEventListener('click', () => goToSlide(currentSlide - 1));
+      nextBtn.addEventListener('click', () => goToSlide(currentSlide + 1));
+
+      tabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+          const targetIndex = parseInt(tab.getAttribute('data-index'), 10);
+          goToSlide(targetIndex);
+        });
+      });
+
+      // Keyboard Navigation
+      window.addEventListener('keydown', (e) => {
+        // Ignore if user is inside an input or editable field
+        if (['INPUT', 'TEXTAREA'].includes(document.activeElement.tagName)) return;
+
+        if (e.key === 'ArrowRight' || e.key === 'ArrowDown' || e.key === ' ' || e.key === 'PageDown') {
+          e.preventDefault();
+          goToSlide(currentSlide + 1);
+        } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp' || e.key === 'PageUp') {
+          e.preventDefault();
+          goToSlide(currentSlide - 1);
+        } else if (e.key === '1') {
+          goToSlide(1);
+        } else if (e.key === '2') {
+          goToSlide(2);
+        } else if (e.key === '3') {
+          goToSlide(3);
+        } else if (e.key === 'Home') {
+          goToSlide(1);
+        } else if (e.key === 'End') {
+          goToSlide(totalSlides);
+        } else if (e.key.toLowerCase() === 'f') {
+          if (!document.fullscreenElement) {
+            document.documentElement.requestFullscreen().catch(() => {});
+          } else {
+            document.exitFullscreen().catch(() => {});
+          }
+        }
+      });
+
+      // ========================================================================
+      // SLIDE 1 INTERACTIVITY: 24h Cluster Telemetry Scrubbing & Cost Waterfall
+      // ========================================================================
+      const telemetryWrap = document.getElementById('telemetry-svg-wrap');
+      const scrubLine = document.getElementById('scrub-line');
+      const scrubDotActive = document.getElementById('scrub-dot-active');
+      const scrubDotWaste = document.getElementById('scrub-dot-waste');
+      const hudTime = document.getElementById('hud-time');
+      const hudUtilized = document.getElementById('hud-utilized');
+      const hudWaste = document.getElementById('hud-waste');
+      const hudLoss = document.getElementById('hud-loss');
+
+      // Sample hourly data across 24h
+      const telemetryData = [
+        { hour: '00:00 EST', vram: 17.2, yActive: 150 },
+        { hour: '02:00 EST', vram: 18.5, yActive: 147 },
+        { hour: '04:00 EST', vram: 16.8, yActive: 151 },
+        { hour: '06:00 EST', vram: 19.4, yActive: 145 },
+        { hour: '08:00 EST', vram: 24.8, yActive: 134 },
+        { hour: '10:00 EST', vram: 31.6, yActive: 120 },
+        { hour: '12:00 EST', vram: 34.2, yActive: 115 },
+        { hour: '14:00 EST', vram: 28.4, yActive: 126 },
+        { hour: '16:00 EST', vram: 36.8, yActive: 110 },
+        { hour: '18:00 EST', vram: 29.5, yActive: 124 },
+        { hour: '20:00 EST', vram: 26.2, yActive: 130 },
+        { hour: '22:00 EST', vram: 21.0, yActive: 142 },
+        { hour: '24:00 EST', vram: 18.0, yActive: 148 }
+      ];
+
+      function updateTelemetryScrub(fraction) {
+        const clampedFraction = Math.max(0, Math.min(1, fraction));
+        const chartX = 40 + clampedFraction * (740 - 40);
+
+        // Find interpolated values
+        const totalIdx = telemetryData.length - 1;
+        const exactIdx = clampedFraction * totalIdx;
+        const lowIdx = Math.floor(exactIdx);
+        const highIdx = Math.min(totalIdx, Math.ceil(exactIdx));
+        const t = exactIdx - lowIdx;
+
+        const lowItem = telemetryData[lowIdx];
+        const highItem = telemetryData[highIdx];
+
+        const interpVram = lowItem.vram + t * (highItem.vram - lowItem.vram);
+        const interpY = lowItem.yActive + t * (highItem.yActive - lowItem.yActive);
+
+        // Update SVG markers
+        scrubLine.setAttribute('x1', chartX);
+        scrubLine.setAttribute('x2', chartX);
+        scrubDotActive.setAttribute('cx', chartX);
+        scrubDotActive.setAttribute('cy', interpY);
+        scrubDotWaste.setAttribute('cx', chartX);
+
+        // Update HUD readouts
+        const hourVal = Math.round(clampedFraction * 24);
+        const hourStr = `${hourVal.toString().padStart(2, '0')}:00 EST`;
+        const wasteGB = (80.0 - interpVram).toFixed(1);
+        const wastePct = ((80.0 - interpVram) / 80.0 * 100).toFixed(1);
+        const hourlyBleed = ((80.0 - interpVram) / 80.0 * 305.8).toFixed(2);
+
+        hudTime.textContent = hourStr;
+        hudUtilized.textContent = `${interpVram.toFixed(1)} GB (${(interpVram / 80 * 100).toFixed(1)}%)`;
+        hudWaste.textContent = `${wasteGB} GB (${wastePct}%)`;
+        hudLoss.textContent = `$${hourlyBleed}/hr`;
+
+        // Update ARIA attribute
+        telemetryWrap.setAttribute('aria-valuenow', hourVal);
+        telemetryWrap.setAttribute('aria-valuetext', `${hourStr}, ${wasteGB} GB Stranded Waste`);
+      }
+
+      if (telemetryWrap) {
+        telemetryWrap.addEventListener('pointermove', (e) => {
+          const rect = telemetryWrap.getBoundingClientRect();
+          const fraction = (e.clientX - rect.left) / rect.width;
+          updateTelemetryScrub(fraction);
+        });
+
+        telemetryWrap.addEventListener('keydown', (e) => {
+          let currentVal = parseInt(telemetryWrap.getAttribute('aria-valuenow') || '14', 10);
+          if (e.key === 'ArrowRight' || e.key === 'ArrowUp') {
+            e.preventDefault();
+            currentVal = Math.min(24, currentVal + 1);
+            updateTelemetryScrub(currentVal / 24);
+          } else if (e.key === 'ArrowLeft' || e.key === 'ArrowDown') {
+            e.preventDefault();
+            currentVal = Math.max(0, currentVal - 1);
+            updateTelemetryScrub(currentVal / 24);
+          }
+        });
+      }
+
+      // Spend waterfall segment hover integration
+      const waterfallBar = document.getElementById('waterfall-bar');
+      const waterfallTag = document.getElementById('waterfall-selected-tag');
+      const causeItems = document.querySelectorAll('.cause-item');
+
+      const segDetails = {
+        active: { label: 'ACTIVE TENSOR COMPUTE: 36¢', cause: null },
+        overprov: { label: 'MONOLITHIC PINNING: 31¢ ($44,020/mo)', cause: 'pinning' },
+        coldstart: { label: 'CHECKPOINT COLD STARTS: 21¢ ($29,820/mo)', cause: 'coldstart' },
+        frag: { label: 'KV-CACHE FRAGMENTATION: 12¢ ($17,040/mo)', cause: 'frag' }
+      };
+
+      document.querySelectorAll('.bar-seg, .legend-item').forEach(el => {
+        el.addEventListener('pointerenter', () => {
+          const seg = el.getAttribute('data-seg');
+          if (segDetails[seg]) {
+            waterfallTag.textContent = segDetails[seg].label;
+            causeItems.forEach(item => {
+              if (item.getAttribute('data-cause') === segDetails[seg].cause) {
+                item.classList.add('active-inspect');
+              } else {
+                item.classList.remove('active-inspect');
+              }
+            });
+          }
+        });
+      });
+
+      if (waterfallBar) {
+        waterfallBar.addEventListener('pointerleave', () => {
+          waterfallTag.textContent = 'TOTAL BREAKDOWN';
+          causeItems.forEach((item, idx) => {
+            if (idx === 0) item.classList.add('active-inspect');
+            else item.classList.remove('active-inspect');
+          });
+        });
+      }
+
+      // ========================================================================
+      // SLIDE 2 INTERACTIVITY: Architecture & Memory Allocation Simulator
+      // ========================================================================
+      const btnModeLegacy = document.getElementById('btn-mode-legacy');
+      const btnModeTensorMesh = document.getElementById('btn-mode-tensormesh');
+      const simStatusPill = document.getElementById('sim-status-pill');
+      const simStatusText = document.getElementById('sim-status-text');
+      const vramContainer = document.getElementById('vram-blocks-container');
+      const vramBadge = document.getElementById('vram-stat-badge');
+      const vramLegend = document.getElementById('vram-legend');
+
+      const pipeLayer2Box = document.getElementById('pipe-layer-2-box');
+      const pipeLayer2Lbl = document.getElementById('pipe-layer-2-lbl');
+      const pipeLayer2Val = document.getElementById('pipe-layer-2-val');
+      const pipeLayer4Box = document.getElementById('pipe-layer-4-box');
+      const pipeLayer4Val = document.getElementById('pipe-layer-4-val');
+
+      const kpiThroughput = document.getElementById('kpi-throughput');
+      const kpiLatency = document.getElementById('kpi-latency');
+      const kpiMfu = document.getElementById('kpi-mfu');
+
+      function renderVramBlocks(mode) {
+        vramContainer.innerHTML = '';
+        if (mode === 'legacy') {
+          // In Legacy Mode: 1 huge model (Llama-3 70B) pins 26 blocks (65GB), 6 blocks are idle fragmented holes
+          for (let i = 0; i < 32; i++) {
+            const block = document.createElement('div');
+            block.className = 'vram-block';
+            if (i < 26) {
+              block.classList.add('pinned');
+              block.textContent = 'M1';
+              block.title = 'Block ' + (i + 1) + ': Pinned Llama-3-70B (Static Locked)';
+            } else {
+              block.classList.add('idle-waste');
+              block.textContent = 'IDLE';
+              block.title = 'Block ' + (i + 1) + ': Stranded VRAM (Cannot allocate)';
+            }
+            vramContainer.appendChild(block);
+          }
+          vramBadge.textContent = '65.0 GB Locked (1 Model) / 18.8% Stranded';
+          vramLegend.innerHTML = `
+            <div class="vram-legend-item"><span class="vram-legend-pip" style="background: rgba(244, 63, 94, 0.8);"></span><span>Llama-3 Pinned</span></div>
+            <div class="vram-legend-item"><span class="vram-legend-pip" style="background: rgba(255, 255, 255, 0.1);"></span><span>Unallocatable Hole</span></div>
+          `;
+        } else {
+          // In TensorMesh Mode: 4 models dynamically paged across all 32 blocks
+          // M1: 8 blocks, M2: 8 blocks, M3: 8 blocks, M4: 8 blocks
+          const classes = ['mesh-active-1', 'mesh-active-2', 'mesh-active-3', 'mesh-active-4'];
+          const names = ['M1', 'M2', 'M3', 'M4'];
+          const modelTitles = ['Llama-3 70B', 'Mistral Large', 'Qwen Coder', 'DeepSeek V3'];
+
+          for (let i = 0; i < 32; i++) {
+            const block = document.createElement('div');
+            block.className = 'vram-block';
+            const modelIndex = Math.floor(i / 8);
+            block.classList.add(classes[modelIndex]);
+            block.textContent = names[modelIndex];
+            block.title = `Block ${i + 1}: ${modelTitles[modelIndex]} (4MB Virtual Page)`;
+            vramContainer.appendChild(block);
+          }
+          vramBadge.textContent = '78.5 GB Active (4 Concurrent Models) / 4.4% Buffer';
+          vramLegend.innerHTML = `
+            <div class="vram-legend-item"><span class="vram-legend-pip" style="background: rgba(6, 182, 212, 0.8);"></span><span>Llama-3 (70B)</span></div>
+            <div class="vram-legend-item"><span class="vram-legend-pip" style="background: rgba(16, 185, 129, 0.8);"></span><span>Mistral-Large</span></div>
+            <div class="vram-legend-item"><span class="vram-legend-pip" style="background: rgba(168, 85, 247, 0.8);"></span><span>Qwen-Coder</span></div>
+            <div class="vram-legend-item"><span class="vram-legend-pip" style="background: rgba(245, 158, 11, 0.8);"></span><span>DeepSeek-V3</span></div>
+          `;
+        }
+      }
+
+      function setSimMode(mode) {
+        if (mode === 'legacy') {
+          btnModeLegacy.classList.add('active');
+          btnModeLegacy.setAttribute('aria-pressed', 'true');
+          btnModeTensorMesh.classList.remove('active');
+          btnModeTensorMesh.setAttribute('aria-pressed', 'false');
+
+          simStatusPill.className = 'sim-status-pill status-legacy';
+          simStatusText.textContent = 'MONOLITHIC CUDA: 1 MODEL STALLED';
+
+          pipeLayer2Box.style.borderColor = 'var(--accent-problem-dim)';
+          pipeLayer2Box.style.backgroundColor = 'rgba(244, 63, 94, 0.08)';
+          pipeLayer2Lbl.textContent = 'Layer 2: Standard CUDA Driver';
+          pipeLayer2Val.textContent = 'Static Device Pointers (Stall on reload)';
+          pipeLayer2Val.style.color = '#fda4af';
+
+          pipeLayer4Box.style.borderColor = 'var(--accent-problem-dim)';
+          pipeLayer4Box.style.backgroundColor = 'rgba(244, 63, 94, 0.08)';
+          pipeLayer4Val.textContent = 'H100 Tensor Cores (36.2% MFU - Stalled)';
+          pipeLayer4Val.style.color = '#fda4af';
+
+          kpiThroughput.textContent = '410 req/s';
+          kpiThroughput.style.color = '#fda4af';
+          kpiLatency.textContent = '14,800 ms';
+          kpiLatency.style.color = '#fda4af';
+          kpiMfu.textContent = '36.2%';
+          kpiMfu.style.color = '#fda4af';
+
+          renderVramBlocks('legacy');
+        } else {
+          btnModeTensorMesh.classList.add('active');
+          btnModeTensorMesh.setAttribute('aria-pressed', 'true');
+          btnModeLegacy.classList.remove('active');
+          btnModeLegacy.setAttribute('aria-pressed', 'false');
+
+          simStatusPill.className = 'sim-status-pill status-tensormesh';
+          simStatusText.textContent = 'TENSORMESH: 4 MODELS PACKED';
+
+          pipeLayer2Box.style.borderColor = 'var(--accent-solution-dim)';
+          pipeLayer2Box.style.backgroundColor = 'rgba(6, 182, 212, 0.08)';
+          pipeLayer2Lbl.textContent = 'Layer 2: Scheduling Layer';
+          pipeLayer2Val.textContent = 'TensorMesh Micro-Kernel Scheduler';
+          pipeLayer2Val.style.color = 'var(--accent-solution-light)';
+
+          pipeLayer4Box.style.borderColor = 'var(--accent-solution-dim)';
+          pipeLayer4Box.style.backgroundColor = 'rgba(6, 182, 212, 0.08)';
+          pipeLayer4Val.textContent = 'H100 Tensor Cores (86.4% MFU)';
+          pipeLayer4Val.style.color = 'var(--accent-solution-light)';
+
+          kpiThroughput.textContent = '1,320 req/s';
+          kpiThroughput.style.color = 'var(--accent-solution-light)';
+          kpiLatency.textContent = '28 ms';
+          kpiLatency.style.color = 'var(--accent-solution-light)';
+          kpiMfu.textContent = '86.4%';
+          kpiMfu.style.color = 'var(--accent-solution-light)';
+
+          renderVramBlocks('tensormesh');
+        }
+      }
+
+      if (btnModeLegacy && btnModeTensorMesh) {
+        btnModeLegacy.addEventListener('click', () => setSimMode('legacy'));
+        btnModeTensorMesh.addEventListener('click', () => setSimMode('tensormesh'));
+        // Initial render
+        renderVramBlocks('tensormesh');
+      }
+
+      // ========================================================================
+      // SLIDE 3 INTERACTIVITY: Monthly ARR Bar Inspection & Cohort Heatmap
+      // ========================================================================
+      const arrBars = document.querySelectorAll('.arr-bar');
+      const arrHudMonth = document.getElementById('arr-hud-month');
+      const arrHudArr = document.getElementById('arr-hud-arr');
+      const arrHudClusters = document.getElementById('arr-hud-clusters');
+
+      arrBars.forEach(bar => {
+        bar.addEventListener('pointerenter', () => {
+          arrBars.forEach(b => b.classList.remove('active-bar'));
+          bar.classList.add('active-bar');
+
+          const monthNum = bar.getAttribute('data-m');
+          const valNum = bar.getAttribute('data-val');
+          const custNum = bar.getAttribute('data-cust');
+
+          arrHudMonth.textContent = `Month ${monthNum}`;
+          arrHudArr.textContent = `$${parseFloat(valNum).toFixed(2)}M`;
+          arrHudClusters.textContent = `${custNum} Enterprise`;
+        });
+      });
+
+      // Cohort Table cell interaction
+      const cohortCells = document.querySelectorAll('.cohort-table td[data-desc]');
+      const cohortDesc = document.getElementById('cohort-desc');
+
+      cohortCells.forEach(cell => {
+        cell.addEventListener('pointerenter', () => {
+          const cohort = cell.getAttribute('data-cohort');
+          const mo = cell.getAttribute('data-mo');
+          const val = cell.getAttribute('data-val');
+          const desc = cell.getAttribute('data-desc');
+
+          cohortDesc.innerHTML = `<strong>${cohort} (${mo} - ${val})</strong>: ${desc}`;
+        });
+      });
+
+      // Initial progress bar color setup
+      progressFill.style.backgroundColor = 'var(--accent-problem)';
+
+    })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,764 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Hooklane — webhook delivery that survives your customers' endpoints</title>
+<meta name="description" content="Sign, queue, deliver, retry and replay webhooks from one endpoint. Ship in minutes." />
+<meta name="theme-color" content="#F2EFE6" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@87..100,400;87..100,600;87..100,700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<style>
+/* ───────────────────────────────────────────────────────────
+   Hooklane hero
+   Motif: "the lane" — a rail with attempt ticks, repeated at
+   three scales (wordmark glyph, row mini-lane, attempt timeline).
+   Type: Archivo semi-condensed for the one display line;
+         IBM Plex Mono as the workhorse for everything else.
+   Scale: 1.25 modular — 12.8 / 16 / 20 / 25 / 31.25 px, display clamped.
+   Spacing: strict 4px base unit.
+   ─────────────────────────────────────────────────────────── */
+
+:root{
+  /* palette — 3 neutrals, 1 signal, 1 data-positive */
+  --paper:#F2EFE6;
+  --panel:#FBFAF5;
+  --ink:#13130F;
+  --ink-rgb:19,19,15;
+  --ink-70:#3E3D35;
+  --ink-45:#55544B;
+  --rule:#DCD7C8;
+  --rule-soft:#E8E4D8;
+  --rule-strong:#8C8268;   /* interactive-boundary rule — ≥3:1 on paper & panel */
+  --signal:#D6360B;        /* graphics / large text only */
+  --signal-ink:#A82A05;    /* small text — 5.5:1 on paper */
+  --accent:#8A5A00;        /* CTA dot / headline emphasis — distinct from --signal's error meaning */
+  --ok:#245C43;
+  --surface-tint:#F6F3EA;  /* hover/expanded surface — one shared tone for rowbtn hover and detail panel */
+
+  /* type scale, 1.25 ratio off 16 */
+  --t-xs:12.8px;
+  --t-sm:16px;
+  --t-md:20px;
+  --t-lg:25px;
+
+  /* 4px base unit */
+  --s1:4px; --s2:8px; --s3:12px; --s4:16px; --s5:24px;
+  --s6:32px; --s7:48px; --s8:64px; --s9:96px;
+
+  /* radius hierarchy — deliberately not uniform */
+  --r-chip:2px;
+  --r-panel:3px;
+  --r-dot:999px;
+
+  --gutter:32px;
+  --maxw:1280px;
+
+  --mono:"IBM Plex Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  --display:"Archivo", "Helvetica Neue", Arial, sans-serif;
+}
+
+*,*::before,*::after{box-sizing:border-box;}
+html{-webkit-text-size-adjust:100%;}
+body{
+  margin:0;
+  background:var(--paper);
+  color:var(--ink);
+  font-family:var(--mono);
+  font-size:var(--t-sm);
+  line-height:1.5;
+  font-variant-ligatures:none;
+  -webkit-font-smoothing:antialiased;
+}
+
+/* paper has a faint ruled texture, not a gradient: it's a ledger */
+body::before{
+  content:"";
+  position:fixed; inset:0;
+  pointer-events:none;
+  background-image:linear-gradient(to bottom, var(--rule-soft) 1px, transparent 1px);
+  background-size:100% 32px;
+  opacity:.55;
+  z-index:0;
+}
+
+.shell{position:relative;z-index:1;max-width:var(--maxw);margin:0 auto;padding:0 var(--gutter);}
+
+a{color:inherit;}
+:focus-visible{outline:2px solid var(--signal);outline-offset:3px;}
+button{font:inherit;color:inherit;}
+
+.sr-only{
+  position:absolute;width:1px;height:1px;overflow:hidden;
+  clip:rect(0,0,0,0);white-space:nowrap;
+}
+
+/* ── nav ─────────────────────────────────────────────── */
+.nav{
+  display:flex;align-items:center;gap:var(--s5);
+  height:72px;
+  border-bottom:1px solid var(--rule);
+}
+.brand{display:flex;align-items:center;gap:var(--s3);text-decoration:none;font-weight:600;letter-spacing:-.01em;}
+.brand svg{display:block;}
+.nav-links{display:flex;gap:var(--s1);margin-left:var(--s5);}
+.nav-links a{
+  text-decoration:none;color:var(--ink-45);
+  font-size:var(--t-xs);letter-spacing:.04em;text-transform:uppercase;
+  padding:var(--s3) var(--s3);
+  display:inline-flex;align-items:center;min-height:44px;
+  transition:color 120ms ease-out;
+}
+.nav-links a:hover{color:var(--ink);}
+.nav-right{margin-left:auto;display:flex;align-items:center;gap:var(--s4);min-width:0;}
+.status-chip{
+  display:inline-flex;align-items:center;gap:var(--s2);
+  font-size:var(--t-xs);color:var(--ink-45);
+  border:1px solid var(--rule);border-radius:var(--r-chip);
+  padding:var(--s2) var(--s3);background:var(--panel);
+}
+.pulse{width:7px;height:7px;border-radius:var(--r-dot);background:var(--ok);flex:0 0 auto;}
+@media (prefers-reduced-motion:no-preference){
+  .pulse{animation:breathe 2400ms ease-in-out infinite;}
+}
+@keyframes breathe{0%,100%{opacity:1}50%{opacity:.35}}
+.signin{
+  text-decoration:none;font-size:var(--t-xs);letter-spacing:.04em;text-transform:uppercase;
+  display:inline-flex;align-items:center;min-height:44px;padding:0 var(--s2);
+  border-bottom:1px solid transparent;
+}
+.signin:hover{border-bottom-color:var(--ink);}
+
+/* ── hero grid ───────────────────────────────────────── */
+.hero{
+  display:grid;
+  grid-template-columns:minmax(0,46fr) minmax(0,54fr);
+  gap:var(--s8);
+  align-items:start;
+  padding:var(--s8) 0 var(--s7);
+}
+@media (min-width:1360px){
+  /* the one deliberate grid break: the instrument bleeds right */
+  .hero{margin-right:calc(-1 * var(--s8));}
+}
+
+.eyebrow{
+  font-size:var(--t-xs);letter-spacing:.14em;text-transform:uppercase;
+  color:var(--signal-ink);
+  display:flex;align-items:center;gap:var(--s3);
+  margin:0 0 var(--s5);
+}
+.eyebrow::after{content:"";height:1px;flex:1;background:var(--rule);}
+
+h1{
+  font-family:var(--display);
+  font-weight:700;
+  font-stretch:90%;
+  font-size:clamp(39px, 4.6vw, 61px); /* 1.25^6 off 16px = 61.03px, the actual scale step */
+  line-height:.98;
+  letter-spacing:-.035em;
+  margin:0 0 var(--s4);
+  text-wrap:balance;
+}
+h1 em{
+  font-style:normal;
+  color:var(--accent);
+  /* the lane, drawn under the phrase it names — a distinct hue from the error-state red */
+  box-shadow:inset 0 -.09em 0 currentColor;
+}
+
+.lede{
+  font-size:var(--t-md);
+  line-height:1.45;
+  color:var(--ink-70);
+  margin:0 0 var(--s5);
+  max-width:44ch;
+}
+.lede b{font-weight:500;color:var(--ink);}
+
+.actions{display:flex;flex-wrap:wrap;align-items:center;gap:var(--s5);margin-bottom:var(--s3);}
+.terms{font-size:var(--t-xs);color:var(--ink-45);margin:0 0 var(--s5);}
+.cta{
+  display:inline-flex;align-items:center;gap:var(--s3);
+  min-height:52px;padding:0 var(--s5);
+  background:var(--ink);color:var(--paper);
+  border:1px solid var(--ink);border-radius:var(--r-chip);
+  text-decoration:none;font-weight:500;font-size:var(--t-sm);
+  letter-spacing:-.01em;cursor:pointer;
+  transition:background 120ms ease-out, transform 120ms ease-out;
+}
+.cta:hover{background:var(--ink);transform:translateY(-1px);}
+.cta .cta-dot{width:8px;height:8px;background:var(--accent);border-radius:var(--r-chip);}
+.link-cta{
+  display:inline-flex;align-items:center;min-height:52px;
+  font-size:var(--t-sm);color:var(--ink-70);text-decoration:none;
+  border-bottom:1px solid var(--rule);padding-bottom:4px;
+  transition:color 120ms ease-out,border-color 120ms ease-out;
+}
+.link-cta:hover{color:var(--ink);border-bottom-color:var(--ink);}
+
+.install{
+  display:flex;align-items:center;gap:var(--s3);
+  border:1px solid var(--rule-strong);border-radius:var(--r-chip);
+  background:var(--panel);
+  padding:var(--s3) var(--s3) var(--s3) var(--s4);
+  max-width:420px;
+}
+.install code{font-size:var(--t-xs);color:var(--ink-70);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0;flex:1 1 auto;}
+.install code .dollar{color:var(--ink-45);user-select:none;}
+.copy{
+  margin-left:auto;flex:0 0 auto;
+  border:1px solid var(--rule-strong);background:transparent;border-radius:var(--r-chip);
+  font-size:var(--t-xs);letter-spacing:.06em;text-transform:uppercase;
+  padding:var(--s2) var(--s3);min-height:36px;cursor:pointer;color:var(--ink-45);
+  transition:color 120ms ease-out,border-color 120ms ease-out;
+}
+.copy:hover{color:var(--ink);border-color:var(--ink);}
+.copy[data-done="1"]{color:var(--ok);border-color:var(--ok);}
+@media (pointer:coarse){ .copy{min-height:44px;} }
+
+/* ── the instrument (delivery ledger) ────────────────── */
+.ledger{
+  border:1px solid var(--ink);
+  border-radius:var(--r-panel);
+  background:var(--panel);
+  box-shadow:6px 6px 0 rgba(var(--ink-rgb),.06); /* one deliberate elevation, hard offset */
+  overflow:hidden;
+}
+.ledger-head{
+  display:flex;align-items:center;gap:var(--s3);flex-wrap:wrap;
+  padding:var(--s3) var(--s4);
+  border-bottom:1px solid var(--rule);
+  background:var(--paper);
+}
+.endpoint{font-size:var(--t-xs);color:var(--ink-70);display:flex;align-items:center;gap:var(--s2);}
+.endpoint .verb{color:var(--signal-ink);font-weight:600;}
+.seg{display:flex;margin-left:auto;border:1px solid var(--rule-strong);border-radius:var(--r-chip);overflow:hidden;background:var(--panel);}
+.seg button{
+  border:0;background:transparent;cursor:pointer;
+  font-size:var(--t-xs);letter-spacing:.02em;text-transform:uppercase;
+  padding:0 var(--s2);min-height:36px;color:var(--ink-45);
+  transition:background 120ms ease-out,color 120ms ease-out;
+}
+.seg button + button{border-left:1px solid var(--rule-strong);}
+.seg button:hover{color:var(--ink);}
+.seg button[aria-pressed="true"]{background:var(--ink);color:var(--paper);}
+.pause{
+  border:1px solid var(--rule-strong);background:var(--panel);border-radius:var(--r-chip);
+  font-size:var(--t-xs);letter-spacing:.02em;text-transform:uppercase;
+  min-height:36px;padding:0 var(--s2);cursor:pointer;color:var(--ink-45);min-width:72px;
+  transition:color 120ms ease-out,border-color 120ms ease-out;
+}
+.pause:hover{color:var(--ink);border-color:var(--ink);}
+.pause[aria-pressed="true"]{color:var(--signal-ink);border-color:var(--signal);}
+@media (pointer:coarse){ .seg button,.pause{min-height:44px;} }
+
+.rows{list-style:none;margin:0;padding:0;}
+.rows li + li{border-top:1px solid var(--rule-soft);}
+.rowbtn{
+  display:grid;
+  grid-template-columns:68px minmax(148px,1fr) minmax(0,.86fr) 112px 92px;
+  align-items:center;gap:var(--s3);
+  width:100%;min-height:52px;padding:var(--s2) var(--s4);
+  background:transparent;border:0;text-align:left;cursor:pointer;
+  font-size:var(--t-xs);
+  transition:background 120ms ease-out;
+}
+.rowbtn:hover,.rowbtn:focus-visible{background:var(--surface-tint);}
+.rowbtn .t{color:var(--ink-45);font-variant-numeric:tabular-nums;}
+.rowbtn .ev{color:var(--ink);font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.rowbtn .dest{color:var(--ink-45);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.rowbtn .state{display:flex;align-items:center;gap:var(--s2);justify-self:end;}
+.rowbtn .state .glyph{width:8px;height:8px;flex:0 0 auto;}
+.s-delivered .glyph{background:var(--ok);border-radius:var(--r-dot);}
+.s-delivered .label{color:var(--ok);}
+.s-retrying  .glyph{background:var(--signal);border-radius:var(--r-chip);}
+.s-retrying  .label{color:var(--signal-ink);}
+.s-failed    .glyph{border:1.5px solid var(--signal);background:transparent;transform:rotate(45deg);}
+.s-failed    .label{color:var(--signal-ink);}
+
+.detail{display:grid;grid-template-rows:0fr;transition:grid-template-rows 220ms ease-out;background:var(--surface-tint);}
+/* visibility, not just clipping: collapsed detail must leave the a11y tree and the tab order */
+.detail > div{overflow:hidden;visibility:hidden;transition:visibility 0s linear 220ms;}
+li[data-open="1"] .detail{grid-template-rows:1fr;}
+li[data-open="1"] .detail > div{visibility:visible;transition-delay:0s;}
+li[data-open="1"]{border-left:0;} /* explicitly no accent strip */
+.detail-inner{padding:var(--s4) var(--s4) var(--s5) 92px;border-top:1px solid var(--rule-soft);}
+.detail-h{font-size:var(--t-xs);letter-spacing:.1em;text-transform:uppercase;color:var(--ink-45);margin:0 0 var(--s3);}
+.attempts{list-style:none;margin:0;padding:0;display:grid;gap:var(--s2);}
+.attempt{display:grid;grid-template-columns:84px 64px 1fr 96px;gap:var(--s3);align-items:center;font-size:var(--t-xs);}
+.attempt .code{font-weight:600;}
+.attempt .bar{height:6px;background:var(--rule);position:relative;}
+.attempt .bar i{position:absolute;inset:0 auto 0 0;background:var(--ink-45);display:block;}
+.attempt.ok .code{color:var(--ok);}
+.attempt.ok .bar i{background:var(--ok);}
+.attempt.bad .code{color:var(--signal-ink);}
+.attempt.bad .bar i{background:var(--signal);}
+.attempt .ms{text-align:right;color:var(--ink-45);font-variant-numeric:tabular-nums;}
+
+/* keyboard equivalent of hovering a mini-lane tick: arrow keys move a roving
+   highlight across a focused row's ticks while the same detail reaches #inspector-val */
+.tick.is-active circle,.tick.is-active rect{stroke:var(--ink);stroke-width:2px;}
+.tick.is-active line{stroke-width:2.4px;}
+
+.ledger-foot{
+  display:flex;align-items:center;gap:var(--s3);
+  border-top:1px solid var(--rule);background:var(--paper);
+  padding:var(--s3) var(--s4);min-height:48px;
+  font-size:var(--t-xs);color:var(--ink-45);
+}
+.ledger-foot .key{letter-spacing:.1em;text-transform:uppercase;}
+.ledger-foot .val{color:var(--ink);font-variant-numeric:tabular-nums;}
+
+/* ── proof rule ──────────────────────────────────────── */
+.proof{
+  display:flex;flex-wrap:wrap;gap:var(--s5) var(--s7);
+  border-top:1px solid var(--rule);
+  padding:var(--s5) 0 var(--s9);
+  font-size:var(--t-xs);color:var(--ink-45);
+}
+.proof div{display:flex;align-items:baseline;gap:var(--s3);}
+.proof b{font-family:var(--display);font-stretch:90%;font-weight:600;font-size:var(--t-lg);color:var(--ink);letter-spacing:-.02em;}
+
+/* ── entrance: 4 staggered moments, nothing else ─────── */
+@media (prefers-reduced-motion:no-preference){
+  .rise{opacity:0;transform:translateY(8px);animation:rise 420ms cubic-bezier(.2,.7,.3,1) forwards;}
+  .rise:nth-child(1){animation-delay:0ms}
+  .d1{animation-delay:60ms}.d2{animation-delay:120ms}.d3{animation-delay:180ms}.d4{animation-delay:240ms}
+  @keyframes rise{to{opacity:1;transform:none;}}
+  .rowbtn.enter{animation:appear 150ms linear;}
+  @keyframes appear{from{opacity:0;transform:translateY(-4px);}to{opacity:1;transform:none;}}
+}
+
+/* ── responsive: content reflows, not shrinks ────────── */
+@media (max-width:1080px){
+  .hero{grid-template-columns:minmax(0,1fr);gap:var(--s7);padding-top:var(--s8);}
+  .lede{max-width:60ch;}
+  .rowbtn{grid-template-columns:72px minmax(0,1fr) 120px 96px;}
+  .rowbtn .dest{display:none;}
+  .detail-inner{padding-left:88px;}
+}
+@media (max-width:720px){
+  :root{--gutter:20px;}
+  .nav{height:auto;padding:var(--s3) 0;flex-wrap:wrap;gap:var(--s2);}
+  .nav-links{display:none;}
+  .nav-right{margin-left:auto;}
+  .hero{padding:var(--s7) 0 var(--s6);}
+  .rowbtn{grid-template-columns:64px minmax(0,1fr) 92px;padding-left:var(--s3);padding-right:var(--s3);}
+  .rowbtn .lane{display:none;}
+  .detail-inner{padding-left:var(--s3);padding-right:var(--s3);}
+  .attempt{grid-template-columns:72px 56px 1fr;}
+  .attempt .ms{display:none;}
+  .ledger-head{gap:var(--s2);}
+  .seg{margin-left:0;}
+  .install{max-width:100%;}
+  .proof{gap:var(--s4) var(--s5);}
+}
+@media (max-width:520px){
+  .status-chip .txt{display:none;}
+  .status-chip{padding:var(--s2);}
+  .install{padding-left:var(--s3);align-items:flex-start;}
+  /* never truncate the thing the user is meant to copy */
+  .install code{white-space:normal;overflow-wrap:anywhere;text-overflow:clip;line-height:1.6;}
+  .copy{margin-top:4px;}
+}
+/* reduced motion: state still changes, it just changes instantly */
+@media (prefers-reduced-motion:reduce){
+  .detail,.detail > div{transition:none;}
+  a,button,.rowbtn,.chip{transition:none;}
+}
+/* touch: the compact 36px control height is fine for a mouse, not for a thumb */
+@media (pointer:coarse){
+  .seg button,.pause,.copy,.nav-right a,.nav-links a{min-height:44px;}
+  .brand{min-height:44px;align-items:center;}
+  .rowbtn{min-height:56px;}
+}
+</style>
+</head>
+<body>
+<div class="shell">
+
+  <header class="nav">
+    <a class="brand" href="#" aria-label="Hooklane, home">
+      <!-- motif at its smallest scale: the lane -->
+      <svg width="34" height="16" viewBox="0 0 34 16" role="img" aria-hidden="true" focusable="false">
+        <line x1="1" y1="8" x2="33" y2="8" stroke="var(--ink)" stroke-width="1.5"/>
+        <circle cx="5" cy="8" r="2.5" fill="none" stroke="var(--ink)" stroke-width="1.5"/>
+        <circle cx="15" cy="8" r="2.5" fill="none" stroke="var(--ink)" stroke-width="1.5"/>
+        <circle cx="29" cy="8" r="4" fill="var(--signal)"/>
+      </svg>
+      <span>hooklane</span>
+    </a>
+    <nav class="nav-links" aria-label="Primary">
+      <a href="#">Docs</a>
+      <a href="#">Pricing</a>
+      <a href="#">Changelog</a>
+    </nav>
+    <div class="nav-right">
+      <span class="status-chip" aria-label="All regions nominal"><span class="pulse" aria-hidden="true"></span><span class="txt">All regions nominal</span></span>
+      <a class="signin" href="#">Sign in</a>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero" aria-labelledby="h1">
+
+      <div>
+        <p class="eyebrow rise">Webhook delivery infrastructure</p>
+
+        <h1 id="h1" class="rise d1">Your customers' endpoints go down. <em>Yours doesn't notice.</em></h1>
+
+        <p class="lede rise d2">
+          One endpoint to sign, queue and deliver every event you emit. Exponential backoff
+          out to 24 hours, HMAC-signed payloads, and replay from the console when an
+          integration comes back from the dead. <b>Ship webhooks in minutes, not a sprint.</b>
+        </p>
+
+        <div class="actions rise d3">
+          <a class="cta" href="#"><span class="cta-dot" aria-hidden="true"></span>Start delivering</a>
+          <a class="link-cta" href="#">Read the quickstart — 4 min</a>
+        </div>
+        <p class="terms rise d3">No card. 100,000 events a month on the free tier.</p>
+
+        <div class="install rise d3">
+          <code><span class="dollar">$ </span>npm i hooklane &amp;&amp; npx hooklane init</code>
+          <button class="copy" id="copy" type="button" data-cmd="npm i hooklane &amp;&amp; npx hooklane init" aria-live="polite" aria-atomic="true">Copy</button>
+        </div>
+      </div>
+
+      <!-- the instrument: the product doing the thing the headline promises -->
+      <section class="ledger rise d4" aria-labelledby="ledger-h">
+        <h2 id="ledger-h" class="sr-only">Live delivery ledger</h2>
+        <div class="ledger-head">
+          <span class="endpoint"><span class="verb">POST</span> /v1/events</span>
+          <div class="seg" role="group" aria-label="Filter deliveries by state">
+            <button type="button" data-filter="all" aria-pressed="true">All</button>
+            <button type="button" data-filter="delivered" aria-pressed="false">Delivered</button>
+            <button type="button" data-filter="retrying" aria-pressed="false">Retrying</button>
+            <button type="button" data-filter="failed" aria-pressed="false">Failed</button>
+          </div>
+          <button class="pause" id="pause" type="button" aria-pressed="false">Pause</button>
+        </div>
+
+        <ul class="rows" id="rows" aria-live="off"></ul>
+
+        <p class="ledger-foot" id="inspector" style="margin:0;">
+          <span class="key">Inspect</span>
+          <span class="val" id="inspector-val" aria-live="polite">Hover, or focus a row and use ← → for exact attempt timings</span>
+        </p>
+      </section>
+
+    </section>
+
+    <div class="proof">
+      <div><b>99.995%</b> <span>delivery SLA, measured at the consumer</span></div>
+      <div><b>42 ms</b> <span>p99 dispatch, us-east</span></div>
+      <div><b>1.4B</b> <span>events routed in the last 30 days</span></div>
+    </div>
+  </main>
+
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  var reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  /* deterministic pseudo-random so the page reads the same every load */
+  var seed = 20260919;
+  function rnd(){ seed = (seed * 1664525 + 1013904223) % 4294967296; return seed / 4294967296; }
+  function pick(a){ return a[Math.floor(rnd() * a.length)]; }
+
+  var EVENTS = ["invoice.paid","checkout.completed","subscription.updated","refund.created",
+                "customer.created","payout.settled","dispute.opened","shipment.delivered"];
+  var DESTS  = ["acme.io/hooks","northwind.dev/wh","lumen-labs.com/in",
+                "paperbird.app/ev","tessellate.co/wh","kettle.sh/hooks"];
+  var FAILCODES = [500, 502, 503, 429, 504];
+
+  var state = { filter:"all", paused:false, open:null, focused:false, rows:[], seq:4821 };
+
+  /* pick without repeating the previous value — a real ledger doesn't stutter */
+  var lastPick = {};
+  function pickFresh(arr, key){
+    var v = pick(arr), guard = 0;
+    while (v === lastPick[key] && guard++ < 6) v = pick(arr);
+    lastPick[key] = v;
+    return v;
+  }
+
+  function makeRow(ageSec){
+    var roll = rnd();
+    var status = roll < 0.66 ? "delivered" : (roll < 0.90 ? "retrying" : "failed");
+    var attempts = [];
+    var nAttempts = status === "delivered" ? (rnd() < 0.72 ? 1 : 2) : (status === "retrying" ? 2 : 4);
+    var backoff = [0, 1, 4, 16, 64];
+    for (var i = 0; i < nAttempts; i++){
+      var last = (i === nAttempts - 1);
+      var ok = last && status === "delivered";
+      attempts.push({
+        n: i + 1,
+        at: backoff[i],
+        code: ok ? 200 : pick(FAILCODES),
+        ms: ok ? Math.round(40 + rnd() * 260) : Math.round(400 + rnd() * 2600)
+      });
+    }
+    return {
+      id: "evt_" + (state.seq++).toString(36) + Math.floor(rnd() * 900 + 100).toString(36),
+      age: ageSec,
+      name: pickFresh(EVENTS, "ev"),
+      dest: pickFresh(DESTS, "dest"),
+      status: status,
+      attempts: attempts
+    };
+  }
+
+  function clock(ageSec){
+    var d = new Date(Date.now() - ageSec * 1000);
+    function p(n){ return n < 10 ? "0" + n : "" + n; }
+    return p(d.getHours()) + ":" + p(d.getMinutes()) + ":" + p(d.getSeconds());
+  }
+
+  function laneSVG(row){
+    /* motif at mid scale: rail + one tick per attempt, terminal tick carries the outcome */
+    var W = 132, H = 14, x0 = 3, x1 = W - 3;
+    var n = row.attempts.length;
+    var parts = ['<svg class="lane" width="' + W + '" height="' + H + '" viewBox="0 0 ' + W + ' ' + H + '" aria-hidden="true" focusable="false">'];
+    parts.push('<line x1="' + x0 + '" y1="7" x2="' + x1 + '" y2="7" stroke="var(--rule)" stroke-width="1.5"/>');
+    var reach = n === 1 ? x0 : x0 + (x1 - x0) * ((n - 1) / Math.max(n - 1, 1));
+    parts.push('<line x1="' + x0 + '" y1="7" x2="' + reach + '" y2="7" stroke="var(--ink-45)" stroke-width="1.5"/>');
+    for (var i = 0; i < n; i++){
+      var a = row.attempts[i];
+      var x = n === 1 ? x0 + 2 : x0 + (x1 - x0) * (i / (n - 1));
+      x = Math.min(Math.max(x, x0 + 2), x1 - 2);
+      var okTick = a.code === 200;
+      if (okTick){
+        parts.push('<circle class="tick" data-i="' + i + '" cx="' + x + '" cy="7" r="4" fill="var(--ok)"/>');
+      } else if (row.status === "failed" && i === n - 1){
+        parts.push('<g class="tick" data-i="' + i + '"><line x1="' + (x-3) + '" y1="4" x2="' + (x+3) + '" y2="10" stroke="var(--signal)" stroke-width="1.6"/><line x1="' + (x-3) + '" y1="10" x2="' + (x+3) + '" y2="4" stroke="var(--signal)" stroke-width="1.6"/></g>');
+      } else {
+        parts.push('<rect class="tick" data-i="' + i + '" x="' + (x-3) + '" y="4" width="6" height="6" fill="var(--signal)"/>');
+      }
+    }
+    parts.push('</svg>');
+    return parts.join("");
+  }
+
+  var STATE_LABEL = { delivered:"delivered", retrying:"retrying", failed:"failed" };
+
+  function rowHTML(row){
+    var open = state.open === row.id;
+    var maxMs = row.attempts.reduce(function(m,a){ return Math.max(m, a.ms); }, 1);
+    var atts = row.attempts.map(function(a){
+      var ok = a.code === 200;
+      return '<li class="attempt ' + (ok ? "ok" : "bad") + '">' +
+               '<span>attempt ' + a.n + '</span>' +
+               '<span class="code">' + a.code + '</span>' +
+               '<span class="bar"><i style="width:' + Math.max(6, Math.round(a.ms / maxMs * 100)) + '%"></i></span>' +
+               '<span class="ms">' + a.ms.toLocaleString() + ' ms</span>' +
+             '</li>';
+    }).join("");
+    var tail = row.status === "retrying"
+      ? '<li class="attempt"><span>next</span><span class="code">queued</span><span class="bar"></span><span class="ms">t+' + (row.attempts.length === 2 ? "4" : "16") + 's</span></li>'
+      : "";
+
+    var detailId = "detail-" + row.id;
+    return '<li data-id="' + row.id + '" data-open="' + (open ? "1" : "0") + '">' +
+      '<button class="rowbtn s-' + row.status + '" type="button" aria-expanded="' + (open ? "true" : "false") + '" aria-controls="' + detailId + '" aria-keyshortcuts="ArrowLeft ArrowRight">' +
+        '<span class="t">' + clock(row.age) + '</span>' +
+        '<span class="ev">' + row.name + '</span>' +
+        '<span class="dest">' + row.dest + '</span>' +
+        laneSVG(row) +
+        '<span class="state"><span class="glyph" aria-hidden="true"></span><span class="label">' + STATE_LABEL[row.status] + '</span></span>' +
+      '</button>' +
+      '<div class="detail" id="' + detailId + '"><div><div class="detail-inner">' +
+        '<p class="detail-h">' + row.id + ' · ' + row.attempts.length + ' attempt' + (row.attempts.length > 1 ? "s" : "") + ' · exponential backoff</p>' +
+        '<ul class="attempts">' + atts + tail + '</ul>' +
+      '</div></div></div>' +
+    '</li>';
+  }
+
+  var rowsEl = document.getElementById("rows");
+  var inspectorVal = document.getElementById("inspector-val");
+
+  function visible(){
+    return state.rows.filter(function(r){ return state.filter === "all" || r.status === state.filter; });
+  }
+
+  function render(newTopId){
+    var list = visible();
+    rowsEl.innerHTML = list.length
+      ? list.map(rowHTML).join("")
+      : '<li><p style="margin:0;padding:var(--s5) var(--s4);font-size:var(--t-xs);color:var(--ink-45);">No deliveries in this state right now — the queue is clear.</p></li>';
+    if (newTopId && !reduced){
+      var first = rowsEl.querySelector('li[data-id="' + newTopId + '"] .rowbtn');
+      if (first) first.classList.add("enter");
+    }
+  }
+
+  function setInspector(text){ inspectorVal.textContent = text; }
+
+  function summarize(row){
+    var last = row.attempts[row.attempts.length - 1];
+    return row.id + " · " + row.name + " → " + row.dest + " · " +
+           row.attempts.length + " attempt" + (row.attempts.length > 1 ? "s" : "") +
+           " · last " + last.code + " in " + last.ms.toLocaleString() + " ms";
+  }
+
+  /* seed the ledger */
+  for (var i = 0; i < 7; i++) state.rows.push(makeRow(3 + i * 7));
+  render();
+
+  /* ── interaction ─────────────────────────────────── */
+  rowsEl.addEventListener("click", function(e){
+    var btn = e.target.closest(".rowbtn");
+    if (!btn) return;
+    var li = btn.closest("li");
+    var id = li.getAttribute("data-id");
+    state.open = state.open === id ? null : id;
+    render();
+    var again = rowsEl.querySelector('li[data-id="' + id + '"] .rowbtn');
+    if (again) again.focus();
+    var row = state.rows.filter(function(r){ return r.id === id; })[0];
+    if (row) setInspector(state.open ? summarize(row) : "Hover, or focus a row and use ← → for exact attempt timings");
+  });
+
+  function hoverTarget(e){
+    var tick = e.target.closest ? e.target.closest(".tick") : null;
+    var btn = e.target.closest ? e.target.closest(".rowbtn") : null;
+    if (!btn) return;
+    var id = btn.closest("li").getAttribute("data-id");
+    var row = state.rows.filter(function(r){ return r.id === id; })[0];
+    if (!row) return;
+    if (tick){
+      var a = row.attempts[Number(tick.getAttribute("data-i"))];
+      if (a) { setInspector("attempt " + a.n + " · t+" + a.at + "s · HTTP " + a.code + " · " + a.ms.toLocaleString() + " ms · " + row.dest); return; }
+    }
+    setInspector(summarize(row));
+  }
+  rowsEl.addEventListener("mouseover", hoverTarget);
+  rowsEl.addEventListener("focusin", hoverTarget);
+  rowsEl.addEventListener("mouseleave", function(){
+    if (!state.open) setInspector("Hover, or focus a row and use ← → for exact attempt timings");
+  });
+
+  /* keyboard equivalent of hovering a tick: ← → walks a focused row's
+     attempts and reports the same per-attempt detail to #inspector-val */
+  var activeTick = { id: null, index: -1 };
+  function clearTickHighlight(){
+    if (!activeTick.id) return;
+    var prev = rowsEl.querySelector('li[data-id="' + activeTick.id + '"] .tick.is-active');
+    if (prev) prev.classList.remove("is-active");
+  }
+  rowsEl.addEventListener("keydown", function(e){
+    if (e.key !== "ArrowRight" && e.key !== "ArrowLeft") return;
+    var btn = e.target.closest(".rowbtn");
+    if (!btn) return;
+    var id = btn.closest("li").getAttribute("data-id");
+    var row = state.rows.filter(function(r){ return r.id === id; })[0];
+    if (!row) return;
+    e.preventDefault();
+    var idx = activeTick.id === id ? activeTick.index : -1;
+    idx = e.key === "ArrowRight" ? Math.min(idx + 1, row.attempts.length - 1) : Math.max(idx - 1, 0);
+    clearTickHighlight();
+    activeTick = { id: id, index: idx };
+    var tick = btn.querySelector('.tick[data-i="' + idx + '"]');
+    if (tick) tick.classList.add("is-active");
+    var a = row.attempts[idx];
+    if (a) setInspector("attempt " + a.n + " · t+" + a.at + "s · HTTP " + a.code + " · " + a.ms.toLocaleString() + " ms · " + row.dest);
+  });
+  rowsEl.addEventListener("focusout", function(e){
+    if (!e.target.closest(".rowbtn")) return;
+    clearTickHighlight();
+    activeTick = { id: null, index: -1 };
+  });
+
+  /* track keyboard focus within the rows so the polling re-render (below) never
+     yanks focus out from under a keyboard user mid ← → inspection */
+  rowsEl.addEventListener("focusin", function(e){
+    if (!e.target.closest(".rowbtn")) return;
+    state.focused = true;
+  });
+  rowsEl.addEventListener("focusout", function(e){
+    if (!e.target.closest(".rowbtn")) return;
+    /* relatedTarget is the element gaining focus; if it's still a rowbtn
+       (e.g. moving between rows) we're still "focused" within the ledger */
+    state.focused = !!(e.relatedTarget && e.relatedTarget.closest && e.relatedTarget.closest(".rowbtn"));
+  });
+
+  /* filter — a real segmented control */
+  var seg = document.querySelector(".seg");
+  seg.addEventListener("click", function(e){
+    var b = e.target.closest("button[data-filter]");
+    if (!b) return;
+    state.filter = b.getAttribute("data-filter");
+    Array.prototype.forEach.call(seg.querySelectorAll("button"), function(x){
+      x.setAttribute("aria-pressed", String(x === b));
+    });
+    render();
+  });
+
+  /* pause — a real toggle */
+  var pauseBtn = document.getElementById("pause");
+  pauseBtn.addEventListener("click", function(){
+    state.paused = !state.paused;
+    pauseBtn.setAttribute("aria-pressed", String(state.paused));
+    pauseBtn.textContent = state.paused ? "Resume" : "Pause";
+  });
+
+  /* copy */
+  var copyBtn = document.getElementById("copy");
+  copyBtn.addEventListener("click", function(){
+    var cmd = copyBtn.getAttribute("data-cmd");
+    var done = function(){
+      copyBtn.textContent = "Copied";
+      copyBtn.setAttribute("data-done","1");
+      setTimeout(function(){ copyBtn.textContent = "Copy"; copyBtn.removeAttribute("data-done"); }, 1600);
+    };
+    var failed = function(){
+      copyBtn.textContent = "Copy failed";
+      copyBtn.setAttribute("data-done","0");
+      setTimeout(function(){ copyBtn.textContent = "Copy"; copyBtn.removeAttribute("data-done"); }, 1600);
+    };
+    var legacyCopy = function(){
+      var ta = document.createElement("textarea");
+      ta.value = cmd;
+      ta.setAttribute("readonly","");
+      ta.style.position = "fixed";
+      ta.style.top = "-1000px";
+      ta.style.left = "-1000px";
+      document.body.appendChild(ta);
+      ta.select();
+      ta.setSelectionRange(0, ta.value.length);
+      var ok = false;
+      try { ok = document.execCommand("copy"); } catch (e) { ok = false; }
+      document.body.removeChild(ta);
+      if (ok) done(); else failed();
+    };
+    if (navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(cmd).then(done, failed);
+    } else { legacyCopy(); }
+  });
+
+  /* the stream: one animated moment, off entirely under reduced motion */
+  var hovering = false;
+  var ledger = document.querySelector(".ledger");
+  ledger.addEventListener("mouseenter", function(){ hovering = true; });
+  ledger.addEventListener("mouseleave", function(){ hovering = false; });
+
+  if (!reduced){
+    setInterval(function(){
+      if (state.paused || hovering || state.open || state.focused) return;
+      if (document.hidden) return;
+      state.rows.forEach(function(r){ r.age += 3; });
+      var row = makeRow(0);
+      state.rows.unshift(row);
+      if (state.rows.length > 7) state.rows.pop();
+      render(row.id);
+    }, 3000);
+  }
+})();
+</script>
+</body>
+</html>

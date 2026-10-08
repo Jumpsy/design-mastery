@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Product Ui</title>
+<style>
+:root { --accent:#c9622d; --ink:#1c1c1c; --bg:#faf8f4; }
+* { box-sizing:border-box; }
+body{ margin:0; font-family:-apple-system,'Segoe UI',sans-serif; background:#faf8f4; color:#1c1c1c; }
+.btn { display:inline-flex; align-items:center; justify-content:center; min-height:44px; padding:0 20px;
+  border-radius:6px; background:var(--ink); color:#fff; border:none; font-size:16px; cursor:pointer; }
+em { font-style:italic; color:var(--accent); }
+@media (max-width:480px) { .grid { grid-template-columns:1fr; } }
+
+</style>
+</head>
+<body>
+<header style="padding:24px 40px;border-bottom:1px solid #eee;"><h1 style="font-size:20px;margin:0;">Product Ui</h1></header>
+<main style="max-width:640px;margin:0 auto;padding:32px 24px;">
+  <p style="color:#555;">Design a settings panel with 5 toggle groups and a danger-zone delete-account section.</p>
+  <section style="margin-top:24px;display:grid;gap:16px;">
+    <div style="display:flex;justify-content:space-between;align-items:center;padding:16px;background:#fff;border-radius:8px;">
+      <span>Email notifications</span><button class="btn" style="min-height:32px;padding:0 14px;">Toggle</button>
+    </div>
+    <div style="display:flex;justify-content:space-between;align-items:center;padding:16px;background:#fff;border-radius:8px;">
+      <span>Two-factor auth</span><button class="btn" style="min-height:32px;padding:0 14px;">Toggle</button>
+    </div>
+  </section>
+  <section style="margin-top:32px;padding:16px;border-radius:8px;background:#fdecea;">
+    <h3 style="margin:0 0 8px;color:#a33;">Danger zone</h3>
+    <button class="btn" style="background:#a33;">Delete account</button>
+  </section>
+</main>
+<footer style="padding:16px 40px;"><nav aria-label="footer">v2.0</nav></footer>
+</body>
+</html>

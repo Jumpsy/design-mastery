@@ -1,0 +1,142 @@
+{
+  "$schema": "design-mastery benchmark fixture list v1",
+  "description": "Machine-rerunnable list of the demonstrated design-mastery tasks for the next evaluation goal. Each fixture names a category, the reference file that should govern it, the built artifact, and concrete pass criteria a future run can re-check.",
+  "generated": "2026-09-16",
+  "fixtures": [
+    {
+      "id": "web-landing-01",
+      "category": "web-landing",
+      "reference": "references/categories/web-landing.md",
+      "artifact": "references/screenshot-to-build-demo/recreation.html",
+      "medium": "web",
+      "task": "Recreate a live-site hero section from a screenshot (screenshot-to-rebuild pipeline).",
+      "pass_criteria": [
+        "Renders in a browser with no layout overflow or overlapping elements",
+        "Matches source screenshot's type scale and spacing within a few px",
+        "Contains no §2 anti-slop tells (SKILL.md)"
+      ]
+    },
+    {
+      "id": "product-ui-01",
+      "category": "product-ui",
+      "reference": "references/categories/product-ui.md",
+      "artifact": "references/plan-gate-live-test/pricing-card.html",
+      "medium": "web",
+      "task": "Design a pricing card UI component with a documented plan-gate decision.",
+      "pass_criteria": [
+        "Renders with no overlap at standard desktop viewport",
+        "Plan-gate rejection/revision documented in plan-gate-live-test/plan-gate-test.md"
+      ]
+    },
+    {
+      "id": "mobile-ui-01",
+      "category": "mobile-ui",
+      "reference": "references/categories/mobile-ui.md",
+      "artifact": "references/mobile-ui-demo/screen.html",
+      "medium": "mobile",
+      "task": "Design a mobile app 'Today' list screen with a bottom tab bar, 390x844 frame.",
+      "pass_criteria": [
+        "Renders inside a 390x844 mobile frame with no clipped content",
+        "Tab bar and list rows do not overlap",
+        "Screenshot-verified via Chrome"
+      ]
+    },
+    {
+      "id": "dashboards-01",
+      "category": "dashboards",
+      "reference": "references/categories/dashboards.md",
+      "artifact": "references/dashboard-demo/dashboard.html",
+      "medium": "web",
+      "task": "Design a SaaS metrics dashboard: MRR/users/churn/session cards plus a revenue-by-week bar chart.",
+      "pass_criteria": [
+        "Grid layout renders with no overlap across metric cards and chart",
+        "Bar chart bars render at distinct, readable heights",
+        "Screenshot-verified via Chrome"
+      ]
+    },
+    {
+      "id": "branding-01",
+      "category": "branding",
+      "reference": "references/categories/branding.md",
+      "artifact": "references/brand-guidelines-demo/sheet.html",
+      "medium": "web/print-adjacent",
+      "task": "Produce a one-page brand guidelines sheet (palette, type sample, mark clearspace) for the 'Fieldnote' brand system.",
+      "pass_criteria": [
+        "Palette swatches, type sample, and mark clearspace section all render without overlap",
+        "Uses the same brand tokens (colors/type) as the packaging and marketing-creative demos",
+        "Screenshot-verified via Chrome"
+      ]
+    },
+    {
+      "id": "logos-01",
+      "category": "logos",
+      "reference": "references/categories/logos.md",
+      "artifact": "references/logo-demo/mark.svg",
+      "medium": "svg",
+      "task": "Design a standalone brand mark/logo as SVG.",
+      "pass_criteria": [
+        "Valid SVG, renders cleanly at multiple sizes with no broken paths",
+        "Passed plan-gate before final form was chosen"
+      ]
+    },
+    {
+      "id": "posters-editorial-01",
+      "category": "posters-editorial",
+      "reference": "references/categories/posters-editorial.md",
+      "artifact": "references/non-web-demo/patient-ink-poster.png",
+      "medium": "print/poster",
+      "task": "Design an editorial/poster-style visual artifact for a non-web medium.",
+      "pass_criteria": [
+        "Renders as a single coherent composition with no cut-off text or graphics",
+        "Design philosophy documented in non-web-demo/design-philosophy.md",
+        "Visually inspected as a rendered PNG, not just described"
+      ]
+    },
+    {
+      "id": "packaging-01",
+      "category": "packaging",
+      "reference": "references/categories/packaging.md",
+      "artifact": "references/packaging-demo/label.svg",
+      "medium": "svg/print-adjacent",
+      "task": "Design a product packaging label for the 'Fieldnote' brand, with a documented plan-gate rejection of a generic first idea.",
+      "pass_criteria": [
+        "Valid SVG, renders cleanly with no overlapping text/graphics",
+        "Plan-gate decision (rejected circular-badge-gradient concept) documented in reference-library-notes.md",
+        "Screenshot-verified via local server + Chrome"
+      ]
+    },
+    {
+      "id": "presentation-01",
+      "category": "presentation",
+      "reference": "references/categories/presentation.md",
+      "artifact": "references/presentation-demo/slide.html",
+      "medium": "web (16:9 slide canvas)",
+      "task": "Design a single 1920x1080 data-forward presentation slide (Q3 results: headline + stat row).",
+      "pass_criteria": [
+        "1920x1080 canvas renders with no element overlap when viewed at full slide width",
+        "Stat row values are legible and aligned",
+        "Screenshot-verified via Chrome (viewport clipping at <1920px browser width is expected, not a defect)"
+      ]
+    },
+    {
+      "id": "marketing-creative-01",
+      "category": "marketing-creative",
+      "reference": "references/categories/marketing-creative.md",
+      "artifact": "references/marketing-creative-demo/ad.html",
+      "medium": "web (1080x1080 ad canvas)",
+      "task": "Design a 1080x1080 social/marketing ad for the 'Fieldnote' brand reusing its established type/color system.",
+      "pass_criteria": [
+        "1080x1080 canvas renders with no overlap between kicker, claim, and footer CTA",
+        "Uses the same brand tokens as the branding and packaging demos",
+        "Screenshot-verified via Chrome"
+      ]
+    }
+  ],
+  "rerun_instructions": [
+    "Serve references/ locally: python3 -m http.server <port> from the design-mastery/references directory.",
+    "For each fixture with an .html artifact, navigate to http://localhost:<port>/<artifact-relative-path> and take a screenshot; confirm against pass_criteria.",
+    "For .svg artifacts, open directly in a browser tab or serve the same way.",
+    "For .png artifacts, read the file directly and visually inspect against pass_criteria.",
+    "A fixture is PASS only if pass_criteria are confirmed by an actual render/screenshot, not by reading the source code alone."
+  ]
+}

@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>LOW FREQUENCY DORMITORY — Album Release Show Poster</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-poster: #0c0d10;
+      --surface-matte: #181a20;
+      --paper-cream: #f2efe6;
+      --acid-lime: #d4ff00;
+      --line-screen: #272a33;
+      --text-muted: #787d85;
+      --font-display: 'Syne', sans-serif;
+      --font-swiss: 'Plus Jakarta Sans', sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body{background:#0c0d10;color:#f2efe6;
+      font-family: var(--font-swiss);
+      font-size: 16px;
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    a:focus-visible, button:focus-visible {
+      outline: 2px solid #d4ff00;
+      outline-offset: 4px;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      * {
+        animation: none !important;
+        transition: none !important;
+      }
+    }
+
+    .gallery-wrapper {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 32px 24px 64px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    /* Screenprinted Poster Container (A2 Aspect Ratio) */
+    main.poster-canvas {
+      width: 100%;
+      max-width: 720px;
+      background: #0c0d10;
+      border: 1px solid #272a33;
+      border-radius: 2px;
+      padding: 40px;
+      box-shadow: 0 24px 48px rgba(0,0,0,0.8);
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    header.poster-top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 2px solid #272a33;
+      padding-bottom: 12px;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.16em;
+      color: #787d85;
+      text-transform: uppercase;
+    }
+
+    .record-label-stamp {
+      color: #d4ff00;
+    }
+
+    /* Kinetic Typographic Hero */
+    article.band-hero-title-wrap {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .album-dek {
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: 0.24em;
+      color: #d4ff00;
+      text-transform: uppercase;
+    }
+
+    h1.band-title-main {
+      font-family: var(--font-display);
+      font-size: 56px;
+      font-weight: 800;
+      line-height: 0.95;
+      letter-spacing: -0.04em;
+      color: #f2efe6;
+      text-transform: uppercase;
+    }
+
+    h1.band-title-main span.lime-word {
+      color: #d4ff00;
+    }
+
+    /* Acoustic Moiré Soundwave Vector */
+    figure.moire-vector-frame {
+      background: #181a20;
+      border: 1px solid #272a33;
+      padding: 24px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+    }
+
+    .moire-vector {
+      width: 100%;
+      height: 220px;
+    }
+
+    /* Event Coordinates Grid */
+    section.event-data-grid {
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 24px;
+      border-top: 2px solid #272a33;
+      border-bottom: 2px solid #272a33;
+      padding: 20px 0;
+    }
+
+    .venue-block {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    h2.venue-name {
+      font-family: var(--font-display);
+      font-size: 24px;
+      font-weight: 800;
+      color: #f2efe6;
+      letter-spacing: -0.01em;
+      text-transform: uppercase;
+    }
+
+    .venue-address {
+      font-size: 14px;
+      color: #787d85;
+      line-height: 1.4;
+    }
+
+    .datetime-block {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 4px;
+    }
+
+    .date-big {
+      font-family: var(--font-display);
+      font-size: 24px;
+      font-weight: 800;
+      color: #d4ff00;
+      letter-spacing: -0.02em;
+    }
+
+    .time-door {
+      font-size: 12px;
+      font-weight: 600;
+      color: #787d85;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    /* Support Bands & Ticket Meta */
+    section.lineup-footer-section {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .support-acts-col {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .support-label {
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: #787d85;
+    }
+
+    .support-names {
+      font-size: 16px;
+      font-weight: 700;
+      color: #f2efe6;
+    }
+
+    .ticket-meta-col {
+      text-align: right;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .ticket-price {
+      font-size: 14px;
+      font-weight: 700;
+      color: #d4ff00;
+    }
+
+    .edition-tag {
+      font-size: 12px;
+      color: #787d85;
+      letter-spacing: 0.08em;
+    }
+
+    /* Action Controls Below Poster */
+    footer.poster-toolbar {
+      width: 100%;
+      max-width: 720px;
+      margin-top: 32px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .toolbar-info {
+      font-size: 12px;
+      color: #787d85;
+    }
+
+    .btn{background:#d4ff00;color:#0c0d10;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 44px;
+      padding: 0 24px;
+      font-family: var(--font-swiss);
+      font-size: 14px;
+      font-weight: 700;
+      border-radius: 2px;
+      cursor: pointer;
+      text-decoration: none;
+      border: 1px solid transparent;
+    }
+
+    .btn-secondary {
+      background-color: transparent;
+      color: #f2efe6;
+      border: 1px solid #272a33;
+    }
+
+    .btn-secondary:hover {
+      background-color: #181a20;
+    }
+
+    @media (max-width: 840px) {
+      h1.band-title-main {
+        font-size: 44px;
+      }
+      main.poster-canvas {
+        padding: 32px 24px;
+      }
+    }
+
+    @media (max-width: 640px) {
+      main.poster-canvas {
+        padding: 24px 16px;
+      }
+      h1.band-title-main {
+        font-size: 36px;
+      }
+      section.event-data-grid {
+        grid-template-columns: 1fr;
+      }
+      .ticket-meta-col {
+        text-align: left;
+      }
+      footer.poster-toolbar {
+        flex-direction: column;
+        align-items: stretch;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="gallery-wrapper">
+    <main class="poster-canvas">
+      <header class="poster-top-bar">
+        <div class="presenter-tag">Dead Channel Recordings &bull; No Wave Arts</div>
+        <div class="record-label-stamp">DCR-089 // LONDON</div>
+      </header>
+
+      <article class="band-hero-title-wrap">
+        <div class="album-dek">Debut LP Release Show &bull; One Night Only</div>
+        <h1 class="band-title-main">
+          LOW <span class="lime-word">FREQUENCY</span><br>DORMITORY
+        </h1>
+      </article>
+
+      <figure class="moire-vector-frame">
+        <svg class="moire-vector" viewBox="0 0 600 220" preserveAspectRatio="none" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Acoustic moiré soundwave interference vector lines">
+          <!-- Harmonic Soundwave Oscillations -->
+          <path d="M0 110 Q75 10 150 110 T300 110 T450 110 T600 110" stroke="#f2efe6" stroke-width="2" />
+          <path d="M0 110 Q75 30 150 110 T300 110 T450 110 T600 110" stroke="#f2efe6" stroke-width="1.5" />
+          <path d="M0 110 Q75 50 150 110 T300 110 T450 110 T600 110" stroke="#787d85" stroke-width="1.5" />
+          <path d="M0 110 Q75 70 150 110 T300 110 T450 110 T600 110" stroke="#787d85" stroke-width="1" />
+          <!-- Electric Moiré Interference Layer -->
+          <path d="M0 110 Q75 190 150 110 T300 110 T450 110 T600 110" stroke="#d4ff00" stroke-width="2" />
+          <path d="M0 110 Q75 170 150 110 T300 110 T450 110 T600 110" stroke="#d4ff00" stroke-width="1.5" />
+          <path d="M0 110 Q75 150 150 110 T300 110 T450 110 T600 110" stroke="#787d85" stroke-width="1.5" />
+          <!-- Resonance Center Core -->
+          <circle cx="300" cy="110" r="8" fill="#d4ff00" />
+          <circle cx="300" cy="110" r="28" stroke="#d4ff00" stroke-width="1" stroke-dasharray="2 2" />
+        </svg>
+      </figure>
+
+      <section class="event-data-grid">
+        <div class="venue-block">
+          <h2 class="venue-name">The Great Eastern Hall</h2>
+          <div class="venue-address">
+            29 Bohemia Place &bull; Hackney Central &bull; London E8 1DU
+          </div>
+        </div>
+
+        <div class="datetime-block">
+          <div class="date-big">FRI 14 NOV 2026</div>
+          <div class="time-door">Doors 19:30 &bull; Music 20:15 &bull; 18+</div>
+        </div>
+      </section>
+
+      <section class="lineup-footer-section">
+        <div class="support-acts-col">
+          <span class="support-label">Special Guests:</span>
+          <div class="support-names">The Cold Wires &bull; Velvet Static</div>
+        </div>
+
+        <div class="ticket-meta-col">
+          <div class="ticket-price">&pound;14.50 Adv / &pound;18.00 Door</div>
+          <div class="edition-tag">Screenprinted Edition: 34 / 150</div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="poster-toolbar">
+      <div class="toolbar-info">
+        Format: ISO A2 (420 &times; 594mm) &bull; 3-Color Screenprint on 300gsm GF Smith Callisto
+      </div>
+      <nav style="display: flex; gap: 12px;" aria-label="Ticket purchasing">
+        <button class="btn btn-secondary" type="button">Venue Access Map</button>
+        <button class="btn" type="button">Reserve Advance Ticket</button>
+      </nav>
+    </footer>
+  </div>
+</body>
+</html>

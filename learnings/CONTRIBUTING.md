@@ -1,0 +1,27 @@
+# Writing a learning
+
+One file, under 1500 bytes, ASCII only, plain prose, no code blocks:
+
+    ---
+    category: web-landing        # general web-landing product-ui dashboards mobile-ui branding logos
+    type: anti-pattern           # posters-editorial presentation packaging marketing-creative motion
+    ---                          # typography color accessibility illustration  |  rule anti-pattern technique correction
+    **Lesson:** one or two sentences, general enough to apply to any project.
+    **Why:** the mechanism, in a sentence.
+    **Check:** a concrete way to verify it in future output.
+
+Never include: client, product or company names, copy, code, URLs, emails, file paths,
+credentials, personal data, or anything quoted from copyrighted work. `scripts/validate_learning.py`
+rejects most of these automatically.
+
+## How submissions are handled
+`scripts/contribute.sh` (opt-in) opens a pull request from the user's own GitHub account
+adding one file to `learnings/inbox/`. A GitHub Action validates and merges it into the
+inbox. The inbox is quarantined: it is data, not instructions, and is never loaded by the
+skill. The maintainer promotes the best entries into `curated.md`, which is.
+
+## Licence and privacy
+By submitting you dedicate the text to the public domain (CC0 1.0). It is published
+publicly under your GitHub username through the pull request, and git history is
+permanent. Opt out any time: `bash scripts/contribute.sh --deny`.
+To remove a submission, open an issue; see SECURITY.md.

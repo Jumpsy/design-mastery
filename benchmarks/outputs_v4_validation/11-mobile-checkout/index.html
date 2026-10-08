@@ -1,0 +1,1799 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Atelier Linum — Boutique Mobile Checkout</title>
+  <!-- Google Fonts: Newsreader (Editorial Serif) & Plus Jakarta Sans (Precision UI Sans) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    /* -------------------------------------------------------------
+       CSS Custom Properties & Disciplined Token System
+       Atelier Linum — Boutique Home Goods Retailer
+       Warm architectural minimalism: linen canvas, deep obsidian, terracotta accent
+       ------------------------------------------------------------- */
+    :root {
+      --canvas-bg: #FAF8F5;
+      --card-bg: #FFFFFF;
+      --text-main: #1C1917;
+      --text-muted: #78716C;
+      --border-line: #E7E1D8;
+      --accent-clay: #9C4221;
+      --forest-sage: #205735;
+
+      --font-serif: 'Newsreader', Didot, 'Baskerville', Georgia, serif;
+      --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    }
+
+    /* Reset & Base Layout */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      width: 100%;
+      height: 100%;
+    }
+
+    body{background:#FAF8F5;color:#1C1917;}
+
+    body {
+      font-family: var(--font-sans);
+      -webkit-font-smoothing: antialiased;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 24px 12px;
+    }
+
+    /* -------------------------------------------------------------
+       Accessibility: Reduced Motion Path
+       ------------------------------------------------------------- */
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+      }
+    }
+
+    /* Screen Reader Only Utility */
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+
+    /* Device Framing Container (390 x 844 Viewport) */
+    .device-container {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .device-meta-label {
+      margin-bottom: 12px;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .device-meta-label span {
+      background: var(--border-line);
+      color: var(--text-main);
+      padding: 4px 8px;
+      border-radius: 12px;
+      font-size: 10px;
+    }
+
+    /* iPhone Hardware Enclosure */
+    .device-frame {
+      position: relative;
+      width: 390px;
+      height: 844px;
+      background-color: var(--text-main);
+      border-radius: 48px;
+      padding: 12px;
+      box-shadow: 0 24px 48px rgba(28, 25, 23, 0.24), 0 0 0 1px var(--text-main);
+      overflow: hidden;
+    }
+
+    /* Phone Screen Surface */
+    .screen-surface {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      background-color: var(--canvas-bg);
+      border-radius: 36px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Status Bar & Dynamic Island */
+    .status-bar {
+      position: relative;
+      z-index: 40;
+      height: 48px;
+      padding: 0 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background-color: var(--canvas-bg);
+      flex-shrink: 0;
+    }
+
+    .status-time {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text-main);
+    }
+
+    .dynamic-island {
+      position: absolute;
+      top: 8px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 112px;
+      height: 28px;
+      background-color: var(--text-main);
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      padding-right: 8px;
+    }
+
+    .island-lens {
+      width: 12px;
+      height: 12px;
+      background: var(--text-muted);
+      border-radius: 8px;
+      opacity: 0.6;
+    }
+
+    .status-network-icons {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      color: var(--text-main);
+    }
+
+    .status-network-icons svg {
+      width: 16px;
+      height: 16px;
+      fill: currentColor;
+    }
+
+    /* Top Navigation Header */
+    .app-header {
+      position: relative;
+      z-index: 30;
+      padding: 8px 16px 12px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background-color: var(--canvas-bg);
+      border-bottom: 1px solid var(--border-line);
+      flex-shrink: 0;
+    }
+
+    .btn-nav-back {
+      width: 44px;
+      height: 44px;
+      min-height: 44px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 20px;
+      border: 1px solid var(--border-line);
+      background: var(--card-bg);
+      color: var(--text-main);
+      cursor: pointer;
+      transition: background 0.15s ease;
+    }
+    .btn-nav-back:hover {
+      background: var(--border-line);
+    }
+
+    .header-brand-box {
+      text-align: center;
+    }
+
+    .brand-overline {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--accent-clay);
+    }
+
+    .checkout-heading-h1 {
+      font-family: var(--font-serif);
+      font-size: 20px;
+      font-weight: 500;
+      color: var(--text-main);
+      letter-spacing: -0.01em;
+    }
+
+    .secure-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--forest-sage);
+      background: var(--card-bg);
+      border: 1px solid var(--border-line);
+      padding: 4px 8px;
+      border-radius: 12px;
+    }
+
+    .secure-pill svg {
+      width: 12px;
+      height: 12px;
+      stroke: currentColor;
+    }
+
+    /* Scrollable Flow Area */
+    .flow-scroll {
+      flex: 1;
+      overflow-y: auto;
+      overflow-x: hidden;
+      padding: 16px 16px 120px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    /* Section Cards */
+    .checkout-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border-line);
+      border-radius: 16px;
+      padding: 16px;
+      box-shadow: 0 1px 4px rgba(28, 25, 23, 0.04);
+    }
+
+    .card-top-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+    }
+
+    .card-title-h2 {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .card-title-h2 svg {
+      width: 16px;
+      height: 16px;
+      stroke: var(--accent-clay);
+    }
+
+    .card-subtitle {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+
+    /* Order Summary Accordion & Items */
+    .btn-toggle-summary {
+      background: none;
+      border: none;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--accent-clay);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      padding: 4px 8px;
+      border-radius: 8px;
+      min-height: 44px;
+    }
+
+    .btn-toggle-summary svg {
+      width: 16px;
+      height: 16px;
+      transition: transform 0.2s ease;
+    }
+    .btn-toggle-summary.collapsed svg {
+      transform: rotate(-90deg);
+    }
+
+    .items-container {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .items-container.is-hidden {
+      display: none;
+    }
+
+    .item-article {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--canvas-bg);
+    }
+    .item-article:last-child {
+      border-bottom: none;
+      padding-bottom: 0;
+    }
+
+    .item-visual {
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
+      background: var(--canvas-bg);
+      border: 1px solid var(--border-line);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .item-visual svg {
+      width: 28px;
+      height: 28px;
+    }
+
+    .item-info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .item-title-h3 {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-main);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .item-detail-text {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+
+    .qty-picker {
+      display: inline-flex;
+      align-items: center;
+      background: var(--canvas-bg);
+      border-radius: 16px;
+      padding: 0 4px;
+      margin-top: 4px;
+      border: 1px solid var(--border-line);
+    }
+
+    .btn-qty {
+      width: 24px;
+      height: 24px;
+      background: transparent;
+      border: none;
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text-main);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .qty-number {
+      font-size: 11px;
+      font-weight: 600;
+      min-width: 16px;
+      text-align: center;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .item-cost-display {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text-main);
+      text-align: right;
+      font-variant-numeric: tabular-nums;
+      flex-shrink: 0;
+    }
+
+    /* -------------------------------------------------------------
+       SHIPPING METHOD SELECTION (Real Clickable Radio Cards)
+       ------------------------------------------------------------- */
+    .shipping-options-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .shipping-tier-card {
+      position: relative;
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 12px;
+      background: var(--canvas-bg);
+      border: 1.5px solid var(--border-line);
+      border-radius: 12px;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .shipping-tier-card:hover {
+      border-color: var(--text-muted);
+      background: var(--card-bg);
+    }
+
+    .shipping-tier-card.active {
+      border-color: var(--accent-clay);
+      background: var(--card-bg);
+      box-shadow: 0 4px 8px rgba(28, 25, 23, 0.04);
+    }
+
+    .shipping-tier-card input[type="radio"] {
+      position: absolute;
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .radio-circle-mark {
+      width: 20px;
+      height: 20px;
+      border-radius: 12px;
+      border: 2px solid var(--border-line);
+      background: var(--card-bg);
+      margin-top: 4px;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: border-color 0.15s ease;
+    }
+
+    .shipping-tier-card.active .radio-circle-mark {
+      border-color: var(--accent-clay);
+      background: var(--accent-clay);
+    }
+
+    .radio-circle-mark::after {
+      content: "";
+      width: 8px;
+      height: 8px;
+      border-radius: 4px;
+      background: var(--card-bg);
+      opacity: 0;
+      transition: opacity 0.15s ease;
+    }
+
+    .shipping-tier-card.active .radio-circle-mark::after {
+      opacity: 1;
+    }
+
+    .tier-content-box {
+      flex: 1;
+    }
+
+    .tier-title-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .tier-name {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text-main);
+    }
+
+    .tier-rate {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text-main);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .tier-timing {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--accent-clay);
+      margin-top: 4px;
+    }
+
+    .tier-description {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-top: 4px;
+      line-height: 1.35;
+    }
+
+    .tier-badge {
+      display: inline-block;
+      font-size: 10px;
+      font-weight: 700;
+      padding: 0 4px;
+      border-radius: 4px;
+      background: var(--border-line);
+      color: var(--text-main);
+      margin-left: 4px;
+    }
+
+    /* -------------------------------------------------------------
+       PROMO CODE & GIFT CARD ENTRY (Real JS Validation & State)
+       ------------------------------------------------------------- */
+    .promo-form-group {
+      display: flex;
+      gap: 8px;
+    }
+
+    .promo-input-box {
+      position: relative;
+      flex: 1;
+    }
+
+    .input-promo {
+      width: 100%;
+      height: 44px;
+      padding: 0 12px 0 32px;
+      background: var(--canvas-bg);
+      border: 1.5px solid var(--border-line);
+      border-radius: 12px;
+      font-family: var(--font-sans);
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-main);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      transition: border-color 0.15s ease;
+    }
+
+    .input-promo:focus {
+      outline: none;
+      border-color: var(--text-main);
+      background: var(--card-bg);
+    }
+
+    .promo-icon-svg {
+      position: absolute;
+      top: 50%;
+      left: 12px;
+      transform: translateY(-50%);
+      width: 16px;
+      height: 16px;
+      stroke: var(--text-muted);
+      pointer-events: none;
+    }
+
+    .btn-apply-promo {
+      height: 44px;
+      min-height: 44px;
+      padding: 0 16px;
+      background: var(--text-main);
+      color: var(--card-bg);
+      border: none;
+      border-radius: 12px;
+      font-family: var(--font-sans);
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      flex-shrink: 0;
+      transition: background 0.15s ease;
+    }
+
+    .btn-apply-promo:hover {
+      background: var(--text-muted);
+    }
+
+    /* Dynamic Message Banner */
+    .promo-alert-msg {
+      display: none;
+      align-items: center;
+      gap: 8px;
+      font-size: 11px;
+      margin-top: 8px;
+      padding: 8px 12px;
+      border-radius: 8px;
+    }
+
+    .promo-alert-msg.state-error {
+      display: flex;
+      color: var(--accent-clay);
+      background: var(--canvas-bg);
+      border: 1px solid var(--accent-clay);
+    }
+
+    .promo-alert-msg.state-success {
+      display: flex;
+      color: var(--forest-sage);
+      background: var(--canvas-bg);
+      border: 1px solid var(--forest-sage);
+    }
+
+    .promo-alert-msg svg {
+      width: 14px;
+      height: 14px;
+      flex-shrink: 0;
+      stroke: currentColor;
+    }
+
+    /* Active Applied Promo Tag */
+    .applied-tag-box {
+      display: none;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 8px;
+      padding: 8px 12px;
+      background: var(--canvas-bg);
+      border: 1px solid var(--forest-sage);
+      border-radius: 12px;
+    }
+
+    .applied-tag-box.is-active {
+      display: flex;
+    }
+
+    .tag-left-group {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .tag-code-label {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--forest-sage);
+      background: var(--card-bg);
+      padding: 4px 8px;
+      border-radius: 4px;
+      border: 1px solid var(--forest-sage);
+    }
+
+    .tag-desc-label {
+      font-size: 11px;
+      color: var(--forest-sage);
+      font-weight: 600;
+    }
+
+    .btn-remove-promo {
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      font-size: 11px;
+      font-weight: 600;
+      cursor: pointer;
+      padding: 4px;
+      min-height: 44px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .btn-remove-promo:hover {
+      color: var(--accent-clay);
+    }
+
+    /* Demo Hint Tags */
+    .quick-demo-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 4px;
+      margin-top: 8px;
+      padding-top: 8px;
+      border-top: 1px solid var(--border-line);
+    }
+
+    .demo-hint-prefix {
+      font-size: 10px;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase;
+    }
+
+    .btn-demo-chip {
+      background: var(--canvas-bg);
+      border: 1px solid var(--border-line);
+      border-radius: 12px;
+      padding: 4px 8px;
+      font-size: 10px;
+      font-weight: 600;
+      color: var(--text-muted);
+      cursor: pointer;
+    }
+    .btn-demo-chip:hover {
+      background: var(--card-bg);
+      color: var(--text-main);
+    }
+
+    /* -------------------------------------------------------------
+       FINANCIAL BREAKDOWN LEDGER
+       ------------------------------------------------------------- */
+    .financial-ledger-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      font-size: 12px;
+    }
+
+    .ledger-item-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      color: var(--text-muted);
+    }
+
+    .ledger-item-row.row-promo {
+      color: var(--forest-sage);
+      font-weight: 600;
+      display: none;
+    }
+    .ledger-item-row.row-promo.is-active {
+      display: flex;
+    }
+
+    .ledger-item-row.row-grand-total {
+      margin-top: 8px;
+      padding-top: 8px;
+      border-top: 1.5px solid var(--border-line);
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text-main);
+    }
+
+    .ledger-number {
+      font-variant-numeric: tabular-nums;
+      font-weight: 600;
+    }
+
+    .ledger-item-row.row-grand-total .ledger-number {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--text-main);
+    }
+
+    /* -------------------------------------------------------------
+       PAYMENT METHODS SECTION
+       ------------------------------------------------------------- */
+    .payment-options-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+
+    .btn-pay-tab {
+      padding: 8px;
+      min-height: 44px;
+      border: 1.5px solid var(--border-line);
+      background: var(--canvas-bg);
+      border-radius: 12px;
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text-muted);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+    .btn-pay-tab.active {
+      background: var(--card-bg);
+      border-color: var(--text-main);
+      color: var(--text-main);
+    }
+
+    .card-token-display {
+      background: var(--text-main);
+      color: var(--card-bg);
+      padding: 12px;
+      border-radius: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .token-top-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--border-line);
+    }
+
+    .token-card-digits {
+      font-size: 12px;
+      letter-spacing: 0.14em;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .token-sub-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 10px;
+      color: var(--text-muted);
+    }
+
+    /* -------------------------------------------------------------
+       STICKY BOTTOM PAYMENT CTA (Thumb Reach Zone Inside Frame)
+       ------------------------------------------------------------- */
+    .sticky-action-dock {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: var(--canvas-bg);
+      border-top: 1px solid var(--border-line);
+      padding: 12px 16px 24px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      box-shadow: 0 -4px 12px rgba(28, 25, 23, 0.06);
+      z-index: 50;
+    }
+
+    .dock-summary-line {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      font-size: 11px;
+    }
+
+    .dock-eta-label {
+      color: var(--text-muted);
+    }
+
+    .dock-total-preview {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text-main);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .btn-complete-checkout {
+      width: 100%;
+      height: 48px;
+      min-height: 48px;
+      background: var(--text-main);
+      color: var(--card-bg);
+      border: none;
+      border-radius: 24px;
+      font-family: var(--font-sans);
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      box-shadow: 0 4px 12px rgba(28, 25, 23, 0.16);
+      transition: background 0.15s ease;
+    }
+    .btn-complete-checkout:hover {
+      background: var(--text-muted);
+    }
+
+    .dock-microcopy {
+      text-align: center;
+      font-size: 10px;
+      font-weight: 600;
+      color: var(--text-muted);
+    }
+
+    /* iOS Home Bar */
+    .ios-home-bar {
+      position: absolute;
+      bottom: 8px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 132px;
+      height: 4px;
+      background-color: var(--text-main);
+      border-radius: 4px;
+      z-index: 60;
+    }
+
+    /* -------------------------------------------------------------
+       CONFIRMATION SCREEN (Order Receipt Overlay)
+       ------------------------------------------------------------- */
+    .receipt-sheet {
+      position: absolute;
+      inset: 0;
+      background: var(--canvas-bg);
+      z-index: 100;
+      display: flex;
+      flex-direction: column;
+      padding: 48px 16px 24px 16px;
+      transform: translateY(100%);
+      transition: transform 0.3s ease;
+      overflow-y: auto;
+    }
+
+    .receipt-sheet.is-opened {
+      transform: translateY(0);
+    }
+
+    .receipt-badge-circle {
+      width: 48px;
+      height: 48px;
+      background: var(--canvas-bg);
+      border: 1.5px solid var(--forest-sage);
+      border-radius: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--forest-sage);
+      margin: 0 auto 12px auto;
+    }
+    .receipt-badge-circle svg {
+      width: 24px;
+      height: 24px;
+    }
+
+    .receipt-header-center {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .receipt-title-h2 {
+      font-family: var(--font-serif);
+      font-size: 24px;
+      font-weight: 500;
+      color: var(--text-main);
+    }
+
+    .receipt-order-id {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--accent-clay);
+      margin-top: 4px;
+      letter-spacing: 0.06em;
+    }
+
+    .receipt-card-body {
+      background: var(--card-bg);
+      border: 1px solid var(--border-line);
+      border-radius: 16px;
+      padding: 16px;
+      margin-bottom: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .receipt-line {
+      display: flex;
+      justify-content: space-between;
+      font-size: 12px;
+      padding-bottom: 4px;
+      border-bottom: 1px solid var(--canvas-bg);
+    }
+    .receipt-line:last-child {
+      border-bottom: none;
+      padding-bottom: 0;
+    }
+
+    .receipt-label {
+      color: var(--text-muted);
+    }
+    .receipt-val {
+      font-weight: 600;
+      color: var(--text-main);
+      text-align: right;
+    }
+
+    .btn-return-store {
+      width: 100%;
+      height: 48px;
+      min-height: 48px;
+      background: var(--text-main);
+      color: var(--card-bg);
+      border: none;
+      border-radius: 24px;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      margin-top: auto;
+    }
+
+    /* Small Screen Media Adaptation */
+    @media (max-width: 440px) {
+      body {
+        padding: 0;
+      }
+      .device-meta-label {
+        display: none;
+      }
+      .device-frame {
+        width: 100vw;
+        height: 100vh;
+        border-radius: 0;
+        padding: 0;
+        box-shadow: none;
+      }
+      .screen-surface {
+        border-radius: 0;
+      }
+    }
+
+    @media (max-width: 360px) {
+      .flow-scroll {
+        padding: 12px 12px 120px 12px;
+      }
+      .checkout-card {
+        padding: 12px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="device-container">
+    <!-- Viewport Spec Indicator -->
+    <div class="device-meta-label">
+      <span>390 &times; 844 Mobile Viewport</span>
+      <strong>Atelier Linum</strong>
+    </div>
+
+    <!-- Mobile Enclosure -->
+    <div class="device-frame" role="region" aria-label="Mobile Device Simulator">
+      <div class="screen-surface">
+
+        <!-- Status Bar -->
+        <header class="status-bar">
+          <span class="status-time">9:41</span>
+          <div class="dynamic-island" aria-hidden="true">
+            <div class="island-lens"></div>
+          </div>
+          <div class="status-network-icons" aria-label="Signal and Battery Status">
+            <svg viewBox="0 0 16 16"><path d="M2 12h2v2H2zm3-3h2v5H5zm3-3h2v8H8zm3-3h2v11h-2z"/></svg>
+            <svg viewBox="0 0 16 16"><path d="M8 12.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm-4.2-3.2a6 6 0 0 1 8.4 0 .8.8 0 1 0 1.1-1.1 7.6 7.6 0 0 0-10.6 0 .8.8 0 0 0 1.1 1.1zm-2.8-2.8a10 10 0 0 1 14 0 .8.8 0 1 0 1.1-1.1 11.6 11.6 0 0 0-16.2 0 .8.8 0 0 0 1.1 1.1z"/></svg>
+            <svg viewBox="0 0 16 16"><path d="M12 4H3a2 2 0 0 0-2 2v4a2 2 0 0 0 2 2h9a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2zm1 6a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1h9a1 1 0 0 1 1 1v4zm2-3.5v3a.5.5 0 0 0 .5-.5v-2a.5.5 0 0 0-.5-.5z"/></svg>
+          </div>
+        </header>
+
+        <!-- Navigation Bar -->
+        <nav class="app-header">
+          <button type="button" class="btn-nav-back" aria-label="Return to bag" id="nav-back-button">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m15 18-6-6 6-6"/></svg>
+          </button>
+          
+          <div class="header-brand-box">
+            <div class="brand-overline">Atelier Linum</div>
+            <h1 class="checkout-heading-h1">Checkout</h1>
+          </div>
+
+          <div class="secure-pill" title="Encrypted Connection">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+            <span>SSL</span>
+          </div>
+        </nav>
+
+        <!-- Flow Scroll Content -->
+        <main class="flow-scroll" id="main-flow-container">
+
+          <!-- 1. ORDER SUMMARY SECTION -->
+          <section class="checkout-card" aria-labelledby="order-summary-title">
+            <div class="card-top-bar">
+              <div>
+                <h2 class="card-title-h2" id="order-summary-title">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+                  Order Summary
+                </h2>
+                <p class="card-subtitle" id="item-counter-label">3 boutique home pieces</p>
+              </div>
+              <button type="button" class="btn-toggle-summary" id="btn-summary-accordion" aria-expanded="true" aria-controls="items-accordion-box">
+                <span id="accordion-action-text">Hide details</span>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
+              </button>
+            </div>
+
+            <!-- Items List -->
+            <div class="items-container" id="items-accordion-box">
+              
+              <!-- Item 1 -->
+              <article class="item-article" data-item="item-1" data-price="64.00">
+                <div class="item-visual" aria-hidden="true">
+                  <!-- Ceramic Pitcher Vector -->
+                  <svg viewBox="0 0 48 48" fill="none">
+                    <path d="M16 12h16c2 0 4 3 3 8l-3 18c-.5 2-2 3-4 3H20c-2 0-3.5-1-4-3L13 20c-1-5 1-8 3-8Z" fill="#FAF8F5" stroke="#9C4221" stroke-width="1.5"/>
+                    <path d="M31 16c5 1 7 5 6 9s-4 6-7 6" stroke="#9C4221" stroke-width="1.5"/>
+                  </svg>
+                </div>
+                <div class="item-info">
+                  <h3 class="item-title-h3">Fluted Stoneware Pitcher</h3>
+                  <div class="item-detail-text">Ochre Glaze &bull; 1.8L</div>
+                  <div class="qty-picker">
+                    <button type="button" class="btn-qty qty-minus-btn" aria-label="Decrease quantity" data-id="item-1">&minus;</button>
+                    <span class="qty-number" id="qty-count-item-1">1</span>
+                    <button type="button" class="btn-qty qty-plus-btn" aria-label="Increase quantity" data-id="item-1">&plus;</button>
+                  </div>
+                </div>
+                <div class="item-cost-display" id="cost-item-1">$64.00</div>
+              </article>
+
+              <!-- Item 2 -->
+              <article class="item-article" data-item="item-2" data-price="185.00">
+                <div class="item-visual" aria-hidden="true">
+                  <!-- Linen Throw Vector -->
+                  <svg viewBox="0 0 48 48" fill="none">
+                    <rect x="10" y="12" width="28" height="24" rx="4" fill="#FAF8F5" stroke="#1C1917" stroke-width="1.5"/>
+                    <path d="M10 20c4-2 8-2 14 0s9 2 14 0" stroke="#1C1917" stroke-width="1.5"/>
+                    <path d="M10 28c4-2 8-2 14 0s9 2 14 0" stroke="#1C1917" stroke-width="1.5"/>
+                  </svg>
+                </div>
+                <div class="item-info">
+                  <h3 class="item-title-h3">Washed Belgian Linen Duvet</h3>
+                  <div class="item-detail-text">Undyed Oat &bull; Queen</div>
+                  <div class="qty-picker">
+                    <button type="button" class="btn-qty qty-minus-btn" aria-label="Decrease quantity" data-id="item-2">&minus;</button>
+                    <span class="qty-number" id="qty-count-item-2">1</span>
+                    <button type="button" class="btn-qty qty-plus-btn" aria-label="Increase quantity" data-id="item-2">&plus;</button>
+                  </div>
+                </div>
+                <div class="item-cost-display" id="cost-item-2">$185.00</div>
+              </article>
+
+              <!-- Item 3 -->
+              <article class="item-article" data-item="item-3" data-price="48.00">
+                <div class="item-visual" aria-hidden="true">
+                  <!-- Bronze Holder Vector -->
+                  <svg viewBox="0 0 48 48" fill="none">
+                    <ellipse cx="24" cy="38" rx="14" ry="4" fill="#FAF8F5" stroke="#9C4221" stroke-width="1.5"/>
+                    <path d="M22 38V22h4v16" stroke="#9C4221" stroke-width="1.5"/>
+                    <ellipse cx="24" cy="21" rx="5" ry="2" stroke="#9C4221" stroke-width="1.5"/>
+                  </svg>
+                </div>
+                <div class="item-info">
+                  <h3 class="item-title-h3">Cast Bronze Chamberstick</h3>
+                  <div class="item-detail-text">Aged Patina Finish</div>
+                  <div class="qty-picker">
+                    <button type="button" class="btn-qty qty-minus-btn" aria-label="Decrease quantity" data-id="item-3">&minus;</button>
+                    <span class="qty-number" id="qty-count-item-3">1</span>
+                    <button type="button" class="btn-qty qty-plus-btn" aria-label="Increase quantity" data-id="item-3">&plus;</button>
+                  </div>
+                </div>
+                <div class="item-cost-display" id="cost-item-3">$48.00</div>
+              </article>
+
+            </div>
+          </section>
+
+          <!-- 2. SHIPPING METHOD SELECTION (Real Clickable Elements) -->
+          <section class="checkout-card" aria-labelledby="shipping-options-title">
+            <div class="card-top-bar">
+              <div>
+                <h2 class="card-title-h2" id="shipping-options-title">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 17h4V5H2v12h3"/><path d="M20 17h2v-3.34a4 4 0 0 0-1.17-2.83L19 9h-5v8h1"/><circle cx="7.5" cy="17.5" r="2.5"/><circle cx="17.5" cy="17.5" r="2.5"/></svg>
+                  Shipping Method
+                </h2>
+                <p class="card-subtitle">Dispatch to: 142 Mercer St, New York, NY</p>
+              </div>
+            </div>
+
+            <div class="shipping-options-list" role="radiogroup" aria-label="Select delivery speed">
+              
+              <!-- Tier 1: Standard -->
+              <label class="shipping-tier-card active" id="card-ship-standard" for="opt-ship-standard">
+                <input type="radio" name="shipping_speed" id="opt-ship-standard" value="standard" checked>
+                <div class="radio-circle-mark" aria-hidden="true"></div>
+                <div class="tier-content-box">
+                  <div class="tier-title-row">
+                    <span class="tier-name">
+                      Standard Ground
+                      <span class="tier-badge">Eco</span>
+                    </span>
+                    <span class="tier-rate">$8.00</span>
+                  </div>
+                  <div class="tier-timing">4–6 business days &bull; Oct 24–26</div>
+                  <div class="tier-description">100% Carbon-neutral transport in recycled molded pulp packaging.</div>
+                </div>
+              </label>
+
+              <!-- Tier 2: Express -->
+              <label class="shipping-tier-card" id="card-ship-express" for="opt-ship-express">
+                <input type="radio" name="shipping_speed" id="opt-ship-express" value="express">
+                <div class="radio-circle-mark" aria-hidden="true"></div>
+                <div class="tier-content-box">
+                  <div class="tier-title-row">
+                    <span class="tier-name">
+                      Priority Air
+                      <span class="tier-badge">Fast</span>
+                    </span>
+                    <span class="tier-rate">$18.00</span>
+                  </div>
+                  <div class="tier-timing">2–3 business days &bull; Oct 21–22</div>
+                  <div class="tier-description">Priority carrier routing with climate control and continuous tracking.</div>
+                </div>
+              </label>
+
+              <!-- Tier 3: White Glove -->
+              <label class="shipping-tier-card" id="card-ship-overnight" for="opt-ship-overnight">
+                <input type="radio" name="shipping_speed" id="opt-ship-overnight" value="overnight">
+                <div class="radio-circle-mark" aria-hidden="true"></div>
+                <div class="tier-content-box">
+                  <div class="tier-title-row">
+                    <span class="tier-name">
+                      White Glove Courier
+                      <span class="tier-badge">Care</span>
+                    </span>
+                    <span class="tier-rate">$36.00</span>
+                  </div>
+                  <div class="tier-timing">Tomorrow morning by 10:30 AM</div>
+                  <div class="tier-description">Hand delivery, room placement, and removal of protective packaging.</div>
+                </div>
+              </label>
+
+            </div>
+          </section>
+
+          <!-- 3. PROMO CODE / GIFT CARD ENTRY (Real JS Validation & State) -->
+          <section class="checkout-card" aria-labelledby="promo-section-title">
+            <div class="card-top-bar">
+              <div>
+                <h2 class="card-title-h2" id="promo-section-title">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
+                  Promo Code or Gift Card
+                </h2>
+                <p class="card-subtitle">Redeem a boutique reward or voucher</p>
+              </div>
+            </div>
+
+            <div class="promo-form-group">
+              <div class="promo-input-box">
+                <svg class="promo-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
+                <input 
+                  type="text" 
+                  id="field-promo-code" 
+                  class="input-promo" 
+                  placeholder="Code (e.g. SAVE10)" 
+                  aria-label="Enter promotional discount code"
+                >
+              </div>
+              <button type="button" id="btn-submit-promo" class="btn-apply-promo">Apply</button>
+            </div>
+
+            <!-- Visible Feedback Banner -->
+            <div id="promo-msg-banner" class="promo-alert-msg" role="alert" aria-live="polite">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+              <span id="promo-msg-text"></span>
+            </div>
+
+            <!-- Active Applied Badge -->
+            <div id="box-applied-tag" class="applied-tag-box">
+              <div class="tag-left-group">
+                <span class="tag-code-label" id="txt-applied-code">SAVE10</span>
+                <span class="tag-desc-label" id="txt-applied-desc">10% discount applied</span>
+              </div>
+              <button type="button" id="btn-delete-promo" class="btn-remove-promo" aria-label="Remove promo code">
+                <span>Remove</span>
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+              </button>
+            </div>
+
+            <!-- Quick Demo Code Pills -->
+            <div class="quick-demo-row">
+              <span class="demo-hint-prefix">Demo:</span>
+              <button type="button" class="btn-demo-chip" data-promo="SAVE10">SAVE10 (10% off)</button>
+              <button type="button" class="btn-demo-chip" data-promo="WELCOME20">WELCOME20 ($20 off)</button>
+              <button type="button" class="btn-demo-chip" data-promo="FREESHIP">FREESHIP ($0 ship)</button>
+              <button type="button" class="btn-demo-chip" data-promo="GIFT50">GIFT50 ($50 card)</button>
+            </div>
+          </section>
+
+          <!-- 4. COST LEDGER -->
+          <section class="checkout-card" aria-labelledby="ledger-title">
+            <h2 class="sr-only" id="ledger-title">Cost Breakdown</h2>
+            <div class="financial-ledger-grid">
+              <div class="ledger-item-row">
+                <span>Merchandise Subtotal</span>
+                <span class="ledger-number" id="val-ledger-subtotal">$297.00</span>
+              </div>
+              <div class="ledger-item-row">
+                <span id="label-ledger-shipping">Shipping (Standard Ground)</span>
+                <span class="ledger-number" id="val-ledger-shipping">$8.00</span>
+              </div>
+              <div class="ledger-item-row row-promo" id="row-ledger-discount">
+                <span id="label-ledger-discount">Discount (SAVE10)</span>
+                <span class="ledger-number" id="val-ledger-discount">-$29.70</span>
+              </div>
+              <div class="ledger-item-row">
+                <span>Estimated Sales Tax (7.5%)</span>
+                <span class="ledger-number" id="val-ledger-tax">$22.28</span>
+              </div>
+              <div class="ledger-item-row row-grand-total">
+                <span>Total Amount Due</span>
+                <span class="ledger-number" id="val-ledger-grand-total">$327.28</span>
+              </div>
+            </div>
+          </section>
+
+          <!-- 5. PAYMENT METHOD -->
+          <section class="checkout-card" aria-labelledby="payment-card-title">
+            <div class="card-top-bar">
+              <div>
+                <h2 class="card-title-h2" id="payment-card-title">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="20" height="14" x="2" y="5" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
+                  Payment Method
+                </h2>
+                <p class="card-subtitle">Encrypted tokenization</p>
+              </div>
+            </div>
+
+            <div class="payment-options-grid" role="tablist">
+              <button type="button" class="btn-pay-tab active" role="tab" aria-selected="true" id="tab-credit-card">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="20" height="14" x="2" y="5" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
+                Credit Card
+              </button>
+              <button type="button" class="btn-pay-tab" role="tab" aria-selected="false" id="tab-apple-pay">
+                <svg width="14" height="14" viewBox="0 0 170 170" fill="currentColor">
+                  <path d="M150.37 130.25c-2.45 5.66-5.35 10.87-8.71 15.66-4.58 6.53-8.33 11.05-11.22 13.56-4.48 4.12-9.28 6.23-14.42 6.35-3.69 0-8.14-1.05-13.32-3.18-5.19-2.12-9.97-3.17-14.34-3.17-4.58 0-9.49 1.05-14.75 3.17-5.26 2.13-9.5 3.24-12.74 3.35-4.35.13-9.16-1.9-14.42-6.08-3.69-3.04-7.6-7.85-11.75-14.43-6.42-10.22-11.45-21.73-15.09-34.54-3.64-12.81-5.46-24.84-5.46-36.09 0-14.12 3.52-25.92 10.57-35.4 7.05-9.48 16.02-14.34 26.9-14.58 5.69 0 11.78 1.54 18.28 4.63 6.5 3.09 10.66 4.67 12.49 4.75 1.45 0 5.86-1.63 13.23-4.89 7.37-3.26 13.82-4.64 19.35-4.14 14.86 1.1 26.69 6.88 35.48 17.34-13.06 7.89-19.46 18.7-19.19 32.42.27 10.74 4.3 19.64 12.09 26.71 7.79 7.07 17.27 11.05 28.44 11.94-2.22 6.64-5.12 13.3-8.71 19.98zM119.22 33.15c0-7.72 2.76-14.94 8.28-21.66 5.52-6.72 12.35-10.89 20.49-12.51.54 1.5.82 3.1.82 4.8 0 7.7-2.88 15.05-8.64 22.06-5.76 7.01-12.76 11.02-21 12.03-.23-1.62-.35-3.19-.35-4.72z"/>
+                </svg>
+                Apple Pay
+              </button>
+            </div>
+
+            <div class="card-token-display" id="box-card-token">
+              <div class="token-top-row">
+                <span>CHIP</span>
+                <span>MASTERCARD</span>
+              </div>
+              <div class="token-card-digits">&bull;&bull;&bull;&bull; &bull;&bull;&bull;&bull; &bull;&bull;&bull;&bull; 4821</div>
+              <div class="token-sub-row">
+                <span>JACOB HURVITZ</span>
+                <span>EXP 08 / 28</span>
+              </div>
+            </div>
+          </section>
+
+        </main>
+
+        <!-- STICKY THUMB DOCK (Inside 390x844 Frame) -->
+        <div class="sticky-action-dock" id="bottom-dock-container">
+          <div class="dock-summary-line">
+            <span class="dock-eta-label" id="txt-dock-eta">Standard Ground &bull; Oct 24–26</span>
+            <span class="dock-total-preview" id="txt-dock-total">$327.28</span>
+          </div>
+
+          <button type="button" class="btn-complete-checkout" id="btn-submit-order">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+            <span id="txt-order-btn-label">Complete Order &bull; $327.28</span>
+          </button>
+
+          <div class="dock-microcopy">
+            <span>256-Bit SSL Encrypted &bull; 30-Day Atelier Returns</span>
+          </div>
+        </div>
+
+        <!-- iOS Bar -->
+        <div class="ios-home-bar" aria-hidden="true"></div>
+
+        <!-- 6. ORDER CONFIRMATION RECEIPT MODAL -->
+        <section class="receipt-sheet" id="order-receipt-sheet" aria-modal="true" role="dialog" aria-labelledby="receipt-heading-id">
+          <div class="receipt-badge-circle" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6 9 17l-5-5"/></svg>
+          </div>
+          
+          <div class="receipt-header-center">
+            <h2 class="receipt-title-h2" id="receipt-heading-id">Order Confirmed</h2>
+            <div class="receipt-order-id">CONFIRMATION #AL-84920</div>
+            <p style="font-size: 11px; color: var(--text-muted); margin-top: 4px;">Receipt dispatched to <strong>jacob@atelierlinum.com</strong>.</p>
+          </div>
+
+          <div class="receipt-card-body">
+            <div class="receipt-line">
+              <span class="receipt-label">Shipping Tier</span>
+              <span class="receipt-val" id="receipt-ship-method">Standard Ground</span>
+            </div>
+            <div class="receipt-line">
+              <span class="receipt-label">Estimated Delivery</span>
+              <span class="receipt-val" id="receipt-ship-eta">Oct 24–26</span>
+            </div>
+            <div class="receipt-line">
+              <span class="receipt-label">Delivery Address</span>
+              <span class="receipt-val">142 Mercer St, New York, NY</span>
+            </div>
+            <div class="receipt-line" id="receipt-discount-line" style="display:none; color:var(--forest-sage);">
+              <span class="receipt-label" style="color:var(--forest-sage);">Promo Applied</span>
+              <span class="receipt-val" id="receipt-discount-val">SAVE10 (-$29.70)</span>
+            </div>
+            <div class="receipt-line" style="margin-top: 8px; padding-top: 8px; border-top: 1.5px solid var(--border-line); font-size: 14px;">
+              <span class="receipt-label" style="font-weight:700; color:var(--text-main);">Total Paid</span>
+              <span class="receipt-val" id="receipt-total-paid" style="font-weight:700; color:var(--text-main);">$327.28</span>
+            </div>
+          </div>
+
+          <button type="button" class="btn-return-store" id="btn-close-receipt">Back to Boutique</button>
+        </section>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- -------------------------------------------------------------
+       JAVASCRIPT: Reactive State & Dynamic Total Recalculation
+       ------------------------------------------------------------- */
+  -->
+  <script>
+    (function() {
+      'use strict';
+
+      // Internal State
+      const state = {
+        items: {
+          'item-1': { title: 'Fluted Stoneware Pitcher', unitPrice: 64.00, qty: 1 },
+          'item-2': { title: 'Washed Belgian Linen Duvet', unitPrice: 185.00, qty: 1 },
+          'item-3': { title: 'Cast Bronze Chamberstick', unitPrice: 48.00, qty: 1 }
+        },
+        shippingTier: 'standard',
+        shippingTiers: {
+          standard: { name: 'Standard Ground', price: 8.00, eta: 'Oct 24–26' },
+          express: { name: 'Priority Air', price: 18.00, eta: 'Oct 21–22' },
+          overnight: { name: 'White Glove Courier', price: 36.00, eta: 'Tomorrow by 10:30 AM' }
+        },
+        appliedPromo: null,
+        taxRate: 0.075
+      };
+
+      // Promo database
+      const VALID_PROMOS = {
+        'SAVE10': { code: 'SAVE10', type: 'percent', value: 0.10, desc: '10% off items' },
+        'WELCOME20': { code: 'WELCOME20', type: 'fixed', value: 20.00, desc: '$20 voucher' },
+        'FREESHIP': { code: 'FREESHIP', type: 'freeship', value: 0, desc: 'Complimentary shipping' },
+        'GIFT50': { code: 'GIFT50', type: 'giftcard', value: 50.00, desc: '$50 gift card' }
+      };
+
+      // DOM Handles
+      const itemCounterLabel = document.getElementById('item-counter-label');
+      const btnSummaryAccordion = document.getElementById('btn-summary-accordion');
+      const accordionActionText = document.getElementById('accordion-action-text');
+      const itemsAccordionBox = document.getElementById('items-accordion-box');
+
+      const cardShipStandard = document.getElementById('card-ship-standard');
+      const cardShipExpress = document.getElementById('card-ship-express');
+      const cardShipOvernight = document.getElementById('card-ship-overnight');
+      const shipRadioInputs = document.querySelectorAll('input[name="shipping_speed"]');
+
+      const fieldPromoCode = document.getElementById('field-promo-code');
+      const btnSubmitPromo = document.getElementById('btn-submit-promo');
+      const promoMsgBanner = document.getElementById('promo-msg-banner');
+      const promoMsgText = document.getElementById('promo-msg-text');
+      const boxAppliedTag = document.getElementById('box-applied-tag');
+      const txtAppliedCode = document.getElementById('txt-applied-code');
+      const txtAppliedDesc = document.getElementById('txt-applied-desc');
+      const btnDeletePromo = document.getElementById('btn-delete-promo');
+      const btnDemoChips = document.querySelectorAll('.btn-demo-chip');
+
+      const valLedgerSubtotal = document.getElementById('val-ledger-subtotal');
+      const labelLedgerShipping = document.getElementById('label-ledger-shipping');
+      const valLedgerShipping = document.getElementById('val-ledger-shipping');
+      const rowLedgerDiscount = document.getElementById('row-ledger-discount');
+      const labelLedgerDiscount = document.getElementById('label-ledger-discount');
+      const valLedgerDiscount = document.getElementById('val-ledger-discount');
+      const valLedgerTax = document.getElementById('val-ledger-tax');
+      const valLedgerGrandTotal = document.getElementById('val-ledger-grand-total');
+
+      const txtDockEta = document.getElementById('txt-dock-eta');
+      const txtDockTotal = document.getElementById('txt-dock-total');
+      const btnSubmitOrder = document.getElementById('btn-submit-order');
+      const txtOrderBtnLabel = document.getElementById('txt-order-btn-label');
+
+      const tabCreditCard = document.getElementById('tab-credit-card');
+      const tabApplePay = document.getElementById('tab-apple-pay');
+      const boxCardToken = document.getElementById('box-card-token');
+
+      const orderReceiptSheet = document.getElementById('order-receipt-sheet');
+      const receiptShipMethod = document.getElementById('receipt-ship-method');
+      const receiptShipEta = document.getElementById('receipt-ship-eta');
+      const receiptDiscountLine = document.getElementById('receipt-discount-line');
+      const receiptDiscountVal = document.getElementById('receipt-discount-val');
+      const receiptTotalPaid = document.getElementById('receipt-total-paid');
+      const btnCloseReceipt = document.getElementById('btn-close-receipt');
+      const navBackButton = document.getElementById('nav-back-button');
+
+      function formatPrice(val) {
+        return '$' + val.toFixed(2);
+      }
+
+      // Mathematical recalculation
+      function computeLedger() {
+        let subtotal = 0;
+        let totalCount = 0;
+        for (const k in state.items) {
+          subtotal += state.items[k].unitPrice * state.items[k].qty;
+          totalCount += state.items[k].qty;
+        }
+
+        const shipTier = state.shippingTiers[state.shippingTier];
+        const shippingCost = shipTier.price;
+
+        let discountVal = 0;
+        let isFreeShipping = false;
+
+        if (state.appliedPromo) {
+          const p = state.appliedPromo;
+          if (p.type === 'percent') {
+            discountVal = subtotal * p.value;
+          } else if (p.type === 'fixed') {
+            discountVal = Math.min(p.value, subtotal);
+          } else if (p.type === 'giftcard') {
+            discountVal = Math.min(p.value, subtotal + shippingCost);
+          } else if (p.type === 'freeship') {
+            isFreeShipping = true;
+            discountVal = shippingCost;
+          }
+        }
+
+        const effectiveShipping = isFreeShipping ? 0 : shippingCost;
+        const taxableBase = Math.max(0, subtotal - (state.appliedPromo && state.appliedPromo.type !== 'freeship' ? discountVal : 0));
+        const estimatedTax = Math.round(taxableBase * state.taxRate * 100) / 100;
+
+        let total;
+        if (state.appliedPromo && state.appliedPromo.type === 'freeship') {
+          total = subtotal + estimatedTax;
+        } else if (state.appliedPromo && state.appliedPromo.type === 'giftcard') {
+          total = Math.max(0, subtotal + shippingCost + estimatedTax - discountVal);
+        } else {
+          total = Math.max(0, subtotal + effectiveShipping + estimatedTax - (state.appliedPromo && state.appliedPromo.type !== 'freeship' ? discountVal : 0));
+        }
+
+        return {
+          subtotal,
+          totalCount,
+          shipTier,
+          shippingCost,
+          effectiveShipping,
+          isFreeShipping,
+          discountVal,
+          estimatedTax,
+          total
+        };
+      }
+
+      // Reactive render
+      function renderCheckout() {
+        const data = computeLedger();
+
+        // 1. Header count
+        itemCounterLabel.textContent = `${data.totalCount} boutique home piece${data.totalCount === 1 ? '' : 's'}`;
+
+        // 2. Shipping cards highlight
+        cardShipStandard.classList.toggle('active', state.shippingTier === 'standard');
+        cardShipExpress.classList.toggle('active', state.shippingTier === 'express');
+        cardShipOvernight.classList.toggle('active', state.shippingTier === 'overnight');
+
+        // 3. Promo active tag
+        if (state.appliedPromo) {
+          boxAppliedTag.classList.add('is-active');
+          txtAppliedCode.textContent = state.appliedPromo.code;
+          txtAppliedDesc.textContent = `${state.appliedPromo.desc} (-${formatPrice(data.discountVal)})`;
+          rowLedgerDiscount.classList.add('is-active');
+          labelLedgerDiscount.textContent = `Discount (${state.appliedPromo.code})`;
+          valLedgerDiscount.textContent = `-${formatPrice(data.discountVal)}`;
+        } else {
+          boxAppliedTag.classList.remove('is-active');
+          rowLedgerDiscount.classList.remove('is-active');
+        }
+
+        // 4. Ledger breakdown
+        valLedgerSubtotal.textContent = formatPrice(data.subtotal);
+        labelLedgerShipping.textContent = `Shipping (${data.shipTier.name})`;
+
+        if (data.isFreeShipping) {
+          valLedgerShipping.innerHTML = `<span style="text-decoration:line-through; margin-right:4px;">${formatPrice(data.shippingCost)}</span> <strong style="color:var(--forest-sage)">FREE</strong>`;
+        } else {
+          valLedgerShipping.textContent = formatPrice(data.shippingCost);
+        }
+
+        valLedgerTax.textContent = formatPrice(data.estimatedTax);
+        valLedgerGrandTotal.textContent = formatPrice(data.total);
+
+        // 5. Dock preview
+        txtDockEta.textContent = `${data.shipTier.name} \u2022 ${data.shipTier.eta}`;
+        txtDockTotal.textContent = formatPrice(data.total);
+        txtOrderBtnLabel.textContent = `Complete Order \u2022 ${formatPrice(data.total)}`;
+
+        // 6. Confirmation Sheet
+        receiptShipMethod.textContent = data.shipTier.name;
+        receiptShipEta.textContent = data.shipTier.eta;
+        receiptTotalPaid.textContent = formatPrice(data.total);
+
+        if (state.appliedPromo) {
+          receiptDiscountLine.style.display = 'flex';
+          receiptDiscountVal.textContent = `${state.appliedPromo.code} (-${formatPrice(data.discountVal)})`;
+        } else {
+          receiptDiscountLine.style.display = 'none';
+        }
+      }
+
+      // Quantity Event Handlers
+      document.querySelectorAll('.qty-plus-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          const id = e.currentTarget.getAttribute('data-id');
+          state.items[id].qty += 1;
+          document.getElementById(`qty-count-${id}`).textContent = state.items[id].qty;
+          document.getElementById(`cost-${id}`).textContent = formatPrice(state.items[id].unitPrice * state.items[id].qty);
+          renderCheckout();
+        });
+      });
+
+      document.querySelectorAll('.qty-minus-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          const id = e.currentTarget.getAttribute('data-id');
+          if (state.items[id].qty > 1) {
+            state.items[id].qty -= 1;
+            document.getElementById(`qty-count-${id}`).textContent = state.items[id].qty;
+            document.getElementById(`cost-${id}`).textContent = formatPrice(state.items[id].unitPrice * state.items[id].qty);
+            renderCheckout();
+          }
+        });
+      });
+
+      // Accordion Toggle
+      btnSummaryAccordion.addEventListener('click', () => {
+        const isHidden = itemsAccordionBox.classList.toggle('is-hidden');
+        btnSummaryAccordion.classList.toggle('collapsed', isHidden);
+        btnSummaryAccordion.setAttribute('aria-expanded', String(!isHidden));
+        accordionActionText.textContent = isHidden ? 'Show details' : 'Hide details';
+      });
+
+      // Shipping Selection Handlers
+      shipRadioInputs.forEach(radio => {
+        radio.addEventListener('change', (e) => {
+          state.shippingTier = e.target.value;
+          renderCheckout();
+        });
+      });
+
+      cardShipStandard.addEventListener('click', () => {
+        state.shippingTier = 'standard';
+        document.getElementById('opt-ship-standard').checked = true;
+        renderCheckout();
+      });
+
+      cardShipExpress.addEventListener('click', () => {
+        state.shippingTier = 'express';
+        document.getElementById('opt-ship-express').checked = true;
+        renderCheckout();
+      });
+
+      cardShipOvernight.addEventListener('click', () => {
+        state.shippingTier = 'overnight';
+        document.getElementById('opt-ship-overnight').checked = true;
+        renderCheckout();
+      });
+
+      // Promo Validation Handlers
+      function setPromoFeedback(status, message) {
+        promoMsgBanner.className = `promo-alert-msg state-${status}`;
+        promoMsgText.textContent = message;
+      }
+
+      function clearPromoFeedback() {
+        promoMsgBanner.className = 'promo-alert-msg';
+        promoMsgText.textContent = '';
+      }
+
+      function executePromoValidation() {
+        const code = fieldPromoCode.value.trim().toUpperCase();
+
+        if (!code) {
+          setPromoFeedback('error', 'Please enter a promo code or gift card voucher.');
+          fieldPromoCode.focus();
+          return;
+        }
+
+        if (state.appliedPromo && state.appliedPromo.code === code) {
+          setPromoFeedback('error', `Voucher "${code}" is already active.`);
+          return;
+        }
+
+        if (VALID_PROMOS[code]) {
+          state.appliedPromo = VALID_PROMOS[code];
+          renderCheckout();
+          setPromoFeedback('success', `Valid code! ${state.appliedPromo.desc} applied.`);
+          fieldPromoCode.value = '';
+        } else {
+          setPromoFeedback('error', `Code "${code}" is invalid. Try SAVE10 or WELCOME20.`);
+        }
+      }
+
+      btnSubmitPromo.addEventListener('click', executePromoValidation);
+
+      fieldPromoCode.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          executePromoValidation();
+        }
+      });
+
+      btnDemoChips.forEach(chip => {
+        chip.addEventListener('click', () => {
+          fieldPromoCode.value = chip.getAttribute('data-promo');
+          executePromoValidation();
+        });
+      });
+
+      btnDeletePromo.addEventListener('click', () => {
+        const oldCode = state.appliedPromo ? state.appliedPromo.code : '';
+        state.appliedPromo = null;
+        clearPromoFeedback();
+        setPromoFeedback('success', `Code ${oldCode} removed. Total recalculated.`);
+        setTimeout(clearPromoFeedback, 2500);
+        renderCheckout();
+      });
+
+      // Payment Tabs
+      tabCreditCard.addEventListener('click', () => {
+        tabCreditCard.classList.add('active');
+        tabCreditCard.setAttribute('aria-selected', 'true');
+        tabApplePay.classList.remove('active');
+        tabApplePay.setAttribute('aria-selected', 'false');
+        boxCardToken.style.display = 'flex';
+      });
+
+      tabApplePay.addEventListener('click', () => {
+        tabApplePay.classList.add('active');
+        tabApplePay.setAttribute('aria-selected', 'true');
+        tabCreditCard.classList.remove('active');
+        tabCreditCard.setAttribute('aria-selected', 'false');
+        boxCardToken.style.display = 'none';
+      });
+
+      // Checkout Payment CTA
+      btnSubmitOrder.addEventListener('click', () => {
+        btnSubmitOrder.disabled = true;
+        txtOrderBtnLabel.textContent = 'Processing Payment...';
+
+        setTimeout(() => {
+          btnSubmitOrder.disabled = false;
+          renderCheckout();
+          orderReceiptSheet.classList.add('is-opened');
+        }, 800);
+      });
+
+      btnCloseReceipt.addEventListener('click', () => {
+        orderReceiptSheet.classList.remove('is-opened');
+      });
+
+      navBackButton.addEventListener('click', () => {
+        alert('Navigating back to bag.');
+      });
+
+      // Initial Mount
+      renderCheckout();
+
+    })();
+  </script>
+</body>
+</html>
