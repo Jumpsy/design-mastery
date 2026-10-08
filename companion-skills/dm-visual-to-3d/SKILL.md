@@ -15,10 +15,21 @@ true reflections, depth of field) and encodes video in-browser (WebCodecs). No B
 verified process: every model passes the QA gates below, is compared to the reference numerically and
 visually, and the report states what still differs. Two limits to say out loud:
 - **Rendering can be photographic; procedural modelling is the bottleneck.** A parametric car looks like a
-  toy even at 4K (measured: see `templates/pathtraced-car.html`). Light and resolution cannot hide simple geometry.
+  toy even at 4K, while a profile-defined product (the black-lacquer bottle, `?subject=bottle`) reads as a real photograph.
+  Choose subjects accordingly: lathe/loft/extrude objects (bottles, vases, watches, speakers, furniture, appliances,
+  jewellery) suit code; organic or complex-surface objects (cars with real styling, people, animals, shoes) need an
+  artist-made glTF or many refinement passes. Say which case applies BEFORE promising a result.
 - **To reach "doesn't look 3D", model fidelity must be high.** Either invest in many refinement passes
   (bevels, panel gaps, thickness, correct curvature), or load a properly licensed glTF/GLB made by an artist
   (`?model=file.glb`) and let this pipeline light, camera, render and animate it at 4K.
+
+## Step 0: capability probe (30 seconds, do it first)
+Open `templates/pathtraced-car.html?subject=sphere&w=480&h=270&samples=48&nowall=1` and LOOK at it. A correct result is a
+clear glass ball showing an inverted, bent image of the backdrop. If the ball is BLACK, this machine's WebGL backend
+mis-renders refraction (measured: ANGLE/Metal on an Apple M4 renders any glass with IOR above 1.0 as black, while the
+same scene is correct on the SwiftShader software renderer, which is ~100x too slow for 4K). In that case do NOT use
+transmission/glass; design the subject around opaque materials (lacquer, metal, ceramic, fabric, paint), which need only
+reflections and work everywhere. Record the probe result in your report.
 
 ## Pipeline (follow in order; do not skip the gates)
 1. **Analyse the reference.** List the object's measured proportions (length:width:height, wheelbase, overhangs,
@@ -65,11 +76,15 @@ visually, and the report states what still differs. Two limits to say out loud:
   a cabin along the whole car).
 - A path tracer must accumulate samples across animation frames (`renderSample()` in a rAF loop until
   `samples >= N`); a single call only shows a raster preview.
-- Glass: keep it opaque, glossy and dark (roughness 0.04) unless you need see-through; transmission is slow and noisy.
+- Glass/refraction: run the Step-0 probe first. Where it fails, fake glass as opaque glossy black/tinted lacquer (roughness ~0.045)
+  with strong softbox reflections, or stage a glass-looking object from layered opaque shells. Where it works, use ONE closed solid
+  with `attenuationColor/Distance` for tint, `bounces` ~20, and a bright emissive backdrop behind it (glass needs a lit background).
+- Product backdrop: a seamless dark cylinder wall plus a soft emissive radial-gradient plane behind the subject gives a studio sweep
+  without a visible horizon; point the camera straight at the glow, and rotate the OBJECT (not the camera) for turntables.
 
 ## Timing (measured on an Apple M4, Chrome/Metal; scale by your hardware)
 - 1280x720, 128 samples: ~20 s. 3840x2160 (8.3 MP), 256 samples: ~4 min per still.
-- Video cost = frames x per-frame time. 4K at 96 samples is ~1.5 min/frame; 48 frames ~ 70 min. Always say the
+- MEASURED proof renders: lacquer bottle 3840x2160 still, 256 samples = 7 min; 4K turntable, 24 frames at 64 samples = 41.5 min (~1.7 min/frame), 8.5 MB VP9 WebM, decodes at 3840x2160. Video cost = frames x per-frame time; a 5 s / 24 fps 4K clip would take ~3.4 h at that quality, so offer 1080p previews and a frame budget first. Always say the
   estimate before starting and offer 1080p. In-browser encoding: `renderTurntable({w,h,frames,fps,samples,arc})`
   returns a VP9 WebM Blob (level selected automatically for 4K); tested decoding at 640x360.
 - Keep the tab visible and the machine awake during long renders.

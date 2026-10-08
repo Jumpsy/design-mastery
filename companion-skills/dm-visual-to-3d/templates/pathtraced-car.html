@@ -25,10 +25,12 @@ import {WebGLPathTracer,PhysicalCamera} from 'three-gpu-pathtracer';
 import {Brush,Evaluator,SUBTRACTION} from 'three-bvh-csg';
 import {Muxer,ArrayBufferTarget} from 'webm-muxer';
 import {GLTFLoader} from 'three/addons/loaders/GLTFLoader.js';
+import {RoundedBoxGeometry} from 'three/addons/geometries/RoundedBoxGeometry.js';
 
 const Q=new URLSearchParams(location.search);
+const SUB=(Q.get('subject')==='sphere'?'bottle':Q.get('subject'))||'car';
 const OPT={w:+(Q.get('w')||1280),h:+(Q.get('h')||720),samples:+(Q.get('samples')||96),
-  az:parseFloat(Q.get('az')??'0.75'),el:parseFloat(Q.get('el')??'0.14'),dist:parseFloat(Q.get('dist')??'8.6'),
+  az:parseFloat(Q.get('az')??(SUB==='bottle'?'1.5708':'0.75')),el:parseFloat(Q.get('el')??(SUB==='bottle'?'.06':'0.14')),dist:parseFloat(Q.get('dist')??(SUB==='bottle'?'6.2':'8.6')),
   color:'#'+(Q.get('color')||'b0100e'),auto:Q.get('auto')!=='0'};
 const st=document.getElementById('st');
 
@@ -134,6 +136,32 @@ function buildCar(color){
   return car;
 }
 
+/* ---------- subject 2: luxury glass bottle (lathe profiles: glass, liquid, metal cap) ----------
+   Procedural modelling suits objects defined by a profile curve; light transport then supplies the realism. */
+function lathe(pts,seg=160){const g=new THREE.LatheGeometry(pts.map(([r,y])=>new THREE.Vector2(r,y)),seg);
+  // QA gate: make sure normals point OUTWARD (transmissive materials trap light if they point inward)
+  const p=g.attributes.position,n=g.attributes.normal;let k=Math.floor(p.count/2),rx=p.getX(k),rz=p.getZ(k),d=n.getX(k)*rx+n.getZ(k)*rz;
+  if(d<0){const ix=g.index.array;for(let i=0;i<ix.length;i+=3){const t=ix[i+1];ix[i+1]=ix[i+2];ix[i+2]=t;}g.computeVertexNormals();}
+  return g;}
+function smoothProfile(keys,n=140){const out=[];for(let i=0;i<=n;i++){const t=i/n;out.push([Math.max(0,cr(keys.r,t)),cr(keys.y,t)]);}return out;}
+function buildBottle(){
+  const g=new THREE.Group();
+  /* Black-lacquer bottle: opaque glossy surfaces need only reflections (reliable on every GPU backend). */
+  const lacquer=new THREE.MeshStandardMaterial({color:0x08080a,metalness:0,roughness:.045});
+  const gold=new THREE.MeshStandardMaterial({color:0xcaa25a,metalness:1,roughness:.2});
+  const brushed=new THREE.MeshStandardMaterial({color:0xb99a58,metalness:1,roughness:.36});
+  const outer=smoothProfile({r:[0,.62,.70,.72,.72,.72,.71,.66,.48,.30,.23,.22,.22,.22,.12,0],y:[0,0,.03,.10,.30,.70,1.05,1.20,1.32,1.42,1.50,1.56,1.62,1.66,1.67,1.67]},220);
+  g.add(new THREE.Mesh(lathe(outer,200),lacquer));
+  const band=(y,r,h)=>{const m=new THREE.Mesh(lathe(smoothProfile({r:[r-.012,r+.004,r+.012,r+.004,r-.012],y:[y,y+h*.1,y+h*.5,y+h*.9,y+h]},30),200),gold);g.add(m);};
+  band(.16,.708,.045);band(1.02,.712,.04);
+  const plate=new THREE.Mesh(new RoundedBoxGeometry(.52,.74,.035,6,.03),gold);plate.position.set(0,.62,.728);g.add(plate);
+  const inset=new THREE.Mesh(new RoundedBoxGeometry(.43,.65,.03,6,.02),lacquer);inset.position.set(0,.62,.745);g.add(inset);
+  const mono=new THREE.Mesh(new THREE.TorusGeometry(.11,.012,16,64),gold);mono.position.set(0,.70,.762);g.add(mono);
+  const bar=new THREE.Mesh(new RoundedBoxGeometry(.26,.014,.012,3,.005),gold);bar.position.set(0,.50,.76);g.add(bar);
+  const collar=new THREE.Mesh(lathe(smoothProfile({r:[0,.27,.285,.285,.27,0],y:[1.62,1.62,1.65,1.74,1.76,1.76]},60),160),gold);g.add(collar);
+  const cap=new THREE.Mesh(lathe(smoothProfile({r:[0,.26,.34,.36,.36,.35,.30,0],y:[1.76,1.76,1.78,1.82,1.95,1.99,2.01,2.01]},80),200),brushed);g.add(cap);
+  return g;}
+
 /* ---------- scene ---------- */
 const renderer=new THREE.WebGLRenderer({antialias:false,preserveDrawingBuffer:true,alpha:false});
 renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.0;
@@ -148,21 +176,30 @@ panel(0xfff8f0,12,1.6,5.5,[-6.5,2.4,3.8]);          // left strip (long highligh
 panel(0xeef4ff,10,1.6,5.5,[6.5,2.4,-3.8]);          // right strip
 panel(0xff9a6a,5,2.5,2.2,[-1.5,1.4,-6.5]);         // warm rim/kicker
 panel(0xffffff,2.2,9,2.2,[0,.7,7.5]);                // low front fill (kills dead-black sides)
+if(SUB==='bottle'){ // seamless studio: dark cylinder wall + a soft warm glow behind the subject (no visible horizon)
+  const wall=Q.get('nowall')?new THREE.Object3D():new THREE.Mesh(new THREE.CylinderGeometry(16,16,40,64,1,true),new THREE.MeshStandardMaterial({color:0x17171a,roughness:.95,side:THREE.BackSide}));wall.position.y=10;scene.add(wall);
+  const gc=document.createElement('canvas');gc.width=gc.height=256;const gx=gc.getContext('2d'),gr=gx.createRadialGradient(128,128,0,128,128,128);
+  gr.addColorStop(0,'#ffffff');gr.addColorStop(.35,'#ffb878');gr.addColorStop(1,'#000000');gx.fillStyle=gr;gx.fillRect(0,0,256,256);
+  const gt=new THREE.CanvasTexture(gc);gt.colorSpace=THREE.SRGBColorSpace;
+  const glow=new THREE.Mesh(new THREE.PlaneGeometry(22,14),new THREE.MeshStandardMaterial({color:0x000000,emissive:0xffffff,emissiveMap:gt,emissiveIntensity:2.2,roughness:1}));glow.position.set(0,3.4,-11);if(!Q.get('noglow'))scene.add(glow);
+  panel(0xffd2a8,6,8,5,[-4,4.5,-6],[0,1,0]);panel(0xcfe0ff,5,3,6,[5.5,3,-3],[0,1,0]);}
 let car;
 if(Q.get('model')){ // ?model=path/to/model.glb : render ANY licensed glTF in this same studio (auto-fit to ~4.6 m, sat on the floor)
   const gltf=await new GLTFLoader().loadAsync(Q.get('model'));car=gltf.scene;
   const bb=new THREE.Box3().setFromObject(car),sz=bb.getSize(new THREE.Vector3()),sc=4.6/Math.max(sz.x,sz.z);
   car.scale.setScalar(sc);bb.setFromObject(car);const c0=bb.getCenter(new THREE.Vector3());car.position.set(-c0.x,-bb.min.y,-c0.z);
-}else car=buildCar(OPT.color);
-scene.add(car);
+}else if(Q.get('subject')==='sphere'){car=new THREE.Group();const sp=new THREE.Mesh(new THREE.SphereGeometry(.8,96,64,0,Math.PI*2,0,Q.get('open')?2.7:Math.PI),new THREE.MeshPhysicalMaterial({color:0xffffff,transmission:1,ior:parseFloat(Q.get('ior')||'1.5'),roughness:parseFloat(Q.get('rough')||'0'),thickness:parseFloat(Q.get('thk')||'1'),attenuationDistance:parseFloat(Q.get('att')||'1e9')}));sp.position.y=.8;car.add(sp);
+}else if(Q.get('subject')==='bottle')car=buildBottle();
+else car=buildCar(OPT.color);
+scene.add(car);window.__car=car;
 const floor=new THREE.Mesh(new THREE.PlaneGeometry(400,400),new THREE.MeshPhysicalMaterial({color:0x0c0c0e,roughness:.28,metalness:0,clearcoat:.0}));floor.rotation.x=-Math.PI/2;scene.add(floor);
 const cam=new PhysicalCamera(24,OPT.w/OPT.h,.1,200);cam.fStop=3.2;cam.bokehSize=.0;
-function aim(az,el,dist){const t=new THREE.Vector3(.1,.55,0);
-  cam.position.set(Math.cos(az)*dist*Math.cos(el),Math.sin(el)*dist+.55,Math.sin(az)*dist*Math.cos(el));
-  cam.lookAt(t);cam.focusDistance=cam.position.distanceTo(new THREE.Vector3(-.2,.5,.9));cam.updateMatrixWorld();}
+function aim(az,el,dist){const t=SUB==='bottle'?new THREE.Vector3(0,.95,0):new THREE.Vector3(.1,.55,0);
+  cam.position.set(Math.cos(az)*dist*Math.cos(el),Math.sin(el)*dist+t.y,Math.sin(az)*dist*Math.cos(el));
+  cam.lookAt(t);cam.focusDistance=SUB==='bottle'?cam.position.distanceTo(t):cam.position.distanceTo(new THREE.Vector3(-.2,.5,.9));cam.updateMatrixWorld();}
 aim(OPT.az,OPT.el,OPT.dist);
 
-const pt=new WebGLPathTracer(renderer);pt.renderDelay=0;pt.minSamples=1;pt.fadeDuration=0;pt.dynamicLowRes=false;pt.tiles.set(2,2);pt.bounces=8;pt.filterGlossyFactor=.5;
+const pt=new WebGLPathTracer(renderer);pt.renderDelay=0;pt.minSamples=1;pt.fadeDuration=0;pt.dynamicLowRes=false;pt.tiles.set(2,2);pt.bounces=SUB==='bottle'?20:8;pt.transmissiveBounces=SUB==='bottle'?20:10;pt.filterGlossyFactor=.5;
 pt.setScene(scene,cam);
 async function accumulate(n,onp){await new Promise(res=>{(function loop(){pt.renderSample();onp&&onp(pt.samples);pt.samples>=n?res():requestAnimationFrame(loop)})()});}
 
@@ -193,7 +230,8 @@ window.renderTurntable=async(o={})=>{
   renderer.setSize(w,h,false);cam.aspect=w/h;cam.updateProjectionMatrix();
   for(let f=0;f<frames;f++){
     const t=f/(frames-1),e=t<.5?4*t*t*t:1-Math.pow(-2*t+2,3)/2;      // ease in-out so the move starts and ends softly
-    aim(az0+arc*e,OPT.el,OPT.dist);pt.updateCamera();pt.reset();
+    if(SUB==='bottle'){car.rotation.y=arc*e;aim(az0,OPT.el,OPT.dist);}else aim(az0+arc*e,OPT.el,OPT.dist);
+    scene.updateMatrixWorld(true);pt.setScene(scene,cam);pt.updateCamera();pt.reset();
     await accumulate(samples,s=>{st.textContent=`frame ${f+1}/${frames}  sample ${s}/${samples}`});
     const fc=post(renderer.domElement);
     const vf=new VideoFrame(fc,{timestamp:Math.round(f*1e6/fps),duration:Math.round(1e6/fps)});
