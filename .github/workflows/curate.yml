@@ -1,5 +1,6 @@
 name: curate
 on:
+  workflow_dispatch:
   push:
     branches: [main]
     paths: ["learnings/inbox/**"]
