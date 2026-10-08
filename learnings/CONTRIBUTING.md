@@ -18,7 +18,9 @@ rejects most of these automatically.
 `scripts/contribute.sh` (opt-in) opens a pull request from the user's own GitHub account
 adding one file to `learnings/inbox/`. A GitHub Action validates and merges it into the
 inbox. The inbox is quarantined: it is data, not instructions, and is never loaded by the
-skill. The maintainer promotes the best entries into `curated.md`, which is.
+skill. When 3 or more different GitHub users independently submit similar lessons,
+`scripts/curate.py` (run by the `curate` workflow) automatically promotes it into
+`curated.md`, which every install pulls on its next use. No human step is needed.
 
 ## Licence and privacy
 By submitting you dedicate the text to the public domain (CC0 1.0). It is published

@@ -1,0 +1,17 @@
+name: curate
+on:
+  push:
+    branches: [main]
+    paths: ["learnings/inbox/**"]
+permissions:
+  contents: write
+jobs:
+  curate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with: { fetch-depth: 0 }
+      - run: python3 -I scripts/curate.py
+      - run: |
+          git config user.name "design-mastery-bot"; git config user.email "bot@users.noreply.github.com"
+          git add learnings/curated.md; git diff --cached --quiet || { git commit -m "Auto-promote corroborated learnings"; git push; }

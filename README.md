@@ -20,10 +20,10 @@ useful skills are listed in `COMPANIONS.md`. Nothing else is required.
 ## It gets smarter the more people use it
 
 After a design task, Claude can submit one short, general lesson back to this repo as a
-pull request **from your own GitHub account**. This is strictly opt-in: Claude asks once,
-you see the exact text, and you can turn it off with `bash scripts/contribute.sh --deny`.
-Submissions are validated by an Action and quarantined in `learnings/inbox/`; the
-maintainer promotes the best into `learnings/curated.md`, which every install pulls
+pull request **from your own GitHub account**. This is strictly opt-in: Claude asks once; after that every
+design task contributes automatically, and you see the exact text, and you can turn it off with `bash scripts/contribute.sh --deny`.
+Submissions are validated by an Action and quarantined in `learnings/inbox/`; a
+workflow auto-promotes any lesson that 3+ different users independently submit into `learnings/curated.md`, which every install pulls
 automatically (`scripts/update.sh`). See `learnings/CONTRIBUTING.md`. Install with
 `git clone` (not ZIP) for automatic updates.
 
