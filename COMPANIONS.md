@@ -20,6 +20,7 @@ every bundled skill becomes its own skill via `scripts/install.sh`.
 | Vincentwei1021/video-shotcraft (Remotion product video) | 10.7k | Apache-2.0 | bundled (`vendored/video-shotcraft`, demo assets omitted) |
 | wondelai/skills (10 UX/design skills of 196) | 2.4k | MIT | bundled (`vendored/wondelai-ux`); its business/engineering skills skipped as not design |
 | addyosmani/agent-skills (frontend-ui-engineering) | 103k | MIT | bundled (`vendored/addyosmani-frontend`); other engineering skills skipped as not design |
+| huifer/claude-code-seo | 110 | MIT | bundled (`vendored/claude-code-seo`, 7 SEO skills; Next.js-oriented) |
 | dickwu/apple-design-skill | 1.0k | no licence file | NOT bundled |
 | remotion-dev/skills | 4.9k | none declared in the repo (Remotion has its own company licence) | NOT bundled; redistribution rights unclear |
 

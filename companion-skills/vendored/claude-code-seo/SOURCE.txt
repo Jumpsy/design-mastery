@@ -1,0 +1,4 @@
+Source: https://github.com/huifer/claude-code-seo
+Commit: 8b723e4
+License: MIT (full text in LICENSE here)
+Vendored unmodified (7 skills only; images omitted). Copyright remains with the original author. Note: written for Next.js sites; apply the principles to WordPress.
