@@ -27,3 +27,6 @@ By submitting you dedicate the text to the public domain (CC0 1.0). It is publis
 publicly under your GitHub username through the pull request, and git history is
 permanent. Opt out any time: `bash scripts/contribute.sh --deny`.
 To remove a submission, open an issue; see SECURITY.md.
+
+## Privacy gates (all must pass before anything is sent)
+1. Opt-in consent. 2. `validate_learning.py` strict format. 3. `privacy_check.py`: your `never.txt` terms, environment variable values, `.env` values, your username/host/project/git identity, high-entropy strings. 4. The same validator again in CI. Personal preferences never leave your machine (`~/.design-mastery/preferences.md`).

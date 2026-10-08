@@ -31,6 +31,7 @@ MSG
 fi
 
 python3 -I "$HERE/validate_learning.py" "$FILE" || exit 1
+python3 -I "$HERE/privacy_check.py" "$FILE" || exit 1
 
 if ! command -v gh >/dev/null 2>&1 || ! gh auth status >/dev/null 2>&1; then
   mkdir -p "$STATE/pending"; cp "$FILE" "$STATE/pending/"
