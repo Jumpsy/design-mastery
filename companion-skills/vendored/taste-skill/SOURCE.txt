@@ -1,0 +1,4 @@
+Source: https://github.com/Leonxlnx/taste-skill
+Commit: b482f7a
+License: MIT (full text in LICENSE here)
+Vendored unmodified; images/media and files over 400KB omitted. Copyright remains with the original authors.

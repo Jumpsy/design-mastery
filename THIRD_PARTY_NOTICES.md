@@ -1,20 +1,102 @@
-# Third-party notices
+# Design Mastery
 
-- `references/design-md/` (most entries): derived from VoltAgent/awesome-design-md,
-  MIT License, Copyright (c) 2026 VoltAgent. Permission notice: Permission is hereby
-  granted, free of charge, to any person obtaining a copy of this software and associated
-  documentation files, to deal in the Software without restriction, subject to inclusion
-  of the copyright and permission notice. THE SOFTWARE IS PROVIDED "AS IS", WITHOUT
-  WARRANTY OF ANY KIND. Remaining entries are factual style observations (colour values,
-  type scales) recorded from public websites.
-- `companion-skills/*` (those present): Apache License 2.0, see each folder's LICENSE.txt.
-- `companion-skills/canvas-design/canvas-fonts/`: SIL Open Font License 1.1, see each *-OFL.txt.
-- `references/github-website-corpus-manifest.csv`: public repository metadata; each
-  repository remains under its own licence.
+A Claude Code skill for producing genuinely considered design output — brand, UI,
+motion, typography, illustration, and front-end craft — with zero AI-slop tells. It
+loads a dense, researched ruleset (`SKILL.md`) plus a large reference library: an
+anti-slop checklist, a category-specific pattern library, 86 real brand design-token
+teardowns, an AI-generated-imagery guide, and Remotion guidance for programmatic video.
 
-## Trademarks and no affiliation
-All brand, product and company names (Stripe, Apple, Notion, Spotify, Claude, etc.) are
-trademarks of their owners. This project is independent, is not affiliated with or
-endorsed by any of them, and uses names only to identify publicly visible design
-characteristics for educational and commentary purposes. No logos or brand assets are
-distributed.
+Install by dropping this repo's contents into `~/.claude/skills/design-mastery/`.
+
+**Getting the repo:** on GitHub, use the green **Code** button → **Download ZIP** (no git
+needed), or `git clone` the repo URL. Unzip/move it so its contents land directly inside
+`~/.claude/skills/design-mastery/` (i.e. `SKILL.md` and `companion-skills/` should be
+directly inside that folder, not nested one level deeper).
+
+It bundles 190+ open-source design skills (taste-skill, impeccable, ui-ux-pro-max, GSAP,
+designer-skills, 67 style presets, Anthropic's frontend/canvas/theme skills) plus original
+`dm-motion-graphics` and `dm-grounding` (anti-hallucination) skills. Run
+`bash scripts/install.sh` to expose every one as its own standalone skill. The full list of
+1k+ star design skills and their licences is in `COMPANIONS.md`.
+
+## It gets smarter the more people use it
+
+After a design task, Claude can submit one short, general lesson back to this repo as a
+pull request **from your own GitHub account**. This is strictly opt-in: Claude asks once; after that every
+design task contributes automatically, and you see the exact text, and you can turn it off with `bash scripts/contribute.sh --deny`.
+Submissions are validated by an Action and quarantined in `learnings/inbox/`; a
+workflow auto-promotes any lesson that 3+ different users independently submit into `learnings/curated.md`, which every install pulls
+automatically (`scripts/update.sh`). See `learnings/CONTRIBUTING.md`. Install with
+`git clone` (not ZIP) for automatic updates.
+
+## Legal
+
+MIT licensed (see `LICENSE`); third-party material in `THIRD_PARTY_NOTICES.md`. Provided
+"as is", without warranty. Not affiliated with any brand mentioned. Submissions are CC0.
+
+## What it's for
+
+Point Claude at a screenshot, a URL, or a blank page and ask for a landing page,
+product UI, dashboard, mobile screen, brand identity, poster, package, or deck — this
+skill makes it check its own plan and output against a hard anti-slop checklist before
+calling anything done, instead of defaulting to the generic gradient-hero,
+three-icon-feature-grid, purple-and-black output every LLM converges on without it.
+
+## Output samples
+
+Rendered directly from the benchmark corpus in `benchmarks/outputs_v4_validation/`
+via Playwright — real HTML/CSS built by this skill, not mockups.
+
+### Web landing page
+
+![Web landing hero](showcase/landing-hero.png)
+
+### Pricing page
+
+![Pricing page](showcase/pricing.png)
+
+### Dashboard (e-commerce)
+
+![Dashboard e-commerce](showcase/dashboard-ecommerce.png)
+
+### Dashboard (uptime monitoring)
+
+![Dashboard uptime](showcase/dashboard-uptime.png)
+
+### Mobile onboarding
+
+<img src="showcase/mobile-onboarding.png" alt="Mobile onboarding" width="360">
+
+### Brand identity (kids edtech)
+
+![Branding kids edtech](showcase/branding-coffee.png)
+
+### Poster (concert)
+
+<img src="showcase/poster-concert.png" alt="Poster concert" width="500">
+
+### Presentation deck
+
+![Presentation pitch](showcase/presentation-pitch.png)
+
+## How it works
+
+1. **`SKILL.md`** — the main ruleset: a plan gate that has to pass before any code gets
+   written, an anti-slop checklist, motion/imagery direction (including when to
+   proactively suggest AI-generated imagery to a client instead of stock photography,
+   and when to reach for Remotion for actual rendered video), a reference pattern
+   library pointer, and an 8-category convergence-loop rubric for self-grading output
+   against real accessibility/interaction/consistency defects before calling it done.
+2. **`references/`** — the depth layer: per-category design principles (web, product
+   UI, mobile, dashboards, branding, logos, posters, packaging, decks), 86 real brand
+   `DESIGN.md` teardowns (Stripe, Linear, Apple, Notion, and more), a catalog of
+   AI-generated-component "tells" (fake terminals, fabricated testimonials, generic
+   bento grids), and process notes on how real design orgs actually critique and ship.
+3. **`benchmarks/`** — validation corpus: 24 task categories run through the skill,
+   self-critiqued, and graded against a material-defect rubric (WCAG contrast/target
+   size, broken keyboard interaction, fake/dishonest UI state, dead CSS tokens,
+   hardcoded values duplicating design tokens, internal inconsistency) across iterative
+   convergence rounds.
+
+See `SKILL.md` for the full ruleset and `references/reference-library-notes.md` for the
+reference library index.

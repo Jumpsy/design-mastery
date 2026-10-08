@@ -1,0 +1,4 @@
+Source: https://github.com/bergside/awesome-design-skills
+Commit: f631a09
+License: MIT (full text in LICENSE here)
+Vendored unmodified; images/media and files over 400KB omitted. Copyright remains with the original authors.

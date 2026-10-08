@@ -1,0 +1,4 @@
+Source: https://github.com/Owl-Listener/designer-skills
+Commit: 9a6930c
+License: MIT (full text in LICENSE here)
+Vendored unmodified; images/media and files over 400KB omitted. Copyright remains with the original authors.
