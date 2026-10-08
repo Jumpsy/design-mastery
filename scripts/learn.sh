@@ -4,7 +4,7 @@
 #   learn.sh never "term"        private: never send anything containing this term/name/value anywhere
 #   learn.sh lesson FILE         public:  queue a general lesson for community contribution (needs consent)
 set -u
-HERE="$(cd "$(dirname "$0")" && pwd)"; STATE="$HOME/.design-mastery"; mkdir -p "$STATE"
+HERE="$(cd "$(dirname "$0")" && pwd)"; STATE="${DESIGN_MASTERY_HOME:-$HOME/.design-mastery}"; mkdir -p "$STATE"
 cmd="${1:-}"; shift || true
 case "$cmd" in
   pref)

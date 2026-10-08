@@ -15,7 +15,7 @@ def has(term):
     t = term.strip().lower()
     return len(t) >= 3 and t in low
 
-state = os.path.expanduser("~/.design-mastery/never.txt")
+state = os.path.join(os.environ.get("DESIGN_MASTERY_HOME") or os.path.expanduser("~/.design-mastery"), "never.txt")
 if os.path.exists(state):
     for l in open(state, encoding="utf-8", errors="replace"):
         if l.strip() and has(l): hits.append("user-excluded term")

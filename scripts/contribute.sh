@@ -6,7 +6,7 @@
 # Exit codes: 0 ok/nothing to do, 1 rejected by validator, 3 consent not asked yet.
 set -u
 UPSTREAM="Jumpsy/design-mastery"
-STATE="$HOME/.design-mastery"
+STATE="${DESIGN_MASTERY_HOME:-$HOME/.design-mastery}"
 HERE="$(cd "$(dirname "$0")" && pwd)"
 mkdir -p "$STATE"
 
