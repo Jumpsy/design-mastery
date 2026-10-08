@@ -14,10 +14,16 @@ every bundled skill becomes its own skill via `scripts/install.sh`.
 | bergside/awesome-design-skills | 3.1k | MIT | bundled (`vendored/awesome-design-skills`, 67 skills) |
 | VoltAgent/awesome-design-md | 120k | MIT | bundled (`references/design-md`) |
 | anthropics/skills (frontend-design, canvas-design, theme-factory, web-artifacts-builder, webapp-testing, algorithmic-art) | 180k | Apache-2.0 per skill | bundled (`companion-skills/`) |
-| vercel-labs/agent-skills (web-design-guidelines etc.) | 32k | no licence file | NOT bundled; install from the author |
-| remotion-dev/skills | 4.9k | no licence file in repo (Remotion has its own licence) | NOT bundled; install from the author |
+| vercel-labs/agent-skills (web-design-guidelines, react-view-transitions, composition-patterns, react-best-practices) | 32k | MIT (declared in README) | design/frontend skills bundled (`vendored/vercel-agent-skills`); deploy/CLI skills skipped as not design |
+| nexu-io/open-design | 100k | Apache-2.0 | bundled (`vendored/open-design`, 277 skills and design templates) |
+| cathrynlavery/diagram-design | 45k | MIT | bundled (`vendored/diagram-design`) |
+| Vincentwei1021/video-shotcraft (Remotion product video) | 10.7k | Apache-2.0 | bundled (`vendored/video-shotcraft`, demo assets omitted) |
+| wondelai/skills (10 UX/design skills of 196) | 2.4k | MIT | bundled (`vendored/wondelai-ux`); its business/engineering skills skipped as not design |
+| addyosmani/agent-skills (frontend-ui-engineering) | 103k | MIT | bundled (`vendored/addyosmani-frontend`); other engineering skills skipped as not design |
+| dickwu/apple-design-skill | 1.0k | no licence file | NOT bundled |
+| remotion-dev/skills | 4.9k | none declared in the repo (Remotion has its own company licence) | NOT bundled; redistribution rights unclear |
 
-Not bundled means no redistribution rights were found, so install them from their authors:
+Not bundled means no redistribution right was found, so install them from their authors:
 follow the install instructions in the README of github.com/vercel-labs/agent-skills and github.com/remotion-dev/skills. Own skills in this repo: `dm-motion-graphics`
 (including Remotion guidance written from scratch) and `dm-grounding`.
 

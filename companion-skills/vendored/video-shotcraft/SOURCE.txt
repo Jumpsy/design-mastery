@@ -1,0 +1,5 @@
+Source: https://github.com/Vincentwei1021/video-shotcraft
+Commit: 5ddbf52
+License: Apache-2.0 (full text in LICENSE here, or declared in the source README)
+Vendored unmodified; images/media and files over 400KB omitted. Copyright remains with the original authors.
+Demo assets/gallery omitted to keep the repo small; see upstream for the full set.

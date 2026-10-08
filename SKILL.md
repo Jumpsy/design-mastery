@@ -1,6 +1,6 @@
 ---
 name: design-mastery
-description: Master design orchestrator — invoke for ANY design task (websites, apps, decks, brand, motion, illustration) and ALWAYS when the user uploads/pastes a screenshot or reference image and wants it analyzed, rebuilt, or matched. Routes to the right specialist skill, runs the screenshot-to-rebuild pipeline, applies the anti-slop checklist, and injects reference-site pattern knowledge (Stripe, OpenAI, Claude.ai, Wispr Flow, StudyFetch, Linear, Vercel). Bundles and routes to 190+ open-source design skills (taste-skill, impeccable, ui-ux-pro-max, GSAP, designer-skills, 67 style presets, motion graphics) and enforces anti-hallucination grounding.
+description: Master design orchestrator — invoke for ANY design task (websites, apps, decks, brand, motion, illustration) and ALWAYS when the user uploads/pastes a screenshot or reference image and wants it analyzed, rebuilt, or matched. Routes to the right specialist skill, runs the screenshot-to-rebuild pipeline, applies the anti-slop checklist, and injects reference-site pattern knowledge (Stripe, OpenAI, Claude.ai, Wispr Flow, StudyFetch, Linear, Vercel). Bundles and routes to 500+ open-source design skills (taste-skill, impeccable, ui-ux-pro-max, GSAP, designer-skills, 67 style presets, motion graphics) and enforces anti-hallucination grounding.
 ---
 
 # Design Mastery
@@ -54,6 +54,7 @@ user can invoke any of them directly, and you should route to the best fit:
 - **Design intelligence (styles, palettes, type, UX rules):** `vendored/ui-ux-pro-max/*`.
 - **Style presets:** `vendored/awesome-design-skills/*` (67 aesthetics).
 - **Process / UX craft (research, critique, systems, writing, a11y):** `vendored/designer-skills/*`.
+- **More:** `vendored/open-design` (277 skills and design templates), `vendored/vercel-agent-skills` (web-design-guidelines, view transitions), `vendored/wondelai-ux` (UX classics: refactoring-ui, web-typography, ux-heuristics), `vendored/diagram-design`, `vendored/video-shotcraft` (Remotion product video), `vendored/addyosmani-frontend`.
 - **Build quality:** `frontend-design`, `canvas-design`, `theme-factory`,
   `web-artifacts-builder`, `webapp-testing`, `algorithmic-art`.
 

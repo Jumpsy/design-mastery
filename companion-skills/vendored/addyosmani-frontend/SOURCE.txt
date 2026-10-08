@@ -1,0 +1,4 @@
+Source: https://github.com/addyosmani/agent-skills
+Commit: 1401c8b
+License: MIT (full text in LICENSE here, or declared in the source README)
+Vendored unmodified; images/media and files over 400KB omitted. Copyright remains with the original authors.

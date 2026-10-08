@@ -1,0 +1,1 @@
+MIT License, declared in the upstream README (License section); no separate LICENSE file upstream. Copyright Vercel and contributors.
