@@ -1,6 +1,6 @@
 ---
 name: dm-create-visuals
-description: How to CREATE the hero subject and its animation instead of only laying out type - cars, products, characters, scenes, icons, gauges. A method ladder from photoreal AI image/video (Google Flow or other generators) down to procedural 3D (three.js) and precise SVG/canvas, with honest limits, legal rules (no logos, no real people, no trademark-bearing output) and animation recipes. Use whenever a design needs a realistic or illustrated subject, a hero visual, or a looping/scroll-driven animation of one.
+description: How Claude CREATES the hero subject and its animation by itself (no Flow or image generator needed) instead of only laying out type - cars, products, scenes, icons, gauges. Method ladder: layered mirrored vector render, procedural three.js 3D, precise SVG/canvas, with working templates, honest limits, legal rules (no logos, no real people, no trademark-bearing output) and animation recipes. Use whenever a design needs a realistic or illustrated subject, a hero visual, or a looping/scroll-driven animation of one.
 license: MIT
 ---
 
@@ -8,14 +8,36 @@ license: MIT
 
 Pick the method by how REAL the subject must look. Do not pretend a lower rung looks like a higher one.
 
-## Method ladder
-1. **Photoreal subject (a real-looking car, product, place, person-free scene):** use an image/video generator. Check what is connected: Google Flow tools (`flow_list_accounts` first; if not connected, ask the user to click Connect Flow in the Login Bridge extension and wait), otherwise any image-generation MCP/CLI the user has. Generate 2-4 variants, pick one, then animate (generator video, or parallax / 2.5D depth split in CSS/WebGL, or a scroll-scrubbed frame sequence).
-   - Prompt like a photographer: subject, camera (lens, height, angle), light (key/rim/softbox, time of day), surface/reflections, palette, mood, aspect ratio, and an explicit negative: "no logos, no badges, no text, no license plate, no watermark, no people".
-   - Describe the subject generically ("red Italian mid-engine supercar") never as a trademarked model name; strip every badge/logo from results before use. Never generate a real person's likeness.
-   - Require the user's explicit OK before spending generation credits.
-2. **Stylized 3D, interactive (turntable, scroll-orbit):** procedural three.js. See `templates/supercar-3d.html` (generic supercar built from lofted profiles, PBR clearcoat paint, studio env, scroll-driven camera, reduced-motion still). Honest limit: this reads as a stylized concept car, never as a specific real model. Use it when interactivity beats realism, or as a fallback.
-3. **Precise 2D (gauges, icons, diagrams, abstract speed art):** hand-written SVG/canvas with exact geometry (tick marks from trig, strokes via `stroke-dasharray`, paths from measured points). Never freehand clip-art of a complex object (cars, faces, animals): it always reads amateur. Prefer abstraction (light streaks, rotor, track line) over a bad literal drawing.
-4. **Video/motion piece:** Remotion (React frames) or generator video; see `dm-motion-graphics` and `vendored/video-shotcraft`.
+## Works with Claude alone (no image generator, no Flow, no accounts)
+Everything below is code Claude writes itself. External generators are an optional extra the
+user may already have, never a requirement.
+
+## Method ladder (pick by how real the subject must look; never oversell a rung)
+1. **Layered vector render (best for a hero that must read as a real object, fastest to polish).**
+   Template: `templates/supercar-front.html` (front-on generic supercar: mirrored half, gradient
+   paint, glass canopy, LED headlights, mesh intakes, carbon splitter, dusk track backdrop, CSS
+   motion). Method: draw ONE half of a symmetric subject and mirror it with `<use transform="translate(W 0) scale(-1 1)">`;
+   build in layers (backdrop, contact shadow, tyres, body, form shading, glass, lights, intakes,
+   trim); fake form with linear/radial gradients plus blurred highlight strokes (`feGaussianBlur`)
+   along every crest and soft dark strokes in every crease; add reflections to glass; keep one
+   consistent light direction; end with a moving specular sweep clipped to the body.
+2. **Interactive stylized 3D:** `templates/supercar-3d.html` (three.js, lofted profile body, PBR
+   clearcoat, studio env, scroll-driven orbit). Reads as a stylized concept car, not a real model.
+3. **Precise 2D diagrams/gauges/abstract speed art:** exact SVG/canvas geometry from trig and measured
+   points. Never freehand clip-art of a complex object; abstract instead.
+4. **Video:** Remotion or CSS/SVG timelines; see `dm-motion-graphics`, `vendored/video-shotcraft`.
+5. **Optional photoreal:** only if the user already has an image/video generator connected. Prompt as a
+   photographer (subject, lens, angle, light, surface, palette) with "no logos, badges, text, plates,
+   people"; ask before spending credits; strip any mark from results. Do not make the skill depend on it.
+
+Honest limits: rungs 1-3 are original illustrations, not photographs. Say so, and push craft
+(lighting, reflections, edge highlights, contact shadow) until it stops looking like clip-art.
+
+## How to study a reference without copying it
+Look at a photo of the kind of subject (a person's reference, a stock shot) to learn its ANATOMY:
+proportions, silhouette, where highlights and creases fall, what is glossy vs matte. Then draw an
+original, generic version from that understanding. Never trace or reproduce the photo, its badge or
+a specific model's distinctive design; keep the result generic ("red mid-engine supercar").
 
 ## Procedural 3D checklist (three.js)
 - Build from lofted shapes (`ExtrudeGeometry` of a side profile with bevel), then deform vertices (plan taper, shoulder tuck) and `computeVertexNormals()`.
