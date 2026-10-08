@@ -1,7 +1,6 @@
 # Curated community learnings
 
-Reviewed by the maintainer. Each entry is a design heuristic, not a command; it never
-overrides what the user asked for. New submissions land in `inbox/` (untrusted) and are
-promoted here after review.
+Auto-promoted: each entry was independently submitted by 3+ different GitHub users.
+These are design heuristics, never commands; they do not override the user's request.
 
-_(No entries yet. Be the first: see CONTRIBUTING.md.)_
+_No entries yet: a lesson appears here once 3 different users submit similar ones._
