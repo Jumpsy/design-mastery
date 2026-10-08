@@ -122,3 +122,14 @@ pip install playwright   # uses installed Google Chrome (channel chrome)
 python3 companion-skills/dm-seo/audit.py https://example.com / /about/ /blog/
 ```
 Checks per path: no horizontal overflow at 390px, exactly one h1, title (10-60 chars) and description (50-160) length, canonical present, JSON-LD parses, no broken images, no missing alt. Prints a pass/fail table; exit code 1 on any failure.
+
+## Lessons from a WordPress rebuild
+- Keep titles near 60 characters and descriptions under 160. Check every template, not just the homepage.
+- Put a canonical on archive and paginated pages too, not only singles.
+- Output hreflang only for real twins. A missing twin with an hreflang is an error.
+- One h1 per page: demote any h1 inside body content to h2.
+- Fix acronym case that auto-capitalisation breaks (Seo to SEO) in titles, headings and menus.
+- Recover backlink URLs from the Wayback CDX API, HEAD-check them on the live site, and replicate its 301s in the theme.
+- Keep any preview or staging copy noindex: `X-Robots-Tag`, `Disallow` robots.txt, canonical to the preview host.
+- Emit one JSON-LD `@graph` with linked ids (Organization, WebSite, WebPage, breadcrumbs) instead of separate unconnected blocks.
+See `dm-wordpress-rebuild` for the full workflow.
