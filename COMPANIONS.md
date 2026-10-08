@@ -26,6 +26,6 @@ every bundled skill becomes its own skill via `scripts/install.sh`.
 
 Not bundled means no redistribution right was found, so install them from their authors:
 follow the install instructions in the README of github.com/vercel-labs/agent-skills and github.com/remotion-dev/skills. Own skills in this repo: `dm-motion-graphics`
-(including Remotion guidance written from scratch) and `dm-grounding`.
+(including Remotion guidance written from scratch), `dm-grounding` and `dm-seo` (WordPress SEO, with a Playwright audit script).
 
 Star counts and licences change; rerun the search before relying on this table.
