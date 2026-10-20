@@ -347,6 +347,10 @@ versionable, diffable code instead of an opaque `.mp4` no one can re-edit.
   motion-design principles (timing, easing character, what a "signature motion idea"
   actually means) that apply whether the output is CSS or a rendered Remotion video.
 
+## 3.7 Free 3D-rendered imagery (no image generator)
+
+When a site/app needs hero art, feature illustrations, icons or product-stage images and no real asset exists, render them locally instead of using stock or a paid generator: `render3d/` (see `render3d/README.md`). Pick a scene (`shapes`, `orb`, `podium`, `ribbon`, `icon3d`), pass the project's palette hex values, preview at 1280x720 / 64 samples, look at it, then render the final at 2x the display size with 160+ samples (`--transparent` for cutouts). Label them as rendered 3D art, not photos. Anything needing glass, people or complex organic forms: see `companion-skills/dm-visual-to-3d` and say the limits first.
+
 ## 4. Reference pattern library
 
 `references/categories/` holds one concise, actionable file per design category — web
